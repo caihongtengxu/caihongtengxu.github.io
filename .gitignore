@@ -4,3 +4,8 @@ db.json
 *.log
 node_modules/
 .deploy*/
+public/
+scaffolds/
+source/
+themes/
+*.json
