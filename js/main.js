@@ -6,7 +6,9 @@ $(function(){
     })
     setTimeout(function(){
         $(".my_hide").each(function(){
-            $(this).slideDown(1000);
+            $(this).animate({opacity:"1"},400,function(){
+                $(this).fadeIn(2000);
+            });
         })
     },2000);
 
