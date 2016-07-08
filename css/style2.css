@@ -4250,6 +4250,7 @@ ul.labels-info li a:hover, ul.labels-info li a:focus {
 .blog-post ul li{
     line-height: 35px;
     color: #837f7e;
+    margin-left: 10px;
 }
 
 .blog-post ul li a{
