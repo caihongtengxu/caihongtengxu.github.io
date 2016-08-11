@@ -45,7 +45,7 @@
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publicvendor.png">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/route.png">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
-<meta property="og:updated_time" content="2016-08-11T03:41:15.864Z">
+<meta property="og:updated_time" content="2016-08-11T03:49:26.736Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel集成Swagger使用总结">
 <meta name="twitter:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧">
@@ -331,7 +331,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"repositories"</span>: &#123;</div><div class="line">   <span class="string">"packagist"</span>: &#123;</div><div class="line">      <span class="string">"type"</span>: <span class="string">"composer"</span>,</div><div class="line">      <span class="string">"url"</span>: <span class="string">"https://packagist.phpcomposer.com"</span></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h3 id="集成Swagger"><a href="#集成Swagger" class="headerlink" title="集成Swagger"></a>集成Swagger</h3><h4 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h4><p>运行</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> jlapp/swaggervel:dev-master</div></pre></td></tr></table></figure>
-<p>上面这个swaggervel包有3个版本的 分别是dev-master    2.0.x-dev（这个是给laravel5用的）     1.0.x-dev（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
+<p>上面这个swaggervel包有3个版本的 分别是<code>dev-master</code>    <code>2.0.x-dev</code>（这个是给laravel5用的）     <code>1.0.x-dev</code>（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
 <h4 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h4><p>编辑 <code>config/app.php</code>文件 找到 <code>providers</code>数组在其中添加 如下代码<code>Jlapp\Swaggervel\SwaggervelServiceProvider::class,</code><br>网上也有些说要在app/config/app.php文件中添加 但我的项目app文件夹下并没有config文件夹 so就没按照app/config/app.php增加目录创建来编辑</p>
 <p>执行<code>php artisan vendor:publish</code> 命令</p>
 <p><img src="http://obomwzenb.bkt.clouddn.com/publish.png" alt="publish List" title="publish list"></p>
@@ -378,7 +378,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/08/10/lumenandswagger/" rel="prev" title="Lumen集成Swagger使用总结">
+              <a href="/2016/07/03/lumenandswagger/" rel="prev" title="Lumen集成Swagger使用总结">
                 Lumen集成Swagger使用总结 <i class="fa fa-chevron-right"></i>
               </a>
             
