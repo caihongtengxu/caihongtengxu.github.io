@@ -319,7 +319,15 @@
 
       
         
-          <p>最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧<br>
+          <blockquote>
+<p>最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧</p>
+<p><strong>Lumen:</strong></p>
+<blockquote>
+<p>Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发</p>
+</blockquote>
+<p><strong>Swagger:</strong></p>
+<blockquote>
+<p>可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的，有时后端修改了API参数或者其他设置 直接通过这个swagger的ui就可以看了方便测试 调试等等<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/07/03/lumenandswagger/#more" rel="contents">
               阅读全文 &raquo;
@@ -441,9 +449,137 @@
 
       
         
-          <p>刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧<br>
+          <blockquote>
+<p>刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧</p>
+<p>先放个包的网址 <a href="https://packagist.org">https://packagist.org</a></p>
+<p>之前都是直接在里面搜索<code>swagger</code> 然后又个<code>laterll/swagger</code>使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 <code>jlapp/swaggervel</code> 很好用哦 就用这个吧<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2016/06/30/laravelandswagger/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/04/21/ubuntuaddanddeleteuser/" itemprop="url">
+                  Ubuntu 16.04下添加和删除用户
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-21T00:00:00+08:00" content="2016-04-21">
+              2016-04-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Ubuntu/" itemprop="url" rel="index">
+                    <span itemprop="name">Ubuntu</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/21/ubuntuaddanddeleteuser/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/21/ubuntuaddanddeleteuser/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><blockquote>
+<p>当我们创建一个新的系统的时候 最最基础且重要的一件事 是你应当知道 如何给系统增加或者删除用户，但是我们往往只是会给一个默认的 <strong>root</strong> 用户</p>
+<p>当我们使用 <strong>root</strong> 用户的时候 它给我们很大的权限和灵活性，但同时它也是很危险的和具有毁灭性的 比如一些误操作。我们几乎总是使用它来创建一个额外的、没有权限的用户来做普通的工作，同时我们也应该为我们系统上的其他用户创建一些额外的账户，每一个用户都应该有一个不同的账户</p>
+<p>当你通过使用<code>sudo</code> 你仍然可以使用系统管理员的权限，下面我们将介绍如何创建用户账号，分配<code>sudo</code>特权以及删除用户<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/21/ubuntuaddanddeleteuser/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -514,7 +650,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -522,7 +658,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -531,7 +667,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

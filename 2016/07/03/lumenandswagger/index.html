@@ -35,21 +35,42 @@
 
 
 
-<meta name="description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧">
+<meta name="description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
+Lumen:
+
+Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发
+
+Swagger:
+
+可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Lumen集成Swagger使用总结">
 <meta property="og:url" content="https://caihongtengxu.github.io/2016/07/03/lumenandswagger/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧">
+<meta property="og:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
+Lumen:
+
+Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发
+
+Swagger:
+
+可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/artisanlist.png">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/lumensuccess.png">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/swagger1.png">
 <meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/swagger2.png">
-<meta property="og:updated_time" content="2016-08-11T03:48:51.489Z">
+<meta property="og:updated_time" content="2016-08-11T09:35:20.360Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lumen集成Swagger使用总结">
-<meta name="twitter:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧">
+<meta name="twitter:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
+Lumen:
+
+Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发
+
+Swagger:
+
+可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
 <meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/artisanlist.png">
 
 
@@ -323,18 +344,18 @@
       
 
       
-        <p>最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧<br><a id="more"></a></p>
-<hr>
-<blockquote>
+        <blockquote>
+<p>最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧</p>
 <p><strong>Lumen:</strong></p>
 <blockquote>
 <p>Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发</p>
 </blockquote>
 <p><strong>Swagger:</strong></p>
 <blockquote>
-<p>可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的，有时后端修改了API参数或者其他设置 直接通过这个swagger的ui就可以看了方便测试 调试等等</p>
+<p>可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的，有时后端修改了API参数或者其他设置 直接通过这个swagger的ui就可以看了方便测试 调试等等<br><a id="more"></a></p>
 </blockquote>
 </blockquote>
+<hr>
 <h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><pre><code>1. 确保PHP版本 &gt;5.5.9
 2. OpenSSL PHP Extension
 3. 确保已经安装 Composer 并配置到环境变量中
@@ -481,7 +502,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-count">3</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -489,7 +510,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -498,7 +519,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
