@@ -1,0 +1,779 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="laravel," />
+
+
+
+
+
+
+<meta name="description" content="最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把
+先来讲下 CSRF 攻击
+CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF大概就是 攻击者盗用用户身份，发送恶意请求 来达到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Laravel中TokenMismatchException报错的一点点总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2016/08/17/20160817/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把
+先来讲下 CSRF 攻击
+CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF大概就是 攻击者盗用用户身份，发送恶意请求 来达到">
+<meta property="og:updated_time" content="2016-08-17T08:57:36.117Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Laravel中TokenMismatchException报错的一点点总结">
+<meta name="twitter:description" content="最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把
+先来讲下 CSRF 攻击
+CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF大概就是 攻击者盗用用户身份，发送恶意请求 来达到">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于Laravel中TokenMismatchException报错的一点点总结 | 指尖的彩虹 </title>
+  
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于Laravel中TokenMismatchException报错的一点点总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-17T16:50:39+08:00" content="2016-08-17">
+              2016-08-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Laravel/" itemprop="url" rel="index">
+                    <span itemprop="name">Laravel</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/17/20160817/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/17/20160817/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把</p>
+<h4 id="先来讲下-CSRF-攻击"><a href="#先来讲下-CSRF-攻击" class="headerlink" title="先来讲下 CSRF 攻击"></a>先来讲下 <strong>CSRF</strong> 攻击</h4><blockquote>
+<p>CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF<br>大概就是 攻击者盗用用户身份，发送恶意请求 来达到攻击者的一些目前 造成用户的隐私以及财产损失啦等等<br>CSRF攻击需要满足<br>1.用户登录受信任网站A，并在本地生成Cookie。<br>2.用户在不登出A的情况下，访问危险网站B。<br>具体的可以去下面看下 <a href="http://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html" target="_blank" rel="external">浅谈CSRF攻击方式</a> 这篇文章写的很详细有兴趣的可以去看下<br><a id="more"></a></p>
+</blockquote>
+<hr>
+<h4 id="Laravel-CSRF令牌"><a href="#Laravel-CSRF令牌" class="headerlink" title="Laravel CSRF令牌"></a>Laravel CSRF令牌</h4><p>Laravel 自动为每一个被应用管理的有效用户会话生成一个 CSRF “令牌”，该令牌用于验证授权用户和发起请求者是否是同一个人。把这个令牌放入 <strong>form表单</strong> 的隐藏域中提交的时候一起提交<br>Laravel中提供了帮助函数<code>csrf_field</code> 来帮助我们添加 <strong>csrf</strong> 令牌</p>
+<p>在模版文件使用<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span> <span class="keyword">echo</span> csrf_field(); <span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>该辅助函数会帮我们生成对应<code>HTML</code>代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"hidden"</span> name=<span class="string">"_token"</span> value=<span class="string">"&lt;?php echo csrf_token(); ?&gt;"</span>&gt;</div></pre></td></tr></table></figure>
+<p>也可以使用<code>blade</code>模版引擎的方式：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;!! csrf_field() !!&#125;</div></pre></td></tr></table></figure>
+<p>不需要我们自己去编写后台的验证代码，Laravel使用了自带的中间件<code>VerifyCsrfToken</code>将请求中输入的 token 值和 Session 中的存储的 token 作对比来进行验证 更多Laravel这个中间件的详细用法请看 <a href="http://laravelacademy.org/post/2784.html" target="_blank" rel="external">Laravel路由</a></p>
+<h4 id="VerifyCsrfToken-中间件"><a href="#VerifyCsrfToken-中间件" class="headerlink" title="VerifyCsrfToken 中间件"></a>VerifyCsrfToken 中间件</h4><p>在Laravel 5.1及更高的版本中<code>VerifyCsrfToken</code>中间件已经被加入到了中间件组<code>web</code>中 在<code>app/Http/Kernel.php</code>中可以看到</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">protected</span> $middlewareGroups = [</div><div class="line">        <span class="string">'web'</span> =&gt; [</div><div class="line">            \App\Http\Middleware\EncryptCookies::class,</div><div class="line">            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,</div><div class="line">            \Illuminate\Session\Middleware\StartSession::class,</div><div class="line">            \Illuminate\View\Middleware\ShareErrorsFromSession::class,</div><div class="line">            <span class="comment">//csrf验证中间件</span></div><div class="line">            \App\Http\Middleware\VerifyCsrfToken::class,</div><div class="line">        ],</div></pre></td></tr></table></figure>
+<p>然后我们可以看到在<code>RouteServiceProvider.php</code>中默认加载了<code>web</code>中间件组 也就是我们所有的请求都会被这个中间件校验 如果你是做<code>API</code>接口的项目可以把这个中间件屏蔽掉 直接注释掉</p>
+<h4 id="TokenMismatchException-产生的原因"><a href="#TokenMismatchException-产生的原因" class="headerlink" title="TokenMismatchException 产生的原因"></a>TokenMismatchException 产生的原因</h4><p>回到正题 关于 TokenMismatchException 产生的原因大概总结了以下</p>
+<blockquote>
+<p>1.表单请求中没有带上校验token<br>2.被人攻击了 请求中伪造的token或者没有token导致的校验不通过<br>3.session过期  [这个比较坑找了好久]</p>
+</blockquote>
+<p>在<code>config/session.php</code>文件中可以看到默认的session时间是120分钟 其实这个已经足够了 如果不满意自己加吧 这个默认时间单位是分钟哦</p>
+<p>回到<code>VerifyCsrfToken.php</code>中 我们可以看到它实际上是继承自<code>Illuminate\Foundation\Http\Middleware\VerifyCsrfToken</code> 这个父类，具体的生成 <strong>token</strong> 以及对 <strong>token</strong> 的校验都是在这里完成的 在它父类的大概第 <strong>55</strong> 行左右</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> (</div><div class="line">            <span class="keyword">$this</span>-&gt;isReading($request) ||</div><div class="line">            <span class="keyword">$this</span>-&gt;runningUnitTests() ||</div><div class="line">            <span class="keyword">$this</span>-&gt;shouldPassThrough($request) ||</div><div class="line">            <span class="keyword">$this</span>-&gt;tokensMatch($request)</div><div class="line">        ) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;addCookieToResponse($request, $next($request));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> TokenMismatchException;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p><code>TokenMismatchException</code>就是在这里被抛出</p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>对于第一种错误 可以直接在表单提交的时候带上校验token就可以了 具体就是加上<code>csrf_field</code>就可以了</p>
+<p>对于第二种 我的想法就是直接给他报错好了 （233）</p>
+<p>对于第三种 网上找了好多也没啥好的解决办法 大概就是做了简单的跳转处理 我觉得这样也可以哦，如果你有空可以把交互做的好一点 于是就用这种办法先做了下</p>
+<p>本来准备直接动刀 <code>Illuminate\Foundation\Http\Middleware\VerifyCsrfToken</code>这个类去做添加处理判断的 后来听了 <strong>mike</strong> 和 <strong>lee</strong> 童鞋的提醒还是回到 <code>app/Http/Middleware/VerifyCsrfToken.php</code>来做更改（多谢提醒）【框架底层的东东尽量还是别动的好】</p>
+<p>在<code>app/Http/Middleware/VerifyCsrfToken.php</code>增加如下方法：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request,Closure $next)</span></span>&#123;</div><div class="line">        <span class="keyword">try</span>&#123;</div><div class="line">            <span class="keyword">parent</span>::handle($request,$next);</div><div class="line">        &#125;<span class="keyword">catch</span> (\<span class="keyword">Exception</span> $e)&#123;</div><div class="line">            <span class="keyword">if</span>($e <span class="keyword">instanceof</span> TokenMismatchException)&#123;</div><div class="line">                <span class="keyword">if</span>($request-&gt;ajax())&#123;</div><div class="line">                    <span class="keyword">return</span> response()-&gt;json(<span class="keyword">array</span>(<span class="string">'status'</span>=&gt;<span class="keyword">false</span>,<span class="string">'msg'</span>=&gt;<span class="string">'您停留的时间过长,页面已过期,请刷新后重试'</span>));</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                	<span class="comment">//针对一些post请求啦什么的</span></div><div class="line">                    <span class="keyword">return</span> redirect()-&gt;to(<span class="string">'errorss'</span>)-&gt;send();</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> $next($request);</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：需要引入<code>use Closure;</code>和<code>use Illuminate\Session\TokenMismatchException;</code></p>
+</blockquote>
+<p>我上面的那个<code>errorss</code>是路由中配置的 具体的就是对应一个方法指向了一个404页面 具体的方法内容随便你喽不用直接模仿我这个 你可以做的更炫酷 更友好的提示页面耶可以<br>下面讲下这个<code>redirect()</code> 这个也比较有意思  就是如果你没有重定向成功的话 你需要在最后调用<code>send()</code>方法 如果可以重定向就不用了</p>
+<blockquote>
+<p>如果想要返回一个重定向请求 只能在 <strong>路由</strong> 、<strong>Controller</strong> 、<strong>Filters</strong> 中 执行<br>否则在最后你需要调用<code>send()</code> 不然不会执 行 —— 这是翻译了一个国外哥们的话 小弟英文不是很好 凑合看吧</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> redirect()-&gt;to(<span class="string">'errorss'</span>)-&gt;send();</div><div class="line"><span class="keyword">return</span> redirect()-&gt;action(<span class="string">'HomeController@errorss'</span>)-&gt;send();</div><div class="line"><span class="keyword">return</span> redirect()</div><div class="line">        -&gt;back()</div><div class="line">        -&gt;withInput($request-&gt;except(<span class="string">'_token'</span>))</div><div class="line">        -&gt;withMessage(<span class="string">'this is a 404 page'</span>)-&gt;send();</div></pre></td></tr></table></figure>
+<p>大体就这样吧 如果你有什么更好的办法可以 分享给我哦 3Q</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/laravel/" rel="tag">#laravel</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/16/20160816/" rel="next" title="GitFlow日常使用总结">
+                <i class="fa fa-chevron-left"></i> GitFlow日常使用总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/17/20160817/"
+           data-title="关于Laravel中TokenMismatchException报错的一点点总结" data-url="https://caihongtengxu.github.io/2016/08/17/20160817/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/linux.jpg"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#先来讲下-CSRF-攻击"><span class="nav-number">1.</span> <span class="nav-text">先来讲下 CSRF 攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-CSRF令牌"><span class="nav-number">2.</span> <span class="nav-text">Laravel CSRF令牌</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VerifyCsrfToken-中间件"><span class="nav-number">3.</span> <span class="nav-text">VerifyCsrfToken 中间件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TokenMismatchException-产生的原因"><span class="nav-number">4.</span> <span class="nav-text">TokenMismatchException 产生的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法"><span class="nav-number">5.</span> <span class="nav-text">解决办法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>
