@@ -45,7 +45,7 @@ CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也�
 <meta property="og:description" content="最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把
 先来讲下 CSRF 攻击
 CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF大概就是 攻击者盗用用户身份，发送恶意请求 来达到">
-<meta property="og:updated_time" content="2016-08-17T08:57:36.117Z">
+<meta property="og:updated_time" content="2016-08-19T09:56:25.589Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Laravel中TokenMismatchException报错的一点点总结">
 <meta name="twitter:description" content="最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把
@@ -354,14 +354,10 @@ CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也�
 <blockquote>
 <p>注意：需要引入<code>use Closure;</code>和<code>use Illuminate\Session\TokenMismatchException;</code></p>
 </blockquote>
-<p>我上面的那个<code>errorss</code>是路由中配置的 具体的就是对应一个方法指向了一个404页面 具体的方法内容随便你喽不用直接模仿我这个 你可以做的更炫酷 更友好的提示页面耶可以<br>下面讲下这个<code>redirect()</code> 这个也比较有意思  就是如果你没有重定向成功的话 你需要在最后调用<code>send()</code>方法 如果可以重定向就不用了</p>
-<blockquote>
-<p>如果想要返回一个重定向请求 只能在 <strong>路由</strong> 、<strong>Controller</strong> 、<strong>Filters</strong> 中 执行<br>否则在最后你需要调用<code>send()</code> 不然不会执 行 —— 这是翻译了一个国外哥们的话 小弟英文不是很好 凑合看吧</p>
-</blockquote>
+<p>我上面的那个<code>errorss</code>是路由中配置的 具体的就是对应一个方法指向了一个404页面 具体的方法内容随便你喽不用直接模仿我这个 你可以做的更炫酷 更友好的提示页面耶可以</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> redirect()-&gt;to(<span class="string">'errorss'</span>)-&gt;send();</div><div class="line"><span class="keyword">return</span> redirect()-&gt;action(<span class="string">'HomeController@errorss'</span>)-&gt;send();</div><div class="line"><span class="keyword">return</span> redirect()</div><div class="line">        -&gt;back()</div><div class="line">        -&gt;withInput($request-&gt;except(<span class="string">'_token'</span>))</div><div class="line">        -&gt;withMessage(<span class="string">'this is a 404 page'</span>)-&gt;send();</div></pre></td></tr></table></figure>
-<p>大体就这样吧 如果你有什么更好的办法可以 分享给我哦 3Q</p>
-<hr>
-
+<p>如果本地为了测试这个报错的话 需要更改本地配置文件中间的session时间，有可能会收不到<code>redirect</code>返回带回的信息哦 因为他返回带的信息都是存在session中的 如果你设置的时间过短会读不到这个 <strong>with</strong> 的信息</p>
+<h2 id="大体就这样吧-如果你有什么更好的办法可以-分享给我哦-3Q"><a href="#大体就这样吧-如果你有什么更好的办法可以-分享给我哦-3Q" class="headerlink" title="大体就这样吧 如果你有什么更好的办法可以 分享给我哦 3Q"></a>大体就这样吧 如果你有什么更好的办法可以 分享给我哦 3Q</h2>
       
     </div>
 
@@ -515,7 +511,7 @@ CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也�
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#先来讲下-CSRF-攻击"><span class="nav-number">1.</span> <span class="nav-text">先来讲下 CSRF 攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-CSRF令牌"><span class="nav-number">2.</span> <span class="nav-text">Laravel CSRF令牌</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VerifyCsrfToken-中间件"><span class="nav-number">3.</span> <span class="nav-text">VerifyCsrfToken 中间件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TokenMismatchException-产生的原因"><span class="nav-number">4.</span> <span class="nav-text">TokenMismatchException 产生的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法"><span class="nav-number">5.</span> <span class="nav-text">解决办法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#先来讲下-CSRF-攻击"><span class="nav-number">1.</span> <span class="nav-text">先来讲下 CSRF 攻击</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-CSRF令牌"><span class="nav-number">2.</span> <span class="nav-text">Laravel CSRF令牌</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VerifyCsrfToken-中间件"><span class="nav-number">3.</span> <span class="nav-text">VerifyCsrfToken 中间件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TokenMismatchException-产生的原因"><span class="nav-number">4.</span> <span class="nav-text">TokenMismatchException 产生的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法"><span class="nav-number">5.</span> <span class="nav-text">解决办法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大体就这样吧-如果你有什么更好的办法可以-分享给我哦-3Q"><span class="nav-number"></span> <span class="nav-text">大体就这样吧 如果你有什么更好的办法可以 分享给我哦 3Q</span></a></div>
             
           </div>
         </section>
