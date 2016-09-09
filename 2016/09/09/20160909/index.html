@@ -28,34 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Laravel," />
+  <meta name="keywords" content="regex," />
 
 
 
 
 
 
-<meta name="description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
+<meta name="description" content="最近因公司需求写了点API 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Laravel集成Swagger使用总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/06/30/laravelandswagger/index.html">
+<meta property="og:title" content="关于银行卡号通用校验算法总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2016/09/09/20160909/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publicvendor.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/route.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
-<meta property="og:updated_time" content="2016-08-11T09:34:53.287Z">
+<meta property="og:description" content="最近因公司需求写了点API 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把">
+<meta property="og:updated_time" content="2016-09-09T10:18:45.387Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Laravel集成Swagger使用总结">
-<meta name="twitter:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
+<meta name="twitter:title" content="关于银行卡号通用校验算法总结">
+<meta name="twitter:description" content="最近因公司需求写了点API 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把">
 
 
 
@@ -76,7 +65,7 @@
 
 
 
-  <title> Laravel集成Swagger使用总结 | 指尖的彩虹 </title>
+  <title> 关于银行卡号通用校验算法总结 | 指尖的彩虹 </title>
   
 </head>
 
@@ -262,7 +251,7 @@
             
             
               
-                Laravel集成Swagger使用总结
+                关于银行卡号通用校验算法总结
               
             
           </h1>
@@ -274,8 +263,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-30T20:02:25+08:00" content="2016-06-30">
-              2016-06-30
+            <time itemprop="dateCreated" datetime="2016-09-09T18:15:20+08:00" content="2016-09-09">
+              2016-09-09
             </time>
           </span>
 
@@ -288,8 +277,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Laravel/" itemprop="url" rel="index">
-                    <span itemprop="name">Laravel</span>
+                  <a href="/categories/Regex/" itemprop="url" rel="index">
+                    <span itemprop="name">Regex</span>
                   </a>
                 </span>
 
@@ -304,8 +293,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/30/laravelandswagger/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/30/laravelandswagger/" itemprop="commentsCount"></span>
+                <a href="/2016/09/09/20160909/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/09/20160909/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -328,32 +317,23 @@
       
 
       
-        <blockquote>
-<p>刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧</p>
-<p>先放个包的网址 <a href="https://packagist.org" target="_blank" rel="external">https://packagist.org</a></p>
-<p>之前都是直接在里面搜索<code>swagger</code> 然后又个<code>laterll/swagger</code>使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 <code>jlapp/swaggervel</code> 很好用哦 就用这个吧<br><a id="more"></a></p>
-</blockquote>
+        <p>最近因公司需求写了点<code>API</code> 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦<br>后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把<br><a id="more"></a></p>
 <hr>
-<h3 id="创建一个Laravel项目"><a href="#创建一个Laravel项目" class="headerlink" title="创建一个Laravel项目"></a>创建一个Laravel项目</h3><p>进入自己的本地环境目录<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer create-project laravel/laravel swaggertest <span class="number">5.1</span>.*</div></pre></td></tr></table></figure></p>
-<h6 id="对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><a href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限" class="headerlink" title="对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限"></a>对了有时候在linux测试环境下搭建项目的话 要记得查看下 <code>storage</code>目录的读写权限</h6><h6 id="复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><a href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了" class="headerlink" title="复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了"></a>复制项目下的<code>.env.example</code>文件 重命名为<code>.env</code> 一般创建的时候都会帮你复制过了</h6><p>上面swaggertest是我的项目名 这个随意 另外Laravel的版本用的是 <strong>5.1</strong> 的 不知道为什么 每次用5.2的都非常慢，慢到爆炸 用5.1就好很多 难道错觉</p>
-<p>进入项目目录 编辑文件<code>composer.json</code>  在最下面加上下面这段代码 增加镜像 以后下载安装什么的可以跑的快点 这一步可以无视不操作 没啥影响</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"repositories"</span>: &#123;</div><div class="line">   <span class="string">"packagist"</span>: &#123;</div><div class="line">      <span class="string">"type"</span>: <span class="string">"composer"</span>,</div><div class="line">      <span class="string">"url"</span>: <span class="string">"https://packagist.phpcomposer.com"</span></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="集成Swagger"><a href="#集成Swagger" class="headerlink" title="集成Swagger"></a>集成Swagger</h3><h4 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h4><p>运行</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> jlapp/swaggervel:dev-master</div></pre></td></tr></table></figure>
-<p>上面这个swaggervel包有3个版本的 分别是<code>dev-master</code>    <code>2.0.x-dev</code>（这个是给laravel5用的）     <code>1.0.x-dev</code>（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
-<h4 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h4><p>编辑 <code>config/app.php</code>文件 找到 <code>providers</code>数组在其中添加 如下代码<code>Jlapp\Swaggervel\SwaggervelServiceProvider::class,</code><br>网上也有些说要在app/config/app.php文件中添加 但我的项目app文件夹下并没有config文件夹 so就没按照app/config/app.php增加目录创建来编辑</p>
-<p>执行<code>php artisan vendor:publish</code> 命令</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publish.png" alt="publish List" title="publish list"></p>
-<p>这句话就是把刚安装的swaggervel-ui一些东西帮你弄到根目录public目录下<br>成功的话目录是这样的</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publicvendor.png" alt="vendor List" title="vendor list"></p>
-<p>运行下<code>php artisan route:list</code> 刷新下路由<br><img src="http://obomwzenb.bkt.clouddn.com/route.png" alt="route List" title="route list"></p>
-<p>其实就是把他默认的<code>api/docs</code> 这个路由帮你加进来了<br>到这里基本已经完成 但是这个时候你去访问你的项目 他可能会报错缺少swg的注释info信息啥的 也并没有生成他运行需要的 <strong>json文件</strong><br><a href="http://localhost/api/docs" target="_blank" rel="external">http://localhost/api/docs</a> &nbsp;&nbsp;&nbsp;&nbsp;[这个是我的项目地址 具体的自己配置吧]</p>
-<p>默认情况下他会在 <code>storage/docs</code>这个文件夹下生成所需要的json文件的 因为我们还没有写controller注释 他没有生成json文件 但是把目录已经创建好了</p>
-<p>需要注意下<code>vendor/jlapp/swaggervel/src/config/swaggervel.php</code> 这个文件 其中有一个 参数 <code>generateAlways</code> 这个变量 他是控制是否每次都刷新生成json 文件， 推荐在<code>.env</code>中配置一个变量参数设置到这里 这样就不用每次来改这里了 毕竟这个路径找起来挺麻烦的</p>
-<p>好了 整个<code>Controller</code> 国际惯例 <code>hello world</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@SWG</span>\Swagger(</div><div class="line"> *   <span class="doctag">@SWG</span>\Info(</div><div class="line"> *      title="测试类",</div><div class="line"> *      version="1.0.0",</div><div class="line"> *      description="测试测试"</div><div class="line"> *   )</div><div class="line"> * )</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@SWG</span>\Get(</div><div class="line">     *      path="/testindex",</div><div class="line">     *      tags=&#123;"测试相关模块"&#125;,</div><div class="line">     *      summary="测试输出hello world",</div><div class="line">     *      <span class="doctag">@SWG</span>\Response(</div><div class="line">     *          response=200,</div><div class="line">     *          description="success",</div><div class="line">     *      )</div><div class="line">     * )</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"hello world"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>访问自己配置的域名 看到下面就成功了<br><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png" alt="swagger success" title="swagger success"></p>
-<h2 id="最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><a href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多" class="headerlink" title="最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多"></a>最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</h2>
+<h4 id="LUHN-算法"><a href="#LUHN-算法" class="headerlink" title="LUHN 算法"></a>LUHN 算法</h4><p>检验数字算法 (Luhn Check Digit Algorithm) 也叫作模数10公式是一种简单的算法，用于验证银行卡、信用卡号码的有效性的算法。对所有大型信用卡公司发行的信用卡都起作用，这些公司包括美国Express、护照、万事达卡、Discover和用餐者俱乐部等。这种算法最初是在20世纪60年代由一组数学家制定，现在Luhn检验数字算法属于大众，任何人都可以使用它</p>
+<h4 id="luhn-算法原理"><a href="#luhn-算法原理" class="headerlink" title="luhn 算法原理"></a>luhn 算法原理</h4><p>假设现在有一个招行卡号 <code>6225882708965808</code> (国内一般的主流银行卡号 一般是16位 或者19位 )</p>
+<h5 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h5><p>从最后一位开始 <strong>逆向</strong> 计算 <strong>奇数</strong> 位相加之和</p>
+<p>如上面的卡号 计算入下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">8</span> + <span class="number">8</span> + <span class="number">6</span> + <span class="number">8</span> + <span class="number">7</span> + <span class="number">8</span> + <span class="number">5</span> + <span class="number">2</span> = <span class="number">52</span></div></pre></td></tr></table></figure>
+<h5 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h5><p>从最后一位开始 <strong>逆向</strong> 将 <strong>偶数</strong> 位先乘 <code>2</code> 如果乘积为 <strong>2位数</strong> 则减去<code>9</code> 在求和 如果乘积不是 <strong>2位数</strong> 则直接相加</p>
+<p>如上面的卡号 计算入下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="number">0</span> * <span class="number">2</span> = <span class="number">0</span></div><div class="line"><span class="number">5</span> * <span class="number">2</span> = <span class="number">10</span> - <span class="number">9</span> = <span class="number">1</span></div><div class="line"><span class="number">9</span> * <span class="number">2</span> = <span class="number">18</span> - <span class="number">9</span> = <span class="number">9</span></div><div class="line"><span class="number">0</span> * <span class="number">2</span> = <span class="number">0</span></div><div class="line"><span class="number">2</span> * <span class="number">2</span> = <span class="number">4</span></div><div class="line"><span class="number">8</span> * <span class="number">2</span> = <span class="number">16</span> - <span class="number">9</span> = <span class="number">7</span></div><div class="line"><span class="number">2</span> * <span class="number">2</span> = <span class="number">4</span></div><div class="line"><span class="number">6</span> * <span class="number">2</span> = <span class="number">12</span> - <span class="number">9</span> = <span class="number">3</span></div><div class="line">最后计算结果</div><div class="line"><span class="number">0</span> + <span class="number">1</span> + <span class="number">9</span> + <span class="number">0</span> + <span class="number">4</span> + <span class="number">7</span> + <span class="number">4</span> + <span class="number">3</span> = <span class="number">28</span></div></pre></td></tr></table></figure>
+<h5 id="步骤三"><a href="#步骤三" class="headerlink" title="步骤三"></a>步骤三</h5><p>将奇数位总和加上偶数位总和 如果结果可以被10整除则表示验证通过</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="number">52</span> + <span class="number">28</span> = <span class="number">80</span></div><div class="line"><span class="number">80</span> % <span class="number">10</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
+<h4 id="PHP版-luhn算法"><a href="#PHP版-luhn算法" class="headerlink" title="PHP版 luhn算法"></a>PHP版 luhn算法</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkLuhn</span><span class="params">($card)</span></span>&#123;</div><div class="line">       $len=strlen($card);</div><div class="line">       $all=[];</div><div class="line">       $sum_odd=<span class="number">0</span>;</div><div class="line">       $sum_even=<span class="number">0</span>;</div><div class="line">       <span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;$len;$i++)&#123;</div><div class="line">           $all[]=substr($card,$len-$i<span class="number">-1</span>,<span class="number">1</span>);</div><div class="line">       &#125;</div><div class="line">       <span class="comment">//all 里的偶数key都是我们要相加的奇数位</span></div><div class="line">       <span class="keyword">for</span>($k=<span class="number">0</span>;$k&lt;$len;$k++)&#123;</div><div class="line">           <span class="keyword">if</span>($k % <span class="number">2</span> ==<span class="number">0</span>)&#123;</div><div class="line">               $sum_odd+=$all[$k];</div><div class="line">           &#125;<span class="keyword">else</span>&#123;</div><div class="line">               <span class="comment">//奇数key都是要相加的偶数和</span></div><div class="line">               <span class="keyword">if</span>($all[$k] * <span class="number">2</span> &gt;= <span class="number">10</span>)&#123;</div><div class="line">                   $sum_even+=$all[$k] * <span class="number">2</span> - <span class="number">9</span>;</div><div class="line">               &#125;<span class="keyword">else</span>&#123;</div><div class="line">                   $sum_even+=$all[$k]*<span class="number">2</span>;</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       $total=$sum_odd+$sum_even;</div><div class="line">       <span class="keyword">if</span>($total % <span class="number">10</span> == <span class="number">0</span>)&#123;</div><div class="line">           <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">       &#125;<span class="keyword">else</span>&#123;</div><div class="line">           <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p><strong>有错误希望指出</strong></p>
+<p>当然在做这个之前需要做一些非空判断啦 数字判断 长度之类啦 能想到自己家吧<br>这个也并非100%适用所有的银行卡号 不排除一些变态银行卡</p>
+<hr>
+
       
     </div>
 
@@ -374,7 +354,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Laravel/" rel="tag">#Laravel</a>
+            <a href="/tags/regex/" rel="tag">#regex</a>
           
         </div>
       
@@ -383,17 +363,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/21/ubuntuaddanddeleteuser/" rel="next" title="Ubuntu 16.04下添加和删除用户">
-                <i class="fa fa-chevron-left"></i> Ubuntu 16.04下添加和删除用户
+              <a href="/2016/08/17/20160817/" rel="next" title="关于Laravel中TokenMismatchException报错的一点点总结">
+                <i class="fa fa-chevron-left"></i> 关于Laravel中TokenMismatchException报错的一点点总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/03/lumenandswagger/" rel="prev" title="Lumen集成Swagger使用总结">
-                Lumen集成Swagger使用总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -419,8 +395,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/30/laravelandswagger/"
-           data-title="Laravel集成Swagger使用总结" data-url="https://caihongtengxu.github.io/2016/06/30/laravelandswagger/">
+      <div class="ds-thread" data-thread-key="2016/09/09/20160909/"
+           data-title="关于银行卡号通用校验算法总结" data-url="https://caihongtengxu.github.io/2016/09/09/20160909/">
       </div>
     
   </div>
@@ -511,7 +487,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个Laravel项目"><span class="nav-number">1.</span> <span class="nav-text">创建一个Laravel项目</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成Swagger"><span class="nav-number">2.</span> <span class="nav-text">集成Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装包"><span class="nav-number">2.1.</span> <span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑配置"><span class="nav-number">2.2.</span> <span class="nav-text">编辑配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><span class="nav-number"></span> <span class="nav-text">最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#LUHN-算法"><span class="nav-number">1.</span> <span class="nav-text">LUHN 算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#luhn-算法原理"><span class="nav-number">2.</span> <span class="nav-text">luhn 算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤一"><span class="nav-number">2.1.</span> <span class="nav-text">步骤一</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤二"><span class="nav-number">2.2.</span> <span class="nav-text">步骤二</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤三"><span class="nav-number">2.3.</span> <span class="nav-text">步骤三</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PHP版-luhn算法"><span class="nav-number">3.</span> <span class="nav-text">PHP版 luhn算法</span></a></li></ol></div>
             
           </div>
         </section>
