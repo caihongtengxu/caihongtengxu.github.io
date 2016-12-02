@@ -28,23 +28,29 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="regex," />
+  <meta name="keywords" content="Laravel," />
 
 
 
 
 
 
-<meta name="description" content="最近因公司需求写了点API 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把">
+<meta name="description" content="最近因为项目需求接触了下larave 中的队列 感觉蛮有意思的写个总结
+队列其实就是推迟一些耗时的操作 提高web的性能">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于银行卡号通用校验算法总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/09/09/20160909/index.html">
+<meta property="og:title" content="Laravel中队列使用总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2016/11/29/20161129/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近因公司需求写了点API 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把">
-<meta property="og:updated_time" content="2016-09-09T10:18:45.387Z">
+<meta property="og:description" content="最近因为项目需求接触了下larave 中的队列 感觉蛮有意思的写个总结
+队列其实就是推迟一些耗时的操作 提高web的性能">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/queue2.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/queue3.png">
+<meta property="og:updated_time" content="2016-12-02T03:38:49.826Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于银行卡号通用校验算法总结">
-<meta name="twitter:description" content="最近因公司需求写了点API 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把">
+<meta name="twitter:title" content="Laravel中队列使用总结">
+<meta name="twitter:description" content="最近因为项目需求接触了下larave 中的队列 感觉蛮有意思的写个总结
+队列其实就是推迟一些耗时的操作 提高web的性能">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/queue2.png">
 
 
 
@@ -65,7 +71,7 @@
 
 
 
-  <title> 关于银行卡号通用校验算法总结 | 指尖的彩虹 </title>
+  <title> Laravel中队列使用总结 | 指尖的彩虹 </title>
   
 </head>
 
@@ -251,7 +257,7 @@
             
             
               
-                关于银行卡号通用校验算法总结
+                Laravel中队列使用总结
               
             
           </h1>
@@ -263,8 +269,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-09T18:15:20+08:00" content="2016-09-09">
-              2016-09-09
+            <time itemprop="dateCreated" datetime="2016-11-29T14:25:45+08:00" content="2016-11-29">
+              2016-11-29
             </time>
           </span>
 
@@ -277,8 +283,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Regex/" itemprop="url" rel="index">
-                    <span itemprop="name">Regex</span>
+                  <a href="/categories/Laravel/" itemprop="url" rel="index">
+                    <span itemprop="name">Laravel</span>
                   </a>
                 </span>
 
@@ -293,8 +299,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/09/20160909/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/09/20160909/" itemprop="commentsCount"></span>
+                <a href="/2016/11/29/20161129/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/29/20161129/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -317,21 +323,28 @@
       
 
       
-        <p>最近因公司需求写了点<code>API</code> 其中需要一些银行卡号的信息 关于这个验证正则找了好多 都是些大致性的校验 比如数字拉 位数啦<br>后来发现一哥们写了个比较详细的介绍银行卡的生成规则  做个小总结把<br><a id="more"></a></p>
+        <p>最近因为项目需求接触了下<code>larave</code> 中的队列 感觉蛮有意思的写个总结</p>
+<p>队列其实就是推迟一些耗时的操作 提高web的性能<br><a id="more"></a></p>
 <hr>
-<h4 id="LUHN-算法"><a href="#LUHN-算法" class="headerlink" title="LUHN 算法"></a>LUHN 算法</h4><p>检验数字算法 (Luhn Check Digit Algorithm) 也叫作模数10公式是一种简单的算法，用于验证银行卡、信用卡号码的有效性的算法。对所有大型信用卡公司发行的信用卡都起作用，这些公司包括美国Express、护照、万事达卡、Discover和用餐者俱乐部等。这种算法最初是在20世纪60年代由一组数学家制定，现在Luhn检验数字算法属于大众，任何人都可以使用它</p>
-<h4 id="luhn-算法原理"><a href="#luhn-算法原理" class="headerlink" title="luhn 算法原理"></a>luhn 算法原理</h4><p>假设现在有一个招行卡号 <code>6225882708965808</code> (国内一般的主流银行卡号 一般是16位 或者19位 )</p>
-<h5 id="步骤一"><a href="#步骤一" class="headerlink" title="步骤一"></a>步骤一</h5><p>从最后一位开始 <strong>逆向</strong> 计算 <strong>奇数</strong> 位相加之和</p>
-<p>如上面的卡号 计算入下</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">8</span> + <span class="number">8</span> + <span class="number">6</span> + <span class="number">8</span> + <span class="number">7</span> + <span class="number">8</span> + <span class="number">5</span> + <span class="number">2</span> = <span class="number">52</span></div></pre></td></tr></table></figure>
-<h5 id="步骤二"><a href="#步骤二" class="headerlink" title="步骤二"></a>步骤二</h5><p>从最后一位开始 <strong>逆向</strong> 将 <strong>偶数</strong> 位先乘 <code>2</code> 如果乘积为 <strong>2位数</strong> 则减去<code>9</code> 在求和 如果乘积不是 <strong>2位数</strong> 则直接相加</p>
-<p>如上面的卡号 计算入下</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="number">0</span> * <span class="number">2</span> = <span class="number">0</span></div><div class="line"><span class="number">5</span> * <span class="number">2</span> = <span class="number">10</span> - <span class="number">9</span> = <span class="number">1</span></div><div class="line"><span class="number">9</span> * <span class="number">2</span> = <span class="number">18</span> - <span class="number">9</span> = <span class="number">9</span></div><div class="line"><span class="number">0</span> * <span class="number">2</span> = <span class="number">0</span></div><div class="line"><span class="number">2</span> * <span class="number">2</span> = <span class="number">4</span></div><div class="line"><span class="number">8</span> * <span class="number">2</span> = <span class="number">16</span> - <span class="number">9</span> = <span class="number">7</span></div><div class="line"><span class="number">2</span> * <span class="number">2</span> = <span class="number">4</span></div><div class="line"><span class="number">6</span> * <span class="number">2</span> = <span class="number">12</span> - <span class="number">9</span> = <span class="number">3</span></div><div class="line">最后计算结果</div><div class="line"><span class="number">0</span> + <span class="number">1</span> + <span class="number">9</span> + <span class="number">0</span> + <span class="number">4</span> + <span class="number">7</span> + <span class="number">4</span> + <span class="number">3</span> = <span class="number">28</span></div></pre></td></tr></table></figure>
-<h5 id="步骤三"><a href="#步骤三" class="headerlink" title="步骤三"></a>步骤三</h5><p>将奇数位总和加上偶数位总和 如果结果可以被10整除则表示验证通过</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="number">52</span> + <span class="number">28</span> = <span class="number">80</span></div><div class="line"><span class="number">80</span> % <span class="number">10</span> = <span class="number">0</span></div></pre></td></tr></table></figure>
-<h4 id="PHP版-luhn算法"><a href="#PHP版-luhn算法" class="headerlink" title="PHP版 luhn算法"></a>PHP版 luhn算法</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkLuhn</span><span class="params">($card)</span></span>&#123;</div><div class="line">       $len=strlen($card);</div><div class="line">       $all=[];</div><div class="line">       $sum_odd=<span class="number">0</span>;</div><div class="line">       $sum_even=<span class="number">0</span>;</div><div class="line">       <span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;$len;$i++)&#123;</div><div class="line">           $all[]=substr($card,$len-$i<span class="number">-1</span>,<span class="number">1</span>);</div><div class="line">       &#125;</div><div class="line">       <span class="comment">//all 里的偶数key都是我们要相加的奇数位</span></div><div class="line">       <span class="keyword">for</span>($k=<span class="number">0</span>;$k&lt;$len;$k++)&#123;</div><div class="line">           <span class="keyword">if</span>($k % <span class="number">2</span> ==<span class="number">0</span>)&#123;</div><div class="line">               $sum_odd+=$all[$k];</div><div class="line">           &#125;<span class="keyword">else</span>&#123;</div><div class="line">               <span class="comment">//奇数key都是要相加的偶数和</span></div><div class="line">               <span class="keyword">if</span>($all[$k] * <span class="number">2</span> &gt;= <span class="number">10</span>)&#123;</div><div class="line">                   $sum_even+=$all[$k] * <span class="number">2</span> - <span class="number">9</span>;</div><div class="line">               &#125;<span class="keyword">else</span>&#123;</div><div class="line">                   $sum_even+=$all[$k]*<span class="number">2</span>;</div><div class="line">               &#125;</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       $total=$sum_odd+$sum_even;</div><div class="line">       <span class="keyword">if</span>($total % <span class="number">10</span> == <span class="number">0</span>)&#123;</div><div class="line">           <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">       &#125;<span class="keyword">else</span>&#123;</div><div class="line">           <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">       &#125;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
-<p><strong>有错误希望指出</strong></p>
-<p>当然在做这个之前需要做一些非空判断啦 数字判断 长度之类啦 能想到自己家吧<br>这个也并非100%适用所有的银行卡号 不排除一些变态银行卡</p>
+<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p>Laravel中关于队列的配置文件在<code>config/queue.php</code>文件中 主要支持的驱动有 同步、数据库、beanstalkd、sqs、redis<br>下面介绍下我主要使用的数据库驱动模式 后续redis在研究</p>
+<p>通过配置文件中可以看到默认使用的是配置文件中的<code>QUEUE_DRIVER</code>变量来定义使用队列驱动的 首先修改<code>.env</code>配置文件中的<code>QUEUE_DRIVER</code>的值为<code>database</code> </p>
+<h4 id="生成相关数据表"><a href="#生成相关数据表" class="headerlink" title="生成相关数据表"></a>生成相关数据表</h4><p>因为使用的是数据库驱动模式 所以需要一些表 可以使用如下命令</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">php artisan queue:table</div><div class="line">php artisan migrate</div></pre></td></tr></table></figure>
+<p>运行后大概内容 其实就是将要生成的表结构 最后会在数据库生成一个 <strong>jobs</strong> 表 或者你也可以自己新建一个jobs表 表结构如下就好了<br><img src="http://obomwzenb.bkt.clouddn.com/queue2.png" alt="queue table"></p>
+<h4 id="编写任务类"><a href="#编写任务类" class="headerlink" title="编写任务类"></a>编写任务类</h4><blockquote>
+<p>注意队列的任务类都是放在<code>app/Jobs</code>目录下的</p>
+</blockquote>
+<p>你可以使用artisan命令来生成也可以自己手写</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan make:job YourJobName</div></pre></td></tr></table></figure>
+<p>比如新建一个 <strong>TestJob</strong>的任务类</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Jobs</span>;</div><div class="line">    <span class="keyword">use</span> <span class="title">App</span>\<span class="title">Jobs</span>\<span class="title">Job</span>;</div><div class="line">    <span class="comment">//主要是告诉laravel该任务要推送到队列而不是同步执行</span></div><div class="line">    <span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Contracts</span>\<span class="title">Queue</span>\<span class="title">ShouldQueue</span>;</div><div class="line">    <span class="comment">//避免序列化整个模型实例 下面这2个是trait</span></div><div class="line">    <span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">SerializesModels</span>;</div><div class="line">    <span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Queue</span>\<span class="title">InteractsWithQueue</span>;</div><div class="line">	</div><div class="line">    <span class="comment">//注意这里继承的job以及实现的shouldQueue是必须的</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestJob</span> <span class="keyword">extends</span> <span class="title">Job</span> <span class="keyword">implements</span> <span class="title">ShouldQueue</span></span>&#123;</div><div class="line">        <span class="keyword">use</span> <span class="title">InteractsWithQueue</span>, <span class="title">SerializesModels</span>;</div><div class="line"></div><div class="line">        <span class="keyword">protected</span> $age;</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * 构造函数 可传参可不传看自己需求</div><div class="line">         * <span class="doctag">@param</span> $age</div><div class="line">         */</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($age)</span></span>&#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;age=$age;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">/**</span></div><div class="line">         * 执行方法 这里也可以使用依赖注入的方式来传递</div><div class="line">         */</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">"this is a test "</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<h4 id="把任务添加到队列"><a href="#把任务添加到队列" class="headerlink" title="把任务添加到队列"></a>把任务添加到队列</h4><p>由于默认的控制器 <code>app/Http/Controllers/Controller</code>中使用了 <code>DispatchesJobs</code> 这个 <strong>Trait</strong> 这个里面提供了一些操作方法 可以让你把任务添加到队列 <code>dispatch</code>  如果你在 <strong>Controller</strong> 中需要添加队列 可以直接使用(ps:要继承基础的 controller类) 如果你在别的地方需要添加到对垒 需要引入 <code>use Illuminate\Foundation\Bus\DispatchesJobs;</code></p>
+<p>下面新建一个testcontroller测试下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>;</div><div class="line">    <span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>\<span class="title">Controller</span>;</div><div class="line">	<span class="comment">//引入要调用的任务类</span></div><div class="line">    <span class="keyword">use</span> <span class="title">App</span>\<span class="title">Jobs</span>\<span class="title">TestJob</span>;</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span> </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getShow</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="comment">//因为本controller继承的基础controller里引入了DispatchesJobs 所以可以直接执行推送任务到队列</span></div><div class="line">            <span class="comment">//改测试job构造函数需要一个参数 随便写了 都是自己定义的</span></div><div class="line">            $job=<span class="keyword">new</span> TestJob(<span class="number">5</span>);</div><div class="line">            <span class="comment">//另外你还可以在单个队列中推送给特定的队列</span></div><div class="line">            <span class="comment">//$job=(new TestJob(5))-&gt;onQueue('two');</span></div><div class="line">            <span class="comment">//延迟任务执行 这个单位是秒 比如你想延迟5分钟 就 60*5</span></div><div class="line">            <span class="comment">//$job=(new TestJob(5))-&gt;delay(60*5);</span></div><div class="line">            <span class="comment">//推送任务到队列</span></div><div class="line">            <span class="keyword">$this</span>-&gt;dispatch($job);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>如果添加成功的话在数据库中的 <strong>jobs</strong> 表中会看到记录<br><img src="http://obomwzenb.bkt.clouddn.com/queue3.png" alt="queue add"></p>
+<h4 id="执行队列"><a href="#执行队列" class="headerlink" title="执行队列"></a>执行队列</h4><p>可以使用命令</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">php artisan queue:work</div><div class="line">或者</div><div class="line">php artisan queue:listen [这个监听好点会有一些详细信息吧]</div></pre></td></tr></table></figure>
+<p>运行完控制台会有输出 并且数据库的那条对应记录会没有</p>
+<p>具体的详细用法可以参考官网的这个地址 <a href="https://laravel.com/docs/5.2/queues" target="_blank" rel="external">Laravel Queue</a> 或者 <a href="http://laravelacademy.org/post/3252.html" target="_blank" rel="external">laravel学院</a></p>
 <hr>
 
       
@@ -354,7 +367,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/regex/" rel="tag">#regex</a>
+            <a href="/tags/Laravel/" rel="tag">#Laravel</a>
           
         </div>
       
@@ -363,17 +376,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/28/20160828/" rel="next" title="对比表结构的差异">
-                <i class="fa fa-chevron-left"></i> 对比表结构的差异
+              <a href="/2016/10/21/20161021/" rel="next" title="PHP 中 Trait 的使用总结">
+                <i class="fa fa-chevron-left"></i> PHP 中 Trait 的使用总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/19/20160919/" rel="prev" title="关于Laravel中自定义通用校验规则的使用终结">
-                关于Laravel中自定义通用校验规则的使用终结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -399,8 +408,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/09/20160909/"
-           data-title="关于银行卡号通用校验算法总结" data-url="https://caihongtengxu.github.io/2016/09/09/20160909/">
+      <div class="ds-thread" data-thread-key="2016/11/29/20161129/"
+           data-title="Laravel中队列使用总结" data-url="https://caihongtengxu.github.io/2016/11/29/20161129/">
       </div>
     
   </div>
@@ -491,7 +500,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#LUHN-算法"><span class="nav-number">1.</span> <span class="nav-text">LUHN 算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#luhn-算法原理"><span class="nav-number">2.</span> <span class="nav-text">luhn 算法原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤一"><span class="nav-number">2.1.</span> <span class="nav-text">步骤一</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤二"><span class="nav-number">2.2.</span> <span class="nav-text">步骤二</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#步骤三"><span class="nav-number">2.3.</span> <span class="nav-text">步骤三</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PHP版-luhn算法"><span class="nav-number">3.</span> <span class="nav-text">PHP版 luhn算法</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">1.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成相关数据表"><span class="nav-number">2.</span> <span class="nav-text">生成相关数据表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编写任务类"><span class="nav-number">3.</span> <span class="nav-text">编写任务类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#把任务添加到队列"><span class="nav-number">4.</span> <span class="nav-text">把任务添加到队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行队列"><span class="nav-number">5.</span> <span class="nav-text">执行队列</span></a></li></ol></div>
             
           </div>
         </section>
