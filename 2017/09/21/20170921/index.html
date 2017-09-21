@@ -28,26 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="laravel," />
+  <meta name="keywords" content="C," />
 
 
 
 
 
 
-<meta name="description" content="最近因项目需求中对银行卡号啦 身份证的校验比较多 校验方法写的也比较复杂 想把这部分校验单独提出来做一个通用的
-方便以后别的地方可以使用 就像系统中的  Validator 下的那些通用验证一样使用 (其实好像就是扩展Validator) 囧">
+<meta name="description" content="今天闲来无事 玩了会C语言 国际惯例经典的 Hello  World">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于Laravel中自定义通用校验规则的使用终结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/09/19/20160919/index.html">
+<meta property="og:title" content="Linux下C语言的编译执行过程">
+<meta property="og:url" content="https://caihongtengxu.github.io/2017/09/21/20170921/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近因项目需求中对银行卡号啦 身份证的校验比较多 校验方法写的也比较复杂 想把这部分校验单独提出来做一个通用的
-方便以后别的地方可以使用 就像系统中的  Validator 下的那些通用验证一样使用 (其实好像就是扩展Validator) 囧">
-<meta property="og:updated_time" content="2016-09-20T06:50:49.134Z">
+<meta property="og:description" content="今天闲来无事 玩了会C语言 国际惯例经典的 Hello  World">
+<meta property="og:updated_time" content="2017-09-21T07:30:36.548Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于Laravel中自定义通用校验规则的使用终结">
-<meta name="twitter:description" content="最近因项目需求中对银行卡号啦 身份证的校验比较多 校验方法写的也比较复杂 想把这部分校验单独提出来做一个通用的
-方便以后别的地方可以使用 就像系统中的  Validator 下的那些通用验证一样使用 (其实好像就是扩展Validator) 囧">
+<meta name="twitter:title" content="Linux下C语言的编译执行过程">
+<meta name="twitter:description" content="今天闲来无事 玩了会C语言 国际惯例经典的 Hello  World">
 
 
 
@@ -68,7 +65,7 @@
 
 
 
-  <title> 关于Laravel中自定义通用校验规则的使用终结 | 指尖的彩虹 </title>
+  <title> Linux下C语言的编译执行过程 | 指尖的彩虹 </title>
   
 </head>
 
@@ -254,7 +251,7 @@
             
             
               
-                关于Laravel中自定义通用校验规则的使用终结
+                Linux下C语言的编译执行过程
               
             
           </h1>
@@ -266,8 +263,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-09-19T11:13:29+08:00" content="2016-09-19">
-              2016-09-19
+            <time itemprop="dateCreated" datetime="2017-09-21T15:25:33+08:00" content="2017-09-21">
+              2017-09-21
             </time>
           </span>
 
@@ -280,8 +277,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Laravel/" itemprop="url" rel="index">
-                    <span itemprop="name">Laravel</span>
+                  <a href="/categories/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C</span>
                   </a>
                 </span>
 
@@ -296,8 +293,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/09/19/20160919/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/19/20160919/" itemprop="commentsCount"></span>
+                <a href="/2017/09/21/20170921/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/21/20170921/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -320,32 +317,21 @@
       
 
       
-        <p>最近因项目需求中对银行卡号啦 身份证的校验比较多 校验方法写的也比较复杂 想把这部分校验单独提出来做一个通用的</p>
-<p>方便以后别的地方可以使用 就像系统中的  <code>Validator</code> 下的那些通用验证一样使用 (其实好像就是扩展Validator) 囧<br><a id="more"></a></p>
+        <p>今天闲来无事 玩了会C语言 国际惯例经典的 <strong>Hello  World</strong><br><a id="more"></a></p>
 <hr>
-<blockquote>
-<p>   注意：下面的方法记得使用 <strong>Laravel</strong> 5.2版本5.1的我没有测试过 反正5.0的是不可以</p>
-<p>   在 bootstrap\autoload.php文件中的大概30-35行</p>
-</blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$compiledPath = <span class="keyword">__DIR__</span>.<span class="string">'/../vendor/compiled.php'</span>;</div><div class="line"><span class="keyword">if</span> (file_exists($compiledPath))&#123;</div><div class="line">	<span class="keyword">require</span> $compiledPath;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>   他这里有引入vendor下的compiled.php文件 在这个文件中有对好多类的覆盖 不是很懂这个类的作用<br>   比如在大概17093-17105行就有一个  <strong>AppServiceProvider</strong> 的类</p>
-</blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Providers</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">ServiceProvider</span>;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AppServiceProvider</span> <span class="keyword">extends</span> <span class="title">ServiceProvider</span></span>&#123;</div><div class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span><span class="params">()</span></span>&#123;</div><div class="line">		<span class="keyword">$this</span>-&gt;app-&gt;bind(<span class="string">'Illuminate\\Contracts\\Auth\\Registrar'</span>, <span class="string">'App\\Services\\Registrar'</span>);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>   这里这个导致了外面的 <strong>app\Providers\AppServiceProvider.php</strong> 的无效</p>
-</blockquote>
-<h5 id="定义通用-Function"><a href="#定义通用-Function" class="headerlink" title="定义通用 Function"></a>定义通用 Function</h5><p>一般我们会先创建一个php文件 用来放一些通用的<code>function</code></p>
-<p>比如我习惯在<code>app</code>文件下建一个<code>Functions</code>的文件夹 然后在这里创建一个<code>helper.php</code>文件  大概路径这样 <code>app\Functions\helper.php</code></p>
-<p>比如增加如下一个方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	<span class="keyword">if</span> (! function_exists(<span class="string">'checkSomeOne'</span>))&#123;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 这是一个测试方法(可以带参数也可以不带的)</div><div class="line">		 */</div><div class="line">		<span class="function"><span class="keyword">function</span> <span class="title">checkSomeOne</span><span class="params">($name)</span></span>&#123;</div><div class="line">			<span class="keyword">if</span>($name == <span class="string">'LL'</span>)&#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">			&#125;<span class="keyword">else</span>&#123;</div><div class="line">				<span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
-<h5 id="自动载入该帮助类"><a href="#自动载入该帮助类" class="headerlink" title="自动载入该帮助类"></a>自动载入该帮助类</h5><p>在<code>bootstrap\autoload.php</code>文件中引入上面创建的帮助类</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span>.<span class="string">'/../app/Functions/helper.php'</span>;</div></pre></td></tr></table></figure>
-<h5 id="添加服务"><a href="#添加服务" class="headerlink" title="添加服务"></a>添加服务</h5><p>在<code>app\Providers\AppServiceProvider.php</code>文件中引入 <strong>Validation</strong></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">use</span> <span class="title">Validator</span>;</div></pre></td></tr></table></figure>
-<p>然后在 <strong>boot</strong> 方法中增加如下代码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Bootstrap any application services.</div><div class="line"> * <span class="doctag">@return</span> void</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">boot</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">//这是一个测试[这3个参数含义第一个是被验证的属性的名称, 第二个是被验证的属性的值, 第三个是一个规则中指定的参数数组]</span></div><div class="line">	Validator::extend(<span class="string">'checkSomeOne'</span>, <span class="function"><span class="keyword">function</span><span class="params">($attribute, $value, $parameters)</span></span>&#123;</div><div class="line">		<span class="keyword">return</span> checkSomeOne($value);</div><div class="line">	&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h5><p>我在<code>app\Http\Controller</code>下新建了一个controller做测试用 这个随便了</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	<span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>;</div><div class="line">	<span class="keyword">use</span> <span class="title">Validator</span>;</div><div class="line">	<span class="class"><span class="keyword">class</span> <span class="title">HomeController</span> <span class="keyword">extends</span> <span class="title">Controller</span> </span>&#123;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 测试</div><div class="line">		 * <span class="doctag">@return</span> \Illuminate\Http\JsonResponse</div><div class="line">		 */</div><div class="line">		<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span></div><div class="line">		&#123;</div><div class="line">			$name=<span class="string">"LL2"</span>;</div><div class="line">			$params=<span class="keyword">array</span>(<span class="string">'name'</span>=&gt;$name);</div><div class="line">			$rules=<span class="keyword">array</span>(</div><div class="line">				<span class="string">'name'</span>=&gt;<span class="string">'checksomeone'</span>,</div><div class="line">			);</div><div class="line">			$message=<span class="keyword">array</span>(</div><div class="line">				<span class="string">'name.checksomeone'</span>=&gt;<span class="string">'name not found'</span></div><div class="line">			);</div><div class="line">			$v=Validator::make($params,$rules,$message);</div><div class="line">			<span class="keyword">if</span>($v-&gt;fails())&#123;</div><div class="line">				<span class="keyword">return</span> response()-&gt;json(<span class="keyword">array</span>(<span class="string">'status'</span>=&gt;<span class="keyword">false</span>,<span class="string">'msg'</span>=&gt;<span class="string">'has fail'</span>));</div><div class="line">			&#125;</div><div class="line">			<span class="comment">//success</span></div><div class="line">			<span class="keyword">echo</span> <span class="string">"is ok"</span>;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>以hello world为例 创建 <code>hello.c</code>文件 这个称为源文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">void main()&#123;</div><div class="line">	printf(&quot;hello world&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>gcc 基本用法 <strong> gcc [options] [filenames] </strong><br>使用<code>gcc</code> 命令编译c文件 经过了以下几个阶段</p>
+<h5 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h5><p>预处理阶段 主要就是处理源文件中的一些预处理命令 如 #include等 可以使用 <code>gcc</code> 的 <code>-E</code> 选项 对源文件只做预处理不进行编译 这个过程会成成一个 <code>*.i</code>的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc -E hello.c -o hello.i</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i</div></pre></td></tr></table></figure></p>
+<p>-o 选项是把前面的编译内容输入到 <strong>hello.i</strong> 文件中<br>可以通过<code>less</code>或者<code>cat</code>等命令查看 <strong>hello.i</strong> 文件的内容</p>
+<h5 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h5><p>编译阶段 主要就是上一步的预处理文件编译成汇编语言文件 可以使用 <code>gcc</code> 的 <code>-S</code> 选项编译为汇编语言文件 这个过程会成成一个 <code>*.s</code>的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc -S hello.c -o hello.s</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i  hello.s</div></pre></td></tr></table></figure></p>
+<p>gcc -S 后这里是使用的 <strong>源文件</strong> 其实使用第一步生成的 <strong>hello.i</strong> 文件结果也是一样的<br>hello.s就是汇编语言文件了 也可以通过<code>less</code>或者<code>cat</code>等命令查看文件的内容</p>
+<h5 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h5><p>汇编阶段 主要就是把汇编文件 也就是上一步生成的 <code>hello.s</code> 文件当作输入 来生成 二进制机器码可以重定向目标文件 默认后缀 <code>*.o</code>的文件。可以使用 <code>gcc</code> 的 <code>-c</code> 选项</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc -c hello.c</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i  hello.o  hello.s</div></pre></td></tr></table></figure>
+<p>查看内容会乱码吧 (不知道怎么处理了,囧)</p>
+<h5 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h5><p>链接阶段主要就是把 上一步生成的重定向目标文件当作输入与其他的库文件等汇集成一个可执行目标文件(可执行二进制文件)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc hello.c -o helloworld</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i  hello.o  hello.s  helloworld</div><div class="line">[root@eiji c++]# ./helloworld </div><div class="line">hello world</div></pre></td></tr></table></figure>
+<p>刚刚回来看C语言 不是很懂 以后再补充吧！</p>
 <hr>
 
       
@@ -368,7 +354,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/laravel/" rel="tag">#laravel</a>
+            <a href="/tags/C/" rel="tag">#C</a>
           
         </div>
       
@@ -377,17 +363,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/09/09/20160909/" rel="next" title="关于银行卡号通用校验算法总结">
-                <i class="fa fa-chevron-left"></i> 关于银行卡号通用校验算法总结
+              <a href="/2017/07/03/20170703/" rel="next" title="搭建自己的Git仓库">
+                <i class="fa fa-chevron-left"></i> 搭建自己的Git仓库
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/10/21/20161021/" rel="prev" title="PHP 中 Trait 的使用总结">
-                PHP 中 Trait 的使用总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -413,8 +395,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/09/19/20160919/"
-           data-title="关于Laravel中自定义通用校验规则的使用终结" data-url="https://caihongtengxu.github.io/2016/09/19/20160919/">
+      <div class="ds-thread" data-thread-key="2017/09/21/20170921/"
+           data-title="Linux下C语言的编译执行过程" data-url="https://caihongtengxu.github.io/2017/09/21/20170921/">
       </div>
     
   </div>
@@ -505,7 +487,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#定义通用-Function"><span class="nav-number">1.</span> <span class="nav-text">定义通用 Function</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自动载入该帮助类"><span class="nav-number">2.</span> <span class="nav-text">自动载入该帮助类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#添加服务"><span class="nav-number">3.</span> <span class="nav-text">添加服务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试"><span class="nav-number">4.</span> <span class="nav-text">测试</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#预处理"><span class="nav-number">1.</span> <span class="nav-text">预处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编译"><span class="nav-number">2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#汇编"><span class="nav-number">3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链接"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li></ol></div>
             
           </div>
         </section>
