@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="TCP/IP," />
+
+
+
+
+
+
+<meta name="description" content="一直以来感觉学的都很浮躁，所以最近开始补基础知识。重新看了下TCP/IP协议 下面都是自己的一些理解吧 整理下方便以后复习内容大多来自《Linux高性能服务器编程》一书，书已经停刊。某宝上找了个店家印了个复印版的！！！质量还算满意 当然肯定比不了原装书 莫强求">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TCP/IP协议族的体系结构扫盲">
+<meta property="og:url" content="https://caihongtengxu.github.io/2017/12/01/20171201/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="一直以来感觉学的都很浮躁，所以最近开始补基础知识。重新看了下TCP/IP协议 下面都是自己的一些理解吧 整理下方便以后复习内容大多来自《Linux高性能服务器编程》一书，书已经停刊。某宝上找了个店家印了个复印版的！！！质量还算满意 当然肯定比不了原装书 莫强求">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/encapsulate.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/fenyong.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/arp.png">
+<meta property="og:updated_time" content="2017-12-01T01:42:42.748Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP/IP协议族的体系结构扫盲">
+<meta name="twitter:description" content="一直以来感觉学的都很浮躁，所以最近开始补基础知识。重新看了下TCP/IP协议 下面都是自己的一些理解吧 整理下方便以后复习内容大多来自《Linux高性能服务器编程》一书，书已经停刊。某宝上找了个店家印了个复印版的！！！质量还算满意 当然肯定比不了原装书 莫强求">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/encapsulate.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> TCP/IP协议族的体系结构扫盲 | 指尖的彩虹 </title>
+  
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                TCP/IP协议族的体系结构扫盲
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-12-01T11:46:54+08:00" content="2017-12-01">
+              2017-12-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">网络编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/12/01/20171201/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/12/01/20171201/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一直以来感觉学的都很浮躁，所以最近开始补基础知识。重新看了下TCP/IP协议 下面都是自己的一些理解吧 整理下方便以后复习<br>内容大多来自《Linux高性能服务器编程》一书，书已经停刊。<br>某宝上找了个店家印了个复印版的！！！质量还算满意 当然肯定比不了原装书 莫强求<br><a id="more"></a></p>
+<hr>
+<blockquote>
+<p>TCP: Transmission Control Protocol 传输控制协议</p>
+<p>IP: Internet Protocol 因特网协议</p>
+</blockquote>
+<p>TCP/IP协议族是一个四层协议系统 从上而下分别是</p>
+<ul>
+<li><strong>应用层</strong></li>
+<li><strong>传输层</strong></li>
+<li><strong>网络层</strong></li>
+<li><strong>数据链路层</strong></li>
+</ul>
+<p>最上面的一个应用层是在用户空间的<br>下面3层是在内核空间的</p>
+<h4 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h4><p>数据链路层主要实现了网络驱动程序,以处理数据在物理媒介（主要有 以太网 令牌环等）上的传输.</p>
+<p>数据链路层主要有2个主要的协议 分别是 <code>ARP(Address Resolve Protocol) 地址解析协议</code> 和 <code>RARP(Reserve Address Resolve Protocol) 逆地址解析协议</code> 他们主要实现了IP地址和主机地址（通常是MAC地址 以太网等）之间的互相转换</p>
+<h4 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h4><p>网络层主要实现了数据包的选路和转发。因为在WAN（Wide Area NetWork 广域网）中2台主机通常不是直接连接的，而是通过N多的分散的中间节点（也可以叫路由器吧）来连接的。那么网络层的作用就是在这些中间节点中选择合适的 <strong>路径</strong> 来确定2台主机之间的通信连接</p>
+<p>网络层最核心的协议就是 <code>IP（因特网协议）</code>。IP协议根据数据包的目的IP地址来决定如何投递它。如果数据包不能直接发送给目标主机，IP协议就会为它寻找一个适合的下一跳路由器 并把数据包都交付给该路由器来转发。就这样重复 直到数据包到达目标主机</p>
+<p>网络层另外一个重要的协议就是 <code>ICMP(Internet Control Message Protocol) 因特网控制报文协议</code> 他是IP协议的补充 主要用来检测网络连接 应用层的 <strong>ping</strong> 其实就是使用了ICMP协议</p>
+<h4 id="传输层"><a href="#传输层" class="headerlink" title="传输层"></a>传输层</h4><p>传输层主要用来为2台主机上的应用程序提供端到端的通信，它只关心通信的起始端和目的端，而不关心中间的数据包转发过程。</p>
+<p>传输层的主要协议有三个</p>
+<ul>
+<li>TCP（Transmission Control Protocol）协议  传输控制协议</li>
+<li>UDP（User Datagram Protocol）协议  用户数据报协议</li>
+<li>SCTP（Stream Control Transmission Protocol）协议  流控制传输协议</li>
+</ul>
+<p>TCP协议为应用层提供 <strong>可靠的</strong> 、<strong>面向连接</strong> 、<strong>基于流（stream）</strong> 的服务。它使用 <strong>超时重传</strong>、<strong>数据确认</strong> 等方式来确保数据被正确的发送到目的端，因为TCP服务是可靠的。因为他的输出是基于流的 所以的传输长度是没有限制的</p>
+<p>UDP协议与TCP协议相反，它提供 <strong>不可靠的</strong>、<strong>无连接</strong>、<strong>基于数据报</strong> 的服务。它无法保证数据正确的传送到目的端，如果数据在中途丢失，或者目的端通过校验发现数据错误而将其丢弃，则UDP协议只是简单的通知应用程序发送失败而已。因为他是无连接的 所以通信双发无法保持一个长久的连接</p>
+<h4 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h4><p>应用层主要用来处理应用程序的逻辑。一般都是放在用户空间来实现的</p>
+<p>应用层的协议有很多 下面简单列出几个</p>
+<ul>
+<li>telnet协议  远程登录协议</li>
+<li>OSPF（Open Shortest Path First） 开放最短路径优先协议  动态路由更新协议</li>
+</ul>
+<p>应用层协议（也可能是应用程序）可能跳过传输层直接使用网络层提供的服务。</p>
+<h4 id="数据传递"><a href="#数据传递" class="headerlink" title="数据传递"></a>数据传递</h4><h5 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h5><p>上层协议是如何使用下层协议的服务，主要是通过封装（Encapsulate）来实现的。<strong>应用程序的数据在发送到物理网络上之前，将沿着协议栈从上往下依次传递，每一层协议都讲在上一层协议的基础上加上自己的头部信息，以实现该层的功能 这个过程就是封装</strong>。如下图</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/encapsulate.png" alt="封装"></p>
+<p>首先应用程序发送数据 会先给传输层之间建立一个TCP连接，<br>当应用程序使用 <code>send</code> 或者 <code>write</code> 函数向TCP连接写入数据时，<br>内核中的TCP模块会先将这些数据复制到与该连接对应的 <strong>TCP内核发送缓冲区</strong> 中,<br>然后带上自己的 <strong>TCP头部信息</strong> 组成 <strong>TCP报文段</strong><br>之后调用网络层的 IP 模块的服务把数据传输给网络层。<br>这里还需要补充一个UDP的封装 经过UDP封装后的数据称为 <strong>UDP数据报</strong> 它与TCP类似 只是他不需要为数据保存副本 因为他提供的服务是不可靠 当他在把UDP数据报发送成功后 他就把UDP内核缓冲区中的该数据给删除了</p>
+<p>数据通过IP协议来到网络层后，经过IP的封装后的数据称为 <strong>IP数据报</strong> （其实他也是拿了上一层的数据拼上自己的头信息，这里上一层的数据也就是上面的TCP报文段或者UDP数据报了）。最后IP把IP数据报通过以太网驱动程序等（也可以是别的 具体还有啥我理解的不是很详细了~）把数据传递给了数据链路层</p>
+<p>数据链路层封装的数据称为 <strong>帧（frame）</strong> 其实它也是在上一层数据的基础上拼上了自己的头部信息或者也加上尾部信息。根据传输媒介的不同，帧的类型也不同。比如以太网传输的就是以太网帧，令牌环上的传输就是令牌环帧。帧的最大传输单元 最多能携带的上层协议数据 通常受网络类型的限制 比如以太网帧是最大数据量是1500字节 所以过长的IP数据报可能会被分片（fragment）传输</p>
+<p><strong>帧才是最终在物理网络上传送的字节序列，至此封装过程完成</strong></p>
+<h5 id="分用"><a href="#分用" class="headerlink" title="分用"></a>分用</h5><p>当帧到达目标机的时候，将沿着协议栈从底而上依次传递。各层协议依次处理本层负责的头部信息，获取自己需要的数据，并最终将处理后的帧交给应用目标，这个过程叫 <strong>分用</strong>。分用是依靠头部信息中的类型字段实现的 下面举例一个以太网帧的 <strong>分用过程</strong> </p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/fenyong.png" alt="分用"></p>
+<p>因为IP协议、ARP协议和RARP协议都使用帧传输数据，帧的头部提供一个2个字节的类型字段来标识上层协议。同样的因为ICMP协议、TCP协议和UDP协议都使用IP协议 所以IP数据报的头部采用16位的协议字段来区分他们。TCP的报文段和UDP数据报则通过其头部的16位端口号来区分上层应用程序 比如 <strong>DNS协议对应的端口是53</strong>，<strong>HTTP协议对用的端口是80</strong> 所有这些知名的应用层协议使用的端口都可以在 <code>etc/services</code> 文件中找到</p>
+<h5 id="ARP协议的工作原理"><a href="#ARP协议的工作原理" class="headerlink" title="ARP协议的工作原理"></a>ARP协议的工作原理</h5><blockquote>
+<p>ARP协议能实现任意网络层地址到任意物理地址的转换（一般来说是讲ip地址到MAC地址的转换）。</p>
+<p>工作原理：主机向自己所在网络广播一个ARP请求，该请求包含目标机器的网络地址，在此网络上（一般是LAN的局域网吧）的其他机器都会收到这个请求，但是只有被请求的主机才会回应一个ARP应答，其中带上自己的物理地址。</p>
+</blockquote>
+<p>ARP请求和应答的报文详细内容如下图</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/arp.png" alt="ARP"></p>
+<p>从上面可以看到一个ARP请求/应答的报文长度为28字节 如果在加上帧的头部和尾部的18字节（上图以太网帧的目的物理地址6字节、源物理地址6字节、类型2字节、CRC4字节）则一个携带ARP请求/应答的以太网帧长度为46字节。不过有些实现要求以太网帧的 <strong>数据部分</strong> 长度至少要46字节（对应这个例子也就是ARP请求的28个字节长度要填充到46字节 因为他正对应的是帧的数据部分），这种情况下一个携带ARP请求的以太网帧的长度为64字节（46+18）</p>
+<h5 id="ARP协议的通信过程"><a href="#ARP协议的通信过程" class="headerlink" title="ARP协议的通信过程"></a>ARP协议的通信过程</h5><p>可以使用 <code>tcpdump</code> 命令来进行抓包(对了系统一般不会有这个工具的 需要自己安装) 我在本地搭建了两个虚拟机 一个是Centos系统 ip地址 <code>192.168.234.129</code> 一个是Minix3系统 ip地址是 <code>192.168.234.130</code> 下面来抓包下ARP的通信过程.</p>
+<p>因为我是用ip 129的那台机器来请求ip 130的机器 执行步骤如下</p>
+<p>先获取以太网接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ ifconfig</div><div class="line">ens33: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</div><div class="line">        inet 192.168.234.129  netmask 255.255.255.0  broadcast 192.168.234.255</div><div class="line">        inet6 fe80::20c:29ff:fe6b:c7b1  prefixlen 64  scopeid 0x20&lt;link&gt;</div><div class="line">        ether 00:0c:29:6b:c7:b1  txqueuelen 1000  (Ethernet)</div><div class="line">        ....</div></pre></td></tr></table></figure></p>
+<p>上面的这个 <font color="red"><strong>ens33</strong></font> 就是了 下面要用到这个<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ arp -d 192.168.234.130		#这里是清除ARP高速缓存中的192.168.234.130对应的项</div><div class="line">$ tcpdump -i ens33 -ent &apos;(dst 192.168.234.130 and src 192.168.234.129)or(dst 192.168.234.129 and src 192.168.234.130)&apos;</div></pre></td></tr></table></figure></p>
+<p>然后tcpdump就开始监听工作了，这时我们切换另外一个窗口使用<code>telnet</code> 来连接130的主机<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ telnet 192.168.234.130</div></pre></td></tr></table></figure></p>
+<p>不用管结果如何，换回tcpdump的窗口我们可以看到监听的信息 大概内容如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">00:0c:29:6b:c7:b1 &gt; ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 192.168.234.130 tell 192.168.234.129, length 28</div><div class="line">00:0c:29:e4:45:3a &gt; 00:0c:29:6b:c7:b1, ethertype ARP (0x0806), length 60: Reply 192.168.234.130 is-at 00:0c:29:e4:45:3a, length 46</div></pre></td></tr></table></figure></p>
+<p>下面来分析数据包<br>第一个数据包中 ARP通信的源物理地址是 <strong>00:0c:29:6b:c7:b1</strong> （也就是那台ip 129的Centos），目标端的物理地址是 <strong>ff:ff:ff:ff:ff:ff</strong> 这个ff是我瞎写的 真实的不是这样 这个是以太网的广播地址 用来标识整个LAN，该LAN上所有的机器都会收到这个ARP请求并处理这样的帧。</p>
+<p>数值 <strong>0x0806</strong> 表示以太网帧头部类型字段的值，他表示 <strong>分用</strong> 的目标是ARP模块。</p>
+<p>该以太网帧的长度为42（实际上是46 因为tcpdump未统计以太网帧最后的4字节CRC字段），其中数据长度为28字节 <strong>Request</strong> 表示这是一个ARP的请求（相对的还有应答） <code>who-has 192.168.234.130 tell 192.168.234.129</code>  则表示谁是130的主机请回应给129的主机</p>
+<p>第二个数据包中 ARP通信的源物理地址是 <strong>00:0c:29:e4:45:3a</strong> （也就是那台ip 130的Minix），目标端的物理地址是 <strong>00:0c:29:6b:c7:b1</strong>（centos的主机） <strong>Reply</strong> 表示他是一个应答，<code>192.168.234.130 is-at 00:0c:29:e4:45:3a</code> 则表示目标主机在应答他的物理地址</p>
+<p><strong>注意：ARP请求/应答都是从以太网驱动程序发出 并不是从ARP模块直接发送到以太网上</strong></p>
+<font color="#b1593f">总结：首先从telnet客户程序发送数据到129主机的以太网驱动程序，然后以129主机的太网驱动程序发送ARP请求给LAN内的所有的主机（包括路由器），然后LAN上的所有主机的以太网驱动程序接收到ARP请求并解析，如果发现是请求自己的，则目标主机（130主机）的以太网驱动程序会发送一个ARP的应答 回复给129主机的以太网驱动程序 从而拿到130主机的物理地址 实现网络地址到物理地址的转换</font>
+
+<h5 id="DNS协议"><a href="#DNS协议" class="headerlink" title="DNS协议"></a>DNS协议</h5><p>比如访问因特网上的网站我们通常是输入域名来访问而不是输入IP地址，这中间就需要域名查询服务（比如NIS、DNS、本地静态文件等等）</p>
+<p>DNS是一套分布式的域名服务系统<br>每个DNS服务器上存储着大量的机器域名和IP地址的映射</p>
+<p>下面来抓包一个DNS通信过程<br>首先我们使用 <code>host</code> 命令，它使用DNS协议和DNS服务器通信 一般在Linux系统下 <code>etc/resolv.conf</code> 文件中会存放DNS服务器的IP地址 自己可以看一下<br><code>$ host -t A www.baidu.com</code> 这个是host命令的一个简单用法 <code>-t</code> 参数表示使用哪种查询类型 <code>参数A</code> 表示 通过机器的域名获取其IP地址（CNAME 表示获取目标主机的别名  PTR表示反向查询）</p>
+<p>开始测试 我们还是使用 <code>tcpdump</code> 命令来抓包</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ tcpdump -x -i ens33 -nt -s 500 port domain</div></pre></td></tr></table></figure>
+<p>注意 上面的ens33 还是以太网接口名 后面多加了 <code>prot domain</code> 参数表示只抓取使用域名服务的数据包也就是DNS查询和应答报文了。然后我们新建一个窗口来执行host命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ host -t A www.baidu.com</div></pre></td></tr></table></figure>
+<p>然后会得到大概如下的数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">IP 192.168.234.129.50085 &gt; 192.168.234.233.53: 7657+ A? www.baidu.com. (31)</div><div class="line">	0x0000:  4500 003b ab56 0000 4011 7986 c0a8 ea81</div><div class="line">	0x0010:  c0a8 ea02 c3a5 0035 0027 560e 1de9 0100</div><div class="line">	0x0020:  0001 0000 0000 0000 0377 7777 0562 6169</div><div class="line">	0x0030:  6475 0363 6f6d 0000 0100 01</div><div class="line">IP 192.168.234.233.53 &gt; 192.168.234.129.50085: 7657 2/0/0 A 14.215.177.39, A 14.215.177.38 (63)</div><div class="line">	0x0000:  4500 005b 001f 0000 8011 e49d c0a8 ea02</div><div class="line">	0x0010:  c0a8 ea81 0035 c3a5 0047 5f43 1de9 8180</div><div class="line">	0x0020:  0001 0002 0000 0000 0377 7777 0562 6169</div><div class="line">	0x0030:  6475 0363 6f6d 0000 0100 01c0 0c00 0100</div><div class="line">	0x0040:  0100 0000 0500 040e d7b1 27c0 0c00 0100</div><div class="line">	0x0050:  0100 0000 0500 040e d7b1 26</div></pre></td></tr></table></figure>
+<p>下面来分析这个报文</p>
+<p>首先2个数据包开头都是 <strong>IP</strong> 表示他描述的内容是一个 <strong>IP数据报</strong> 然后后面的 <code>&gt;</code> 表示数据传输方向 在它前面的是源端 后面的是目的端，所以第一个数据包是从IP地址为 <strong>192.168.234.129</strong> 的主机向首选DNS主机 <strong>192.168.234.233</strong> 发送的DNS查询报文 端口是53（不用纠结这个dns-ip地址 一般都是上面那个 etc/resolv.conf文件中的，另外dns服务使用的端口就是53）。</p>
+<p>在后面的 <strong>7657</strong> 表示DNS查询报文的标识值 因为在应答报文中也会有这个标识值 用来把一个DNS请求和一个DNS应答对应上 不然怎么找的到哪个是哪个的请求和回复。</p>
+<p>在后面的 <strong>+</strong> 表示启用递归查询标志，因为如果首选DNS服务器没有查找到相应的域名和IP映射关系 将继续到下一个DNS服务器上查找以此类推</p>
+<p>在后面的 <strong>A?</strong> 表示A类型的查询方式也就是通过域名查找IP地址喽</p>
+<p>在后面的 <strong>www.baidu.com</strong> 就是DNS查询问题中的 <strong>查询名</strong></p>
+<p>最后的 <strong>31</strong> 表示DNS查询报文的长度是31字节</p>
+<p>同理第二个数据包内容就是一个DNS应答报文了 表示从DNS服务器233请求到129的主机 端口号53 后面的 <strong>7657</strong> 和上面的129请求标识对应 表示这是一对</p>
+<p>第二个数据包中的 <strong>2/0/0</strong> 表示该报文中包含了 <font color="red"> <strong>2个应答资源记录、0个授权资源记录、0个额外信息记录</strong> </font></p>
+<p><strong>A</strong> 表示其后面的是IP地址 然后他有2个IP地址 应答报文长度为63字节</p>
+<h5 id="Socket简单科普"><a href="#Socket简单科普" class="headerlink" title="Socket简单科普"></a>Socket简单科普</h5><p>socket是一套通用网络编程接口 它不但可以访问内核中的 TCP/IP 协议栈 而且也可以访问其他网络协议栈</p>
+<p>上面提到的 <strong>数据链路层</strong> <strong>网络层</strong> <strong>传输层协议</strong> 都是在内核中实现的。因此操作系统需要实现一组系统调用用来使应用程序能够访问这些协议提供的服务。实现这组系统调用的API主要有2套 一个是 <code>Socket</code> 一个是 <code>XTI</code></p>
+<p>socket主要提供2点功能</p>
+<ol>
+<li>将应用程序的数据从用户缓冲区复制到TCP/UDP内核发送缓冲区 用来把数据交付给内核。比如<code>send</code>函数 或者就是把数据从内核TCP/UDP的缓冲区复制到用户缓冲区 用来读取数据</li>
+<li>应用程序可以通过他们来修改内核中各层协议的某些头部信息或其数据结构 从而控制底层通信的行为</li>
+</ol>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/TCP-IP/" rel="tag">#TCP/IP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/28/20171128/" rel="next" title="计算机操作系统之进程扫盲">
+                <i class="fa fa-chevron-left"></i> 计算机操作系统之进程扫盲
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/12/01/20171201/"
+           data-title="TCP/IP协议族的体系结构扫盲" data-url="https://caihongtengxu.github.io/2017/12/01/20171201/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据链路层"><span class="nav-number">1.</span> <span class="nav-text">数据链路层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#网络层"><span class="nav-number">2.</span> <span class="nav-text">网络层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#传输层"><span class="nav-number">3.</span> <span class="nav-text">传输层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#应用层"><span class="nav-number">4.</span> <span class="nav-text">应用层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据传递"><span class="nav-number">5.</span> <span class="nav-text">数据传递</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#封装"><span class="nav-number">5.1.</span> <span class="nav-text">封装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#分用"><span class="nav-number">5.2.</span> <span class="nav-text">分用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ARP协议的工作原理"><span class="nav-number">5.3.</span> <span class="nav-text">ARP协议的工作原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ARP协议的通信过程"><span class="nav-number">5.4.</span> <span class="nav-text">ARP协议的通信过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DNS协议"><span class="nav-number">5.5.</span> <span class="nav-text">DNS协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Socket简单科普"><span class="nav-number">5.6.</span> <span class="nav-text">Socket简单科普</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>
