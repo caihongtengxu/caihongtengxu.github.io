@@ -28,23 +28,19 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C," />
+  <meta name="keywords" content="Hexo, NexT ,caihongtengxu" />
 
 
 
 
 
 
-<meta name="description" content="今天闲来无事 玩了会C语言 国际惯例经典的 Hello  World">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux下C语言的编译执行过程">
-<meta property="og:url" content="https://caihongtengxu.github.io/2017/09/21/20170921/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="指尖的彩虹">
+<meta property="og:url" content="https://caihongtengxu.github.io/archives/2018/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="今天闲来无事 玩了会C语言 国际惯例经典的 Hello  World">
-<meta property="og:updated_time" content="2017-09-21T07:30:36.548Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux下C语言的编译执行过程">
-<meta name="twitter:description" content="今天闲来无事 玩了会C语言 国际惯例经典的 Hello  World">
+<meta name="twitter:title" content="指尖的彩虹">
 
 
 
@@ -65,7 +61,7 @@
 
 
 
-  <title> Linux下C语言的编译执行过程 | 指尖的彩虹 </title>
+  <title> 归档 | 指尖的彩虹 </title>
   
 </head>
 
@@ -97,7 +93,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left page-post-detail ">
+  <div class="container one-collumn sidebar-position-left  page-archive  ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -230,166 +226,66 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-expand">
+  <section id="posts" class="posts-collapse">
+    <span class="archive-move-on"></span>
+
+    <span class="archive-page-counter">
+      
+      
+      
+        
+      
+      嗯..! 目前共计 19 篇日志。 继续努力。
+    </span>
+
     
 
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Linux下C语言的编译执行过程
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-09-21T15:25:33+08:00" content="2017-09-21">
-              2017-09-21
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/C/" itemprop="url" rel="index">
-                    <span itemprop="name">C</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/09/21/20170921/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/21/20170921/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
+      
       
       
 
-      
-        <p>今天闲来无事 玩了会C语言 国际惯例经典的 <strong>Hello  World</strong><br><a id="more"></a></p>
-<hr>
-<p>以hello world为例 创建 <code>hello.c</code>文件 这个称为源文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#include &lt;stdio.h&gt;</div><div class="line">void main()&#123;</div><div class="line">	printf(&quot;hello world&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>gcc 基本用法 <strong> gcc [options] [filenames] </strong><br>使用<code>gcc</code> 命令编译c文件 经过了以下几个阶段</p>
-<h5 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h5><p>预处理阶段 主要就是处理源文件中的一些预处理命令 如 #include等 可以使用 <code>gcc</code> 的 <code>-E</code> 选项 对源文件只做预处理不进行编译 这个过程会成成一个 <code>*.i</code>的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc -E hello.c -o hello.i</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i</div></pre></td></tr></table></figure></p>
-<p>-o 选项是把前面的编译内容输入到 <strong>hello.i</strong> 文件中<br>可以通过<code>less</code>或者<code>cat</code>等命令查看 <strong>hello.i</strong> 文件的内容</p>
-<h5 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h5><p>编译阶段 主要就是上一步的预处理文件编译成汇编语言文件 可以使用 <code>gcc</code> 的 <code>-S</code> 选项编译为汇编语言文件 这个过程会成成一个 <code>*.s</code>的文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc -S hello.c -o hello.s</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i  hello.s</div></pre></td></tr></table></figure></p>
-<p>gcc -S 后这里是使用的 <strong>源文件</strong> 其实使用第一步生成的 <strong>hello.i</strong> 文件结果也是一样的<br>hello.s就是汇编语言文件了 也可以通过<code>less</code>或者<code>cat</code>等命令查看文件的内容</p>
-<h5 id="汇编"><a href="#汇编" class="headerlink" title="汇编"></a>汇编</h5><p>汇编阶段 主要就是把汇编文件 也就是上一步生成的 <code>hello.s</code> 文件当作输入 来生成 二进制机器码可以重定向目标文件 默认后缀 <code>*.o</code>的文件。可以使用 <code>gcc</code> 的 <code>-c</code> 选项</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc -c hello.c</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i  hello.o  hello.s</div></pre></td></tr></table></figure>
-<p>查看内容会乱码吧 (不知道怎么处理了,囧)</p>
-<h5 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h5><p>链接阶段主要就是把 上一步生成的重定向目标文件当作输入与其他的库文件等汇集成一个可执行目标文件(可执行二进制文件)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@eiji c++]# gcc hello.c -o helloworld</div><div class="line">[root@eiji c++]# ls</div><div class="line">hello.c  hello.i  hello.o  hello.s  helloworld</div><div class="line">[root@eiji c++]# ./helloworld </div><div class="line">hello world</div></pre></td></tr></table></figure>
-<p>刚刚回来看C语言 不是很懂 以后再补充吧！</p>
-<hr>
-
-      
-    </div>
-
-    <div>
       
         
-      
-    </div>
-
-    <div>
-      
-        
-
-      
-    </div>
-
-    <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/C/" rel="tag">#C</a>
-          
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
         </div>
       
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/07/03/20170703/" rel="next" title="搭建自己的Git仓库">
-                <i class="fa fa-chevron-left"></i> 搭建自己的Git仓库
-              </a>
-            
-          </div>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/26/20170926/" rel="prev" title="C语言的指针初步理解">
-                C语言的指针初步理解 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
-      
-    </footer>
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h1 class="post-title">
+        
+            <a class="post-title-link" href="/2018/05/09/20180509/" itemprop="url">
+              
+                <span itemprop="name">Mysql && Laravel 事务总结</span>
+              
+            </a>
+        
+      </h1>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-05-09T09:28:11+08:00"
+              content="2018-05-09" >
+          05-09
+        </time>
+      </div>
+
+    </header>
   </article>
 
 
 
-    <div class="post-spread">
-      
-    </div>
-  </div>
+    
+
+  </section>
+
+  
+
 
 
           </div>
@@ -397,14 +293,6 @@
 
 
           
-  <div class="comments" id="comments">
-    
-      <div class="ds-thread" data-thread-key="2017/09/21/20170921/"
-           data-title="Linux下C语言的编译执行过程" data-url="https://caihongtengxu.github.io/2017/09/21/20170921/">
-      </div>
-    
-  </div>
-
 
         </div>
         
@@ -424,17 +312,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel ">
+      <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/che2.png"
@@ -484,17 +363,6 @@
 
       </section>
 
-      
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-            
-              
-            
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#预处理"><span class="nav-number">1.</span> <span class="nav-text">预处理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#编译"><span class="nav-number">2.</span> <span class="nav-text">编译</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#汇编"><span class="nav-number">3.</span> <span class="nav-text">汇编</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链接"><span class="nav-number">4.</span> <span class="nav-text">链接</span></a></li></ol></div>
-            
-          </div>
-        </section>
       
 
     </div>
@@ -598,9 +466,11 @@
 
 
   
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
-
+  
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
 
 
   
