@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="项目总结," />
+
+
+
+
+
+
+<meta name="description" content="最近忙于公司的一个项目，美名其曰项目经理 其实还是个开发仔主要自己和大家代入感都不高(哈哈~) 惹出一大堆幺蛾子介于终于项目上线发布了（其实还有不少问题） 顺便带入角色回头来感慨总结下 需要学习的地方还有很多 再接再厉吧~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="欢雀小保重构项目总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/06/04/20180604/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近忙于公司的一个项目，美名其曰项目经理 其实还是个开发仔主要自己和大家代入感都不高(哈哈~) 惹出一大堆幺蛾子介于终于项目上线发布了（其实还有不少问题） 顺便带入角色回头来感慨总结下 需要学习的地方还有很多 再接再厉吧~">
+<meta property="og:updated_time" content="2018-06-08T03:41:06.724Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="欢雀小保重构项目总结">
+<meta name="twitter:description" content="最近忙于公司的一个项目，美名其曰项目经理 其实还是个开发仔主要自己和大家代入感都不高(哈哈~) 惹出一大堆幺蛾子介于终于项目上线发布了（其实还有不少问题） 顺便带入角色回头来感慨总结下 需要学习的地方还有很多 再接再厉吧~">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 欢雀小保重构项目总结 | 指尖的彩虹 </title>
+  
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                欢雀小保重构项目总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-06-04T11:32:33+08:00" content="2018-06-04">
+              2018-06-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/项目总结/" itemprop="url" rel="index">
+                    <span itemprop="name">项目总结</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/06/04/20180604/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/06/04/20180604/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近忙于公司的一个项目，美名其曰项目经理 其实还是个开发仔主要自己和大家代入感都不高(哈哈~) 惹出一大堆幺蛾子<br>介于终于项目上线发布了（其实还有不少问题） 顺便带入角色回头来感慨总结下 需要学习的地方还有很多 再接再厉吧~<br><a id="more"></a></p>
+</blockquote>
+<hr>
+<h3 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h3><blockquote>
+<p>欢雀小保作为公司最 <strong>活跃</strong> 的项目之一 从用户量 和 活跃度上 只能算勉强可看(摊手)<br>贴个链接吧 <a href="https://weixin.que360.com" target="_blank" rel="external">欢雀小保</a><br>至于为什么要做这个优化版本 我真不知道…<br>可能原因如下：<br>1.小保要做一个APP了 基于APP干脆连微信一起优化 毕竟老是感觉旧版的有些Low<br>2.近些年新兴的 React、Vue等技术使用应用做的体验很舒服<br>3.主要还是做个用户体验 打造好这个产品</p>
+</blockquote>
+<h3 id="项目初期"><a href="#项目初期" class="headerlink" title="项目初期"></a>项目初期</h3><p>在项目初期阶段,私底下我们意识到会有很多的问题,但是迫于一些上层压力,加上某些员工选择了自己扛(就是自己想办法解决,不论用什么方式,我就是经常这么干的…) 是从来没有向上面反映的,导致整个项目的从需求评审到开发计划都是很被动的 主要是两方面的问题</p>
+<h4 id="关于需求"><a href="#关于需求" class="headerlink" title="关于需求"></a>关于需求</h4><p>1.整个项目需求 直接从小保APP拷贝出来 本来说砍掉一些功能 单独给H5端应用 最后完全一样的需求 【这里默认就传递了一个信号：微信版的小保要和APP做成一样】 此时埋下第一个坑 无论是 APP 或者 H5 的应用 虽然本次开发他们底层都是用的 <code>React-Native</code> 来实现的 但是都不可能做的一模一样 只能想另外的办法来实现一个相似度极高的应用罢了 (当然也没人反应问题 怪我们)</p>
+<p>2.在产品经理召集大家一起过产品需求的时候 其实只是粗略的的过了下 此时只能明确 以下几个事情<br>① 整个项目大概需要做什么功能<br>② 整体的模块划分<br>③ 各个模块的次重比<br>④ 各个模块的耗时比<br>⑤ 各个功能点的大体流程(其实这个时候很多的交互逻辑也没反应出来)<br>此时埋下第二个大坑 整个需求的理解 和 规划时间会有出入 也导致了后续的沟通问题</p>
+<p>3.整个项目的需求功能 就是把原有的小保微信功能 + PC端的个人中心 + 社保服务相关的一个整合体<br>这个时候埋下第三个坑 整个个人中心里的很多功能 整个流程交互都是不完善的 很多都是些简化的东西 比如修改绑定手机 绑定银行卡 提现等流程 这些都是照抄的原来的PC个人中心的需要，但是原来的流程又可能不太友好呢，整个交互逻辑和流程还需要我们去查看源代码才能知道(原产品需要找不到了) 校验的选项 前置触发条件 后置条件 等等这些东西 (整个这些对开发来说会耽误很多时间)</p>
+<p>4.产品原型直接影响了 UI设计 和 后端API设计<br>4.1 举个例子：比如修改绑定用户手机 从原型上被分了2步(2个页面) 第一步输入原手机和验证码 提交下一步(进入下一个页面) 然后输入新的手机和新验证码 绑定成功 <code>当然这里这样做并没有什么不行</code> UI也是做了2个页面 接口也是这个流程走的 后来APP端整个流程修改为一个页面处理（和产品商量过） 这样可以看起来更紧凑 整个绑定在一个页面完成 对于后端来说API和可以合并为一个 不需要去提前校验短信验证码 可以放到绑定中接口来校验。后来没有通知到叶同学的开发 还是按原来的流程来开发 这样又出了一些问题 (沟通成本增加)</p>
+<p>4.2 在比如订单详情 原接口返回结构是按照月份为主导的数据结构来返回的 现需求上变更为了已人为主导的数据结构 原接口已经在很多方便在应用了并不想动它 这个时候又需要重新新的接口才能适应本次开发需要</p>
+<p>说这个只是想说有很多这种流程优化的东西,本来这个重构版本就是为了做好用户体验,和产品沟通后你说改还是不改</p>
+<p>5.上一个产品经理(文鑫已经离职) 当时和我讲了一句话 现在小保有的功能 一个不能少 我就把微信登录列入了必做开发之一 （这个东西耽误了好多时间 原因后面再说） <code>因为后来把第三方登录列入了优化版本来做 时间很紧张 其实可以放掉这个</code></p>
+<h4 id="关于人员"><a href="#关于人员" class="headerlink" title="关于人员"></a>关于人员</h4><p>1.作为一个新的项目,组内成功 叶同学和小蔡都是新成员 第一次加入小保的项目 大家的默契度还尚未形成。另一方面对叶同学来说整个小保的功能都需要明确 清晰的理解才能做好,毕竟原小保都做了2年了吧, 让叶同学在2个月内重现 怎么都感觉不太靠谱。很多实现细节有问题 也是问题之一</p>
+<p>2.后端人员(我自己) 由于前期APP开发进度要远远大于H5的开发 基本在对接APP的需求 接口开发完后没有及时通知到前端同学,接口地址没有及时更新变更 参数说明不够详细 导致叶同学对接也是有些费劲 另外在授权方面前端也是有些理解不足 浪费了好多时间</p>
+<p>3.测试方面：由于默认就是当成和APP一样的需求 提测第一天就提出了100多 Bug 其实很多都是些实现细节的问题 （前端同学经验不足）</p>
+<p>4.我自己和各方面协调不够</p>
+<h3 id="开发阶段"><a href="#开发阶段" class="headerlink" title="开发阶段"></a>开发阶段</h3><h4 id="集中问题"><a href="#集中问题" class="headerlink" title="集中问题"></a>集中问题</h4><p>一、后端的开发时间 完全是我自己按照和APP端对接来定的 这里犯了严重的一个错误：H5的开发要落后APP端的开发很多 这就造成了不同步<br>二、微信相关的接口的联调时间预估错误 虽然多留了3天时间 但是严重不够 光一个微信js的接口 问题就处理了一天半 这是第二个问题<br>三、接口文档说明做的不够 有些是以前就存在的接口 我自己也有点忘记在哪里了<br>四、前端方面 开发时间原定是3个月 然后压缩到 60多天 最后定稿的是41天 严重被压缩 后面导致叶同学 在家也在加班<br>五、项目启动阶段UCPin的项目也占用了3天 这个没有被考虑在内 时间再次被压缩<br>六、前端实现细节问题 很多实现不到位 比如不同订单状态的查询-关联订单详情后返回时无法定位到对应的状态订单列表 类似等等(其实还有很多 可能是压力较大 时间比较赶)<br>七、原定是整个小保的购买流程为主流程 已完成整个购买为优先 中间出现了很多问题 比如订单的预付款 这个其实是有接口的 (叶同学没有问 我也没有通知到位 因为处理东西太多 默认他们都知道了) 叶同学选择了自己计算 这个也是很花时间的一个预付款的详情页,叶同学对整个购买的流程理解也有些出入<br>八、支付联调时还有各种问题 比如订单金额传递错误 支付方式的错误 支付回调地址的处理 订单类型的处理 订单成功后的返回等 这里也严重超出预计时间<br>九、微信自动登录的流程理解不够（我需要付一部分责任 只是口头和叶同学讲了下 没有补充完成流程图） 这个功能在测试阶段完全没有通过 估计是被忙忘记了 准备发布时才发现）<br>十、整个项目的交互体验方面留了很多坑需要优化 暂时没有处理好</p>
+<h3 id="关于发布"><a href="#关于发布" class="headerlink" title="关于发布"></a>关于发布</h3><h4 id="第一次-延迟发布"><a href="#第一次-延迟发布" class="headerlink" title="第一次-延迟发布"></a>第一次-延迟发布</h4><p>原计划项目发布时间是 <code>2018-05-22</code> 当时由于还有40多个Bug 设计流程 和 体验优化等方面 所以申请了延期 延期到 <code>2018-05-25</code></p>
+<h4 id="第二次-延迟发布"><a href="#第二次-延迟发布" class="headerlink" title="第二次-延迟发布"></a>第二次-延迟发布</h4><p>时间再次预估错误 只处理完了严重影响主要流程的bug 还有是有很多需要优化等Bug. 然后和博士讨论 反应情况 再次申请延期到 <code>2018-05-31</code></p>
+<h4 id="第三次-发布失败"><a href="#第三次-发布失败" class="headerlink" title="第三次-发布失败"></a>第三次-发布失败</h4><p>主要有如下几个问题 导致发布失败<br>0.服务器问题 因为很久前直接动了测试环境的服务器 Nginx 服务器的处理 导致测试和生产不一致 没能及时发现问题<br>1.接口访问 出现跨域问题 【测试环境处理过了 服务器端再次出现 没及时处理掉问题】<br>2.接口调用地址前端配置错误<br>3.微信自动登录未实现<br>4.参保人模块有问题【主要是上传和保存】</p>
+<h3 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h3><p>本次项目暴露出很多问题<br>首先整个项目 是一个 资源、工期、质量（潜在的）的矛盾问题 如果保持一个相对平衡 还需要学习 和 提高</p>
+<p>项目经理的问题：</p>
+<p>1.做为一个菜鸟项目经理我的能力是不够的 因为大多的时候我给自己的定位还是一个开发人员<br>2.对于人手不够,同事超负荷工作 没有及时反馈<br>3.工作量 和 工期 预估错误<br>4.没有正确评估现状 对于项目里程碑(大模块)没有设定固定的检查点 大多都是选择只看最终时间<br>5.和产品以及运营的沟通协调都不够</p>
+<p>开发的问题：</p>
+<p>1.后端方面 接口 说明做的不够<br>2.返回结构问题 （接口返回结构有些不一致）【历史遗留问题】<br>3.字段名称问题 （字段名称不统一）【历史遗留问题】<br>4.接口设计没有和前端同学提前沟通 完全是按照需求上来的</p>
+<p>4.前端方面 需求理解不够 经验不够<br>5.接口调用授权理解不够<br>6.前端开发工作量评估有误<br>7.实现插件选择有误 比如 选择月份 比如 参保人上传插件<br>8.具体的实现细节不够好 （这个占了很大一个占比 技术和理解能力都有待提高）</p>
+<p>产品的问题：</p>
+<p>1.原型不够详细 相关流程 和 交互细节 等等<br>2.更新不及时<br>3.产品上线产品经理应该陪同测试产品发布(感觉脱节)<br>4.相关文案需要确认好 并且保证字符无误<br>5.产品经理交接对项目开发产生影响</p>
+<p>别的问题：</p>
+<p>和各部位 各领导沟通不够 没能及时访问情况 和 资源申请调动</p>
+<p>另外某些同事的沟通态度不是很好 不说项目做的怎么样 起码态度要端正 不想指明了<br>因为中间一些东西好几次差点爆脾气（我自己的问题我会改正 也请大家都可以端正态度 毕竟是一个team）</p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><h4 id="关于发布后的优化"><a href="#关于发布后的优化" class="headerlink" title="关于发布后的优化"></a>关于发布后的优化</h4><p>本次重构版本的开发 主要就是为了 用户体验（如果不是为了这个 我感觉现在有的就没有必要改动）待优化的地方还是有很多的 关于优化 包括 流程 和 用户体验上的 当然这次只是修改本次开发中遗留的优化问题（这是必须改的 开发需要反思）。</p>
+<p>后续的优化 还希望 产品和UI方面可以从下面几个方面来反馈（个人看法）<br>1.分析 做好UI相关市场和用户分析<br>2.做好规范<br>3.优化 做好坚持不懈的优化体验<br>4.目标 提出设计目标 并和项目组达成一致<br>5.微调 设计快速迭代 进入版本 进行微调</p>
+<h4 id="感谢"><a href="#感谢" class="headerlink" title="感谢"></a>感谢</h4><p>从项目启动 到现在 也有3个多月了 虽然这是一次失败的项目(延期了半月之久) 、 一次发布失败的经历 以及 质量并没有达到75%的产品<br>但是依然感谢大家的努力与付出 辛苦了<br>希望我们在后续的工作中 能够吸取教训 做好开发 做好产品<br>共勉</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/项目总结/" rel="tag">#项目总结</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/09/20180509/" rel="next" title="Mysql && Laravel 事务总结">
+                <i class="fa fa-chevron-left"></i> Mysql && Laravel 事务总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/06/04/20180604/"
+           data-title="欢雀小保重构项目总结" data-url="https://caihongtengxu.github.io/2018/06/04/20180604/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">20</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目概述"><span class="nav-number">1.</span> <span class="nav-text">项目概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目初期"><span class="nav-number">2.</span> <span class="nav-text">项目初期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于需求"><span class="nav-number">2.1.</span> <span class="nav-text">关于需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于人员"><span class="nav-number">2.2.</span> <span class="nav-text">关于人员</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开发阶段"><span class="nav-number">3.</span> <span class="nav-text">开发阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#集中问题"><span class="nav-number">3.1.</span> <span class="nav-text">集中问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于发布"><span class="nav-number">4.</span> <span class="nav-text">关于发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一次-延迟发布"><span class="nav-number">4.1.</span> <span class="nav-text">第一次-延迟发布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二次-延迟发布"><span class="nav-number">4.2.</span> <span class="nav-text">第二次-延迟发布</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第三次-发布失败"><span class="nav-number">4.3.</span> <span class="nav-text">第三次-发布失败</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#项目总结"><span class="nav-number">5.</span> <span class="nav-text">项目总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#关于发布后的优化"><span class="nav-number">6.1.</span> <span class="nav-text">关于发布后的优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#感谢"><span class="nav-number">6.2.</span> <span class="nav-text">感谢</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>
