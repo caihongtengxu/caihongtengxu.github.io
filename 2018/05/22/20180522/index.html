@@ -28,19 +28,28 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT ,caihongtengxu" />
+  <meta name="keywords" content="Http," />
 
 
 
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="指尖的彩虹">
-<meta property="og:url" content="https://caihongtengxu.github.io/archives/2017/12/index.html">
+<meta name="description" content="最近收到通知说微信支付HTTPS服务器 由于 根证书即将在8.23号过期 
+所以更换了新的服务器证书 需要商户确认服务器上是否已经部署了新的CA根证书">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于微信支付升级替换证书问题">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/05/22/20180522/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近收到通知说微信支付HTTPS服务器 由于 根证书即将在8.23号过期 
+所以更换了新的服务器证书 需要商户确认服务器上是否已经部署了新的CA根证书">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png">
+<meta property="og:updated_time" content="2018-07-04T03:52:59.340Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="指尖的彩虹">
+<meta name="twitter:title" content="关于微信支付升级替换证书问题">
+<meta name="twitter:description" content="最近收到通知说微信支付HTTPS服务器 由于 根证书即将在8.23号过期 
+所以更换了新的服务器证书 需要商户确认服务器上是否已经部署了新的CA根证书">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png">
 
 
 
@@ -61,7 +70,7 @@
 
 
 
-  <title> 归档 | 指尖的彩虹 </title>
+  <title> 关于微信支付升级替换证书问题 | 指尖的彩虹 </title>
   
 </head>
 
@@ -93,7 +102,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,66 +235,169 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 23 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
 
-      
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于微信支付升级替换证书问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-22T09:20:14+08:00" content="2018-05-22">
+              2018-05-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Http/" itemprop="url" rel="index">
+                    <span itemprop="name">Http</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/05/22/20180522/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/05/22/20180522/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
+        <p>最近收到通知说微信支付HTTPS服务器 由于 根证书即将在8.23号过期 </p>
+<p>所以更换了新的服务器证书 需要商户确认服务器上是否已经部署了新的CA根证书<br><a id="more"></a></p>
+<hr>
+<h3 id="首先请求微信的Https服务器是这样的"><a href="#首先请求微信的Https服务器是这样的" class="headerlink" title="首先请求微信的Https服务器是这样的"></a>首先请求微信的Https服务器是这样的</h3><p>第一步浏览器发送请求(https哈) 对 微信服务器说 hello，I‘m client</p>
+<p>第二步微信服务器回复浏览器 hello I’m server 并附加 他的数字证书（包含公钥）</p>
+<p>第三步浏览器收到证书判断是哪家的 然后读取自己系统级的证书信任列表是否包含该证书签发CA机构 并做证书校验（这里发生了好多巴啦巴拉一堆）<br>（这里其实就是校验请求的服务器是否是可靠的信任的）</p>
+<p>第四步如果浏览器确认无误就会回复服务器 然后双方使用规定的加密方式 用密钥建立通信</p>
+<p>如果浏览器判断证书有问题就会提示用户 这是一个不受信任的 请求之类类似的玩意</p>
+<h3 id="那微信这样做是为了什么？"><a href="#那微信这样做是为了什么？" class="headerlink" title="那微信这样做是为了什么？"></a>那微信这样做是为了什么？</h3><p>原因就在第三步那里，微信签了 <code>DigiCert</code> 和 <code>Baltimore</code> 的证书 </p>
+<p>因此在第二步的时候 微信服务器返回了他的签认证书 我们去校验他是不是真的微信服务器 </p>
+<p>所以会读取我们本地的系统级一些根证书（比如windows 或者 Linux 下其实已经内置了很多大厂的根证书）</p>
+<p>如果我们本地没有DigiCert的根证书 也没有 Baltimore 的根证书 这个时候根本没办法校验微信证书的真假</p>
+<p>浏览器直接弹出提示 说对方不安全 <strong>有可能直接中断请求（比如chrome就准备这么搞事情）</strong></p>
+<p>微信主要就是防止这个 所有需要我们校验自己的服务器是否已经内置了 相应的 Baltimore 或者 DigiCert 根证书</p>
+<h3 id="根证书和其他证书关系"><a href="#根证书和其他证书关系" class="headerlink" title="根证书和其他证书关系"></a>根证书和其他证书关系</h3><p><img src="http://obomwzenb.bkt.clouddn.com/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png" alt="证书"></p>
+<p>证书的关系类似这样 因为只要根证书是可信任的 他就可以校验他的下面所有签发的证书是不是有效真实的</p>
+<h3 id="我们需要做什么"><a href="#我们需要做什么" class="headerlink" title="我们需要做什么"></a>我们需要做什么</h3><p>我们只需要在我们自己的服务器中安装下 <strong>Baltimore</strong> 或者 <strong>DigiCert</strong> 的根证书就可以了</p>
+<p>至于微信官网写的那些校验只是校验这些的</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2017">2017</h2>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Http/" rel="tag">#Http</a>
+          
         </div>
       
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/09/20180509/" rel="next" title="Mysql && Laravel 事务总结">
+                <i class="fa fa-chevron-left"></i> Mysql && Laravel 事务总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/04/20180604/" rel="prev" title="欢雀小保重构项目总结">
+                欢雀小保重构项目总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/01/20171201/" itemprop="url">
-              
-                <span itemprop="name">TCP/IP协议族的体系结构扫盲</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-01T11:46:54+08:00"
-              content="2017-12-01" >
-          12-01
-        </time>
-      </div>
-
-    </header>
+      
+    </footer>
   </article>
 
 
 
-    
-
-  </section>
-
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -293,6 +405,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/05/22/20180522/"
+           data-title="关于微信支付升级替换证书问题" data-url="https://caihongtengxu.github.io/2018/05/22/20180522/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -312,8 +432,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/che2.png"
@@ -363,6 +492,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#首先请求微信的Https服务器是这样的"><span class="nav-number">1.</span> <span class="nav-text">首先请求微信的Https服务器是这样的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#那微信这样做是为了什么？"><span class="nav-number">2.</span> <span class="nav-text">那微信这样做是为了什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根证书和其他证书关系"><span class="nav-number">3.</span> <span class="nav-text">根证书和其他证书关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#我们需要做什么"><span class="nav-number">4.</span> <span class="nav-text">我们需要做什么</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -466,11 +606,9 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
