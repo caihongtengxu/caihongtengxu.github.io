@@ -28,23 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Js," />
+  <meta name="keywords" content="Http," />
 
 
 
 
 
 
-<meta name="description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
+<meta name="description" content="最近一直忙于上个项目的发布上线 也没空做别的 另外一个版本的开发计划又延期了本次发布后出现了不少问题 处理的焦头烂额 都是些看了很懵 又很奇葩的问题写个记录方便以后回忆吧">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Input type=file 原生上传使用总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/12/15/20161215/index.html">
+<meta property="og:title" content="项目发布中奇葩问题总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/06/08/20180608/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
-<meta property="og:updated_time" content="2018-06-08T05:46:48.662Z">
+<meta property="og:description" content="最近一直忙于上个项目的发布上线 也没空做别的 另外一个版本的开发计划又延期了本次发布后出现了不少问题 处理的焦头烂额 都是些看了很懵 又很奇葩的问题写个记录方便以后回忆吧">
+<meta property="og:updated_time" content="2018-07-04T03:38:49.049Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Input type=file 原生上传使用总结">
-<meta name="twitter:description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
+<meta name="twitter:title" content="项目发布中奇葩问题总结">
+<meta name="twitter:description" content="最近一直忙于上个项目的发布上线 也没空做别的 另外一个版本的开发计划又延期了本次发布后出现了不少问题 处理的焦头烂额 都是些看了很懵 又很奇葩的问题写个记录方便以后回忆吧">
 
 
 
@@ -65,7 +65,7 @@
 
 
 
-  <title> 使用Input type=file 原生上传使用总结 | 指尖的彩虹 </title>
+  <title> 项目发布中奇葩问题总结 | 指尖的彩虹 </title>
   
 </head>
 
@@ -251,7 +251,7 @@
             
             
               
-                使用Input type=file 原生上传使用总结
+                项目发布中奇葩问题总结
               
             
           </h1>
@@ -263,8 +263,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-12-15T00:00:00+08:00" content="2016-12-15">
-              2016-12-15
+            <time itemprop="dateCreated" datetime="2018-06-08T11:25:04+08:00" content="2018-06-08">
+              2018-06-08
             </time>
           </span>
 
@@ -277,8 +277,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Js/" itemprop="url" rel="index">
-                    <span itemprop="name">Js</span>
+                  <a href="/categories/Http/" itemprop="url" rel="index">
+                    <span itemprop="name">Http</span>
                   </a>
                 </span>
 
@@ -293,8 +293,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/12/15/20161215/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/15/20161215/" itemprop="commentsCount"></span>
+                <a href="/2018/06/08/20180608/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/06/08/20180608/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -317,25 +317,44 @@
       
 
       
-        <hr>
-<p>最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用<code>input</code>标签中的<code>type=file</code>这种原生的上传 写下分享下<br><a id="more"></a></p>
-<h4 id="传统的上传"><a href="#传统的上传" class="headerlink" title="传统的上传"></a>传统的上传</h4><p>比如我们在正常的<code>form</code>表单中需要上传一张图片 一般不使用插件之类的常用做法就是先设置form属性 <code>enctype =&quot;multipart/form-data&quot;</code> 最后提交form表单 然后后天那边自己写处理接受存储啥的 但是这样做会直接刷新页面 很多时候我们不希望提交页面这种 一般都会想到<code>ajax</code>之类 当然也有别的方法吧 小弟学渣</p>
-<h4 id="Ajax上传"><a href="#Ajax上传" class="headerlink" title="Ajax上传"></a>Ajax上传</h4><p>使用ajax上传时 需要把要提交的数据组成<code>key=&gt;value</code>的形式 但是文件流就比较麻烦了 他不能被转换成字符之类 即使你使用<code>serialize</code> 也不能把文件流序列化 然后传送到后端 不过没关系 有个 <code>FormData</code>的玩意可以帮助我们在 <strong>ajax</strong> 中提交文件流</p>
-<h5 id="FormData-简介"><a href="#FormData-简介" class="headerlink" title="FormData 简介"></a>FormData 简介</h5><blockquote>
-<p>The FormData interface provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to “multipart/form-data”.<br>大概就是说  <strong>FormData</strong> 接口提供了一种很方便的方法去构建表单中的 <strong>属性=&gt;值</strong> 的这种键值对结构 另外他还可以使用 <strong>XMLHttpRequest.send()</strong> 来发送异步请求 如果设置了  <strong>multipart/form-data</strong>  还可以使用和form表单一样的格式化(渣渣英文翻译水平勿喷！！！)</p>
+        <blockquote>
+<p>最近一直忙于上个项目的发布上线 也没空做别的 另外一个版本的开发计划又延期了<br>本次发布后出现了不少问题 处理的焦头烂额 都是些看了很懵 又很奇葩的问题<br>写个记录方便以后回忆吧<br><a id="more"></a></p>
 </blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>创建一个formdata对象</div><div class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line"><span class="number">2.</span>添加属性值 append方法有<span class="number">2</span>个版本 一个是传<span class="number">2</span>个参数的 一个是传递<span class="number">3</span>个参数的</div><div class="line">①formData.append(<span class="string">'key_name'</span>,<span class="string">'value'</span>); <span class="comment">//这种可以用来设置普通的字符串之类的值</span></div><div class="line">②formData.append(<span class="string">'key_name'</span>,<span class="string">'value'</span>,<span class="string">'file_name'</span>); <span class="comment">//这种用来设置 Blob 和 File 类型的值 如果是blob类型的 第三个参数默认写 ‘blob’就行 如果是file 类型 默认就写上传的文件名就行</span></div><div class="line">eg:formData.append(<span class="string">'file'</span>,myFileInput.files[<span class="number">0</span>],<span class="string">'test.jpg'</span>);</div><div class="line"><span class="number">3.</span>设置的Key也可以是数组形式</div><div class="line">formData.append(<span class="string">'userpic[]'</span>, myFileInput1.files[<span class="number">0</span>], <span class="string">'chris1.jpg'</span>);</div><div class="line">formData.append(<span class="string">'userpic[]'</span>, myFileInput2.files[<span class="number">0</span>], <span class="string">'chris2.jpg'</span>);</div></pre></td></tr></table></figure>
-<p>其实我用<code>append()</code>2个参数的也可以提交<code>file</code> 第二个参数直接传递 <strong>file</strong> 对象就可以了<br>具体参考 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="external">MDN</a> 这里有详细的介绍 包括浏览器的兼容情况等等</p>
-<h5 id="通过Ajax使用FormData实现上传图片"><a href="#通过Ajax使用FormData实现上传图片" class="headerlink" title="通过Ajax使用FormData实现上传图片"></a>通过Ajax使用FormData实现上传图片</h5><p>html:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;label for="uploadID_face" class="show_info show_info_face" id="show_info_face"&gt;+身份证正面&lt;/label&gt;</div><div class="line">&lt;input class="hide"  type="file" id="uploadID_face" /&gt;</div></pre></td></tr></table></figure>
-<p>我做了一个lable-for的绑定 不用学我<br>js:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">$(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">	$(<span class="string">'#uploadID_face'</span>).change(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="keyword">var</span> file=this.files[<span class="number">0</span>]; <span class="comment">//这里是获取file对象 id对应了上面的input的id属性 0 表示取的第一个</span></div><div class="line">            reader = <span class="keyword">new</span> FileReader(); <span class="comment">//这个filereader对象也是 MDN mozilla里的东东 可以看看</span></div><div class="line">            reader.readAsDataURL(file); <span class="comment">//这个就是把文件读取成base64的格式 输出成图片的一个url一样的东东可以在本地访问到图片 传递进来的file对象已经被处理过了</span></div><div class="line">            <span class="comment">//console.log(file);</span></div><div class="line">            reader.onload = <span class="function"><span class="keyword">function</span><span class="params">( evt )</span></span>&#123;</div><div class="line">                <span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line">                formData.append(<span class="string">'file'</span>,file);</div><div class="line">                console.log(reader.result);</div><div class="line">                new_fileload(formData);</div><div class="line">           &#125;</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">new_fileload</span><span class="params">(formData)</span></span>&#123;</div><div class="line">            $.ajax(&#123;</div><div class="line">                type:<span class="string">"post"</span>,</div><div class="line">                url:<span class="string">'your upload url'</span>,</div><div class="line">                processData: <span class="keyword">false</span>,</div><div class="line">                cache: <span class="keyword">false</span>,</div><div class="line">                contentType: <span class="keyword">false</span>,</div><div class="line">                data:formData,</div><div class="line">                success:<span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>&#123;</div><div class="line">                    <span class="comment">//上传结果的判断以及后续的一些操作 比如上传显示缩略图等</span></div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>上面的ajax中需要注意几个参数<br>1.processData 设置为false 表示对formdata对象不做处理<br>2.cache设置为false 表示上传文件不需要缓存<br>3.contentType设置为false 表示表示不设置该值</p>
-</blockquote>
-<p>然后后台接受处理就好了 因为我上面的formData中设置的名字是file所以后台接受了一个file的变量名 我使用的是PHP</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$fileData=$_FILES[<span class="string">'file'</span>];</div><div class="line"><span class="comment">//使用了CurlFile构建了一个后端file文件对象 自己写的上传需要</span></div><div class="line">$file   = <span class="keyword">new</span> CURLFile($fileData[<span class="string">'tmp_name'</span>], $fileData[<span class="string">'type'</span>], $fileData[<span class="string">'name'</span>]);</div></pre></td></tr></table></figure>
-<p>仅供参考</p>
+<hr>
+<h3 id="关于Https-和-http-交叉请求-问题"><a href="#关于Https-和-http-交叉请求-问题" class="headerlink" title="关于Https 和 http 交叉请求 问题"></a>关于Https 和 http 交叉请求 问题</h3><p>最近新上线的项目直接使用了 <code>Https</code> 来访问 之前项目都是配置的可以同时使用 <code>https</code> 或者 <code>http</code> 来请求也一直没有注意这个问题(平时访问我们自己的站点我都是直接用的http 捂脸~) 这次发现有好多 <code>Mixed Content</code> 的报错 原因就是直接从 <code>Https</code> 页面下去加载 <code>Http</code>的资源 这里主要是调用接口 报错内容如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Mixed Content: The page at <span class="string">'https://xxxx1'</span> was loaded over HTTPS, but requested an insecure resource <span class="string">'http://api.xx.com'</span>. This request has been blocked; the content must be served over HTTPS.</div></pre></td></tr></table></figure>
+<p>现在知道了问题原因 来说下解决办法<br>1.比较彻底的办法就是使相关的站点全部升级 <code>Https</code> 当然这里处理起来可能会因为各种因素比较费时费力 但是是比较彻底的一种办法（本次我们就这样处理的 所有的 <code>API</code> 项目 全部升级 Https）</p>
+<p>2.第二种解决办法就是在 <code>&lt;head&gt;</code> 代码中增加 如下代码</p>
+<p><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;upgrade-insecure-requests&quot;&gt;</code></p>
+<p>他的作用是在我们的 Https 的页面中 如果发现 存在 Http 的资源 会自动替换成 Https 的请求来加载 【并不太推荐这个 浏览器支持不是很好】</p>
+<h3 id="关于部分链接呗-Abp-广告拦截插件拦截"><a href="#关于部分链接呗-Abp-广告拦截插件拦截" class="headerlink" title="关于部分链接呗 Abp 广告拦截插件拦截"></a>关于部分链接呗 Abp 广告拦截插件拦截</h3><p>这里要说一个问题了 就是项目上线后 某位同事访问测试了下 然后发现页面中有个报错 仔细看了下是有一个接口请求报错了</p>
+<p>然后我复查了下接口 怀疑是否是接口报错了 然后发现接口 一切正常 并没有什么问题 找另外同事访问也是正常 唯独这一位同事会报错</p>
+<p>后来仔细看了下 接口的 请求状态 发现是 <code>net::ERR_BLOCKED_BY_CLIENT</code> </p>
+<p>通常这种问题是由于服务器中缺少文件或者url拼写错误 在请求不丢失的边缘 有其他什么东西阻止了请求。</p>
+<p>可以阻止请求的东西就很多了 比如传输之间的网络传输层，代理服务器或者路由器 当然还有个最坑爹的玩意 就是被浏览器扩展插件阻止了请求 比如 <font color="red"> <strong><code>AdBlock Plus</code></strong> </font> 这样的 广告拦截器</p>
+<p>最后一番排查 果然这位同事在 <strong>chrome </strong> 浏览器中 安装了 <strong>AdBlock Plus</strong> 但是为什么这个广告拦截器只拦截了这一个接口请求地址呢 经过同事提醒 最后发现 是接口名字出了问题 简直要笑死自己 来看下接口名字</p>
+<p><code>https://api.x.x.com/advertisement/list</code></p>
+<p>这个接口的作用是用来加载公司设置的广告列表的 我直接使用了 <code>advertisement</code> 这个词来命名接口 翻译过来就是 <strong>广告</strong> 的意思 然后直接被</p>
+<p><strong>AdBlock Plus</strong> 给拦截了 无奈 为了防止还有用户是安装了 该插件的 修改了下接口的名字 问题解决 所以以后命名的时候还是需要多多注意下~</p>
+<h3 id="关于合并代码个别文件权限问题"><a href="#关于合并代码个别文件权限问题" class="headerlink" title="关于合并代码个别文件权限问题"></a>关于合并代码个别文件权限问题</h3><p>这是一个很诡异的问题 遇见了好几次了 有点莫名其妙 就是在我们项目准备发布的接口 准备去合并代码 然后提交发布了</p>
+<p>但是合并的时候发现有一个文件提示权限又问题 忘记截图报错内容了,但是一番查看 文件权限并没有问题 也不存在别的编辑器打开当前文件占用问题</p>
+<p>后来问了某位 <strong>高玩</strong> 给了个建议 <font color="red"><strong>把当前系统打开的所有编辑器IDE都关闭掉</strong></font> 然后重新合并，提交成功了</p>
+<p>至今也不知道什么鬼原因 只知道这样可以解决 也是笑哭自己！</p>
+<h3 id="关于Laravel-Redis访问不了问题"><a href="#关于Laravel-Redis访问不了问题" class="headerlink" title="关于Laravel-Redis访问不了问题"></a>关于Laravel-Redis访问不了问题</h3><p>这也是一个奇葩的问题</p>
+<p>问题描述：</p>
+<p>【Lumen项目】在做微信js授权的时候 想缓存那个 <code>ticket</code> 的值,然后想直接存到 <code>Redis</code> 中</p>
+<p>本地开发一帆风顺 然后提交测试环境准备测试的时候 直接报错502</p>
+<p>最后定位到问题是 <code>Redis</code> 的连接出了问题 但是看 Redis 的连接配置并没有什么问题</p>
+<p>在<code>.env</code> 文件中</p>
+<p>本地的Redis配置参数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#redis配置</span></div><div class="line">REDIS_HOST=<span class="number">192.168</span><span class="number">.1</span><span class="number">.80</span></div><div class="line">REDIS_PORT=<span class="number">6379</span></div><div class="line">REDIS_PASSWORD=Gundam</div></pre></td></tr></table></figure>
+<p>然后测试环境的Redis配置 【测试环境是没有设置密码的】<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#redis配置</span></div><div class="line">REDIS_HOST=<span class="number">192.168</span><span class="number">.1</span><span class="number">.80</span></div><div class="line">REDIS_PORT=<span class="number">6379</span></div><div class="line">REDIS_PASSWORD=</div></pre></td></tr></table></figure></p>
+<p>乍一看没啥毛病啊 郁闷了半天 找了好几个同事看也没啥问题 最后试了下把密码也做掉了 然后报错信息出来了</p>
+<p><code>AUTH failed: ERR Client sent AUTH, but no password is set [tcp://192.1.1.1:6379]</code></p>
+<p>问题就出在坑爹的没密码上 照常没有密码就没有呗 但是如果你配置了参数 <code>REDIS_PASSWORD</code> 就必须给他一个值 默认下没有这个配置参数的时候底层链接Redis的时候他会填上一 <code>null</code> 值 而我的配置文件中 设置了 <code>REDIS_PASSWORD</code> 但是却没有给他值 所以底层连接 Redis的时候加载了配置文件 带入这个进去就报错了</p>
+<p>解决办法 在没有密码的时候设置null即可 <code>REDIS_PASSWORD=null</code></p>
+<p>至此本次项目中几个问题都解决了</p>
+<p>继续努力~</p>
 <hr>
 
       
@@ -358,7 +377,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Js/" rel="tag">#Js</a>
+            <a href="/tags/Http/" rel="tag">#Http</a>
           
         </div>
       
@@ -367,17 +386,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/29/20161129/" rel="next" title="Laravel中队列使用总结">
-                <i class="fa fa-chevron-left"></i> Laravel中队列使用总结
+              <a href="/2018/06/07/20180607/" rel="next" title="请求跨域问题总结">
+                <i class="fa fa-chevron-left"></i> 请求跨域问题总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/26/20170626/" rel="prev" title="windows下给Gvim安装NERDTree目录树插件">
-                windows下给Gvim安装NERDTree目录树插件 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -403,8 +418,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/15/20161215/"
-           data-title="使用Input type=file 原生上传使用总结" data-url="https://caihongtengxu.github.io/2016/12/15/20161215/">
+      <div class="ds-thread" data-thread-key="2018/06/08/20180608/"
+           data-title="项目发布中奇葩问题总结" data-url="https://caihongtengxu.github.io/2018/06/08/20180608/">
       </div>
     
   </div>
@@ -495,7 +510,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#传统的上传"><span class="nav-number">1.</span> <span class="nav-text">传统的上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ajax上传"><span class="nav-number">2.</span> <span class="nav-text">Ajax上传</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#FormData-简介"><span class="nav-number">2.1.</span> <span class="nav-text">FormData 简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#通过Ajax使用FormData实现上传图片"><span class="nav-number">2.2.</span> <span class="nav-text">通过Ajax使用FormData实现上传图片</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Https-和-http-交叉请求-问题"><span class="nav-number">1.</span> <span class="nav-text">关于Https 和 http 交叉请求 问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于部分链接呗-Abp-广告拦截插件拦截"><span class="nav-number">2.</span> <span class="nav-text">关于部分链接呗 Abp 广告拦截插件拦截</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于合并代码个别文件权限问题"><span class="nav-number">3.</span> <span class="nav-text">关于合并代码个别文件权限问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Laravel-Redis访问不了问题"><span class="nav-number">4.</span> <span class="nav-text">关于Laravel-Redis访问不了问题</span></a></li></ol></div>
             
           </div>
         </section>

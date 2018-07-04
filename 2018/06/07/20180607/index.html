@@ -28,23 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Js," />
+  <meta name="keywords" content="Http," />
 
 
 
 
 
 
-<meta name="description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
+<meta name="description" content="最近在项目中出现了好多跨域的问题 写个回忆简单说下跨域请求的发生：当 Web 资源请求由其它域名或端口提供的资源时，会发起跨域 HTTP 请求（cross-origin HTTP request）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Input type=file 原生上传使用总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/12/15/20161215/index.html">
+<meta property="og:title" content="请求跨域问题总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/06/07/20180607/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
-<meta property="og:updated_time" content="2018-06-08T05:46:48.662Z">
+<meta property="og:description" content="最近在项目中出现了好多跨域的问题 写个回忆简单说下跨域请求的发生：当 Web 资源请求由其它域名或端口提供的资源时，会发起跨域 HTTP 请求（cross-origin HTTP request）">
+<meta property="og:updated_time" content="2018-07-04T03:38:57.377Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Input type=file 原生上传使用总结">
-<meta name="twitter:description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
+<meta name="twitter:title" content="请求跨域问题总结">
+<meta name="twitter:description" content="最近在项目中出现了好多跨域的问题 写个回忆简单说下跨域请求的发生：当 Web 资源请求由其它域名或端口提供的资源时，会发起跨域 HTTP 请求（cross-origin HTTP request）">
 
 
 
@@ -65,7 +65,7 @@
 
 
 
-  <title> 使用Input type=file 原生上传使用总结 | 指尖的彩虹 </title>
+  <title> 请求跨域问题总结 | 指尖的彩虹 </title>
   
 </head>
 
@@ -251,7 +251,7 @@
             
             
               
-                使用Input type=file 原生上传使用总结
+                请求跨域问题总结
               
             
           </h1>
@@ -263,8 +263,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-12-15T00:00:00+08:00" content="2016-12-15">
-              2016-12-15
+            <time itemprop="dateCreated" datetime="2018-06-07T10:00:12+08:00" content="2018-06-07">
+              2018-06-07
             </time>
           </span>
 
@@ -277,8 +277,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Js/" itemprop="url" rel="index">
-                    <span itemprop="name">Js</span>
+                  <a href="/categories/Http/" itemprop="url" rel="index">
+                    <span itemprop="name">Http</span>
                   </a>
                 </span>
 
@@ -293,8 +293,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/12/15/20161215/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/15/20161215/" itemprop="commentsCount"></span>
+                <a href="/2018/06/07/20180607/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/06/07/20180607/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -317,25 +317,49 @@
       
 
       
-        <hr>
-<p>最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用<code>input</code>标签中的<code>type=file</code>这种原生的上传 写下分享下<br><a id="more"></a></p>
-<h4 id="传统的上传"><a href="#传统的上传" class="headerlink" title="传统的上传"></a>传统的上传</h4><p>比如我们在正常的<code>form</code>表单中需要上传一张图片 一般不使用插件之类的常用做法就是先设置form属性 <code>enctype =&quot;multipart/form-data&quot;</code> 最后提交form表单 然后后天那边自己写处理接受存储啥的 但是这样做会直接刷新页面 很多时候我们不希望提交页面这种 一般都会想到<code>ajax</code>之类 当然也有别的方法吧 小弟学渣</p>
-<h4 id="Ajax上传"><a href="#Ajax上传" class="headerlink" title="Ajax上传"></a>Ajax上传</h4><p>使用ajax上传时 需要把要提交的数据组成<code>key=&gt;value</code>的形式 但是文件流就比较麻烦了 他不能被转换成字符之类 即使你使用<code>serialize</code> 也不能把文件流序列化 然后传送到后端 不过没关系 有个 <code>FormData</code>的玩意可以帮助我们在 <strong>ajax</strong> 中提交文件流</p>
-<h5 id="FormData-简介"><a href="#FormData-简介" class="headerlink" title="FormData 简介"></a>FormData 简介</h5><blockquote>
-<p>The FormData interface provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to “multipart/form-data”.<br>大概就是说  <strong>FormData</strong> 接口提供了一种很方便的方法去构建表单中的 <strong>属性=&gt;值</strong> 的这种键值对结构 另外他还可以使用 <strong>XMLHttpRequest.send()</strong> 来发送异步请求 如果设置了  <strong>multipart/form-data</strong>  还可以使用和form表单一样的格式化(渣渣英文翻译水平勿喷！！！)</p>
+        <blockquote>
+<p>最近在项目中出现了好多跨域的问题 写个回忆<br>简单说下跨域请求的发生：当 Web 资源请求由其它域名或端口提供的资源时，会发起跨域 HTTP 请求（cross-origin HTTP request）<br><a id="more"></a></p>
 </blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>创建一个formdata对象</div><div class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line"><span class="number">2.</span>添加属性值 append方法有<span class="number">2</span>个版本 一个是传<span class="number">2</span>个参数的 一个是传递<span class="number">3</span>个参数的</div><div class="line">①formData.append(<span class="string">'key_name'</span>,<span class="string">'value'</span>); <span class="comment">//这种可以用来设置普通的字符串之类的值</span></div><div class="line">②formData.append(<span class="string">'key_name'</span>,<span class="string">'value'</span>,<span class="string">'file_name'</span>); <span class="comment">//这种用来设置 Blob 和 File 类型的值 如果是blob类型的 第三个参数默认写 ‘blob’就行 如果是file 类型 默认就写上传的文件名就行</span></div><div class="line">eg:formData.append(<span class="string">'file'</span>,myFileInput.files[<span class="number">0</span>],<span class="string">'test.jpg'</span>);</div><div class="line"><span class="number">3.</span>设置的Key也可以是数组形式</div><div class="line">formData.append(<span class="string">'userpic[]'</span>, myFileInput1.files[<span class="number">0</span>], <span class="string">'chris1.jpg'</span>);</div><div class="line">formData.append(<span class="string">'userpic[]'</span>, myFileInput2.files[<span class="number">0</span>], <span class="string">'chris2.jpg'</span>);</div></pre></td></tr></table></figure>
-<p>其实我用<code>append()</code>2个参数的也可以提交<code>file</code> 第二个参数直接传递 <strong>file</strong> 对象就可以了<br>具体参考 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="external">MDN</a> 这里有详细的介绍 包括浏览器的兼容情况等等</p>
-<h5 id="通过Ajax使用FormData实现上传图片"><a href="#通过Ajax使用FormData实现上传图片" class="headerlink" title="通过Ajax使用FormData实现上传图片"></a>通过Ajax使用FormData实现上传图片</h5><p>html:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;label for="uploadID_face" class="show_info show_info_face" id="show_info_face"&gt;+身份证正面&lt;/label&gt;</div><div class="line">&lt;input class="hide"  type="file" id="uploadID_face" /&gt;</div></pre></td></tr></table></figure>
-<p>我做了一个lable-for的绑定 不用学我<br>js:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">$(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">	$(<span class="string">'#uploadID_face'</span>).change(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="keyword">var</span> file=this.files[<span class="number">0</span>]; <span class="comment">//这里是获取file对象 id对应了上面的input的id属性 0 表示取的第一个</span></div><div class="line">            reader = <span class="keyword">new</span> FileReader(); <span class="comment">//这个filereader对象也是 MDN mozilla里的东东 可以看看</span></div><div class="line">            reader.readAsDataURL(file); <span class="comment">//这个就是把文件读取成base64的格式 输出成图片的一个url一样的东东可以在本地访问到图片 传递进来的file对象已经被处理过了</span></div><div class="line">            <span class="comment">//console.log(file);</span></div><div class="line">            reader.onload = <span class="function"><span class="keyword">function</span><span class="params">( evt )</span></span>&#123;</div><div class="line">                <span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line">                formData.append(<span class="string">'file'</span>,file);</div><div class="line">                console.log(reader.result);</div><div class="line">                new_fileload(formData);</div><div class="line">           &#125;</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">new_fileload</span><span class="params">(formData)</span></span>&#123;</div><div class="line">            $.ajax(&#123;</div><div class="line">                type:<span class="string">"post"</span>,</div><div class="line">                url:<span class="string">'your upload url'</span>,</div><div class="line">                processData: <span class="keyword">false</span>,</div><div class="line">                cache: <span class="keyword">false</span>,</div><div class="line">                contentType: <span class="keyword">false</span>,</div><div class="line">                data:formData,</div><div class="line">                success:<span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>&#123;</div><div class="line">                    <span class="comment">//上传结果的判断以及后续的一些操作 比如上传显示缩略图等</span></div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+<h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>本次请求跨域主要发生在前端调用后端API上<br>会先发一个 <code>Options</code> 的预检请求 这个的返回一直过不去 导致真正的接口调用失败</p>
+<p>在正式讲这个之前 需要讲一下简单请求和非简单请求<br>具体参考可以看 廖雪峰大神的博客 讲的很细很具体 <a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="external">点我走你</a></p>
 <blockquote>
-<p>上面的ajax中需要注意几个参数<br>1.processData 设置为false 表示对formdata对象不做处理<br>2.cache设置为false 表示上传文件不需要缓存<br>3.contentType设置为false 表示表示不设置该值</p>
+<p>先来简单讲下 CORS(Cross-origin resource sharing) 跨域资源共享<br>他允许浏览器向本站以外的站点发起 <strong>XMLHttpRequest</strong>请求 说白就是你可以发送类似 Ajax 的请求,请求别人<br>浏览器一旦发现你是Ajax的跨域请求 会自动附加一些头信息 这个头信息决定了当前的请求是简单请求还是非简单请求</p>
 </blockquote>
-<p>然后后台接受处理就好了 因为我上面的formData中设置的名字是file所以后台接受了一个file的变量名 我使用的是PHP</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$fileData=$_FILES[<span class="string">'file'</span>];</div><div class="line"><span class="comment">//使用了CurlFile构建了一个后端file文件对象 自己写的上传需要</span></div><div class="line">$file   = <span class="keyword">new</span> CURLFile($fileData[<span class="string">'tmp_name'</span>], $fileData[<span class="string">'type'</span>], $fileData[<span class="string">'name'</span>]);</div></pre></td></tr></table></figure>
-<p>仅供参考</p>
+<h3 id="简单请求-Simple-Request"><a href="#简单请求-Simple-Request" class="headerlink" title="简单请求 (Simple Request)"></a>简单请求 (Simple Request)</h3><p>在 Cors 中的简单请求<br>1.包含 <code>GET</code> <code>HEAD</code> <code>POST</code></p>
+<p>2.HTTP的头信息不超出以下几种字段：Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain</p>
+<p>这样就是一个简单请求 简单会直接请求 服务器只要回复中允许 <code>Origin</code> 的源就可以了</p>
+<h3 id="非简单请求-Not-so-Simple-Request"><a href="#非简单请求-Not-so-Simple-Request" class="headerlink" title="非简单请求 (Not-so-Simple Request)"></a>非简单请求 (Not-so-Simple Request)</h3><p>非简单请求是那种对服务器有特殊要求的请求，比如请求方法是PUT或DELETE，或者Content-Type字段的类型是application/json</p>
+<p>非简单请求的CORS请求，会在正式通信之前，增加一次HTTP查询请求，称为”预检”请求（preflight）。</p>
+<p>浏览器先询问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些HTTP动词和头信息字段。</p>
+<p>只有得到肯定答复，浏览器才会发出正式的XMLHttpRequest请求，否则就报错</p>
+<h3 id="关于Options请求"><a href="#关于Options请求" class="headerlink" title="关于Options请求"></a>关于Options请求</h3><blockquote>
+<p>OPTIONS方法是用于请求获得由Request-URI标识的资源在请求/响应的通信过程中可以使用的功能选项。通过这个方法，客户端可以在采取具体资源请求之前，决定对该资源采取何种必要措施，或者了解服务器的性能</p>
+</blockquote>
+<p>关于Http请求有8种 <code>OPTIONS</code>、<code>GET</code>、<code>HEAD</code>、<code>POST</code>、<code>PUT</code>、<code>DELETE</code>、<code>TRACE</code>、<code>CONNECT</code></p>
+<p>其中最常用的莫过于 <code>GET</code> 和 <code>POST</code> 了</p>
+<p><code>Options</code> 请求主要实现2个功能</p>
+<p>1.获取服务器支持的HTTP请求方法</p>
+<p>2.用来检查服务器的性能。例如：AJAX进行跨域请求时的预检，需要向另外一个域名的资源发送一个HTTP OPTIONS请求头，用以判断实际发送的请求是否安全</p>
+<p>为什么会产生 <code>Options</code> 请求?</p>
+<p>因为浏览器发现你当前不是一个简单请求 在正式通信前发送了一次预检请求 也就是 <code>Options</code> 请求 来请求服务器允许的请求方法 和 一些Header头</p>
+<p>服务器需要回复几个相关的字段就好了 如果没有这些字段 浏览器就会默认服务器不同意预检 后面的真正请求也就不会发出去 同时控制台可以看到类似的错误</p>
+<p><code>XMLHttpRequest cannot load http://local.xxx.com.Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.</code></p>
+<p>服务器方需要回复 下面的相关字段来应答 预检的 <code>Options</code> 请求</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Access-Control-Allow-Methods: GET, POST, PUT</div><div class="line">Access-Control-Allow-Headers: X-Custom-Header</div><div class="line">Access-Control-Allow-Credentials: <span class="keyword">true</span></div><div class="line">Access-Control-Max-Age: <span class="number">1728000</span></div></pre></td></tr></table></figure>
+<p>问题和基本概况已经讲解</p>
+<p>因为后端 是使用的 <code>Lumen</code> 框架做的微服务 提供 <code>API</code> 给前端调用 我直接很暴力的加了个 <code>Cors</code> 的中间件给路由使用</p>
+<p><code>CorsMiddleware.php</code> 代码片段</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">   &#123;</div><div class="line">       $headers = [</div><div class="line">           <span class="string">'Access-Control-Allow-Origin'</span>      =&gt; <span class="string">'*'</span>,</div><div class="line">           <span class="string">'Access-Control-Allow-Methods'</span>     =&gt; <span class="string">'POST, GET, OPTIONS, PUT, DELETE'</span>,</div><div class="line">           <span class="string">'Access-Control-Allow-Credentials'</span> =&gt; <span class="string">'true'</span>,</div><div class="line">           <span class="string">'Access-Control-Max-Age'</span>           =&gt; <span class="string">'86400'</span>,</div><div class="line">           <span class="string">'Access-Control-Allow-Headers'</span>     =&gt; <span class="string">'Content-Type, Accept, Authorization, X-Requested-With, Application'</span>,</div><div class="line">           <span class="string">'Access-Control-Request-Headers'</span>   =&gt; <span class="string">'Content-Type'</span>,<span class="comment">//CORS请求会额外发送的头信息字段</span></div><div class="line">       ];</div><div class="line">       <span class="keyword">if</span> ($request-&gt;isMethod(<span class="string">'OPTIONS'</span>))</div><div class="line">       &#123;</div><div class="line">           $response = $next($request);</div><div class="line">           <span class="keyword">foreach</span>($headers <span class="keyword">as</span> $key =&gt; $value)</div><div class="line">           &#123;</div><div class="line">               $response-&gt;headers-&gt;set($key, $value);</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line">       <span class="keyword">return</span> $response;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>然后在 <code>Kernel.php</code> 的 <code>routeMiddleware</code> 中 增加了如下配置</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * The application's route middleware.</div><div class="line">    * These middleware may be assigned to groups or used individually.</div><div class="line">    * <span class="doctag">@var</span> array</div><div class="line">    */</div><div class="line">   <span class="keyword">protected</span> $routeMiddleware = [</div><div class="line">       <span class="comment">//跨域请求头信息</span></div><div class="line">       <span class="string">'cors'</span> =&gt;  \App\Http\Middleware\Cors::class,</div><div class="line">   ];</div></pre></td></tr></table></figure>
+<p>直接给<code>Options</code> 请求增加返回了上面的一个header头</p>
+<p>但是最后发现并没有生效 因为这里只是声明了一个中间件的名字 而你需要在对应的请求路由设置 去引用这个中间件才能生效 </p>
+<p>然后在路由中加了中间件 还是发现没有生效 这时又发现了个问题 因为我的路由控制中都是写的post或get请求 即使你使用了中间件 他也只是会在对应的请求方式过来的时候才会去加载中间件 所以option请求过来是没有自动加载执行上面的中间件的 如果给每个请求都设置一次options的请求路由会累死啊 最后又去看了下Laravel文档 发现了一个解决办法</p>
+<p>在<code>Kennel.php</code> 的<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">     * The application's global HTTP middleware stack.</div><div class="line">     * These middleware are run during every request to your application.</div><div class="line">     * <span class="doctag">@var</span> array</div><div class="line">     */</div><div class="line">    <span class="keyword">protected</span> $middleware = [</div><div class="line">        <span class="comment">//中间件加到这里才会使每个请求都生效 都会先走这个中间件检测</span></div><div class="line">        \App\Http\Middleware\Cors::class,</div><div class="line">    ];</div></pre></td></tr></table></figure></p>
+<p>加载到这里的中间件才会全局执行 不论什么请求进来 </p>
+<p>至此解决了本次项目中的接口请求跨域问题</p>
+<p>对框架理解还是不够深啊 加油!</p>
 <hr>
 
       
@@ -358,7 +382,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Js/" rel="tag">#Js</a>
+            <a href="/tags/Http/" rel="tag">#Http</a>
           
         </div>
       
@@ -367,16 +391,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/29/20161129/" rel="next" title="Laravel中队列使用总结">
-                <i class="fa fa-chevron-left"></i> Laravel中队列使用总结
+              <a href="/2018/06/04/20180604/" rel="next" title="欢雀小保重构项目总结">
+                <i class="fa fa-chevron-left"></i> 欢雀小保重构项目总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/26/20170626/" rel="prev" title="windows下给Gvim安装NERDTree目录树插件">
-                windows下给Gvim安装NERDTree目录树插件 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/06/08/20180608/" rel="prev" title="项目发布中奇葩问题总结">
+                项目发布中奇葩问题总结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -403,8 +427,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/15/20161215/"
-           data-title="使用Input type=file 原生上传使用总结" data-url="https://caihongtengxu.github.io/2016/12/15/20161215/">
+      <div class="ds-thread" data-thread-key="2018/06/07/20180607/"
+           data-title="请求跨域问题总结" data-url="https://caihongtengxu.github.io/2018/06/07/20180607/">
       </div>
     
   </div>
@@ -495,7 +519,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#传统的上传"><span class="nav-number">1.</span> <span class="nav-text">传统的上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ajax上传"><span class="nav-number">2.</span> <span class="nav-text">Ajax上传</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#FormData-简介"><span class="nav-number">2.1.</span> <span class="nav-text">FormData 简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#通过Ajax使用FormData实现上传图片"><span class="nav-number">2.2.</span> <span class="nav-text">通过Ajax使用FormData实现上传图片</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单请求-Simple-Request"><span class="nav-number">2.</span> <span class="nav-text">简单请求 (Simple Request)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非简单请求-Not-so-Simple-Request"><span class="nav-number">3.</span> <span class="nav-text">非简单请求 (Not-so-Simple Request)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Options请求"><span class="nav-number">4.</span> <span class="nav-text">关于Options请求</span></a></li></ol></div>
             
           </div>
         </section>
