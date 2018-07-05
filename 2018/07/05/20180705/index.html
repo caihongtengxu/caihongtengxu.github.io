@@ -35,26 +35,22 @@
 
 
 
-<meta name="description" content="最近做了点新功能开了个新分支 然而数据库改动了好多 本来一条条SQL都记录了下 然而最后看了好乱
-推荐个好玩的东东SQLyog 这个东东可以很容易的帮你去比较表结构与数据的不同 以及各种操作的记录
-当然其他的工具应该也有类似的功能 我用的比较少没怎么发现哈哈">
+<meta name="description" content="最近发现有张用户信息表中的性别字段 由于之前的问题 没有正确维护进数据库中
+现在需要维护下 本想直接写个程序跑一下 想想用Mysql来实现应该会很有意思 所以决定用存储过程来完成字段的维护
+顺便复习下存储过程的使用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对比表结构的差异">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/08/28/20160828/index.html">
+<meta property="og:title" content="Mysql 存储过程的使用">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/07/05/20180705/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近做了点新功能开了个新分支 然而数据库改动了好多 本来一条条SQL都记录了下 然而最后看了好乱
-推荐个好玩的东东SQLyog 这个东东可以很容易的帮你去比较表结构与数据的不同 以及各种操作的记录
-当然其他的工具应该也有类似的功能 我用的比较少没怎么发现哈哈">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/001.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/002.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/003.png">
-<meta property="og:updated_time" content="2018-06-08T05:46:04.885Z">
+<meta property="og:description" content="最近发现有张用户信息表中的性别字段 由于之前的问题 没有正确维护进数据库中
+现在需要维护下 本想直接写个程序跑一下 想想用Mysql来实现应该会很有意思 所以决定用存储过程来完成字段的维护
+顺便复习下存储过程的使用">
+<meta property="og:updated_time" content="2018-07-05T10:16:17.950Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="对比表结构的差异">
-<meta name="twitter:description" content="最近做了点新功能开了个新分支 然而数据库改动了好多 本来一条条SQL都记录了下 然而最后看了好乱
-推荐个好玩的东东SQLyog 这个东东可以很容易的帮你去比较表结构与数据的不同 以及各种操作的记录
-当然其他的工具应该也有类似的功能 我用的比较少没怎么发现哈哈">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/001.png">
+<meta name="twitter:title" content="Mysql 存储过程的使用">
+<meta name="twitter:description" content="最近发现有张用户信息表中的性别字段 由于之前的问题 没有正确维护进数据库中
+现在需要维护下 本想直接写个程序跑一下 想想用Mysql来实现应该会很有意思 所以决定用存储过程来完成字段的维护
+顺便复习下存储过程的使用">
 
 
 
@@ -75,7 +71,7 @@
 
 
 
-  <title> 对比表结构的差异 | 指尖的彩虹 </title>
+  <title> Mysql 存储过程的使用 | 指尖的彩虹 </title>
   
 </head>
 
@@ -261,7 +257,7 @@
             
             
               
-                对比表结构的差异
+                Mysql 存储过程的使用
               
             
           </h1>
@@ -273,8 +269,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-28T14:21:46+08:00" content="2016-08-28">
-              2016-08-28
+            <time itemprop="dateCreated" datetime="2018-07-05T17:56:05+08:00" content="2018-07-05">
+              2018-07-05
             </time>
           </span>
 
@@ -303,8 +299,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/08/28/20160828/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/28/20160828/" itemprop="commentsCount"></span>
+                <a href="/2018/07/05/20180705/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/07/05/20180705/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -327,15 +323,25 @@
       
 
       
-        <p>最近做了点新功能开了个新分支 然而数据库改动了好多 本来一条条SQL都记录了下 然而最后看了好乱</p>
-<p>推荐个好玩的东东<code>SQLyog</code> 这个东东可以很容易的帮你去比较表结构与数据的不同 以及各种操作的记录</p>
-<p>当然其他的工具应该也有类似的功能 我用的比较少没怎么发现哈哈<br><a id="more"></a></p>
+        <p>最近发现有张用户信息表中的性别字段 由于之前的问题 没有正确维护进数据库中</p>
+<p>现在需要维护下 本想直接写个程序跑一下 想想用Mysql来实现应该会很有意思 所以决定用存储过程来完成字段的维护</p>
+<p>顺便复习下存储过程的使用<br><a id="more"></a></p>
 <hr>
-<h4 id="比较表结构"><a href="#比较表结构" class="headerlink" title="比较表结构"></a>比较表结构</h4><h5 id="首先打开2个窗口"><a href="#首先打开2个窗口" class="headerlink" title="首先打开2个窗口"></a>首先打开2个窗口</h5><p>如果你是在2个服务器下的数据库就打开2个数据库连接 </p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/001.png" alt="connect to db" title="connect"></p>
-<h5 id="选择架构同步工具"><a href="#选择架构同步工具" class="headerlink" title="选择架构同步工具"></a>选择架构同步工具</h5><p><img src="http://obomwzenb.bkt.clouddn.com/002.png" alt="sqlyom" title="sqlyom"></p>
-<h5 id="选择对比的库-执行比较"><a href="#选择对比的库-执行比较" class="headerlink" title="选择对比的库 执行比较"></a>选择对比的库 执行比较</h5><p><img src="http://obomwzenb.bkt.clouddn.com/003.png" alt="check" title="check"></p>
-<p>执行完后会在下面显示出不同以及自动生成<code>sql</code>语句</p>
+<h4 id="什么是存储过程"><a href="#什么是存储过程" class="headerlink" title="什么是存储过程"></a>什么是存储过程</h4><p>存储过程（Stored Procedure） 是一组为了完成特定功能的 SQL 语句集合 </p>
+<p>它主要用来完成 <code>CURD</code> 操作 其中可以使用流程控制语句 来完成复杂的判断和 复杂的运算等</p>
+<p>在经过编译后可以存储在数据库中 用户可以通过调用存储过程（传入相关参数[并不是必须]） 来调用它</p>
+<h4 id="存储过程和函数的区别"><a href="#存储过程和函数的区别" class="headerlink" title="存储过程和函数的区别"></a>存储过程和函数的区别</h4><p>1.函数必须要有返回值, 而存储过程没有这个限制<br>2.函数只能返回一个变量, 而存储过程可以返回多个<br>3.函数的参数只有 in类的 就是输出参数, 而存储过程可以有 In Out Input 3种类型参数<br>4.函数中不能进行修改全局数据库状态的操作,而存储过程可以<br>5.函数可以做为查询语句的一部分来使用,而存储过程不可以</p>
+<h4 id="创建存储过程"><a href="#创建存储过程" class="headerlink" title="创建存储过程"></a>创建存储过程</h4><p>先上个例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">DELIMITER <span class="comment">// </span></div><div class="line">CREATE PROCEDURE proc1(int s varchar(<span class="number">20</span>),out ss int,input sss double)</div><div class="line">BEGIN</div><div class="line">  SELECT COUNT(*) INTO s FROM user;</div><div class="line">END <span class="comment">//</span></div><div class="line">DELIMITER ;</div></pre></td></tr></table></figure>
+<p>讲解：</p>
+<p>（1）这里需要注意的是DELIMITER//和DELIMITER;两句,DELIMITER是分割符的意思,因为MySQL默认以”;”为分隔 符，如果我们没有声明分割符，那么编译器会把存储过程当成SQL语句进行处理，则存储过程的编译过程会报错，所以要事先用DELIMITER关键字申明当 前段分隔符，这样MySQL才会将”;”当做存储过程中的代码，不会执行这些代码，用完了之后要把分隔符还原。<br>（2）存储过程根据需要可能会有输入、输出、输入输出参数，这里有3个参数 第一个参数s 是输入参数 varchar类型, 第二个参数是ss 是输出参数 第三个参数sss 类型是输入输出参数, 你可以随便定义自己需要的参数 不要按照上面的顺序 上面例子参数不是必须的</p>
+<h4 id="存储过程的调用"><a href="#存储过程的调用" class="headerlink" title="存储过程的调用"></a>存储过程的调用</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">call procedure_name(parame1,parame2,parame3);</div></pre></td></tr></table></figure>
+<h4 id="存储过程完成表信息字段维护"><a href="#存储过程完成表信息字段维护" class="headerlink" title="存储过程完成表信息字段维护"></a>存储过程完成表信息字段维护</h4><p>回到开局问题 下面用存储过程来完成员工表中性别字段的维护<br>包含了mysql 的循环 条件判断 字符串函数截取等</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"># 删除存储过程</div><div class="line">drop procedure if exists emp_change;</div><div class="line"></div><div class="line">delimiter //</div><div class="line"># 创建一个存储过程</div><div class="line">create procedure emp_change()</div><div class="line"></div><div class="line">begin</div><div class="line">	# 当前的记录id</div><div class="line">	declare this_id int;</div><div class="line">    # 声明待判断的身份证值</div><div class="line">    declare curren_check int;</div><div class="line">    # 当前的gender</div><div class="line">	declare this_gender tinyint;</div><div class="line">    # 当前的身份证号</div><div class="line">	declare this_card_no varchar(20);</div><div class="line">	# 声明一个是否执行完的标识</div><div class="line">	declare done int default 0;</div><div class="line">	# 把查询结果设置到c1中 先简单的拿2条数据测试下</div><div class="line">	declare c1 cursor for select id,card_no from employees where gender = 0;</div><div class="line">    # 声明一个异常 如果结果集遍历完 就把done标识设置为1 标识结束</div><div class="line">	declare continue handler for sqlstate '02000' set done = 1;</div><div class="line">    </div><div class="line">	open c1;</div><div class="line">    # 开启循环</div><div class="line">	repeat</div><div class="line">    # 先设置一个默认值</div><div class="line">    set this_gender = 0;</div><div class="line">    set curren_check = 0;</div><div class="line">    # 取出一条结果集</div><div class="line">    fetch c1 into this_id, this_card_no;</div><div class="line">    # 如果done标识可以继续执行</div><div class="line">    if not done then</div><div class="line">		# 如果是15位身份证号码</div><div class="line">		if CHAR_LENGTH(this_card_no) = 15 then</div><div class="line">        	# 截取第15位值</div><div class="line">			set curren_check = right(this_card_no, 1);</div><div class="line">            if mod(curren_check,2) = 0 then</div><div class="line">				# 整除了 就是 女</div><div class="line">				set this_gender = 2;</div><div class="line">			else</div><div class="line">				set this_gender = 1;</div><div class="line">			end if;</div><div class="line">		# 如果是18位身份证号码</div><div class="line">		elseif CHAR_LENGTH(this_card_no) = 18 then</div><div class="line">			# 截取第17位</div><div class="line">			set curren_check = substring(this_card_no, -2, 1);</div><div class="line">            if mod(curren_check,2) = 0 then</div><div class="line">				# 整除了 就是 女</div><div class="line">				set this_gender = 2;</div><div class="line">			else</div><div class="line">				set this_gender = 1;</div><div class="line">			end if;</div><div class="line">        end if;</div><div class="line">		# 设置好gender了 然后开始变更sql</div><div class="line">        update employees set gender = this_gender where id = this_id;</div><div class="line">    end if;</div><div class="line">	until done end repeat;</div><div class="line">	# 关闭</div><div class="line">	close c1;</div><div class="line">    </div><div class="line">end //</div><div class="line"></div><div class="line">delimiter ;</div><div class="line"></div><div class="line"># 执行</div><div class="line"># call emp_change();</div></pre></td></tr></table></figure>
+<p>关于存储过程的使用基本就这样了</p>
+<p>参考文档：</p>
+<p><a href="https://www.jianshu.com/p/7b2d74701ccd" target="_blank" rel="external">https://www.jianshu.com/p/7b2d74701ccd</a><br><a href="https://www.jianshu.com/p/53a12af46836" target="_blank" rel="external">https://www.jianshu.com/p/53a12af46836</a><br><a href="http://www.cnblogs.com/chenmh/p/5201473.html" target="_blank" rel="external">http://www.cnblogs.com/chenmh/p/5201473.html</a></p>
+<p>感谢大家的分享</p>
 <hr>
 
       
@@ -367,17 +373,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/17/20160817/" rel="next" title="关于Laravel中TokenMismatchException报错的一点点总结">
-                <i class="fa fa-chevron-left"></i> 关于Laravel中TokenMismatchException报错的一点点总结
+              <a href="/2018/06/08/20180608/" rel="next" title="项目发布中奇葩问题总结">
+                <i class="fa fa-chevron-left"></i> 项目发布中奇葩问题总结
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/09/09/20160909/" rel="prev" title="PHP中关于银行卡号通用校验算法总结">
-                PHP中关于银行卡号通用校验算法总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -403,8 +405,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/08/28/20160828/"
-           data-title="对比表结构的差异" data-url="https://caihongtengxu.github.io/2016/08/28/20160828/">
+      <div class="ds-thread" data-thread-key="2018/07/05/20180705/"
+           data-title="Mysql 存储过程的使用" data-url="https://caihongtengxu.github.io/2018/07/05/20180705/">
       </div>
     
   </div>
@@ -495,7 +497,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#比较表结构"><span class="nav-number">1.</span> <span class="nav-text">比较表结构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#首先打开2个窗口"><span class="nav-number">1.1.</span> <span class="nav-text">首先打开2个窗口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#选择架构同步工具"><span class="nav-number">1.2.</span> <span class="nav-text">选择架构同步工具</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#选择对比的库-执行比较"><span class="nav-number">1.3.</span> <span class="nav-text">选择对比的库 执行比较</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是存储过程"><span class="nav-number">1.</span> <span class="nav-text">什么是存储过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储过程和函数的区别"><span class="nav-number">2.</span> <span class="nav-text">存储过程和函数的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建存储过程"><span class="nav-number">3.</span> <span class="nav-text">创建存储过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储过程的调用"><span class="nav-number">4.</span> <span class="nav-text">存储过程的调用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储过程完成表信息字段维护"><span class="nav-number">5.</span> <span class="nav-text">存储过程完成表信息字段维护</span></a></li></ol></div>
             
           </div>
         </section>
