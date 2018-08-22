@@ -28,19 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT ,caihongtengxu" />
+  <meta name="keywords" content="Git," />
 
 
 
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="指尖的彩虹">
-<meta property="og:url" content="https://caihongtengxu.github.io/archives/2018/07/index.html">
+<meta name="description" content="关于 git branch 和 git 批量删除分支 的一点使用记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 查看分支与批量删除分支">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/08/22/20180822/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="关于 git branch 和 git 批量删除分支 的一点使用记录">
+<meta property="og:updated_time" content="2018-08-22T01:44:28.900Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="指尖的彩虹">
+<meta name="twitter:title" content="Git 查看分支与批量删除分支">
+<meta name="twitter:description" content="关于 git branch 和 git 批量删除分支 的一点使用记录">
 
 
 
@@ -61,7 +65,7 @@
 
 
 
-  <title> 归档 | 指尖的彩虹 </title>
+  <title> Git 查看分支与批量删除分支 | 指尖的彩虹 </title>
   
 </head>
 
@@ -93,7 +97,7 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -226,66 +230,160 @@
           <div id="content" class="content">
             
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
-
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 25 篇日志。 继续努力。
-    </span>
-
+  <div id="posts" class="posts-expand">
     
 
-      
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Git 查看分支与批量删除分支
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-08-22T09:19:22+08:00" content="2018-08-22">
+              2018-08-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/08/22/20180822/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/08/22/20180822/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
+        <p>关于 <code>git branch</code> 和 git 批量删除分支 的一点使用记录<br><a id="more"></a></p>
+<hr>
+<h3 id="Git-Branch-的使用"><a href="#Git-Branch-的使用" class="headerlink" title="Git Branch 的使用"></a>Git Branch 的使用</h3><p>前几天项目进入提测阶段 给测试组拉了一个 <code>release</code> 分支出来 做提测阶段测试使用</p>
+<p>随后测试大姐头发现 使用 <strong>pull</strong> 拉取分支的时候 提示报错 大概就是提示分支远端已经不存在</p>
+<p>后面我看了下 果然报错 然后习惯性的使用了 <code>git branch -a</code> 的命令 发现列出来的分支列表中 该分支存在</p>
+<p>这就奇怪了 发生了啥幺蛾子 随后登录了 <strong>gitlab</strong> 查看远端分支 发现那个 release分支确实是不存在的</p>
+<p>然后去找了一圈 <code>git branch -a</code> 的用法到底是什么</p>
+<p><code>git branch -a</code> 的作用 他会列出本地和远端的所有分支 包含哪些已经被 <strong>删除</strong> 了的分支<br>所以就出现了看到远端不存在的分支的情况</p>
+<p>这个时候 我们可以使用 <code>git remote prune origin</code> 同步远程的分支到本地</p>
+<p>这样那些已经被删除的远端分支，本地就不会再看见了。</p>
+<h3 id="Git-批量删除本地分支"><a href="#Git-批量删除本地分支" class="headerlink" title="Git 批量删除本地分支"></a>Git 批量删除本地分支</h3><p>由于经常创建分支 测试服务器上的分支已经非常多了 每次查看分支都会列出一大坨看的好累</p>
+<p>然后就想删除他们 之前一直不知道怎么批量删除 后来找了一圈 记录下吧</p>
+<p><code>git branch |grep &#39;branchName*&#39; |xargs git branch -D</code></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2018">2018</h2>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag">#Git</a>
+          
         </div>
       
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/05/20180705/" rel="next" title="Mysql 存储过程的使用">
+                <i class="fa fa-chevron-left"></i> Mysql 存储过程的使用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2018/07/05/20180705/" itemprop="url">
-              
-                <span itemprop="name">Mysql 存储过程的使用</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-07-05T17:56:05+08:00"
-              content="2018-07-05" >
-          07-05
-        </time>
-      </div>
-
-    </header>
+      
+    </footer>
   </article>
 
 
 
-    
-
-  </section>
-
-  
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -293,6 +391,14 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/08/22/20180822/"
+           data-title="Git 查看分支与批量删除分支" data-url="https://caihongtengxu.github.io/2018/08/22/20180822/">
+      </div>
+    
+  </div>
+
 
         </div>
         
@@ -312,8 +418,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel  sidebar-panel-active ">
+      <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/che2.png"
@@ -363,6 +478,17 @@
 
       </section>
 
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-Branch-的使用"><span class="nav-number">1.</span> <span class="nav-text">Git Branch 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-批量删除本地分支"><span class="nav-number">2.</span> <span class="nav-text">Git 批量删除本地分支</span></a></li></ol></div>
+            
+          </div>
+        </section>
       
 
     </div>
@@ -466,11 +592,9 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
 
 
   
