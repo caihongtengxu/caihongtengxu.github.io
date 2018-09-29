@@ -1,0 +1,777 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RSA," />
+
+
+
+
+
+
+<meta name="description" content="最近重新优化了下公司的支付系统 折腾了一圈 主要问题有2个 加密 和 签名 整理下自己的思路吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP中RSA加密算法的使用">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/09/20/20180920/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近重新优化了下公司的支付系统 折腾了一圈 主要问题有2个 加密 和 签名 整理下自己的思路吧">
+<meta property="og:updated_time" content="2018-09-29T08:31:27.338Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP中RSA加密算法的使用">
+<meta name="twitter:description" content="最近重新优化了下公司的支付系统 折腾了一圈 主要问题有2个 加密 和 签名 整理下自己的思路吧">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP中RSA加密算法的使用 | 指尖的彩虹 </title>
+  
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP中RSA加密算法的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-20T17:48:34+08:00" content="2018-09-20">
+              2018-09-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/09/20/20180920/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/20/20180920/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近重新优化了下公司的支付系统 折腾了一圈 主要问题有2个 加密 和 签名 整理下自己的思路吧<br><a id="more"></a></p>
+<hr>
+<h3 id="RSA加密是什么"><a href="#RSA加密是什么" class="headerlink" title="RSA加密是什么"></a>RSA加密是什么</h3><p>RSA（Rivest-Shamir-Adleman）是最早的公钥密码系统之一，广泛用于安全数据传输。</p>
+<p>3位数学家Rivest、Shamir 和 Adleman 的名字来命名的</p>
+<p>是非对称加密的一种 这种算法非常可靠，密钥越长，它就越难破解。</p>
+<p>在这样的密码系统中，加密密钥是公共的，并且它与保密（私有）的解密密钥不同</p>
+<h3 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h3><p>RSA密码体制是一种公钥密码体制，加密算法公开，以分配的密钥作为加密解密的关键</p>
+<p>一般来说，在一对公私钥中，公钥和私钥都可以用来加密和解密，即公钥加密能且只能被对应的私钥进行解密</p>
+<p>私钥加密能且只能被对应的公钥进行解密。</p>
+<font color="red"><br>一般我们都是把公钥公开出去 如果我们是服务方 一般我们是拿私钥加密 接收方来拿公钥进行验签等<br><br>为了保证加密安全 建议RSA密钥的长度为2048<br></font>
+
+<h3 id="签名"><a href="#签名" class="headerlink" title="签名"></a>签名</h3><p>签名就是在这份资料后面增加一段强而有力的证明</p>
+<p>以此证明这段信息的发布者和这段信息的有效性完整性。</p>
+<p>简单来说，签名主要包含两个过程：<strong>摘要</strong> 和 <strong>非对称加密</strong></p>
+<p>首先对需要签名的数据做摘要（类似于常见的MD5）后得到摘要结果</p>
+<p>然后通过签名者的私钥对摘要结果进行非对称加密即可得到签名结果</p>
+<h3 id="支付中签名的套路"><a href="#支付中签名的套路" class="headerlink" title="支付中签名的套路"></a>支付中签名的套路</h3><p>来说下对接的支付中的签名,拿 <strong>支付宝</strong> 举例</p>
+<h4 id="生成签名"><a href="#生成签名" class="headerlink" title="生成签名"></a>生成签名</h4><p>1.生成参数并进行 <code>url_encode</code> 然后按照字典排序，组成字符串 等到待签名字符串<br>2.获取私钥 然后使用各自语音的加密方法 对待签名字符串进行加密<br>3.得到签名(sign) 后并进行 <code>base64</code> 转码<br>4.把加密字符串的的数组 和 签名 一并发给接受方</p>
+<h4 id="验证签名"><a href="#验证签名" class="headerlink" title="验证签名"></a>验证签名</h4><p>1.在通知返回参数列表中，除去 签名参数 （<code>sign</code> ） 以及空的参数 其他的全部都是待签名的参数<br>2.将剩下参数进行 <code>url_decode</code>, 然后进行字典排序， 使用 <code>&amp;</code> <code>=</code> 组成字符串，得到待签名字符串 </p>
+<p><code>body=大乐透2.1&amp;buyer_id=2088102116773037&amp;charset=utf-8&amp;gmt_close=2016-07-19 14:10:46&amp;gmt_payment=2016-07-19 14:10:47&amp;notify_time=2016-07-19 14:10:49&amp;notify_type=trade_status_sync&amp;out_trade_no=0719141034-6418&amp;refund_fee=0.00&amp;subject=大乐透2.1&amp;total_amount=2.00&amp;trade_no=2016071921001003030200089909&amp;trade_status=TRADE_SUCCESS&amp;version=1.0</code></p>
+<p>3.将签名参数（sign）使用 <code>base64</code> 解码为字节码串<br>4.使用RSA的验签方法，通过签名字符串、签名参数（经过 <code>base64</code> 解码）及支付宝公钥验证签名，根据返回结果判定是否验签通过</p>
+<h3 id="PHP中OpenSSL的使用"><a href="#PHP中OpenSSL的使用" class="headerlink" title="PHP中OpenSSL的使用"></a>PHP中OpenSSL的使用</h3><p>php的扩展中有 <code>OpenSSL</code> 库 可以用来操作 <code>对称/非对称的加密</code> 算法</p>
+<p>下面贴段大概的 <strong>PHP</strong> 示例代码</p>
+<h4 id="生成待-签名-验签-的字符串"><a href="#生成待-签名-验签-的字符串" class="headerlink" title="生成待 签名/验签 的字符串"></a>生成待 签名/验签 的字符串</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 生成待签名的字符串</div><div class="line"> * <span class="doctag">@param</span> $data 参与签名的参数数组</div><div class="line"> * <span class="doctag">@return</span> string 待签名的字符串</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSignStr</span><span class="params">($data)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//排序</span></div><div class="line">    ksort($data);</div><div class="line">    <span class="comment">//剔除sign 如果对方的签名叫sign 或者可以在调用方法的时候剔除</span></div><div class="line">    <span class="comment">//unset($data['sign']);</span></div><div class="line"></div><div class="line">    $stringToBeSigned = <span class="string">''</span>;</div><div class="line"></div><div class="line">    $i = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">foreach</span> ($data <span class="keyword">as</span> $k =&gt; $v) &#123;</div><div class="line">        <span class="keyword">if</span> ($i == <span class="number">0</span>) &#123;</div><div class="line">            $stringToBeSigned .= <span class="string">"$k"</span> . <span class="string">"="</span> . <span class="string">"$v"</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            $stringToBeSigned .= <span class="string">"&amp;"</span> . <span class="string">"$k"</span> . <span class="string">"="</span> . <span class="string">"$v"</span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        $i++;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $stringToBeSigned;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="生成签名-1"><a href="#生成签名-1" class="headerlink" title="生成签名"></a>生成签名</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 生成签名</div><div class="line"> * <span class="doctag">@param</span> array $params 待签名的所有参数</div><div class="line"> * <span class="doctag">@return</span> string 生成的签名</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getSignGenerator</span><span class="params">($params)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//生成待验签的字符串</span></div><div class="line">    $data = <span class="keyword">$this</span>-&gt;getSignStr($params);</div><div class="line">    <span class="comment">//私钥的内容 一行的格式</span></div><div class="line">    $privateKey = <span class="string">'xxx'</span>;</div><div class="line"></div><div class="line">    $pem = <span class="string">"-----BEGIN RSA PRIVATE KEY-----\n"</span> .</div><div class="line">        wordwrap($privateKey, <span class="number">64</span>, <span class="string">"\n"</span>, <span class="keyword">true</span>) .</div><div class="line">        <span class="string">"\n-----END RSA PRIVATE KEY-----"</span>;</div><div class="line"></div><div class="line">    <span class="comment">//openssl_private_encrypt($data, $crypted, $pem);</span></div><div class="line">    openssl_sign($data, $sign, $pem, OPENSSL_ALGO_SHA256);</div><div class="line"></div><div class="line">    $sign = base64_encode($sign);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $sign;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="验证签名-1"><a href="#验证签名-1" class="headerlink" title="验证签名"></a>验证签名</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 验证签名</div><div class="line"> * <span class="doctag">@param</span> array $params 待签名的所有参数</div><div class="line"> * <span class="doctag">@param</span> string $sign 生成的签名</div><div class="line"> * <span class="doctag">@return</span> boolean 校验的结果</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">signCheck</span><span class="params">($params, $sign)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//生成待验签的字符串</span></div><div class="line">    $data = <span class="keyword">$this</span>-&gt;getSignStr($params);</div><div class="line">    <span class="comment">//对方的公钥内容 一行的形式</span></div><div class="line">    $publicKey = <span class="string">'xxx'</span>;</div><div class="line"></div><div class="line">    $pem = <span class="string">"-----BEGIN PUBLIC KEY-----\n"</span> .</div><div class="line">        wordwrap($publicKey, <span class="number">64</span>, <span class="string">"\n"</span>, <span class="keyword">true</span>) .</div><div class="line">        <span class="string">"\n-----END PUBLIC KEY-----"</span>;</div><div class="line"></div><div class="line">    $checkResult = (bool)openssl_verify($data, base64_decode($sign), $pem, OPENSSL_ALGO_SHA256);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $checkResult;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="使用公钥证书加密"><a href="#使用公钥证书加密" class="headerlink" title="使用公钥证书加密"></a>使用公钥证书加密</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 我们自己的加密</div><div class="line"> * <span class="doctag">@param</span> $str 待加密的字段</div><div class="line"> * <span class="doctag">@return</span> string</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">encrypt</span><span class="params">($string)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//公钥内容 一行的形式</span></div><div class="line">    $pubKey = <span class="string">'xxxx'</span>;</div><div class="line"></div><div class="line">    $res = <span class="string">"-----BEGIN PUBLIC KEY-----\n"</span> .</div><div class="line">        wordwrap($pubKey, <span class="number">64</span>, <span class="string">"\n"</span>, <span class="keyword">true</span>) .</div><div class="line">        <span class="string">"\n-----END PUBLIC KEY-----"</span>;</div><div class="line"></div><div class="line">    openssl_public_encrypt($string, $encrypt, $res);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> base64_encode($encrypt);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="使用私钥证书解密"><a href="#使用私钥证书解密" class="headerlink" title="使用私钥证书解密"></a>使用私钥证书解密</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 我们自己的解密</div><div class="line"> * <span class="doctag">@param</span> $secret 加密后的base64字段</div><div class="line"> * <span class="doctag">@return</span> string</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">decrypt</span><span class="params">($secret)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//私钥内容 一行的形式</span></div><div class="line">    $privateKey = <span class="string">'xx'</span>;</div><div class="line"></div><div class="line">    $res = <span class="string">"-----BEGIN RSA PRIVATE KEY-----\n"</span> .</div><div class="line">        wordwrap($privateKey, <span class="number">64</span>, <span class="string">"\n"</span>, <span class="keyword">true</span>) .</div><div class="line">        <span class="string">"\n-----END RSA PRIVATE KEY-----"</span>;</div><div class="line"></div><div class="line">    openssl_private_decrypt(base64_decode($secret), $oldData, $res);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $oldData;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<font color="red"><br>注意： 主要使用到下面几个函数 分别都是对应的<br><br>私钥加密 <code>openssl_private_encrypt</code> =&gt; 公钥解密 <code>openssl_public_decrypt</code><br><br>公钥加密 <code>openssl_public_encrypt</code> =&gt; 私钥解密 <code>openssl_private_decrypt</code><br><br>使用的时候分别使用对应的公钥/私钥的文件内容即可<br><br>我是把公钥和私钥都配置了一行形式(也就是没有换行符等 方便配置吧)<br><br>可是使用支付宝的签名工具来生成<br><br>下面贴2个测试使用<br><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">private_pem=MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCCozdqfMkO/Rz9sPe1Peg6WVAGike13FNqgtdSKrekAFw7dwVIXrCUY82C+ojUrVCswtNAjpLP9h830V6GAYwLhb8qbDIUDWKb3uXHw5a2RXa9zuZ5eo7Sue1boJffBQt5fG/BZ5aB8if6BGln92WucVNqNMB7Q68i5O7zDtQ1ulxC8VXSAqYHtiqMkRH+krnB0N8KQHay0SpGtnTMKYn7J+kkaqn0Q+xiwvwkR709cvXPzTDsgu74GqNrk1/EJfRWx1/<span class="number">7</span>ViHOqRoWlLG8pRe74RldXobonrff0fZHh/+<span class="number">64</span>XmPGick8DGoVdXy0VDh9JCZd/sb1dsc7ZupcuAWo2hpAgMBAAECggEAcbxsaNfPrK8N6ImEgFUvtG1B0Q/fMyRps5fKo4zxaWWu507OWJ2oGulxaZF6Q7/JN0A/<span class="number">8</span>Dqw80ITF+O+<span class="number">6</span>ei65uVA9ExSpUaqDY7Yez18H6EGqmZSHn1nj2u0jUuaLd8UiGagXcA0N1p/F5tzscKg0mlz+EmJM0hQWI78wrysYUFd50gDZUp8MkDQF1LoUaRuS5j7kvC2rcjGcG0d8DyrOhC1Y+hP135cP+lAuJt2aE2RqZo1gg3BkEG80ERZjthmlzmMAoYo7MD0oFhKqP7BeQRvK7y8SKr4PpsloIwkAXLzX+JFaoYh4tvRXyjV9OjC/KlsPuOOIGECAqCYTVkEiQKBgQDy9MrXdtZBPeV9b5HxIUUBcXrmjFWZLTbVqpldEZQc3LwaDCBz0mf5Zy4K3cFuwjQl9SBSjBFH9W/hN4bVgkoDZkfljjipAwM5cBC2krHFkkXiNhDhv5ewxqTEhPlg2mLMDOYufNlXXknev0ZHaWf9tNpCshwHIlhz2u9sI44cKwKBgQCJprVfb+uXNMXMi9SkKy4CLp4HuppN9JZfTPZBJxGHnR/xIwzcqPzR0OzC9vv4H4m/kkLYBb6wqmiVof5xmigndop3CwABhJkDOAXbRFNg2AoJAMEa1tEzne4+<span class="number">1</span>eL+ixv+kePVbHtDKj8haFB2jUGevYtdp8b/D2CyGKOwnlL/uwKBgGdIEQLPjf1mJqzQRSZQklkuuKRRfAIF6o2iXFfoJSKv43bfONyD0ZeAeV49LwG6pRiNwBPXX3FLsSf4xuT04inXzTCU6RlQIorETRaP/eqTaAnmGf8dx4pqp5izPqAhtmYwBZo1kN9HQffjMCkjcgW0YCSCOs/<span class="number">9</span>lcSKicVayArJAoGBAIGc9j/NVRrl2DKIoEuNVR884hUJAm7RFh7aiy5CKWF29DLM/Dly7cxrW+UhR5UVrVEz2bkrf6k+bIgpJzu1GoY+OpdpRjIntySuxeT3a0NPafOcQDiTeh2OYl3MbJeeSVfl65B1O4O87gD5Bnr6+<span class="number">4</span>ULmYUwjFJzGmvYg5m1GxYtAoGADGU0fr7BjQCeb6/VfPlgAotlrCp0hcfhCgSaaOc3D6qXdt6xqlK0CoKFDoW3Nd1krz6JDz9V0m2b30oBwjL9yLR5df2OpJG19KPIaI8EqqJ6onu48dZ9Mo7epE5D90LICbyJ9iChnCOadb0moU1f6O1J3CZapjEuWUDay2zOP1s=</div><div class="line">public_pem=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgqM3anzJDv0c/bD3tT3oOllQBopHtdxTaoLXUiq3pABcO3cFSF6wlGPNgvqI1K1QrMLTQI6Sz/YfN9FehgGMC4W/KmwyFA1im97lx8OWtkV2vc7meXqO0rntW6CX3wULeXxvwWeWgfIn+gRpZ/dlrnFTajTAe0OvIuTu8w7UNbpcQvFV0gKmB7YqjJER/pK5wdDfCkB2stEqRrZ0zCmJ+yfpJGqp9EPsYsL8JEe9PXL1z80w7ILu+Bqja5NfxCX0Vsdf+<span class="number">1</span>YhzqkaFpSxvKUXu+EZXV6G6J6339H2R4f/uuF5jxonJPAxqFXV8tFQ4fSQmXf7G9XbHO2bqXLgFqNoaQIDAQAB</div></pre></td></tr></table></figure><br><br>也可以直接存储文件(需要读取资源)<br></font>
+
+
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p>参考如下内容 感谢！</p>
+<p><a href="http://www.youdzone.com/signature.html" target="_blank" rel="external">http://www.youdzone.com/signature.html</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2011/08/what_is_a_digital_signature.html</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html</a></p>
+<p><a href="https://www.jianshu.com/p/94cd6d5be142" target="_blank" rel="external">https://www.jianshu.com/p/94cd6d5be142</a></p>
+<p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem" target="_blank" rel="external">https://en.wikipedia.org/wiki/RSA_(cryptosystem)</a>)</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RSA/" rel="tag">#RSA</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/14/20180914/" rel="next" title="关于PHP cURL 的用法">
+                <i class="fa fa-chevron-left"></i> 关于PHP cURL 的用法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/28/20180928/" rel="prev" title="关于Base64的一些理解">
+                关于Base64的一些理解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/09/20/20180920/"
+           data-title="PHP中RSA加密算法的使用" data-url="https://caihongtengxu.github.io/2018/09/20/20180920/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">31</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#RSA加密是什么"><span class="nav-number">1.</span> <span class="nav-text">RSA加密是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加密"><span class="nav-number">2.</span> <span class="nav-text">加密</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#签名"><span class="nav-number">3.</span> <span class="nav-text">签名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支付中签名的套路"><span class="nav-number">4.</span> <span class="nav-text">支付中签名的套路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成签名"><span class="nav-number">4.1.</span> <span class="nav-text">生成签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证签名"><span class="nav-number">4.2.</span> <span class="nav-text">验证签名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP中OpenSSL的使用"><span class="nav-number">5.</span> <span class="nav-text">PHP中OpenSSL的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#生成待-签名-验签-的字符串"><span class="nav-number">5.1.</span> <span class="nav-text">生成待 签名/验签 的字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#生成签名-1"><span class="nav-number">5.2.</span> <span class="nav-text">生成签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#验证签名-1"><span class="nav-number">5.3.</span> <span class="nav-text">验证签名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用公钥证书加密"><span class="nav-number">5.4.</span> <span class="nav-text">使用公钥证书加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用私钥证书解密"><span class="nav-number">5.5.</span> <span class="nav-text">使用私钥证书解密</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#致谢"><span class="nav-number">6.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>
