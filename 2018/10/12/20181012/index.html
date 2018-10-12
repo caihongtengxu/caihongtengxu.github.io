@@ -28,25 +28,29 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Git," />
+  <meta name="keywords" content="FPM CGI CLI," />
 
 
 
 
 
 
-<meta name="description" content="最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种">
+<meta name="description" content="嗯 被运维哥问了个问题： PHP 的 CLI 模式和 FPM 有什么区别和联系我：卧槽 我还真不知道 怎么忽悠他下呢！
+
+其实我对这个问题 也不甚很懂 一直都是这么用 没想过都是些啥玩意 然后搜索了好久 网上的答案真是众说纷纭 讲什么的都有 看的越来越晕">
 <meta property="og:type" content="article">
-<meta property="og:title" content="windows下给Gvim安装NERDTree目录树插件">
-<meta property="og:url" content="https://caihongtengxu.github.io/2017/06/26/20170626/index.html">
+<meta property="og:title" content="PHP中CGI、CLI、FPM是什么">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/10/12/20181012/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/nerdtree-github.png">
-<meta property="og:updated_time" content="2018-06-08T05:46:45.690Z">
+<meta property="og:description" content="嗯 被运维哥问了个问题： PHP 的 CLI 模式和 FPM 有什么区别和联系我：卧槽 我还真不知道 怎么忽悠他下呢！
+
+其实我对这个问题 也不甚很懂 一直都是这么用 没想过都是些啥玩意 然后搜索了好久 网上的答案真是众说纷纭 讲什么的都有 看的越来越晕">
+<meta property="og:updated_time" content="2018-10-12T09:49:41.728Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="windows下给Gvim安装NERDTree目录树插件">
-<meta name="twitter:description" content="最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/nerdtree-github.png">
+<meta name="twitter:title" content="PHP中CGI、CLI、FPM是什么">
+<meta name="twitter:description" content="嗯 被运维哥问了个问题： PHP 的 CLI 模式和 FPM 有什么区别和联系我：卧槽 我还真不知道 怎么忽悠他下呢！
+
+其实我对这个问题 也不甚很懂 一直都是这么用 没想过都是些啥玩意 然后搜索了好久 网上的答案真是众说纷纭 讲什么的都有 看的越来越晕">
 
 
 
@@ -67,7 +71,7 @@
 
 
 
-  <title> windows下给Gvim安装NERDTree目录树插件 | 指尖的彩虹 </title>
+  <title> PHP中CGI、CLI、FPM是什么 | 指尖的彩虹 </title>
 
 </head>
 
@@ -253,7 +257,7 @@
             
             
               
-                windows下给Gvim安装NERDTree目录树插件
+                PHP中CGI、CLI、FPM是什么
               
             
           </h1>
@@ -265,8 +269,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-06-26T14:10:23+08:00" content="2017-06-26">
-              2017-06-26
+            <time itemprop="dateCreated" datetime="2018-10-12T17:41:33+08:00" content="2018-10-12">
+              2018-10-12
             </time>
           </span>
 
@@ -279,8 +283,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
                   </a>
                 </span>
 
@@ -295,8 +299,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2017/06/26/20170626/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/26/20170626/" itemprop="commentsCount"></span>
+                <a href="/2018/10/12/20181012/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/12/20181012/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -320,12 +324,55 @@
 
       
         <blockquote>
-<p>最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种<br><a id="more"></a></p>
+<p>嗯 被运维哥问了个问题： PHP 的 CLI 模式和 FPM 有什么区别和联系<br>我：卧槽 我还真不知道 怎么忽悠他下呢！</p>
 </blockquote>
+<p>其实我对这个问题 也不甚很懂 一直都是这么用 没想过都是些啥玩意 然后搜索了好久 网上的答案真是众说纷纭 讲什么的都有 看的越来越晕<br><a id="more"></a></p>
 <hr>
-<h4 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h4><p>1.可以去NERDTree的 <strong>Github</strong> 上去下载 贴个链接 <a href="https://github.com/scrooloose/nerdtree" target="_blank" rel="external">NERDTree</a><br>2.下载后解压出来会有大概如下目录<br><img src="http://obomwzenb.bkt.clouddn.com/nerdtree-github.png" alt="NERDTree-PIC"><br>3.然后进入vim的运行目录 我的是<code>D:\Gvim\vimfiles</code> 然后把<code>plugin</code>和<code>doc</code>文件夹下的文件复制到vim的运行目录相同名字的文件夹内<br>4.最后重启vim 可惜我报错了！！ 缺少了变量 无奈之下把解压的文件夹内的 <strong>autoload</strong> 文件内的 <code>nerdtree</code>目录和<code>nerdtree.vim</code>复制到了vim的运行目录内对应的文件夹中 以及<code>lib</code>和<code>nerdtree-plugin</code>文件夹一并复制到运行目录下 重启 OK</p>
-<h4 id="快捷设置"><a href="#快捷设置" class="headerlink" title="快捷设置"></a>快捷设置</h4><p>打开vim后可以在命令行模式下 通过命令 <code>:NERDTree</code>来启用左侧目录树 关闭直接输入 <code>q</code><br>另外也可以通过配置快捷键来设置<br>1.找到你本地的vim安装目录下的配置文件<code>_vimrc</code><br>2.在最下面添加如下代码<br>3.<code>map &lt;F8&gt; :NERDTreeToggle&lt;CR&gt;</code><br>4.以后就可以通过快捷键 F8 来展开目录树了<br>5.重启OK</p>
-<h4 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h4><p>默认打开的Nerdtree会列出桌面的内容，可以通过命令<code>:NERDTree dir_path</code>的方式来切换要展开的目录<br>eg:<br><code>:NERDTree D:\</code><br>这样他就会显示D盘的目录结构了<br>更多的命令和用法可以通过命令 <code>?</code> 来获得详细实用方法介绍 同样是用<code>?</code>来退出使用介绍</p>
+<p>最后终于发现一个大神写的一个回答 算我看过的讲的最赞的一个了 需要着重感谢下</p>
+<font color="red">原文地址： <a href="https://segmentfault.com/q/1010000000256516" target="_blank" rel="external">https://segmentfault.com/q/1010000000256516</a> 包括下面的评论回复区也有收获内容  推荐去看下</font>
+
+<p>下面是自己整理的一些内容</p>
+<h3 id="SAPI-是什么"><a href="#SAPI-是什么" class="headerlink" title="SAPI 是什么"></a>SAPI 是什么</h3><p><strong>SAPI 全称 Server Application Programming Interface 直译过来 服务端应用编程端口</strong></p>
+<blockquote>
+<p>SAPI是一个应用程序编程接口 （API）由Web服务器提供，以帮助其他开发人员扩展Web服务器功能。</p>
+</blockquote>
+<p>例如，PHP有一个名为SAPI的直接模块接口，用于不同的Web服务器; 在Windows下的PHP 5和Apache 2.0的情况下，它以DLL文件的形式提供，名为php5apache2.dll，这是一个模块，除了其他功能之外，还提供PHP和PHP之间的接口。 Web服务器，以服务器理解的形式实现。这种形式就是所谓的SAPI。<br>在PHP中实现了SAPI的还包括 <code>CGI</code> 和 <code>CLI</code></p>
+<h3 id="CGI-是什么"><a href="#CGI-是什么" class="headerlink" title="CGI 是什么"></a>CGI 是什么</h3><p><strong>CGI 全称 Common Gateway Interface 直译过来 通用网关接口</strong></p>
+<blockquote>
+<p>CGI是一个协议规范 为WebServer提供标准协议，以执行在运行生成网页的服务器上运行的控制台应用程序（也称为命令行界面程序）之类的程序。</p>
+</blockquote>
+<p>这些程序称为CGI脚本或简称为CGI。服务器执行脚本的具体细节由服务器确定</p>
+<p>在说的简单点就是他规范了 WebServer 传递数据的格式 必须按这个来 不能乱搞</p>
+<h3 id="PHP-CLI是什么"><a href="#PHP-CLI是什么" class="headerlink" title="PHP-CLI是什么"></a>PHP-CLI是什么</h3><p><strong>CLI 全称 command-line interface 直译过来 命令行接口 维基上 是 命令行界面</strong></p>
+<p>一般我们在 Linux 操作系统时是没有操作界面的（别问我为什么），那要怎么才能执行程序或者对程序进行编译 </p>
+<p>这个时候就需要一些实现了 CLI 的工具， PHP-CLI 就是这样一个程序 可以在命令行下直接运行PHP程序 常用来开发 PHP 的外壳应用 后台应用</p>
+<h3 id="FastCGI-是什么"><a href="#FastCGI-是什么" class="headerlink" title="FastCGI 是什么"></a>FastCGI 是什么</h3><p><strong>FastCGI 全称 Fast Common Gateway Interface 直译过来 快速通用网关接口</strong></p>
+<blockquote>
+<p>是一种让交互程序与Web服务器通信的协议</p>
+<p>FastCGI 致力于减少网页服务器与CGI程序之间交互的开销，从而使服务器可以同时处理更多的网页请求<br>CGI 使外部程序与Web服务器之间交互成为可能。CGI程序运行在独立的进程中，并对每个Web请求创建一个进程，这种方法非常容易实现，但效率很差，难以扩展。面对大量请求，进程的大量创建和消亡使操作系统性能大大下降。此外，由于地址空间无法共享，也限制了资源重用。</p>
+</blockquote>
+<p>说白了它和 <strong>CGI</strong> 一样都是协议 是一个增强版本而已 其主要目的是为了提高 <strong>CGI</strong> 的效率和性能</p>
+<h4 id="FastCGI-的实现"><a href="#FastCGI-的实现" class="headerlink" title="FastCGI 的实现"></a>FastCGI 的实现</h4><p>FastCGI本身还是一个协议 他致力于提高 CGI 性能 那么怎么实现提高性能呢</p>
+<blockquote>
+<p>与为每个请求创建一个新的进程不同，FastCGI使用持续的进程来处理一连串的请求。这些进程由FastCGI服务器管理，而不是web服务器。 当进来一个请求时，web服务器把环境变量和这个页面请求通过一个socket比如FastCGI进程与web服务器（都位于本地）或者一个TCP connection（FastCGI进程在远端的server farm）传递给FastCGI进程。</p>
+</blockquote>
+<p>引用下 <strong>尹川</strong> 大佬的回复</p>
+<blockquote>
+<p>提高性能，那么CGI程序的性能问题在哪呢？”PHP解析器会解析php.ini文件，初始化执行环境”，就是这里了。标准的CGI对每个请求都会执行这些步骤（不闲累啊！启动进程很累的说！），所以处理每个时间的时间会比较长。这明显不合理嘛！那么Fastcgi是怎么做的呢？首先，Fastcgi会先启一个master，解析配置文件，初始化执行环境，然后再启动多个worker。当请求过来时，master会传递给一个worker，然后立即可以接受下一个请求。这样就避免了重复的劳动，效率自然是高。而且当worker不够用时，master可以根据配置预先启动几个worker等着；当然空闲worker太多时，也会停掉一些，这样就提高了性能，也节约了资源。这就是fastcgi的对进程的管理。</p>
+</blockquote>
+<h4 id="FastCGI-的不足"><a href="#FastCGI-的不足" class="headerlink" title="FastCGI 的不足"></a>FastCGI 的不足</h4><p>因为是多进程，所以比CGI多线程消耗更多的服务器内存</p>
+<h3 id="PHP-FPM是什么"><a href="#PHP-FPM是什么" class="headerlink" title="PHP-FPM是什么"></a>PHP-FPM是什么</h3><p><strong>FPM 全称 FastCGI Process Manager 直译过来 FastCGI进程管理器</strong></p>
+<blockquote>
+<p>PHP-FPM: PHP 的 FastCGI进程管理器 只能用于PHP <strong>是一个实现了 FastCGI 的程序</strong> 它管理的并不是FastCGI(协议怎么管理…) 而是执行PHP过程中的进程 </p>
+<p>PHP-FPM 提供了更好的PHP进程管理方式，可以有效控制内存和进程、可以平滑重载PHP配置，比spawn-fcgi具有更多优点，所以被PHP官方收录了。在./configure的时候带 –enable-fpm 参数即可开启 PHP-FPM</p>
+</blockquote>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://segmentfault.com/q/1010000000256516" target="_blank" rel="external">https://segmentfault.com/q/1010000000256516</a></p>
+<p><a href="http://www.nowamagic.net/librarys/veda/detail/1319" target="_blank" rel="external">http://www.nowamagic.net/librarys/veda/detail/1319</a></p>
+<p><a href="http://php.net/manual/zh/features.commandline.php" target="_blank" rel="external">http://php.net/manual/zh/features.commandline.php</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Server_Application_Programming_Interface" target="_blank" rel="external">https://en.wikipedia.org/wiki/Server_Application_Programming_Interface</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Common_Gateway_Interface" target="_blank" rel="external">https://en.wikipedia.org/wiki/Common_Gateway_Interface</a></p>
+<p><a href="https://en.wikipedia.org/wiki/FastCGI" target="_blank" rel="external">https://en.wikipedia.org/wiki/FastCGI</a></p>
+<p><a href="https://baike.baidu.com/item/php-fpm" target="_blank" rel="external">https://baike.baidu.com/item/php-fpm</a></p>
 <hr>
 
       
@@ -348,7 +395,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Git/" rel="tag">#Git</a>
+            <a href="/tags/FPM-CGI-CLI/" rel="tag">#FPM CGI CLI</a>
           
         </div>
       
@@ -357,17 +404,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/12/15/20161215/" rel="next" title="使用Input type=file 原生上传使用总结">
-                <i class="fa fa-chevron-left"></i> 使用Input type=file 原生上传使用总结
+              <a href="/2018/10/11/20181011/" rel="next" title="Win10下 StarUML 3.0 License激活">
+                <i class="fa fa-chevron-left"></i> Win10下 StarUML 3.0 License激活
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/07/03/20170703/" rel="prev" title="搭建自己的Git仓库">
-                搭建自己的Git仓库 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -393,8 +436,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2017/06/26/20170626/"
-           data-title="windows下给Gvim安装NERDTree目录树插件" data-url="https://caihongtengxu.github.io/2017/06/26/20170626/">
+      <div class="ds-thread" data-thread-key="2018/10/12/20181012/"
+           data-title="PHP中CGI、CLI、FPM是什么" data-url="https://caihongtengxu.github.io/2018/10/12/20181012/">
       </div>
     
   </div>
@@ -485,7 +528,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装方法"><span class="nav-number">1.</span> <span class="nav-text">安装方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快捷设置"><span class="nav-number">2.</span> <span class="nav-text">快捷设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单使用"><span class="nav-number">3.</span> <span class="nav-text">简单使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SAPI-是什么"><span class="nav-number">1.</span> <span class="nav-text">SAPI 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CGI-是什么"><span class="nav-number">2.</span> <span class="nav-text">CGI 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-CLI是什么"><span class="nav-number">3.</span> <span class="nav-text">PHP-CLI是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FastCGI-是什么"><span class="nav-number">4.</span> <span class="nav-text">FastCGI 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#FastCGI-的实现"><span class="nav-number">4.1.</span> <span class="nav-text">FastCGI 的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FastCGI-的不足"><span class="nav-number">4.2.</span> <span class="nav-text">FastCGI 的不足</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-FPM是什么"><span class="nav-number">5.</span> <span class="nav-text">PHP-FPM是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
         </section>
