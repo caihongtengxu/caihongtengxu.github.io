@@ -1,0 +1,815 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Xdebug," />
+
+
+
+
+
+
+<meta name="description" content="之前本地开发环境一直都是自己搭建的 安装好各个软件关联起来就好了 或者就是 集成软件 后来学习 Laravel 框架后官方推荐使用 Homestead 做为开发环境 然后从 Laravel China 教程搭建了一套环境 windows 环境 、 Mac 环境。 后来换了一次系统后 发现 Xdebug 不能用了…事情的起因大概就是这样了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP环境 VirtualBox + Homestead + Xdebug 解决过程">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/10/25/20181025/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="之前本地开发环境一直都是自己搭建的 安装好各个软件关联起来就好了 或者就是 集成软件 后来学习 Laravel 框架后官方推荐使用 Homestead 做为开发环境 然后从 Laravel China 教程搭建了一套环境 windows 环境 、 Mac 环境。 后来换了一次系统后 发现 Xdebug 不能用了…事情的起因大概就是这样了">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776415/blog/xdebug3.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776398/blog/xdebug1.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776406/blog/xdebug2.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm2.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm3.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm4.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm5.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm6.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm7.png">
+<meta property="og:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776371/blog/phpstorm8.png">
+<meta property="og:updated_time" content="2018-10-29T01:59:45.696Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP环境 VirtualBox + Homestead + Xdebug 解决过程">
+<meta name="twitter:description" content="之前本地开发环境一直都是自己搭建的 安装好各个软件关联起来就好了 或者就是 集成软件 后来学习 Laravel 框架后官方推荐使用 Homestead 做为开发环境 然后从 Laravel China 教程搭建了一套环境 windows 环境 、 Mac 环境。 后来换了一次系统后 发现 Xdebug 不能用了…事情的起因大概就是这样了">
+<meta name="twitter:image" content="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776415/blog/xdebug3.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP环境 VirtualBox + Homestead + Xdebug 解决过程 | 指尖的彩虹 </title>
+
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP环境 VirtualBox + Homestead + Xdebug 解决过程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-10-25T09:55:38+08:00" content="2018-10-25">
+              2018-10-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/10/25/20181025/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/25/20181025/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前本地开发环境一直都是自己搭建的 安装好各个软件关联起来就好了 或者就是 集成软件 后来学习 <code>Laravel</code> 框架后官方推荐使用 <code>Homestead</code> 做为开发环境 然后从 <strong>Laravel China</strong> 教程搭建了一套环境 <a href="https://laravel-china.org/docs/laravel-development-environment/5.5/development-environment-windows/938" target="_blank" rel="external"><strong>windows 环境</strong></a> 、 <a href="https://laravel-china.org/docs/laravel-development-environment/5.5/development-environment-macos/937" target="_blank" rel="external"><strong>Mac 环境</strong></a>。 后来换了一次系统后 发现 <code>Xdebug</code> 不能用了…事情的起因大概就是这样了<br><a id="more"></a></p>
+<hr>
+<h3 id="Xdebug-是什么"><a href="#Xdebug-是什么" class="headerlink" title="Xdebug 是什么"></a>Xdebug 是什么</h3><p>Xdebug是PHP的扩展，用于协助调试和开发。<br>它包含一个用于IDE的单步调试器; 它升级了 PHP 的 <code>var_dump()</code>函数;<br>它为通知，警告，错误和异常添加了堆栈跟踪;<br>它具有记录每个函数调用和磁盘变量赋值的功能; 它包含一个分析器;<br>它提供了与PHPUnit一起使用的代码覆盖功能</p>
+<p>如果你还在使用 <code>var_dump</code> <code>echo</code> <code>dd</code> 等 还是赶紧来使用下 <code>xdebug</code> 吧 能提升你的调试效率 还能看到各种变量的变化等</p>
+<h3 id="Xdebug-安装"><a href="#Xdebug-安装" class="headerlink" title="Xdebug 安装"></a>Xdebug 安装</h3><p>关于安装 <a href="https://xdebug.org/download.php" target="_blank" rel="external">点击这里</a></p>
+<p>如果你是使用的上面的开发环境 里面已经集成好了 可以通过 <code>phpinfo()</code> 来输出信息</p>
+<p>如果你看到下面的信息就是安装成功了<br><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776415/blog/xdebug3.png" alt="xdebug3"></p>
+<p>需要注意一下 因为我的环境里有 <strong>4</strong> 个版本的 <strong>PHP</strong> 所以一定要确认你当前web端访问的那个是哪个版本的PHP 最好的办法就是通过 <code>phpinfo()</code> 来确认 如果是从服务里直接执行的 <strong>PHP</strong> 命令 是使用的 <strong>php-cli</strong> 模式 </p>
+<p>运行的是默认的 PHP 在我的环境里也就是7.2的 而 <strong>FPM</strong> 执行的是 7.1的 PHP</p>
+<h3 id="IDE-与-Xdebug-的通信"><a href="#IDE-与-Xdebug-的通信" class="headerlink" title="IDE 与 Xdebug 的通信"></a>IDE 与 Xdebug 的通信</h3><p>IDE 与 Xdebug之间的通信有2种方式</p>
+<h4 id="静态绑定客户端"><a href="#静态绑定客户端" class="headerlink" title="静态绑定客户端"></a>静态绑定客户端</h4><p>通信流程大概入下图</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776398/blog/xdebug1.png" alt="xdebug1"></p>
+<p>在上面的 配置 <code>xdebug.remote_connect_back = 0</code> </p>
+<p>xdebug 在收到调试通知时会读取配置 <code>xdebug.remote_host</code> 和 <code>xdebug.remote_port</code> </p>
+<p>默认是 localhost:9000，然后向这个端口发送通知</p>
+<h4 id="根据请求动态获取IP"><a href="#根据请求动态获取IP" class="headerlink" title="根据请求动态获取IP"></a>根据请求动态获取IP</h4><p>这种通信流程如下</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776406/blog/xdebug2.png" alt="xdebug2"></p>
+<p>也就是上面的配置  把 <code>xdebug.remote_connect_back = 1</code> 即可 这个时候 将会忽视 <code>remote_host</code> 的配置，以请求来源的 IP 作为 xdebug 响应的 IP</p>
+<h3 id="Xdebug-配置"><a href="#Xdebug-配置" class="headerlink" title="Xdebug 配置"></a>Xdebug 配置</h3><p>首先找到 <strong>PHP</strong> 的扩展配置目录 不同环境配置不同 路径也不同 我的路径大概如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">vagrant@homestead:/etc/php$ pwd</div><div class="line">/etc/php</div><div class="line">vagrant@homestead:/etc/php$ ls</div><div class="line"><span class="number">5.6</span>  <span class="number">7.0</span>  <span class="number">7.1</span>  <span class="number">7.2</span></div></pre></td></tr></table></figure>
+<p>因为我是使用的 <strong>7.1</strong> 版本的PHP 所以进入到7.1目录下 <code>/etc/php/7.1/mods-available</code> 在这个目录下 会有很多的扩展配置文件</p>
+<p>编辑 <code>xdebug.ini</code> 文件 这个是我的配置 不要直接抄袭 有几个参数需要改下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">zend_extension=xdebug.so</div><div class="line">xdebug.max_nesting_level=<span class="number">512</span></div><div class="line">xdebug.remote_enable=<span class="number">1</span></div><div class="line">xdebug.remote_connect_back=<span class="number">0</span></div><div class="line">xdebug.remote_port=<span class="number">9002</span></div><div class="line">xdebug.scream=<span class="number">0</span></div><div class="line">xdebug.show_local_vars=<span class="number">1</span></div><div class="line">xdebug.idekey=PHPSTORM</div><div class="line">xdebug.remote_host=<span class="number">192.168</span><span class="number">.1</span><span class="number">.32</span></div><div class="line">xdebug.remote_log = /tmp/xdebug.log</div></pre></td></tr></table></figure>
+<p>默认端口是 <strong>9000</strong> 这里我是自己随便改的 只要改了后和IDE中设置的端口一致就可以了</p>
+<p>你可以改 也可以不改 另外 <strong>日志目录</strong> 一定要设置下 方便排错</p>
+<h4 id="我遇到的问题"><a href="#我遇到的问题" class="headerlink" title="我遇到的问题"></a>我遇到的问题</h4><p>我本地是采用的第一种绑定IP的形式， 因为我在使用 <code>VirtualBox</code> 虚拟机的时候把网络固定了 <code>192.168.10.1</code> 一直是这个IP</p>
+<p>而我本机的IP是 <code>192.168.1.32</code> 当我第一次采用动态获取IP地址的时候调试 xdebug 一直是失败的 最后查看下日志发现</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Log opened at <span class="number">2018</span><span class="number">-10</span><span class="number">-25</span> <span class="number">06</span>:<span class="number">46</span>:<span class="number">27</span></div><div class="line">I: Checking remote connect back address.</div><div class="line">I: Checking header <span class="string">'HTTP_X_FORWARDED_FOR'</span>.</div><div class="line">I: Checking header <span class="string">'REMOTE_ADDR'</span>.</div><div class="line">I: Remote address found, connecting to <span class="number">192.168</span><span class="number">.10</span><span class="number">.1</span>:<span class="number">9002.</span></div><div class="line">E: Time-out connecting to client (Waited: <span class="number">200</span> ms). :-(</div><div class="line">Log closed at <span class="number">2018</span><span class="number">-10</span><span class="number">-25</span> <span class="number">06</span>:<span class="number">46</span>:<span class="number">28</span></div><div class="line"></div><div class="line">Log opened at <span class="number">2018</span><span class="number">-10</span><span class="number">-25</span> <span class="number">06</span>:<span class="number">48</span>:<span class="number">51</span></div><div class="line">I: Checking remote connect back address.</div><div class="line">I: Checking header <span class="string">'HTTP_X_FORWARDED_FOR'</span>.</div><div class="line">I: Remote address found, connecting to <span class="number">192.168</span><span class="number">.1</span><span class="number">.32</span>:<span class="number">9002.</span></div><div class="line">I: Connected to client. :-)</div><div class="line">-&gt; ....</div></pre></td></tr></table></figure>
+<p>根据上面的第一次错误信息可以看到 xdebug在尝试连接 <code>192.168.10.1</code> 这个地址 从虚拟机里直接ping 这个地址是不通的 </p>
+<p>所以我把本地的ip地址也给固定死了 </p>
+<p>直接使用了绑定IP的方式 你们不要学我，如果哪天ip地址变了也要来改这里</p>
+<p>然后重启 <strong>FPM</strong>  我的版本是 php7.1</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service php7<span class="number">.1</span>-fpm restart</div></pre></td></tr></table></figure>
+<p>至此我的问题是解决了 总结2点</p>
+<font color="red"><br>一、理解原理<br>二、多看日志<br></font>
+
+<p>下面就只是一个Xdebug的安装教程方便自己回忆</p>
+<h3 id="PHPStorm的配置"><a href="#PHPStorm的配置" class="headerlink" title="PHPStorm的配置"></a>PHPStorm的配置</h3><h4 id="设置-PHP-的版本-以及-CLI-的版本"><a href="#设置-PHP-的版本-以及-CLI-的版本" class="headerlink" title="设置 PHP 的版本 以及 CLI 的版本"></a>设置 PHP 的版本 以及 CLI 的版本</h4><p>不设置也可以 如下图：</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm2.png" alt="step2"></p>
+<p>讲下 <code>Cli Interpreters</code> 的设置 </p>
+<p>点击后面的 <code>...</code> 进入<br>然后添加 选择 <code>From Docker, Vagrant,VM,Remote</code><br>然后单击选中 <code>Vagrant</code> 因为我是用的vagrant管理虚拟机的（请根据自己的实际情况选择）<br>然后 <code>Vagrant Instance F...</code> 选择你的 <code>Homestead</code> 目录即可 不需要进入目录里 比如我的 <code>E:/Homestead</code><br>最后他会自己加载到你的PHP-CLI版本信息等</p>
+<h4 id="设置PHP-Debug"><a href="#设置PHP-Debug" class="headerlink" title="设置PHP-Debug"></a>设置PHP-Debug</h4><p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm3.png" alt="step3"></p>
+<p>注意配置的端口号要和你的 <code>xdebug.ini</code> 中配置的端口号一致 上面2个不要勾选 勾了刚进入的时候就会启动调试</p>
+<h4 id="设置PHP-Server"><a href="#设置PHP-Server" class="headerlink" title="设置PHP-Server"></a>设置PHP-Server</h4><p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm4.png" alt="step4"></p>
+<p>注意 <code>Host</code> 里设置你的项目访问地址 如果有配置虚拟主机域名的 可以填你的配置域名 然后端口80 后面选 <code>Xdebug</code></p>
+<p>因为是使用的虚拟机 所以要勾选 <code>Use Path mappings</code> 目录映射</p>
+<p>首先是本地的项目目录 然后后面的 绝对路径写虚拟机中的绝对路径 如上图 这里一定要映射不然会找不到</p>
+<h4 id="设置-Debug"><a href="#设置-Debug" class="headerlink" title="设置 Debug"></a>设置 Debug</h4><p>在下面位置设置Debug测试</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm5.png" alt="step5"></p>
+<p>然后新建一个 <strong>PHP Web Application</strong> 设置如下</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm6.png" alt="step6"></p>
+<p>Server一项选择签名创建的Server名字 路径写 <code>/</code> 就好了 表示项目全路径</p>
+<h4 id="测试-Debug"><a href="#测试-Debug" class="headerlink" title="测试 Debug"></a>测试 Debug</h4><p>打开监听 如下图</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776370/blog/phpstorm7.png" alt="step7"></p>
+<p>在代码中设置断点 然后点击那个小虫子图标启动 当执行到断点的时候 在IDE的控制面板中 出现下图即表示成功了</p>
+<p><img src="https://res.cloudinary.com/dt1sirwll/image/upload/v1540776371/blog/phpstorm8.png" alt="step8"></p>
+<h3 id="Chrome-中-Xdebug-插件配置"><a href="#Chrome-中-Xdebug-插件配置" class="headerlink" title="Chrome 中 Xdebug 插件配置"></a>Chrome 中 Xdebug 插件配置</h3><p>其实上面已经可以了 不设置浏览器debug插件也可以的 如果你不想每次都点击那个小虫子来启动debug的话 可以继续往下看 安装一个Chrome的Xdebug插件 每次运行到你的断点的时候他会自动检测到</p>
+<h4 id="Xdebug-helper-插件下载"><a href="#Xdebug-helper-插件下载" class="headerlink" title="Xdebug-helper 插件下载"></a>Xdebug-helper 插件下载</h4><p>下载地址：<a href="https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc" target="_blank" rel="external">https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc</a></p>
+<p>安装成功后会在浏览器的插件栏里 一样是一个小虫子的图标 点击后有4个选择</p>
+<p>1.Debug<br>2.Profile<br>3.Trace<br>4.Disabled</p>
+<p>点击Debug的时候就表示启动了 然后会默认选中这个选项 他会记住域名的</p>
+<h4 id="Xdebug-helper-插件配置"><a href="#Xdebug-helper-插件配置" class="headerlink" title="Xdebug-helper 插件配置"></a>Xdebug-helper 插件配置</h4><p>在那个小虫子图标上点击 <code>右键-&gt;选项</code> 进入配置页面</p>
+<p>找到 <strong>IDE Key</strong> 一项 选择自己使用的 IDE 工具 这里我是 <strong>PHPStorm</strong> 可以看到他默认的值是 <code>PHPSTORM</code> 不能修改（至今不知道怎么在chrome里修改它…）  上面的配置里已经设置过了这个值 默认即可</p>
+<p>现在输入域名访问下 然后启动浏览器插件里的debug 点击使那个小虫子图标变绿就表示启动了</p>
+<p>然后在代码里打上断点 当浏览器放到断点的代码时 IDE 中的控制台看到和上面一样成功的界面就表示Xdebug启动成功</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://laravel-china.org/articles/4090/the-first-step-to-becoming-a-senior-php-programmer-debugging-xdebug-principle" target="_blank" rel="external">https://laravel-china.org/articles/4090/the-first-step-to-becoming-a-senior-php-programmer-debugging-xdebug-principle</a></p>
+<p><a href="https://juejin.im/entry/58fdc9868d6d8100589d826a" target="_blank" rel="external">https://juejin.im/entry/58fdc9868d6d8100589d826a</a></p>
+<p><a href="https://segmentfault.com/a/1190000016366104" target="_blank" rel="external">https://segmentfault.com/a/1190000016366104</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Xdebug/" rel="tag">#Xdebug</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/12/20181012/" rel="next" title="PHP中CGI、CLI、FPM是什么">
+                <i class="fa fa-chevron-left"></i> PHP中CGI、CLI、FPM是什么
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/10/25/20181025/"
+           data-title="PHP环境 VirtualBox + Homestead + Xdebug 解决过程" data-url="https://caihongtengxu.github.io/2018/10/25/20181025/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">35</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Xdebug-是什么"><span class="nav-number">1.</span> <span class="nav-text">Xdebug 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xdebug-安装"><span class="nav-number">2.</span> <span class="nav-text">Xdebug 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IDE-与-Xdebug-的通信"><span class="nav-number">3.</span> <span class="nav-text">IDE 与 Xdebug 的通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#静态绑定客户端"><span class="nav-number">3.1.</span> <span class="nav-text">静态绑定客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根据请求动态获取IP"><span class="nav-number">3.2.</span> <span class="nav-text">根据请求动态获取IP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xdebug-配置"><span class="nav-number">4.</span> <span class="nav-text">Xdebug 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#我遇到的问题"><span class="nav-number">4.1.</span> <span class="nav-text">我遇到的问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHPStorm的配置"><span class="nav-number">5.</span> <span class="nav-text">PHPStorm的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置-PHP-的版本-以及-CLI-的版本"><span class="nav-number">5.1.</span> <span class="nav-text">设置 PHP 的版本 以及 CLI 的版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置PHP-Debug"><span class="nav-number">5.2.</span> <span class="nav-text">设置PHP-Debug</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置PHP-Server"><span class="nav-number">5.3.</span> <span class="nav-text">设置PHP-Server</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置-Debug"><span class="nav-number">5.4.</span> <span class="nav-text">设置 Debug</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试-Debug"><span class="nav-number">5.5.</span> <span class="nav-text">测试 Debug</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chrome-中-Xdebug-插件配置"><span class="nav-number">6.</span> <span class="nav-text">Chrome 中 Xdebug 插件配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Xdebug-helper-插件下载"><span class="nav-number">6.1.</span> <span class="nav-text">Xdebug-helper 插件下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Xdebug-helper-插件配置"><span class="nav-number">6.2.</span> <span class="nav-text">Xdebug-helper 插件配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>
