@@ -28,34 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Laravel," />
+  <meta name="keywords" content="Referer," />
 
 
 
 
 
 
-<meta name="description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
+<meta name="description" content="最近公司申请了微信的H5支付 相关支付文档见这里 https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4 发布上线后发起支付 一直报错 商家参数格式有误，请联系商家解决 根据微信官方文档的错误提示 应该是 referer 丢失的问题 于是定位一通发现还真是 referer 丢失了 记录下解决问题过程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Laravel集成Swagger使用总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/06/30/20160630/index.html">
+<meta property="og:title" content="微信H5支付 - Referer丢失问题">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/11/01/20181101/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publicvendor.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/route.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
-<meta property="og:updated_time" content="2018-09-28T03:19:24.300Z">
+<meta property="og:description" content="最近公司申请了微信的H5支付 相关支付文档见这里 https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4 发布上线后发起支付 一直报错 商家参数格式有误，请联系商家解决 根据微信官方文档的错误提示 应该是 referer 丢失的问题 于是定位一通发现还真是 referer 丢失了 记录下解决问题过程">
+<meta property="og:updated_time" content="2018-11-01T09:38:38.941Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Laravel集成Swagger使用总结">
-<meta name="twitter:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
+<meta name="twitter:title" content="微信H5支付 - Referer丢失问题">
+<meta name="twitter:description" content="最近公司申请了微信的H5支付 相关支付文档见这里 https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4 发布上线后发起支付 一直报错 商家参数格式有误，请联系商家解决 根据微信官方文档的错误提示 应该是 referer 丢失的问题 于是定位一通发现还真是 referer 丢失了 记录下解决问题过程">
 
 
 
@@ -76,7 +65,7 @@
 
 
 
-  <title> Laravel集成Swagger使用总结 | 指尖的彩虹 </title>
+  <title> 微信H5支付 - Referer丢失问题 | 指尖的彩虹 </title>
 
 </head>
 
@@ -262,7 +251,7 @@
             
             
               
-                Laravel集成Swagger使用总结
+                微信H5支付 - Referer丢失问题
               
             
           </h1>
@@ -274,8 +263,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-30T20:02:25+08:00" content="2016-06-30">
-              2016-06-30
+            <time itemprop="dateCreated" datetime="2018-11-01T17:36:24+08:00" content="2018-11-01">
+              2018-11-01
             </time>
           </span>
 
@@ -304,8 +293,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/30/20160630/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/30/20160630/" itemprop="commentsCount"></span>
+                <a href="/2018/11/01/20181101/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/11/01/20181101/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -328,32 +317,42 @@
       
 
       
-        <blockquote>
-<p>刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧</p>
-<p>先放个包的网址 <a href="https://packagist.org" target="_blank" rel="external">https://packagist.org</a></p>
-<p>之前都是直接在里面搜索<code>swagger</code> 然后又个<code>laterll/swagger</code>使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 <code>jlapp/swaggervel</code> 很好用哦 就用这个吧<br><a id="more"></a></p>
-</blockquote>
+        <p>最近公司申请了微信的H5支付 相关支付文档见这里 <a href="https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4" target="_blank" rel="external">https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4</a> 发布上线后发起支付 一直报错 <code>商家参数格式有误，请联系商家解决</code> 根据微信官方文档的错误提示 应该是 <code>referer</code> 丢失的问题 于是定位一通发现还真是 <code>referer</code> 丢失了 记录下解决问题过程<br><a id="more"></a></p>
 <hr>
-<h3 id="创建一个Laravel项目"><a href="#创建一个Laravel项目" class="headerlink" title="创建一个Laravel项目"></a>创建一个Laravel项目</h3><p>进入自己的本地环境目录<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer create-project laravel/laravel swaggertest <span class="number">5.1</span>.*</div></pre></td></tr></table></figure></p>
-<h6 id="对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><a href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限" class="headerlink" title="对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限"></a>对了有时候在linux测试环境下搭建项目的话 要记得查看下 <code>storage</code>目录的读写权限</h6><h6 id="复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><a href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了" class="headerlink" title="复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了"></a>复制项目下的<code>.env.example</code>文件 重命名为<code>.env</code> 一般创建的时候都会帮你复制过了</h6><p>上面swaggertest是我的项目名 这个随意 另外Laravel的版本用的是 <strong>5.1</strong> 的 不知道为什么 每次用5.2的都非常慢，慢到爆炸 用5.1就好很多 难道错觉</p>
-<p>进入项目目录 编辑文件<code>composer.json</code>  在最下面加上下面这段代码 增加镜像 以后下载安装什么的可以跑的快点 这一步可以无视不操作 没啥影响</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"repositories"</span>: &#123;</div><div class="line">   <span class="string">"packagist"</span>: &#123;</div><div class="line">      <span class="string">"type"</span>: <span class="string">"composer"</span>,</div><div class="line">      <span class="string">"url"</span>: <span class="string">"https://packagist.phpcomposer.com"</span></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="集成Swagger"><a href="#集成Swagger" class="headerlink" title="集成Swagger"></a>集成Swagger</h3><h4 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h4><p>运行</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> jlapp/swaggervel:dev-master</div></pre></td></tr></table></figure>
-<p>上面这个swaggervel包有3个版本的 分别是<code>dev-master</code>    <code>2.0.x-dev</code>（这个是给laravel5用的）     <code>1.0.x-dev</code>（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
-<h4 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h4><p>编辑 <code>config/app.php</code>文件 找到 <code>providers</code>数组在其中添加 如下代码<code>Jlapp\Swaggervel\SwaggervelServiceProvider::class,</code><br>网上也有些说要在app/config/app.php文件中添加 但我的项目app文件夹下并没有config文件夹 so就没按照app/config/app.php增加目录创建来编辑</p>
-<p>执行<code>php artisan vendor:publish</code> 命令</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publish.png" alt="publish List" title="publish list"></p>
-<p>这句话就是把刚安装的swaggervel-ui一些东西帮你弄到根目录public目录下<br>成功的话目录是这样的</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publicvendor.png" alt="vendor List" title="vendor list"></p>
-<p>运行下<code>php artisan route:list</code> 刷新下路由<br><img src="http://obomwzenb.bkt.clouddn.com/route.png" alt="route List" title="route list"></p>
-<p>其实就是把他默认的<code>api/docs</code> 这个路由帮你加进来了<br>到这里基本已经完成 但是这个时候你去访问你的项目 他可能会报错缺少swg的注释info信息啥的 也并没有生成他运行需要的 <strong>json文件</strong><br><a href="http://localhost/api/docs" target="_blank" rel="external">http://localhost/api/docs</a> &nbsp;&nbsp;&nbsp;&nbsp;[这个是我的项目地址 具体的自己配置吧]</p>
-<p>默认情况下他会在 <code>storage/docs</code>这个文件夹下生成所需要的json文件的 因为我们还没有写controller注释 他没有生成json文件 但是把目录已经创建好了</p>
-<p>需要注意下<code>vendor/jlapp/swaggervel/src/config/swaggervel.php</code> 这个文件 其中有一个 参数 <code>generateAlways</code> 这个变量 他是控制是否每次都刷新生成json 文件， 推荐在<code>.env</code>中配置一个变量参数设置到这里 这样就不用每次来改这里了 毕竟这个路径找起来挺麻烦的</p>
-<p>好了 整个<code>Controller</code> 国际惯例 <code>hello world</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@SWG</span>\Swagger(</div><div class="line"> *   <span class="doctag">@SWG</span>\Info(</div><div class="line"> *      title="测试类",</div><div class="line"> *      version="1.0.0",</div><div class="line"> *      description="测试测试"</div><div class="line"> *   )</div><div class="line"> * )</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@SWG</span>\Get(</div><div class="line">     *      path="/testindex",</div><div class="line">     *      tags=&#123;"测试相关模块"&#125;,</div><div class="line">     *      summary="测试输出hello world",</div><div class="line">     *      <span class="doctag">@SWG</span>\Response(</div><div class="line">     *          response=200,</div><div class="line">     *          description="success",</div><div class="line">     *      )</div><div class="line">     * )</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"hello world"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>访问自己配置的域名 看到下面就成功了<br><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png" alt="swagger success" title="swagger success"></p>
-<h2 id="最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><a href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多" class="headerlink" title="最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多"></a>最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</h2>
+<h3 id="Referer-是什么"><a href="#Referer-是什么" class="headerlink" title="Referer 是什么"></a>Referer 是什么</h3><p>HTTP Referer是 <code>HTTP</code> 请求 <code>header</code> 头信息的一部分 当浏览器向web服务器发送请求的时候，一般会带上Referer</p>
+<p>告诉服务器我是从哪个页面链接过来的，服务器藉此可以获得一些信息用于处理。</p>
+<p>比如我们在 <code>Chrome</code> 浏览器的控制台下 可以看到 <code>Request Headers</code> 下有类似如下的信息</p>
+<blockquote>
+<p>Provisional headers are shown<br>Accept: <em>/</em><br>Origin: <a href="https://local.test5.show" target="_blank" rel="external">https://local.test5.show</a><br>Referer: <a href="https://local.test5.show/test/show" target="_blank" rel="external">https://local.test5.show/test/show</a><br>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</p>
+</blockquote>
+<p>其中 <code>Referer</code> 就是该属性了</p>
+<p><strong>Referer</strong> 的正确英语拼法是 <strong>referrer</strong>。由于早期 HTTP 规范的拼写错误，为了保持向后兼容就将错就错了</p>
+<h3 id="Referer-的作用"><a href="#Referer-的作用" class="headerlink" title="Referer 的作用"></a>Referer 的作用</h3><h4 id="防盗链"><a href="#防盗链" class="headerlink" title="防盗链"></a>防盗链</h4><p>比如你发现访问加载自己的资源 而 referer不是自己的站点 就可以屏蔽它</p>
+<h4 id="防止恶意请求"><a href="#防止恶意请求" class="headerlink" title="防止恶意请求"></a>防止恶意请求</h4><p>这点同上</p>
+<h4 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h4><p>比如微信H5支付 也需要这个 就不知道他们做啥用了(hhh</p>
+<h3 id="Referer-丢失"><a href="#Referer-丢失" class="headerlink" title="Referer 丢失"></a>Referer 丢失</h3><p>关于 <code>Referer</code> 丢失的问题 首先 referer 是由客户端的浏览器发送到服务器上，且在客户端可以通过 <code>document.referrer</code> 来获取，也就是说referer的发送实际上是一个浏览器行为，发送与否的决定权是在浏览器手里。虽然这样说，但是HTTP协议对什么情况下，浏览器该发送，什么情况下不该发送有着严格的规定。</p>
+<h4 id="总结下-Referer-丢失的几种情况"><a href="#总结下-Referer-丢失的几种情况" class="headerlink" title="总结下 Referer 丢失的几种情况"></a>总结下 Referer 丢失的几种情况</h4><p>1.当网站使用refresh字段进行跳转的时候，大多数浏览器不发送referer</p>
+<p>2.从用户从一个HTTPS的网站点击链接到另一个HTTP的网站时，不发送referer</p>
+<p>3.html5中，a标签的rel = “noreferrer”, 可以让浏览器不发送referer</p>
+<p>4.使用Data URI scheme链接的，浏览器也不发送referer</p>
+<p>5.使用Content Security Policy, 也可以让浏览器不发送referer</p>
+<p>6.在html头部中使用meta标签来控制不让浏览器发送referer</p>
+<h3 id="自动生成URL链接HTTPS变HTTP"><a href="#自动生成URL链接HTTPS变HTTP" class="headerlink" title="自动生成URL链接HTTPS变HTTP"></a>自动生成URL链接HTTPS变HTTP</h3><p>有时候需要在API项目中生成一些URL链接返回 但是服务器端已经配置了支持HTTPS，通过HTTPS访问的时候生成的URL仍然是HTTP</p>
+<p>关于这个问题其实是服务器 <strong>配置</strong> 问题 和 下面类似</p>
+<p>回到我遇到的微信支付问题 跟踪了一圈浏览器的跳转之后发现是属性第二种情况 从 HTTPS 站点跳到 HTTP 站点 丢失了 Referer【ps:反过来从HTTP到HTTPS是没问题的 不会丢失 Referer】 中间藏的比较深</p>
+<p>当然我一开始没有发现这个问题 因为从前端请求到 API 整个都没有问题 全部项目已经全线部署了 HTTPS , Referer 信息也有携带 然后到最后一步微信的支付请求URL的时候 Referer 就丢失了.</p>
+<p>后面发现在请求到API项目的时候 API项目返回了一个 URL 给前端 这个 URL 是后端代码根据规则生成的(Laravel 里的 action 辅助函数) 这个函数本身并没有什么问题 但是生成的URL链接 是 HTTP 了 又搞事情！！！</p>
+<p>API项目配置的是 HTTPS 请求 但是生成的URL是 HTTP 问题就是这里了 请求运维哥协助 最后发现是 Nginx 反向代理中配置的问题</p>
+<p>nginx服务器配置片段如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">location / &#123;</div><div class="line">    proxy_pass http:<span class="comment">//114.114.114.114:80;</span></div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>可以看到 proxy_pass 参数 指向的是 HTTP的协议 所以在 后台获取的 URL 都是HTTP协议的</p>
+<p>把代理这设置成 <code>https://114.114.114.114:443;</code> 即可 问题终解决</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://blog.csdn.net/diyiday/article/details/83376857?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="external">https://blog.csdn.net/diyiday/article/details/83376857?tdsourcetag=s_pctim_aiomsg</a></p>
+<p><a href="https://www.jianshu.com/p/bed000e1830b" target="_blank" rel="external">https://www.jianshu.com/p/bed000e1830b</a></p>
+<p><a href="https://blog.csdn.net/samxx8/article/details/53508078" target="_blank" rel="external">https://blog.csdn.net/samxx8/article/details/53508078</a></p>
+<p><a href="https://www.zhihu.com/question/37101927" target="_blank" rel="external">https://www.zhihu.com/question/37101927</a></p>
+<hr>
+
       
     </div>
 
@@ -374,7 +373,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Laravel/" rel="tag">#Laravel</a>
+            <a href="/tags/Referer/" rel="tag">#Referer</a>
           
         </div>
       
@@ -383,17 +382,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/21/20160421/" rel="next" title="Ubuntu 16.04下添加和删除用户">
-                <i class="fa fa-chevron-left"></i> Ubuntu 16.04下添加和删除用户
+              <a href="/2018/10/25/20181025/" rel="next" title="PHP环境 VirtualBox + Homestead + Xdebug 解决过程">
+                <i class="fa fa-chevron-left"></i> PHP环境 VirtualBox + Homestead + Xdebug 解决过程
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/07/03/20160703/" rel="prev" title="Lumen集成Swagger使用总结">
-                Lumen集成Swagger使用总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -419,8 +414,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/30/20160630/"
-           data-title="Laravel集成Swagger使用总结" data-url="https://caihongtengxu.github.io/2016/06/30/20160630/">
+      <div class="ds-thread" data-thread-key="2018/11/01/20181101/"
+           data-title="微信H5支付 - Referer丢失问题" data-url="https://caihongtengxu.github.io/2018/11/01/20181101/">
       </div>
     
   </div>
@@ -511,7 +506,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个Laravel项目"><span class="nav-number">1.</span> <span class="nav-text">创建一个Laravel项目</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成Swagger"><span class="nav-number">2.</span> <span class="nav-text">集成Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装包"><span class="nav-number">2.1.</span> <span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑配置"><span class="nav-number">2.2.</span> <span class="nav-text">编辑配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><span class="nav-number"></span> <span class="nav-text">最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-是什么"><span class="nav-number">1.</span> <span class="nav-text">Referer 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-的作用"><span class="nav-number">2.</span> <span class="nav-text">Referer 的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#防盗链"><span class="nav-number">2.1.</span> <span class="nav-text">防盗链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止恶意请求"><span class="nav-number">2.2.</span> <span class="nav-text">防止恶意请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高级用法"><span class="nav-number">2.3.</span> <span class="nav-text">高级用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-丢失"><span class="nav-number">3.</span> <span class="nav-text">Referer 丢失</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结下-Referer-丢失的几种情况"><span class="nav-number">3.1.</span> <span class="nav-text">总结下 Referer 丢失的几种情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动生成URL链接HTTPS变HTTP"><span class="nav-number">4.</span> <span class="nav-text">自动生成URL链接HTTPS变HTTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
           </div>
         </section>
