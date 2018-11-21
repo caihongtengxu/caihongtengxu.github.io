@@ -41,7 +41,7 @@
 <meta property="og:url" content="https://caihongtengxu.github.io/2018/08/22/20180822/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="关于 git branch 和 git 批量删除分支 的一点使用记录">
-<meta property="og:updated_time" content="2018-08-22T01:44:28.900Z">
+<meta property="og:updated_time" content="2018-11-21T01:14:51.345Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 查看分支与批量删除分支">
 <meta name="twitter:description" content="关于 git branch 和 git 批量删除分支 的一点使用记录">
@@ -330,6 +330,15 @@
 <h3 id="Git-批量删除本地分支"><a href="#Git-批量删除本地分支" class="headerlink" title="Git 批量删除本地分支"></a>Git 批量删除本地分支</h3><p>由于经常创建分支 测试服务器上的分支已经非常多了 每次查看分支都会列出一大坨看的好累</p>
 <p>然后就想删除他们 之前一直不知道怎么批量删除 后来找了一圈 记录下吧</p>
 <p><code>git branch |grep &#39;branchName*&#39; |xargs git branch -D</code></p>
+<h3 id="Git-回滚远端分支内容"><a href="#Git-回滚远端分支内容" class="headerlink" title="Git 回滚远端分支内容"></a>Git 回滚远端分支内容</h3><p>有时候我们已经把本地代码推到远端服务器了 然而因为一些情况需要回滚本地的内容到某次提交之前</p>
+<p>常用的操作 </p>
+<p><code>git reset --hard commit_id</code></p>
+<p>然后习惯性的 <code>git push origin branch_name</code> 想覆盖远端的内容 这里时候你就会懵逼了 提示你推送不上去</p>
+<p>会让你先 <code>pull</code> 下来远端的内容 然后在提交。今天看到一个骚操作</p>
+<p>可以先删除远端分支 然后在把本地回滚过的代码分支推上去</p>
+<p>删除远端分支：<code>git push origin :branch_name</code></p>
+<p>提交本地回滚过的分支：<code>git push origin branch_name</code></p>
+<p>如果你要回滚 <code>master</code> 我就真不敢这么操作了…</p>
 <hr>
 
       
@@ -489,7 +498,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-Branch-的使用"><span class="nav-number">1.</span> <span class="nav-text">Git Branch 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-批量删除本地分支"><span class="nav-number">2.</span> <span class="nav-text">Git 批量删除本地分支</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-Branch-的使用"><span class="nav-number">1.</span> <span class="nav-text">Git Branch 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-批量删除本地分支"><span class="nav-number">2.</span> <span class="nav-text">Git 批量删除本地分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-回滚远端分支内容"><span class="nav-number">3.</span> <span class="nav-text">Git 回滚远端分支内容</span></a></li></ol></div>
             
           </div>
         </section>
