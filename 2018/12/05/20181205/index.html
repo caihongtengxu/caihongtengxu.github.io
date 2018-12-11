@@ -1,0 +1,793 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="GitFlow," />
+
+
+
+
+
+
+<meta name="description" content="前任老大一直都是推荐使用 Git Flow 工作流 可是好多同事不喜欢这么干，每次都是自己合并分支 没有备注 乱打 tag 因为这个鬼事情 出错了好几次 头疼，最近自己又补了相关知识 下面主要讲下 Git Flow 工作流 的一些命令都干了什么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于GitFlow工作流一些总结">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/12/05/20181205/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="前任老大一直都是推荐使用 Git Flow 工作流 可是好多同事不喜欢这么干，每次都是自己合并分支 没有备注 乱打 tag 因为这个鬼事情 出错了好几次 头疼，最近自己又补了相关知识 下面主要讲下 Git Flow 工作流 的一些命令都干了什么">
+<meta property="og:updated_time" content="2018-12-11T07:35:16.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于GitFlow工作流一些总结">
+<meta name="twitter:description" content="前任老大一直都是推荐使用 Git Flow 工作流 可是好多同事不喜欢这么干，每次都是自己合并分支 没有备注 乱打 tag 因为这个鬼事情 出错了好几次 头疼，最近自己又补了相关知识 下面主要讲下 Git Flow 工作流 的一些命令都干了什么">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于GitFlow工作流一些总结 | 指尖的彩虹 </title>
+
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于GitFlow工作流一些总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-12-05T15:34:16+08:00" content="2018-12-05">
+              2018-12-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/12/05/20181205/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/05/20181205/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前任老大一直都是推荐使用 <code>Git Flow</code> 工作流 可是好多同事不喜欢这么干，每次都是自己合并分支 没有备注 乱打 tag 因为这个鬼事情 出错了好几次 头疼，最近自己又补了相关知识 下面主要讲下 <strong>Git Flow</strong> 工作流 的一些命令都干了什么<br><a id="more"></a></p>
+<hr>
+<h3 id="WorkFlow"><a href="#WorkFlow" class="headerlink" title="WorkFlow"></a>WorkFlow</h3><p>一般我们都是使用 <code>Git</code> 来做代码管理的 中间大家都在操作 为了方便协作 减少不必要的混乱 都会有一个工作流程 这个就是 <code>WorkFlow</code></p>
+<p>常用的 一般有</p>
+<blockquote>
+<p>Git Flow<br>Github Flow<br>Gitlab Flow</p>
+</blockquote>
+<h3 id="Git-Flow"><a href="#Git-Flow" class="headerlink" title="Git Flow"></a>Git Flow</h3><p>最早诞生、并得到广泛采用的一种工作流程，就是Git flow</p>
+<p>主要讲下 git flow 工作流 他会同时维护 <strong>2</strong> 个 <strong>长期分支</strong> </p>
+<p>一个是 <strong>主干分支</strong> <code>master</code> 用来存放稳定发布版本</p>
+<p>一个是 <strong>开发分支</strong> <code>develop</code> 用来存放日常开发版本 </p>
+<font color="red">建议：每次 <strong>创建分支</strong> 和 <strong>合并分支</strong> 的时候 先 <code>fetch</code> 一下 <code>develop</code> 和 <code>master</code> 分支 有更新的话直接更新最新代码，保持同步</font>
+
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>一般高版本的git工具都内置了 <code>git flow</code> 命名 在检出项目分支后直接运行 <code>git flow init</code> 进行初始化 中间会询问你一些确定的分支名称 如果你没有异议 直接一路回车搞定</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ git flow init</div><div class="line">...</div><div class="line">How to name your supporting branch prefixes?</div><div class="line">Feature branches? [feature/]</div><div class="line">Bugfix branches? [bugfix/]</div><div class="line">Release branches? [release/]</div><div class="line">Hotfix branches? [hotfix/]</div><div class="line">Support branches? [support/]</div><div class="line">Version tag prefix? []</div><div class="line">Hooks <span class="keyword">and</span> filters directory? [.git/hooks]</div></pre></td></tr></table></figure>
+<p>执行完毕 他会帮你生成2个长期分支 分别是 <code>develop</code> 和 <code>master</code></p>
+<h3 id="功能分支"><a href="#功能分支" class="headerlink" title="功能分支"></a>功能分支</h3><h4 id="创建功能分支"><a href="#创建功能分支" class="headerlink" title="创建功能分支"></a>创建功能分支</h4><p>一般我们需要开发新功能的时候 需要创建一个 <strong>功能分支（feature branch）</strong> 可以执行命令 <code>git flow feature start barnach_name</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git flow feature start test</div><div class="line">...</div><div class="line">Summary of actions:</div><div class="line">- A <span class="keyword">new</span> branch <span class="string">'feature/test'</span> was created, based on <span class="string">'develop'</span></div><div class="line">- You are now on branch <span class="string">'feature/test'</span></div><div class="line"></div><div class="line">When done, <span class="keyword">use</span>:</div><div class="line">     <span class="title">git</span> <span class="title">flow</span> <span class="title">feature</span> <span class="title">finish</span> <span class="title">test</span></div></pre></td></tr></table></figure>
+<p>通过输出信息可以看到 <strong>git flow</strong> 他会帮你基于 <code>develop</code> 分支创建了 功能分支 <strong>feature/test</strong> 给你 然后并帮你切换到了 <strong>feature/test</strong> 分支上， 并且告诉你在你开发完成后需要合并分支的时候可以 使用命令 <code>git flow feature finish test</code> 来合并分支</p>
+<h4 id="完成功能分支"><a href="#完成功能分支" class="headerlink" title="完成功能分支"></a>完成功能分支</h4><p>在我们确定完成了新功能准备合并的时候 可以通过命令 <code>git flow feature finish test</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ git flow feature finish test</div><div class="line">...</div><div class="line">Summary of actions:</div><div class="line">- The feature branch <span class="string">'feature/test'</span> was merged into <span class="string">'develop'</span></div><div class="line">- Feature branch <span class="string">'feature/test'</span> has been locally deleted</div><div class="line">- You are now on branch <span class="string">'develop'</span></div></pre></td></tr></table></figure>
+<p>通过上面显示信息 我们可以看到 执行这个命令的时候 <strong>git flow</strong> 他进行了3步操作 先是吧当前的 <strong>feature/test</strong> 分支合并进了 <strong>develop</strong> 分支 然后删除了本地的 <code>feature/test</code> 分支 最后帮你切换到了 <strong>develop</strong> 分支上</p>
+<h3 id="预发布分支"><a href="#预发布分支" class="headerlink" title="预发布分支"></a>预发布分支</h3><h4 id="创建预发布分支"><a href="#创建预发布分支" class="headerlink" title="创建预发布分支"></a>创建预发布分支</h4><p>在我们完成了功能分支后 一般要创建一个 <strong>预发布分支（release branch）</strong> 然后进行提测 给测试人员来测试 可以执行命令 <code>git flow release start 版本号</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git flow release start v1<span class="number">.0</span><span class="number">.0</span></div><div class="line">...</div><div class="line">Summary of actions:</div><div class="line">- A <span class="keyword">new</span> branch <span class="string">'release/v1.0.0'</span> was created, based on <span class="string">'develop'</span></div><div class="line">- You are now on branch <span class="string">'release/v1.0.0'</span></div><div class="line">...</div><div class="line">- When done, run:</div><div class="line">     git flow release finish <span class="string">'v1.0.0'</span></div></pre></td></tr></table></figure>
+<p>可以看到他是基于 <code>develop</code> 分支帮我们创建了 <strong>release/v1.0.0</strong> 分支 并且帮你自动切换过去 并且告诉你当你完成了后准备合并的时候可以执行 <code>git flow release finish &#39;v1.0.0&#39;</code> 来合并预发布分支</p>
+<h4 id="完成预发布分支"><a href="#完成预发布分支" class="headerlink" title="完成预发布分支"></a>完成预发布分支</h4><p>当各种验收通过 准备合并当前的 <strong>预发布分支</strong> 发布线上的时候 可以执行 <code>git flow release finish &#39;v1.0.0&#39;</code> (这里的名字是你上面创建的)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git flow release finish <span class="string">'v1.0.0'</span></div><div class="line">....</div></pre></td></tr></table></figure>
+<p>这个时候他会让你打上2个备注 第一个备注是你合并分支 <code>Merge branch &#39;relese/v1.0.0&#39;</code> 需要的备注信息 记录本次合并分支需要</p>
+<p>第二次备注是让你给 <strong>tag</strong> 标签打一个备注 输入保存退出即可</p>
+<p>最后会有个信息 他会合并 tag <code>v1.0.0</code> 到 <code>develop</code> 分支中 直接退出保存</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git flow release finish <span class="string">'v1.0.0'</span></div><div class="line">...</div><div class="line">Summary of actions:</div><div class="line">- Release branch <span class="string">'release/v1.0.0'</span> has been merged into <span class="string">'master'</span></div><div class="line">- The release was tagged <span class="string">'v1.0.0'</span></div><div class="line">- Release tag <span class="string">'v1.0.0'</span> has been back-merged into <span class="string">'develop'</span></div><div class="line">- Release branch <span class="string">'release/v1.0.0'</span> has been locally deleted</div><div class="line">- You are now on branch <span class="string">'develop'</span></div></pre></td></tr></table></figure>
+<p>可以看到他后面的操作是帮你把 <strong>release/v1.0.0</strong> 分支合并到了 <strong>master</strong> 然后打上了 <strong>tag</strong> 同时合并到了 <strong>develop</strong> 最后把本地的 <strong>release/v1.0.0</strong> 分支删除 然后切换到了 <strong>develop</strong> 分支</p>
+<p>后面需要发布的话（如果有权限） 只需要</p>
+<ol>
+<li><code>git push origin &#39;v1.0.0&#39;</code> 推送tag</li>
+<li><code>git push origin develop</code> 推送 develop 分支</li>
+<li>切换到 master 分支 <code>git push origin master</code> 推送master分支</li>
+</ol>
+<h3 id="补丁分支"><a href="#补丁分支" class="headerlink" title="补丁分支"></a>补丁分支</h3><h4 id="创建补丁分支"><a href="#创建补丁分支" class="headerlink" title="创建补丁分支"></a>创建补丁分支</h4><p>一般我们遇到线上有些 <strong>bug</strong> 需要紧急修复的时候就可以创建一个 <strong>补丁分支（hotfix branch）</strong> 执行命令 <code>git flow hotfix start branch_name</code> 这里我随便写的名字 不要纠结</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git flow hotfix start v1<span class="number">.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line">...</div><div class="line">Summary of actions:</div><div class="line">- A <span class="keyword">new</span> branch <span class="string">'hotfix/v1.0.0.1'</span> was created, based on <span class="string">'master'</span></div><div class="line">- You are now on branch <span class="string">'hotfix/v1.0.0.1'</span></div><div class="line">...</div><div class="line">- When done, run:</div><div class="line">     git flow hotfix finish <span class="string">'v1.0.0.1'</span></div></pre></td></tr></table></figure>
+<p>可以看到他类似 <strong>功能分支</strong> 只不过他是基于 <strong>master</strong> 分支创建的 并且帮你自动切换到 <strong>hotfix/v1.0.0.1</strong> 分支上</p>
+<h4 id="完成补丁分支"><a href="#完成补丁分支" class="headerlink" title="完成补丁分支"></a>完成补丁分支</h4><p>当我们修改完bug 并且验收完毕的时候就可以合并分支 准备发布了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git flow hotfix finish <span class="string">'v1.0.0.1'</span></div><div class="line">...</div><div class="line">Summary of actions:</div><div class="line">- Hotfix branch <span class="string">'hotfix/v1.0.0.1'</span> has been merged into <span class="string">'master'</span></div><div class="line">- The hotfix was tagged <span class="string">'v1.0.0.1'</span></div><div class="line">- Hotfix tag <span class="string">'v1.0.0.1'</span> has been back-merged into <span class="string">'develop'</span></div><div class="line">- Hotfix branch <span class="string">'hotfix/v1.0.0.1'</span> has been locally deleted</div><div class="line">- You are now on branch <span class="string">'develop'</span></div></pre></td></tr></table></figure>
+<p>他的过程和合并 <strong>预发布分支</strong> 是一样的 都需要打2次备注 帮你合并master 打tag 同步develop 删除本地分支 切换分支</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>其实使用 <strong>git flow</strong> 通过简单的命令 他帮我们处理的操作就是些依赖不同 <strong>长期分支</strong> 检出分支 然后帮你合并分支 添加备注 添加tag 并帮你自动切换分支 完全可以自己手动用基础 <strong>git 命令</strong> 操作 但是他简化了这个过程 不是挺好的么 还能防止中间手误</p>
+<p>不足的地方，引用下 <a href="http://www.ruanyifeng.com/home.html" target="_blank" rel="external">阮一峰大神</a> 的话：</p>
+<blockquote>
+<p>Git flow的优点是清晰可控，缺点是相对复杂，需要同时维护两个长期分支。大多数工具都将master当作默认分支，可是开发是在develop分支进行的，这导致经常要切换分支，非常烦人。</p>
+<p>更大问题在于，这个模式是基于”版本发布”的，目标是一段时间以后产出一个新版本。但是，很多网站项目是”持续发布”，代码一有变动，就部署一次。这时，master分支和develop分支的差别不大，没必要维护两个长期分支</p>
+</blockquote>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://www.ruanyifeng.com/blog/2015/12/git-workflow.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2015/12/git-workflow.html</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2012/07/git.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2012/07/git.html</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2015/08/git-use-process.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2015/08/git-use-process.html</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/GitFlow/" rel="tag">#GitFlow</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/03/20181203/" rel="next" title="关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法">
+                <i class="fa fa-chevron-left"></i> 关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2222/12/22/22222222/" rel="prev" title="关于Laravel的一些小事 不定时更新">
+                关于Laravel的一些小事 不定时更新 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/12/05/20181205/"
+           data-title="关于GitFlow工作流一些总结" data-url="https://caihongtengxu.github.io/2018/12/05/20181205/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#WorkFlow"><span class="nav-number">1.</span> <span class="nav-text">WorkFlow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Git-Flow"><span class="nav-number">2.</span> <span class="nav-text">Git Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">3.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能分支"><span class="nav-number">4.</span> <span class="nav-text">功能分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建功能分支"><span class="nav-number">4.1.</span> <span class="nav-text">创建功能分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完成功能分支"><span class="nav-number">4.2.</span> <span class="nav-text">完成功能分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预发布分支"><span class="nav-number">5.</span> <span class="nav-text">预发布分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建预发布分支"><span class="nav-number">5.1.</span> <span class="nav-text">创建预发布分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完成预发布分支"><span class="nav-number">5.2.</span> <span class="nav-text">完成预发布分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补丁分支"><span class="nav-number">6.</span> <span class="nav-text">补丁分支</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建补丁分支"><span class="nav-number">6.1.</span> <span class="nav-text">创建补丁分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完成补丁分支"><span class="nav-number">6.2.</span> <span class="nav-text">完成补丁分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">8.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>
