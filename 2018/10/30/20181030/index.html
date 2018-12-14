@@ -1,0 +1,778 @@
+<!doctype html>
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Laravel," />
+
+
+
+
+
+
+<meta name="description" content="本文主要记录从学Laravel开始 实际工作中经常用到的一些小用法知识点 老是忘记 记录下方便自己以后查找 不定时更新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Laravel的一些小事 不定时更新">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/10/30/20181030/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="本文主要记录从学Laravel开始 实际工作中经常用到的一些小用法知识点 老是忘记 记录下方便自己以后查找 不定时更新">
+<meta property="og:updated_time" content="2018-12-14T08:49:23.836Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Laravel的一些小事 不定时更新">
+<meta name="twitter:description" content="本文主要记录从学Laravel开始 实际工作中经常用到的一些小用法知识点 老是忘记 记录下方便自己以后查找 不定时更新">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于Laravel的一些小事 不定时更新 | 指尖的彩虹 </title>
+
+</head>
+
+<body itemscope  lang="zh-Hans">
+	
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?724d524bc25132210d989ddebd88e4d6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于Laravel的一些小事 不定时更新
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+                <i class="fa fa-thumb-tack"></i>
+                <font color=7D26CD>置顶</font>
+                <span class="post-meta-divider">|</span>
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-10-30T22:22:22+08:00" content="2018-10-30">
+              2018-10-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/10/30/20181030/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/10/30/20181030/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文主要记录从学Laravel开始 实际工作中经常用到的一些小用法知识点 老是忘记 记录下方便自己以后查找 <strong>不定时更新</strong><br><a id="more"></a></p>
+<hr>
+<h4 id="Laravel-中Model的-with方法-预加载方法小记"><a href="#Laravel-中Model的-with方法-预加载方法小记" class="headerlink" title="Laravel 中Model的 with方法 预加载方法小记"></a>Laravel 中Model的 <code>with</code>方法 预加载方法小记</h4><p>如果你需要在关联的With中控制返回的数据字段 比如</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">User::with(<span class="string">'log'</span>)-&gt;get();</div></pre></td></tr></table></figure>
+<p>而你只需要log中的title字段<br>如果你不做处理这时候你如果有调用log的时候他会加载全部的log数据库字段<br>你可以这样设置 就是查询他的主键+你需要的字段 注意主键一定要查询 不然他会返回你所真正需要的字段<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">User::with([<span class="string">'log'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">($query)</span></span>&#123;</div><div class="line">	$query-&gt;select(<span class="string">'id'</span>,<span class="string">'你需要的字段'</span>);</div><div class="line">&#125;])</div></pre></td></tr></table></figure></p>
+<h4 id="在本地执行Laravel的队列"><a href="#在本地执行Laravel的队列" class="headerlink" title="在本地执行Laravel的队列"></a>在本地执行Laravel的队列</h4><p>在本地执行Larave中的队列话 需要先执行一次 <code>work</code> 开启队列 然后使用<code>listen</code> 来监听就好了 就会自动执行了 但是他是一条一条执行的效率有点慢<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan queue:work</div></pre></td></tr></table></figure></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">php artisan queue:listen --queue=push_wechat</div></pre></td></tr></table></figure>
+<h4 id="Larave中Model让他自己维护created-at和updated-at时间问题"><a href="#Larave中Model让他自己维护created-at和updated-at时间问题" class="headerlink" title="Larave中Model让他自己维护created_at和updated_at时间问题"></a>Larave中Model让他自己维护created_at和updated_at时间问题</h4><p>有时候我们会在数据库表中增加 <code>created_at</code> 和 <code>updated_at</code> 字段 自己去维护也可以 不过就烦就是<br>可是使用Laravel 让他自己去维护<br>1.数据库增加字段 <code>created_at</code> 和 <code>updated_at</code> 并设置类型 <code>int</code> 如果很大的话可以 <code>bigint</code> 【ps:我又看到需要设置成timesteamp 但测试并不可以不知道是Laravel版本问题还是啥别的设置影响了 待补充测试】<br>2.把这2个字段需要加入到Model中的  <strong><code>fillable</code> </strong>  数组中<br>3.使用 <code>create</code> 方法会自动维护 <code>insert</code>方法并不会自动维护但是和一次性插入多条记录 另外对象的实例的 <code>save</code> 方法也是可以自动维护的<br>4.如果你数据库设置的是int类型的 需要在Model中增加 protected $dateFormat = “U”; 或者重写 fromDateTime 方法<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">fromDateTime</span><span class="params">($value)</span></span>&#123;</div><div class="line">    <span class="keyword">return</span> strtotime(<span class="keyword">parent</span>::fromDateTime($value));</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="Laravel-软删除"><a href="#Laravel-软删除" class="headerlink" title="Laravel 软删除"></a>Laravel 软删除</h4><p>有时候需要软删除数据 操作如下</p>
+<p>数据库添加 <code>deleted_at</code> 字段 类型 <code>int</code> 即可<br>在对应的Model中 引入 <code>use Illuminate\Database\Eloquent\SoftDeletes;</code><br>在类中使用 上面的类 <code>use SoftDeletes;</code><br>类中增加软删除的数组标识<code>protected $dates = [&#39;deleted_at&#39;];</code></p>
+<p>后续在执行<code>delete()</code>删除方法的时候就不会真的删除数据看 而是在数据库中 <code>deleted_at</code> 字段填上删除的时间<br>后面的查询会自动过滤掉软删除掉的记录</p>
+<h5 id="如果想在查询结果中包含软删除的记录"><a href="#如果想在查询结果中包含软删除的记录" class="headerlink" title="如果想在查询结果中包含软删除的记录"></a>如果想在查询结果中包含软删除的记录</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$posts = Model::withTrashed()-&gt;get();</div><div class="line">dd($posts);</div></pre></td></tr></table></figure>
+<h5 id="如果只想查询软删除的记录"><a href="#如果只想查询软删除的记录" class="headerlink" title="如果只想查询软删除的记录"></a>如果只想查询软删除的记录</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$posts = Model::onlyTrashed()-&gt;get();</div><div class="line">dd($posts);</div></pre></td></tr></table></figure>
+<h5 id="软删除恢复"><a href="#软删除恢复" class="headerlink" title="软删除恢复"></a>软删除恢复</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Model::withTrashed()-&gt;where(<span class="string">'id'</span>,<span class="number">1</span>)-&gt;restore();</div></pre></td></tr></table></figure>
+<h5 id="强制删除-forceDelete"><a href="#强制删除-forceDelete" class="headerlink" title="强制删除 forceDelete()"></a>强制删除 <code>forceDelete()</code></h5><h4 id="Laravel-Model-中追加字段"><a href="#Laravel-Model-中追加字段" class="headerlink" title="Laravel Model 中追加字段"></a>Laravel Model 中追加字段</h4><p>比如我们有时候我们在数据库中存的是一个id值<br>需要在查询返回的时候把这个id对应的换成需要显示的一些文字的<br>这时候我们可以追加一些字段来返回他对应的信息</p>
+<p>在Model中设置 <code>appends</code> 数组 里面是你要追加返回的字段<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//追加自定义字段</span></div><div class="line"><span class="keyword">protected</span> $appends = [<span class="string">'type_text'</span>,<span class="string">'created_at_text'</span>];</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getTypeTextAttribute</span><span class="params">()</span></span>&#123;</div><div class="line">    $type = <span class="keyword">$this</span>-&gt;attributes[<span class="string">'type'</span>];</div><div class="line">    $arr=<span class="keyword">array</span>(</div><div class="line">        <span class="number">1</span>=&gt;<span class="string">'社保'</span>,</div><div class="line">        <span class="number">2</span>=&gt;<span class="string">'公积金'</span>,</div><div class="line">    );</div><div class="line">    $text=<span class="string">""</span>;</div><div class="line">    <span class="keyword">if</span>(<span class="keyword">isset</span>($arr[$type]))&#123;</div><div class="line">        $text = $arr[$type];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;attributes[<span class="string">'type_text'</span>] = $text;</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getCreatedAtTextAttribute</span><span class="params">()</span></span>&#123;</div><div class="line">    $created_at = <span class="keyword">$this</span>-&gt;attributes[<span class="string">'created_at'</span>];</div><div class="line">    $text = date(<span class="string">'Y-m-d'</span>,strtotime($created_at));</div><div class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;attributes[<span class="string">'created_at_text'</span>] = $text;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="Laravel的分块查询"><a href="#Laravel的分块查询" class="headerlink" title="Laravel的分块查询"></a>Laravel的分块查询</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Employee::where(<span class="string">'gender'</span>,<span class="number">0</span>)-&gt;where(<span class="string">'card_type'</span>,<span class="string">'id_card'</span>)-&gt;chunk(<span class="number">200</span>,<span class="function"><span class="keyword">function</span><span class="params">($query)</span></span>&#123;</div><div class="line">      		<span class="comment">//注意这里的$query已经是一个Collection 因此不需要在去使用get()之类去获取结果 可以直接用来遍历</span></div><div class="line">              <span class="keyword">foreach</span> ($query <span class="keyword">as</span> $key =&gt; $val)&#123;</div><div class="line">                  $seventeen = substr($val-&gt;card_no,<span class="number">16</span>,<span class="number">1</span>);</div><div class="line">                  <span class="keyword">if</span>($seventeen % <span class="number">2</span> == <span class="number">0</span>)&#123;</div><div class="line">                      <span class="comment">//偶数=女</span></div><div class="line">                      $gender = <span class="number">2</span>;</div><div class="line">                  &#125;<span class="keyword">else</span>&#123;</div><div class="line">                      $gender = <span class="number">1</span>;</div><div class="line">                  &#125;</div><div class="line">                  Employee::where(<span class="string">'id'</span>,$val-&gt;id)-&gt;update([<span class="string">'gender'</span> =&gt; $gender]);</div><div class="line">              &#125;</div><div class="line">          &#125;);</div></pre></td></tr></table></figure>
+<h4 id="Laravel-Model-批量操作字段设置"><a href="#Laravel-Model-批量操作字段设置" class="headerlink" title="Laravel-Model 批量操作字段设置"></a>Laravel-Model 批量操作字段设置</h4><p>Laravel 允许在Model中设置字段属性是否允许被批量赋值操作</p>
+<p><code>$fillable</code> 的数组中 这相当于一个白名单 这里的字段都允许批量操作<br><code>$guarded</code> 的数组中相当于一个黑名单 加入这里的字段都不可以被批量操作 同样不在他里面的字段都是可以批量操作的<br>这2个属性互斥 不能同时出现在Model中只能出现其中之一</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">可以在Model中设置对应的属性是否允许批量赋值(添加 更新之类)</div></pre></td></tr></table></figure>
+<h4 id="Laravel-更新数据"><a href="#Laravel-更新数据" class="headerlink" title="Laravel 更新数据"></a>Laravel 更新数据</h4><p>有时候我们查询了一条数据 只有一条数据的时候</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$payment = PayRecord::where(<span class="string">'order_uuid'</span>, $orderUuid)</div><div class="line">                -&gt;select(<span class="string">'id'</span>, <span class="string">'order_uuid'</span>, <span class="string">'order_type'</span>)</div><div class="line">                -&gt;first();</div></pre></td></tr></table></figure>
+<p>这个时候我们拿到了数据的对象 本例子中是 <code>$payment</code> </p>
+<p>这个时候我们可以拿它直接进行更新的操作 不需要使用 <code>Models</code> 来 <code>update</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">$updateData = [</div><div class="line">    <span class="string">'pay_record'</span> =&gt; $data[<span class="string">'trade_no'</span>],</div><div class="line">    <span class="string">'pay_status'</span> =&gt; <span class="number">1</span>,</div><div class="line">    <span class="string">'paid_at'</span> =&gt; $paidTime,</div><div class="line">];</div><div class="line"></div><div class="line"></div><div class="line">$updateResult = $payment-&gt;update($updateData);</div><div class="line"></div><div class="line"><span class="comment">//或者 下面这种形式都可以</span></div><div class="line"></div><div class="line">$payment-&gt;pay_record = $data[<span class="string">'trade_no'</span>];</div><div class="line">$payment-&gt;pay_status = <span class="number">1</span>;</div><div class="line">$payment-&gt;paid_at = $paidTime;</div><div class="line"></div><div class="line">$payment-&gt;save();</div></pre></td></tr></table></figure>
+<p>注意 如果想使用这个方式来更新数据的话 需要在获取对象的时候一定要查询包含 <code>主键</code> 不然更新不了的</p>
+<h4 id="Larave-为同一个Group下的路由指定不同的中间件"><a href="#Larave-为同一个Group下的路由指定不同的中间件" class="headerlink" title="Larave 为同一个Group下的路由指定不同的中间件"></a>Larave 为同一个Group下的路由指定不同的中间件</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Route::group([<span class="string">'prefix'</span> =&gt; <span class="string">'payment'</span>], <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">    Route::post(<span class="string">'pay'</span>, <span class="string">'PaymentController@pay'</span>)-&gt;middleware(<span class="string">'oauth:user'</span>);<span class="comment">//统一支付入口</span></div><div class="line">    Route::post(<span class="string">'refund'</span>, <span class="string">'PaymentController@refund'</span>)-&gt;middleware(<span class="string">'oauth'</span>);<span class="comment">//统一退款入口</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h4 id="Laravel-中查询-结果返回-key-gt-value的形式"><a href="#Laravel-中查询-结果返回-key-gt-value的形式" class="headerlink" title="Laravel 中查询 结果返回 key-&gt;value的形式"></a>Laravel 中查询 结果返回 key-&gt;value的形式</h4><p>有时我们只需要查询 2个 字段 一个当 Key 一个当Value的形式返回 可以使用下面<br>注意pluck是作用在collection下的 所以需要先获取到collection对象 可以使用get() first()方法等</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$userApps = User_app::where(<span class="string">'uuid'</span>, $uuid)-&gt;get()-&gt;pluck(<span class="string">'openid'</span>, <span class="string">'user_code'</span>);</div><div class="line">第一个参数是value  第二个参数是key</div></pre></td></tr></table></figure>
+<h4 id="Laravel-中判断查询的结果-Collection-是否为空的方法"><a href="#Laravel-中判断查询的结果-Collection-是否为空的方法" class="headerlink" title="Laravel 中判断查询的结果 Collection 是否为空的方法"></a>Laravel 中判断查询的结果 Collection 是否为空的方法</h4><p>我们在使用Laravel的关联模型查询的时候 Eloquent 查询 get() 等的时候其实是返回了一个  <code>Illuminate\Database\Eloquent\Collection对象实例</code> 可以使用下面的方法来判断是否为空 也就是没有结果</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ($result-&gt;first()) &#123; &#125; </div><div class="line"><span class="keyword">if</span> (!$result-&gt;isEmpty()) &#123; &#125;</div><div class="line"><span class="keyword">if</span> ($result-&gt;count()) &#123; &#125;</div></pre></td></tr></table></figure>
+<h4 id="Laravel-with查询取值问题"><a href="#Laravel-with查询取值问题" class="headerlink" title="Laravel with查询取值问题"></a>Laravel with查询取值问题</h4><p>比如我们在使用with的时候 刚好方法名是有 <code>小驼峰法</code> 命名的 这个时候遍历中取值的问题</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">$query = Model::wint(<span class="string">'userShow'</span>)-&gt;where($where);</div><div class="line"><span class="comment">//有两种情况 第一种就是直接get() 获取记录 这种情况下的遍历</span></div><div class="line">$result = $query-&gt;get();</div><div class="line"><span class="keyword">foreach</span>($result <span class="keyword">as</span> $key =&gt; $val) &#123;</div><div class="line">	<span class="keyword">echo</span> $val-&gt;user_show-&gt;xxx;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//第二种情况 就是有分页的获取记录</span></div><div class="line">$result = $query-&gt;paginate($pageSize);</div><div class="line"><span class="keyword">foreach</span>($result <span class="keyword">as</span> $key =&gt; $val) &#123;</div><div class="line">	<span class="keyword">echo</span> $val-&gt;userShow-&gt;xxx;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Laravel/" rel="tag">#Laravel</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/25/20181025/" rel="next" title="PHP环境 VirtualBox + Homestead + Xdebug 解决过程">
+                <i class="fa fa-chevron-left"></i> PHP环境 VirtualBox + Homestead + Xdebug 解决过程
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/01/20181101/" rel="prev" title="微信H5支付 - Referer丢失问题">
+                微信H5支付 - Referer丢失问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/10/30/20181030/"
+           data-title="关于Laravel的一些小事 不定时更新" data-url="https://caihongtengxu.github.io/2018/10/30/20181030/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">45</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-中Model的-with方法-预加载方法小记"><span class="nav-number">1.</span> <span class="nav-text">Laravel 中Model的 with方法 预加载方法小记</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在本地执行Laravel的队列"><span class="nav-number">2.</span> <span class="nav-text">在本地执行Laravel的队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Larave中Model让他自己维护created-at和updated-at时间问题"><span class="nav-number">3.</span> <span class="nav-text">Larave中Model让他自己维护created_at和updated_at时间问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-软删除"><span class="nav-number">4.</span> <span class="nav-text">Laravel 软删除</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#如果想在查询结果中包含软删除的记录"><span class="nav-number">4.1.</span> <span class="nav-text">如果想在查询结果中包含软删除的记录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如果只想查询软删除的记录"><span class="nav-number">4.2.</span> <span class="nav-text">如果只想查询软删除的记录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#软删除恢复"><span class="nav-number">4.3.</span> <span class="nav-text">软删除恢复</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#强制删除-forceDelete"><span class="nav-number">4.4.</span> <span class="nav-text">强制删除 forceDelete()</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-Model-中追加字段"><span class="nav-number">5.</span> <span class="nav-text">Laravel Model 中追加字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel的分块查询"><span class="nav-number">6.</span> <span class="nav-text">Laravel的分块查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-Model-批量操作字段设置"><span class="nav-number">7.</span> <span class="nav-text">Laravel-Model 批量操作字段设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-更新数据"><span class="nav-number">8.</span> <span class="nav-text">Laravel 更新数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Larave-为同一个Group下的路由指定不同的中间件"><span class="nav-number">9.</span> <span class="nav-text">Larave 为同一个Group下的路由指定不同的中间件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-中查询-结果返回-key-gt-value的形式"><span class="nav-number">10.</span> <span class="nav-text">Laravel 中查询 结果返回 key->value的形式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-中判断查询的结果-Collection-是否为空的方法"><span class="nav-number">11.</span> <span class="nav-text">Laravel 中判断查询的结果 Collection 是否为空的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Laravel-with查询取值问题"><span class="nav-number">12.</span> <span class="nav-text">Laravel with查询取值问题</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">teng xu</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"caihongtengxugithubio"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+
+</body>
+</html>

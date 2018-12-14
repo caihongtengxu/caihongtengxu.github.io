@@ -250,6 +250,255 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/17/20160817/" itemprop="url">
+                  关于Laravel中TokenMismatchException报错的一点点总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-17T16:50:39+08:00" content="2016-08-17">
+              2016-08-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/17/20160817/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/17/20160817/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>最近发现服务器上 Laravel日志中 TokenMismatchException的报错有点多 找了下原因和资料 来做个小小总结把</p>
+<h4 id="先来讲下-CSRF-攻击"><a href="#先来讲下-CSRF-攻击" class="headerlink" title="先来讲下 CSRF 攻击"></a>先来讲下 <strong>CSRF</strong> 攻击</h4><blockquote>
+<p>CSRF（Cross-site request forgery），中文名称：跨站请求伪造，也被称为：one click attack/session riding，缩写为：CSRF/XSRF<br>大概就是 攻击者盗用用户身份，发送恶意请求 来达到攻击者的一些目前 造成用户的隐私以及财产损失啦等等<br>CSRF攻击需要满足<br>1.用户登录受信任网站A，并在本地生成Cookie。<br>2.用户在不登出A的情况下，访问危险网站B。<br>具体的可以去下面看下 <a href="http://www.cnblogs.com/hyddd/archive/2009/04/09/1432744.html">浅谈CSRF攻击方式</a> 这篇文章写的很详细有兴趣的可以去看下<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/17/20160817/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/08/16/20160816/" itemprop="url">
+                  GitFlow日常使用总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-16T18:22:39+08:00" content="2016-08-16">
+              2016-08-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/16/20160816/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/16/20160816/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="GitFlow使用"><a href="#GitFlow使用" class="headerlink" title="GitFlow使用"></a>GitFlow使用</h3><blockquote>
+<p>Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目<br>Git是一个开源的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理<br>以上都是扯犊子 我就只知道用他来做项目版本管理的 下面说下git flow 这是个什么东西呢 度娘都没有百科呢（丢） 大概就是他提供了一种方便快捷的管理项目版本/分支的功能吧 把你需要用git分几步命令的操作 使用git flow 仅仅只需一个命令就搞定了 另外团队成员都是使用这种 统一规范 创建的版本啦 分支不会乱套 大概就是这样吧 个人用到的就这么多 233 更多高级玩意自己去发现吧<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/08/16/20160816/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/07/03/20160703/" itemprop="url">
                   Lumen集成Swagger使用总结
                 </a>
@@ -260,6 +509,7 @@
 
         <div class="post-meta">
           <span class="post-time">
+              
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
@@ -390,6 +640,7 @@
 
         <div class="post-meta">
           <span class="post-time">
+              
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
@@ -515,6 +766,7 @@
 
         <div class="post-meta">
           <span class="post-time">
+              
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
@@ -654,7 +906,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">43</span>
+              <span class="site-state-item-count">45</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -662,7 +914,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -671,7 +923,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
