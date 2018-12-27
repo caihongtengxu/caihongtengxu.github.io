@@ -28,23 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Js," />
+  <meta name="keywords" content="Git," />
 
 
 
 
 
 
-<meta name="description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
+<meta name="description" content="昨天公司 Git 服务器进行了升级 导致密钥全部都没了 需要重新上传 有个别几个项目顺便换了个地址">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Input type=file 原生上传使用总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/12/15/20161215/index.html">
+<meta property="og:title" content="关于SSH登录中 公钥指纹 科普">
+<meta property="og:url" content="https://caihongtengxu.github.io/2018/12/26/20181226/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
-<meta property="og:updated_time" content="2018-06-08T05:46:48.662Z">
+<meta property="og:description" content="昨天公司 Git 服务器进行了升级 导致密钥全部都没了 需要重新上传 有个别几个项目顺便换了个地址">
+<meta property="og:updated_time" content="2018-12-27T06:26:42.361Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Input type=file 原生上传使用总结">
-<meta name="twitter:description" content="最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用input标签中的type=file这种原生的上传 写下分享下">
+<meta name="twitter:title" content="关于SSH登录中 公钥指纹 科普">
+<meta name="twitter:description" content="昨天公司 Git 服务器进行了升级 导致密钥全部都没了 需要重新上传 有个别几个项目顺便换了个地址">
 
 
 
@@ -65,7 +65,7 @@
 
 
 
-  <title> 使用Input type=file 原生上传使用总结 | 指尖的彩虹 </title>
+  <title> 关于SSH登录中 公钥指纹 科普 | 指尖的彩虹 </title>
 
 </head>
 
@@ -251,7 +251,7 @@
             
             
               
-                使用Input type=file 原生上传使用总结
+                关于SSH登录中 公钥指纹 科普
               
             
           </h1>
@@ -264,8 +264,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-12-15T00:00:00+08:00" content="2016-12-15">
-              2016-12-15
+            <time itemprop="dateCreated" datetime="2018-12-26T11:15:15+08:00" content="2018-12-26">
+              2018-12-26
             </time>
           </span>
 
@@ -278,8 +278,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Js/" itemprop="url" rel="index">
-                    <span itemprop="name">Js</span>
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
                   </a>
                 </span>
 
@@ -294,8 +294,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/12/15/20161215/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/15/20161215/" itemprop="commentsCount"></span>
+                <a href="/2018/12/26/20181226/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/26/20181226/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -318,25 +318,37 @@
       
 
       
-        <hr>
-<p>最新发现之前项目里用的 js 上传插件有点点问题 就是上传同一张图片会报错图片限制的类型错误 不知道是不是自己参数什么没设置对 然后想到了使用<code>input</code>标签中的<code>type=file</code>这种原生的上传 写下分享下<br><a id="more"></a></p>
-<h4 id="传统的上传"><a href="#传统的上传" class="headerlink" title="传统的上传"></a>传统的上传</h4><p>比如我们在正常的<code>form</code>表单中需要上传一张图片 一般不使用插件之类的常用做法就是先设置form属性 <code>enctype =&quot;multipart/form-data&quot;</code> 最后提交form表单 然后后天那边自己写处理接受存储啥的 但是这样做会直接刷新页面 很多时候我们不希望提交页面这种 一般都会想到<code>ajax</code>之类 当然也有别的方法吧 小弟学渣</p>
-<h4 id="Ajax上传"><a href="#Ajax上传" class="headerlink" title="Ajax上传"></a>Ajax上传</h4><p>使用ajax上传时 需要把要提交的数据组成<code>key=&gt;value</code>的形式 但是文件流就比较麻烦了 他不能被转换成字符之类 即使你使用<code>serialize</code> 也不能把文件流序列化 然后传送到后端 不过没关系 有个 <code>FormData</code>的玩意可以帮助我们在 <strong>ajax</strong> 中提交文件流</p>
-<h5 id="FormData-简介"><a href="#FormData-简介" class="headerlink" title="FormData 简介"></a>FormData 简介</h5><blockquote>
-<p>The FormData interface provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to “multipart/form-data”.<br>大概就是说  <strong>FormData</strong> 接口提供了一种很方便的方法去构建表单中的 <strong>属性=&gt;值</strong> 的这种键值对结构 另外他还可以使用 <strong>XMLHttpRequest.send()</strong> 来发送异步请求 如果设置了  <strong>multipart/form-data</strong>  还可以使用和form表单一样的格式化(渣渣英文翻译水平勿喷！！！)</p>
-</blockquote>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="number">1.</span>创建一个formdata对象</div><div class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line"><span class="number">2.</span>添加属性值 append方法有<span class="number">2</span>个版本 一个是传<span class="number">2</span>个参数的 一个是传递<span class="number">3</span>个参数的</div><div class="line">①formData.append(<span class="string">'key_name'</span>,<span class="string">'value'</span>); <span class="comment">//这种可以用来设置普通的字符串之类的值</span></div><div class="line">②formData.append(<span class="string">'key_name'</span>,<span class="string">'value'</span>,<span class="string">'file_name'</span>); <span class="comment">//这种用来设置 Blob 和 File 类型的值 如果是blob类型的 第三个参数默认写 ‘blob’就行 如果是file 类型 默认就写上传的文件名就行</span></div><div class="line">eg:formData.append(<span class="string">'file'</span>,myFileInput.files[<span class="number">0</span>],<span class="string">'test.jpg'</span>);</div><div class="line"><span class="number">3.</span>设置的Key也可以是数组形式</div><div class="line">formData.append(<span class="string">'userpic[]'</span>, myFileInput1.files[<span class="number">0</span>], <span class="string">'chris1.jpg'</span>);</div><div class="line">formData.append(<span class="string">'userpic[]'</span>, myFileInput2.files[<span class="number">0</span>], <span class="string">'chris2.jpg'</span>);</div></pre></td></tr></table></figure>
-<p>其实我用<code>append()</code>2个参数的也可以提交<code>file</code> 第二个参数直接传递 <strong>file</strong> 对象就可以了<br>具体参考 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData" target="_blank" rel="external">MDN</a> 这里有详细的介绍 包括浏览器的兼容情况等等</p>
-<h5 id="通过Ajax使用FormData实现上传图片"><a href="#通过Ajax使用FormData实现上传图片" class="headerlink" title="通过Ajax使用FormData实现上传图片"></a>通过Ajax使用FormData实现上传图片</h5><p>html:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;label for="uploadID_face" class="show_info show_info_face" id="show_info_face"&gt;+身份证正面&lt;/label&gt;</div><div class="line">&lt;input class="hide"  type="file" id="uploadID_face" /&gt;</div></pre></td></tr></table></figure>
-<p>我做了一个lable-for的绑定 不用学我<br>js:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">$(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">	$(<span class="string">'#uploadID_face'</span>).change(<span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">            <span class="keyword">var</span> file=this.files[<span class="number">0</span>]; <span class="comment">//这里是获取file对象 id对应了上面的input的id属性 0 表示取的第一个</span></div><div class="line">            reader = <span class="keyword">new</span> FileReader(); <span class="comment">//这个filereader对象也是 MDN mozilla里的东东 可以看看</span></div><div class="line">            reader.readAsDataURL(file); <span class="comment">//这个就是把文件读取成base64的格式 输出成图片的一个url一样的东东可以在本地访问到图片 传递进来的file对象已经被处理过了</span></div><div class="line">            <span class="comment">//console.log(file);</span></div><div class="line">            reader.onload = <span class="function"><span class="keyword">function</span><span class="params">( evt )</span></span>&#123;</div><div class="line">                <span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</div><div class="line">                formData.append(<span class="string">'file'</span>,file);</div><div class="line">                console.log(reader.result);</div><div class="line">                new_fileload(formData);</div><div class="line">           &#125;</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">new_fileload</span><span class="params">(formData)</span></span>&#123;</div><div class="line">            $.ajax(&#123;</div><div class="line">                type:<span class="string">"post"</span>,</div><div class="line">                url:<span class="string">'your upload url'</span>,</div><div class="line">                processData: <span class="keyword">false</span>,</div><div class="line">                cache: <span class="keyword">false</span>,</div><div class="line">                contentType: <span class="keyword">false</span>,</div><div class="line">                data:formData,</div><div class="line">                success:<span class="function"><span class="keyword">function</span><span class="params">(data)</span></span>&#123;</div><div class="line">                    <span class="comment">//上传结果的判断以及后续的一些操作 比如上传显示缩略图等</span></div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <p>昨天公司 <code>Git</code> 服务器进行了升级 导致密钥全部都没了 需要重新上传 有个别几个项目顺便换了个地址<br><a id="more"></a></p>
+<hr>
+<h3 id="SSH-首次登陆"><a href="#SSH-首次登陆" class="headerlink" title="SSH 首次登陆"></a>SSH 首次登陆</h3><p>当重新上传<code>SSH Key</code> 然后设置完 <code>Git</code> 远端项目地址后 发现有个小提示信息 如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ git fetch</div><div class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</div><div class="line">@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @</div><div class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</div><div class="line">IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!</div><div class="line">Someone could be eavesdropping on you right now (man-in-the-middle attack)!</div><div class="line">It is also possible that a host key has just been changed.</div><div class="line">The fingerprint <span class="keyword">for</span> the ECDSA key sent by the remote host is</div><div class="line">SHA256:<span class="number">7</span>g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</div><div class="line">Please contact your system administrator.</div><div class="line">Add correct host key in /c/Users/reggie/.ssh/known_hosts to get rid of this message.</div><div class="line">Offending ECDSA key in /c/Users/reggie/.ssh/known_hosts:<span class="number">2</span></div><div class="line">ECDSA host key <span class="keyword">for</span> [xxx.xxx.com]:<span class="number">12222</span> has changed <span class="keyword">and</span> you have requested strict checking.</div><div class="line">Host key verification failed.</div><div class="line">fatal: Could not read from remote repository.</div><div class="line"></div><div class="line">Please make sure you have the correct access rights</div><div class="line"><span class="keyword">and</span> the repository exists.</div></pre></td></tr></table></figure>
+<p>和</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git fetch</div><div class="line">The authenticity of host <span class="string">'[host]:12222 ([xxx.xxx.xx.xxx]:12222)'</span> can<span class="string">'t be established.</span></div><div class="line">ECDSA key fingerprint is SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</div><div class="line">Are you sure you want to continue connecting (yes/no)? yes</div><div class="line">Warning: Permanently added '[host]:<span class="number">12222</span><span class="string">' (ECDSA) to the list of known hosts.</span></div><div class="line">Warning: the ECDSA host key for '[host]:<span class="number">12222</span><span class="string">' differs from the key for the IP address '</span>[<span class="number">121.201</span><span class="number">.57</span><span class="number">.228</span>]:<span class="number">10022</span><span class="string">'</span></div><div class="line">Offending key for IP in /c/Users/reggie/.ssh/known_hosts:7</div><div class="line">Are you sure you want to continue connecting (yes/no)? yes</div></pre></td></tr></table></figure>
 <blockquote>
-<p>上面的ajax中需要注意几个参数<br>1.processData 设置为false 表示对formdata对象不做处理<br>2.cache设置为false 表示上传文件不需要缓存<br>3.contentType设置为false 表示表示不设置该值</p>
+<p>大概翻译下就是有可能有某人在服务器做了些 “坏事” (还能什么坏事 就是被攻击了被)<br>有人可能在窃听你（中间人攻击）<br>还可能更换了主机密钥<br>下面是主机发送的 <code>公钥指纹</code> 其值<br><strong>SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</strong></p>
 </blockquote>
-<p>然后后台接受处理就好了 因为我上面的formData中设置的名字是file所以后台接受了一个file的变量名 我使用的是PHP</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$fileData=$_FILES[<span class="string">'file'</span>];</div><div class="line"><span class="comment">//使用了CurlFile构建了一个后端file文件对象 自己写的上传需要</span></div><div class="line">$file   = <span class="keyword">new</span> CURLFile($fileData[<span class="string">'tmp_name'</span>], $fileData[<span class="string">'type'</span>], $fileData[<span class="string">'name'</span>]);</div></pre></td></tr></table></figure>
-<p>仅供参考</p>
+<h3 id="发生的原因"><a href="#发生的原因" class="headerlink" title="发生的原因"></a>发生的原因</h3><p>找了下相关 <code>known_hosts</code> 内容 这个提示一般发生在第一次连接服务器的时候 SSH 会对进行连接的服务器核对你历史信息登录的服务器文件 也就是 <code>known_hosts</code> 文件</p>
+<p>这个里面记录了你登录过的服务器信息 什么IP啦端口啦 还有最重要的 服务器的 <strong>公钥指纹</strong> 而本次我们换了Git服务器 公钥指纹也发生了变动 然后SSH在下面进行比对的时候发现不一致</p>
+<p>给出提示 有可能会发生中间人攻击 问我们是否信任主机 同时还返回了服务器的 <strong>公钥指纹</strong> 我们可以校验服务器的 <strong>公钥指纹</strong> 已确认是否是我们需要真正连接的服务器 而不是中间人的服务器。</p>
+<p>如果我们输入 <code>yes</code> 表示确认是正确的服务器 然后他会吧相关信息写入 到 <code>known_hosts</code> 文件 然后继续下面的连接。 </p>
+<p>后面还有一个小插曲 就是我输入了一个yes后 信息也写入了 但是每次连接还是会提示这个 后面我发现是Git服务器的域名没变 IP变了 </p>
+<p>然后上面一条记录是连接的老的服务器 而指纹已经变了，新的指纹信息在最下面。</p>
+<p>推测应该是从上而下读取记录信息 然后比对的 比对到老的地址了 然后发现指纹不一致 直接弹了这个出来 </p>
+<p>后面我直接把 <code>known_hosts</code> 文件清空了 重新连接一次 OK 搞定</p>
+<h3 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h3><p>SSH的首次连接会下载服务端的公钥，用户确认后公钥将被保存并信任。</p>
+<p>下次访问时客户端将会核对服务端发来的公钥和本地保存的是否相同，不同就发出中间人攻击的警告拒绝连接，除非用户手动清除已保存的公钥。</p>
+<p>所以，如果首次连接没有中间人，之后的连接就无需担心中间人，因为中间人给出的公钥和服务端给出的公钥相同的可能性可以忽略。</p>
+<p>如果首次连接就有中间人攻击，那么恭喜你中奖了。</p>
+<h3 id="校验公钥指纹"><a href="#校验公钥指纹" class="headerlink" title="校验公钥指纹"></a>校验公钥指纹</h3><p>关于上一步给出来的 服务器 公钥指纹如何校验 找了一圈内容 大概都没有好的办法来校验。</p>
+<p>一般都是服务器端公开自己的密钥指纹 比如 <a href="https://help.github.com/articles/github-s-ssh-key-fingerprints/" target="_blank" rel="external">Github</a> 他们公开了自己的公钥指纹 然后连接的时候返回过来可以自己对比下是否一致。</p>
+<p>还有一种校验方式操作如下</p>
+<h4 id="获取服务端公钥"><a href="#获取服务端公钥" class="headerlink" title="获取服务端公钥"></a>获取服务端公钥</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh-keyscan -t ECDSA -p <span class="number">22</span> host &gt; xx.txt</div><div class="line"><span class="comment"># host:22 SSH xxxx</span></div></pre></td></tr></table></figure>
+<p>然后我们可以查看 <code>xx.txt</code> 文件（注意你的路径哈）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[host]:<span class="number">22</span> ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBBAv7EZMq4b<span class="comment">//f0Wj1ik/GK8G1/YwwU4dpS2d3C6YuPY0lMHeivFW4OyWOADqi7wnlO3Ot6fVZ6t1hZjQqhj2u4=</span></div></pre></td></tr></table></figure>
+<p>这个内容其实和写入你的 <code>known_hosts</code> 的内容是一样的</p>
+<h4 id="校验公钥指纹-1"><a href="#校验公钥指纹-1" class="headerlink" title="校验公钥指纹"></a>校验公钥指纹</h4><p>可以使用下面的命令来生成公钥指纹 <code>-E</code> 参数是指定指纹的类型 注意一开始返回的类型一致 上面是<code>sha256</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh-keygen -E sha256 -lf xx.txt</div><div class="line"><span class="number">256</span> SHA256:<span class="number">7</span>g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec no comment (ECDSA)</div></pre></td></tr></table></figure>
+<p>可以看到返回的值是 <code>SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec</code> 这和一开始第一次连接服务器时返回的指纹是一致的 <code>SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec</code>。 这样就完成了一次校验 但是这个校验真的是准确的吗 如果你获取到的公钥都是 中间人的呢… 好吧我也不知道了！！！ 一般都是服务器放公开自己的指纹 然后比对吧 这样靠谱点</p>
 <hr>
 
       
@@ -359,7 +371,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Js/" rel="tag">#Js</a>
+            <a href="/tags/Git/" rel="tag">#Git</a>
           
         </div>
       
@@ -368,16 +380,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/29/20161129/" rel="next" title="Laravel中队列使用总结">
-                <i class="fa fa-chevron-left"></i> Laravel中队列使用总结
+              <a href="/2018/12/13/20181213/" rel="next" title="英文 `spend`, `pay`, `take`, `cost` 的区别">
+                <i class="fa fa-chevron-left"></i> 英文 `spend`, `pay`, `take`, `cost` 的区别
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/06/26/20170626/" rel="prev" title="windows下给Gvim安装NERDTree目录树插件">
-                windows下给Gvim安装NERDTree目录树插件 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/12/27/20181227/" rel="prev" title="关于SSH登录">
+                关于SSH登录 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -404,8 +416,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/12/15/20161215/"
-           data-title="使用Input type=file 原生上传使用总结" data-url="https://caihongtengxu.github.io/2016/12/15/20161215/">
+      <div class="ds-thread" data-thread-key="2018/12/26/20181226/"
+           data-title="关于SSH登录中 公钥指纹 科普" data-url="https://caihongtengxu.github.io/2018/12/26/20181226/">
       </div>
     
   </div>
@@ -496,7 +508,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#传统的上传"><span class="nav-number">1.</span> <span class="nav-text">传统的上传</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ajax上传"><span class="nav-number">2.</span> <span class="nav-text">Ajax上传</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#FormData-简介"><span class="nav-number">2.1.</span> <span class="nav-text">FormData 简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#通过Ajax使用FormData实现上传图片"><span class="nav-number">2.2.</span> <span class="nav-text">通过Ajax使用FormData实现上传图片</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-首次登陆"><span class="nav-number">1.</span> <span class="nav-text">SSH 首次登陆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发生的原因"><span class="nav-number">2.</span> <span class="nav-text">发生的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中间人攻击"><span class="nav-number">3.</span> <span class="nav-text">中间人攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#校验公钥指纹"><span class="nav-number">4.</span> <span class="nav-text">校验公钥指纹</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#获取服务端公钥"><span class="nav-number">4.1.</span> <span class="nav-text">获取服务端公钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#校验公钥指纹-1"><span class="nav-number">4.2.</span> <span class="nav-text">校验公钥指纹</span></a></li></ol></li></ol></div>
             
           </div>
         </section>
