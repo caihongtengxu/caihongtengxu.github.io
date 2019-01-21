@@ -28,23 +28,23 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Chrome," />
+  <meta name="keywords" content="PHP," />
 
 
 
 
 
 
-<meta name="description" content="今天公司项目发了个小版本,发到线上后我看了一眼 发现主页加载不全 看了下控制台 有几个接口请求报错了 而且不是服务器出错 都是请求状态 failed + ERR_NAME_NOT_RESOLVED 连忙问了下别的同事 他们请求都是正常加载的 只有我的 Chrome 下会有这个问题。后面我切换 Firefox 后一切正常 然后找了一圈解决办法 又折腾">
+<meta name="description" content="现在写项目都是天天用框架底层连接数据库都忘记怎么写了，刚好有个东西需要自己手动写一个PHP去执行下，需要连接数据库，然后一脸懵逼…我居然不会底层连接数据库的方法….">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法">
-<meta property="og:url" content="https://caihongtengxu.github.io/2018/12/03/20181203/index.html">
+<meta property="og:title" content="PHP连接Mysql的三种方法">
+<meta property="og:url" content="https://caihongtengxu.github.io/2019/01/09/20190109/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="今天公司项目发了个小版本,发到线上后我看了一眼 发现主页加载不全 看了下控制台 有几个接口请求报错了 而且不是服务器出错 都是请求状态 failed + ERR_NAME_NOT_RESOLVED 连忙问了下别的同事 他们请求都是正常加载的 只有我的 Chrome 下会有这个问题。后面我切换 Firefox 后一切正常 然后找了一圈解决办法 又折腾">
-<meta property="og:updated_time" content="2018-12-11T03:01:56.599Z">
+<meta property="og:description" content="现在写项目都是天天用框架底层连接数据库都忘记怎么写了，刚好有个东西需要自己手动写一个PHP去执行下，需要连接数据库，然后一脸懵逼…我居然不会底层连接数据库的方法….">
+<meta property="og:updated_time" content="2019-01-21T07:56:17.370Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法">
-<meta name="twitter:description" content="今天公司项目发了个小版本,发到线上后我看了一眼 发现主页加载不全 看了下控制台 有几个接口请求报错了 而且不是服务器出错 都是请求状态 failed + ERR_NAME_NOT_RESOLVED 连忙问了下别的同事 他们请求都是正常加载的 只有我的 Chrome 下会有这个问题。后面我切换 Firefox 后一切正常 然后找了一圈解决办法 又折腾">
+<meta name="twitter:title" content="PHP连接Mysql的三种方法">
+<meta name="twitter:description" content="现在写项目都是天天用框架底层连接数据库都忘记怎么写了，刚好有个东西需要自己手动写一个PHP去执行下，需要连接数据库，然后一脸懵逼…我居然不会底层连接数据库的方法….">
 
 
 
@@ -65,7 +65,7 @@
 
 
 
-  <title> 关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法 | 指尖的彩虹 </title>
+  <title> PHP连接Mysql的三种方法 | 指尖的彩虹 </title>
 
 </head>
 
@@ -251,7 +251,7 @@
             
             
               
-                关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法
+                PHP连接Mysql的三种方法
               
             
           </h1>
@@ -264,8 +264,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-12-03T11:01:42+08:00" content="2018-12-03">
-              2018-12-03
+            <time itemprop="dateCreated" datetime="2019-01-09T10:56:23+08:00" content="2019-01-09">
+              2019-01-09
             </time>
           </span>
 
@@ -294,8 +294,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2018/12/03/20181203/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/12/03/20181203/" itemprop="commentsCount"></span>
+                <a href="/2019/01/09/20190109/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/01/09/20190109/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -318,20 +318,16 @@
       
 
       
-        <p>今天公司项目发了个小版本,发到线上后我看了一眼 发现主页加载不全 看了下控制台 有几个接口请求报错了 而且不是服务器出错 都是请求状态 <code>failed</code> + <code>ERR_NAME_NOT_RESOLVED</code> 连忙问了下别的同事 他们请求都是正常加载的 只有我的 <code>Chrome</code> 下会有这个问题。后面我切换 <code>Firefox</code> 后一切正常 然后找了一圈解决办法 又折腾<br><a id="more"></a></p>
+        <p>现在写项目都是天天用框架底层连接数据库都忘记怎么写了，刚好有个东西需要自己手动写一个PHP去执行下，需要连接数据库，然后一脸懵逼…我居然不会底层连接数据库的方法….<br><a id="more"></a></p>
 <hr>
-<h3 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h3><p>基本上，都是的DNS地址问题导致ERR_NAME_NOT_RESOLVED错误。 </p>
-<p>由于各种原因，您的Internet DNS地址被阻止，因此发生此ERR_NAME_NOT_RESOLVED错误。</p>
-<p>解决办法如下</p>
-<h3 id="清除Chrome缓存"><a href="#清除Chrome缓存" class="headerlink" title="清除Chrome缓存"></a>清除Chrome缓存</h3><p>浏览器Cookie可能会阻止您的Internet DNS，然后导致ERR_NAME_NOT_RESOLVED错误。 您可以尝试清除浏览器cookie以修复此错误。</p>
-<p>在 Chrome 下使用快捷键 <code>Ctrl + Shift + Delete</code> 或者 在地址栏输入 <code>chrome://settings/clearBrowserData</code> 然后选择 <code>高级</code> 清除数据即可</p>
-<h3 id="清除Chrome-DNS缓存"><a href="#清除Chrome-DNS缓存" class="headerlink" title="清除Chrome-DNS缓存"></a>清除Chrome-DNS缓存</h3><p>当更改了操作系统的 DNS 设置时，如果只清除操作系统的 DNS 缓存不一定会修复 Chrome 的连接问题，手动刷新 Chrome DNS 缓存会比较有用。</p>
-<p>浏览器 DNS 缓存通常用于存储你访问的每个网站的域名所对应的服务器 IP 地址数据库，这个小数据库本质上可以加快访问网站的速度。但是，当一个网站更换了新 IP 地址时，再通过 Chrome DNS 缓存中的 IP 来访问时就会遇到访问错误。此种情况下，刷新清除 Chrome DNS 缓存可以帮助解决连接错误。</p>
-<p>在 Chrome 地址栏 输入 <code>chrome://net-internals/#dns</code> 即可打开页面 然后全部清除即可</p>
-<h3 id="刷新操作系统DNS缓存"><a href="#刷新操作系统DNS缓存" class="headerlink" title="刷新操作系统DNS缓存"></a>刷新操作系统DNS缓存</h3><p>如果你是Windows系统 在 <code>运行</code> 中 输入 <code>cmd</code> 打开终端  然后依次输入 <code>ipconfig /flushdns</code> , <code>ipconfig /renew</code> , <code>ipconfig /registerdns</code> 理论上只要输入第一条执行就可以了，如果你脸黑到不行 请执行3条 然后重启电脑…</p>
-<p>Linux 系 Mac 系电脑请自己搜索如何清除DNS</p>
-<h3 id="检查你的防火墙和安全软件"><a href="#检查你的防火墙和安全软件" class="headerlink" title="检查你的防火墙和安全软件"></a>检查你的防火墙和安全软件</h3><p>您使用的防火墙或安全软件可能会阻止网络连接或浏览器，从而产生DNS阻止错误。 检查防火墙和安全软件的设置。 您可能需要取消阻止浏览器和网络连接。 或者，您可以尝试禁用防火墙或安全软件以查看错误是否已修复。</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://www.drivereasy.com/knowledge/how-to-fix-err-name-not-resolved-error/" target="_blank" rel="external">https://www.drivereasy.com/knowledge/how-to-fix-err-name-not-resolved-error/</a></p>
+<h3 id="面向过程"><a href="#面向过程" class="headerlink" title="面向过程"></a>面向过程</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	$conn = mysql_connect(<span class="string">'localhost'</span>, <span class="string">'root'</span>, <span class="string">'123456'</span>);</div><div class="line">	<span class="keyword">if</span>(!$conn)&#123;</div><div class="line">		<span class="keyword">echo</span> <span class="string">"mysql connect is failed and error msg is:"</span>.mysql_error();</div><div class="line">	&#125;</div><div class="line">	<span class="comment">//连接成功</span></div><div class="line">	mysql_query(<span class="string">"set names 'utf8'"</span>);</div><div class="line">	mysql_select_db(<span class="string">'mytest'</span>);</div><div class="line">	$result = mysql_query(<span class="string">'select * from users'</span>);</div><div class="line"></div><div class="line">	$rows = mysql_fetch_row($result);</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>这种方式在PHP版本升级中会废除 而且在php5.6以后的版本中都已经提示 <code>mysql_connect</code> 的方法将在未来废除 推荐使用mysqli 或者 pdo的方式来连接数据库</p>
+<h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">// $mysqli = mysqli_init(); 官方文档上是这样的</span></div><div class="line"><span class="comment">//同时在new的时候也可以带参数</span></div><div class="line"><span class="comment">// $mysqli = new Mysqli(‘host’, ’db_username’, ’db_password’, ’db_name’, ’db_port’);</span></div><div class="line"></div><div class="line">$mysqli = <span class="keyword">new</span> Mysqli();</div><div class="line"><span class="comment">//也可以使用这种连接</span></div><div class="line">$mysqli-&gt;real_connect(<span class="string">'localhost'</span>, <span class="string">'root'</span>, <span class="string">''</span>, <span class="string">'mytest'</span>);</div><div class="line">$sql = <span class="string">'select * from ceshi'</span>;</div><div class="line">$result = $mysqli-&gt;query($sql);</div><div class="line">$res = [];</div><div class="line"></div><div class="line"><span class="keyword">while</span> (<span class="keyword">false</span> != ($row=$result-&gt;fetch_assoc())) &#123;</div><div class="line">	$res[] = $row;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>;</div><div class="line">print_r($res);</div><div class="line"><span class="keyword">exit</span>();</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p><strong>Mysqli</strong>是 Mysql 的扩展他同时也支持过程过的操作同时也支持面向对象的操作</p>
+<h3 id="使用PDO的方式"><a href="#使用PDO的方式" class="headerlink" title="使用PDO的方式"></a>使用PDO的方式</h3><p><strong>PDO</strong> 其实就是 PHP Database Object 即PHP数据库对象 它提供了一种统一的php和数据库交互的方法</p>
+<p>这是目前比较流行的一种连接数据库的方法。它的优势在于：只要正确提供数据源，余下对于数据库的基本操作都是一样的。也就是说，同一段代码既可以同MySQL交互，也可以和SQLite3交互，当然也可以和PostgreSQL进行交互，前提是你提供了正确的数据源。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">$dns = <span class="string">'mysql:dbname=mytest;host=127.0.0.1'</span>;</div><div class="line">$db_username = <span class="string">'root'</span>;</div><div class="line">$db_password = <span class="string">''</span>;</div><div class="line"></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    $pdo = <span class="keyword">new</span> PDO($dns, $db_username, $db_password);</div><div class="line">&#125; <span class="keyword">catch</span> (PDOException $e) &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"PDO connect is failed "</span>.$e-&gt;getMessage();</div><div class="line">&#125;</div><div class="line"></div><div class="line">$sql = <span class="string">"select * from ceshi"</span>;</div><div class="line">$result = $pdo-&gt;query($sql);</div><div class="line"><span class="comment">// $result = $pdo-&gt;prepare($sql);</span></div><div class="line"><span class="comment">// $result-&gt;execute();</span></div><div class="line"><span class="comment">// object(PDOStatement)[2]</span></div><div class="line"><span class="comment">// public 'queryString' =&gt; string 'select * from ceshi' 	// 	(length=19)</span></div><div class="line"></div><div class="line">$arr = [];</div><div class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $row = $result-&gt;fetchObject(); $i++) &#123;</div><div class="line">    $arr[] = (<span class="keyword">array</span>)$row;</div><div class="line">&#125;</div><div class="line"><span class="keyword">echo</span> <span class="string">"&lt;pre&gt;"</span>;</div><div class="line">print_r($arr);</div><div class="line"><span class="keyword">exit</span>();</div></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Mysql</span></div><div class="line">$dns = <span class="string">'mysql:dbname=mytest;host=127.0.0.1'</span>;</div><div class="line"></div><div class="line"><span class="comment"># SQLite3</span></div><div class="line">$dsn=<span class="string">'sqlite3:“C:\sqlite\user.db”'</span>;</div><div class="line"></div><div class="line"><span class="comment"># PostgreSQL</span></div><div class="line">$dsn=<span class="string">'pgsql:host='</span>.$dbhost.<span class="string">' port=5432 dbname='</span>.$dbdatabase.<span class="string">' user='</span>.$username.<span class="string">' password='</span>.$userpass;</div></pre></td></tr></table></figure>
 <hr>
 
       
@@ -354,7 +350,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Chrome/" rel="tag">#Chrome</a>
+            <a href="/tags/PHP/" rel="tag">#PHP</a>
           
         </div>
       
@@ -363,16 +359,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/26/20181126/" rel="next" title="关于PHP中 Trait 的使用">
-                <i class="fa fa-chevron-left"></i> 关于PHP中 Trait 的使用
+              <a href="/2019/01/03/20190103/" rel="next" title="关于Mysql8的远程连接">
+                <i class="fa fa-chevron-left"></i> 关于Mysql8的远程连接
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/12/05/20181205/" rel="prev" title="关于GitFlow工作流一些总结">
-                关于GitFlow工作流一些总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/16/20190116/" rel="prev" title="PHP内存的一些简单理解">
+                PHP内存的一些简单理解 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -399,8 +395,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2018/12/03/20181203/"
-           data-title="关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法" data-url="https://caihongtengxu.github.io/2018/12/03/20181203/">
+      <div class="ds-thread" data-thread-key="2019/01/09/20190109/"
+           data-title="PHP连接Mysql的三种方法" data-url="https://caihongtengxu.github.io/2019/01/09/20190109/">
       </div>
     
   </div>
@@ -491,7 +487,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除Chrome缓存"><span class="nav-number">2.</span> <span class="nav-text">清除Chrome缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#清除Chrome-DNS缓存"><span class="nav-number">3.</span> <span class="nav-text">清除Chrome-DNS缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刷新操作系统DNS缓存"><span class="nav-number">4.</span> <span class="nav-text">刷新操作系统DNS缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#检查你的防火墙和安全软件"><span class="nav-number">5.</span> <span class="nav-text">检查你的防火墙和安全软件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向过程"><span class="nav-number">1.</span> <span class="nav-text">面向过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向对象"><span class="nav-number">2.</span> <span class="nav-text">面向对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用PDO的方式"><span class="nav-number">3.</span> <span class="nav-text">使用PDO的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他"><span class="nav-number">4.</span> <span class="nav-text">其他</span></a></li></ol></div>
             
           </div>
         </section>
