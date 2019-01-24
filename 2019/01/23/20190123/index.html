@@ -28,34 +28,25 @@
 <link href="/css/main.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Laravel," />
+  <meta name="keywords" content="PHP," />
 
 
 
 
 
 
-<meta name="description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
+<meta name="description" content="之前有遇到需要打印出执行SQL的问题，在Laravel的ORM关联模型中 之前都是用 builder 对象执行 toSql() 方法 或者写错一个字段名 这样会报错显示出SQL（满脑子的骚操作…） 感觉不能在懒下去了 还是要回归正途使用 Laravel-Debugbar 然后安装又遇到了幺蛾子">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Laravel集成Swagger使用总结">
-<meta property="og:url" content="https://caihongtengxu.github.io/2016/06/30/laravelandswagger/index.html">
+<meta property="og:title" content="Laraval-Debugbar的简单使用">
+<meta property="og:url" content="https://caihongtengxu.github.io/2019/01/23/20190123/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publicvendor.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/route.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
-<meta property="og:updated_time" content="2016-08-11T09:34:53.287Z">
+<meta property="og:description" content="之前有遇到需要打印出执行SQL的问题，在Laravel的ORM关联模型中 之前都是用 builder 对象执行 toSql() 方法 或者写错一个字段名 这样会报错显示出SQL（满脑子的骚操作…） 感觉不能在懒下去了 还是要回归正途使用 Laravel-Debugbar 然后安装又遇到了幺蛾子">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel_debugbar.png">
+<meta property="og:updated_time" content="2019-01-24T09:01:54.061Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Laravel集成Swagger使用总结">
-<meta name="twitter:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
+<meta name="twitter:title" content="Laraval-Debugbar的简单使用">
+<meta name="twitter:description" content="之前有遇到需要打印出执行SQL的问题，在Laravel的ORM关联模型中 之前都是用 builder 对象执行 toSql() 方法 或者写错一个字段名 这样会报错显示出SQL（满脑子的骚操作…） 感觉不能在懒下去了 还是要回归正途使用 Laravel-Debugbar 然后安装又遇到了幺蛾子">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel_debugbar.png">
 
 
 
@@ -76,8 +67,8 @@
 
 
 
-  <title> Laravel集成Swagger使用总结 | 指尖的彩虹 </title>
-  
+  <title> Laraval-Debugbar的简单使用 | 指尖的彩虹 </title>
+
 </head>
 
 <body itemscope  lang="zh-Hans">
@@ -262,7 +253,7 @@
             
             
               
-                Laravel集成Swagger使用总结
+                Laraval-Debugbar的简单使用
               
             
           </h1>
@@ -270,12 +261,13 @@
 
         <div class="post-meta">
           <span class="post-time">
+              
             <span class="post-meta-item-icon">
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-30T20:02:25+08:00" content="2016-06-30">
-              2016-06-30
+            <time itemprop="dateCreated" datetime="2019-01-23T08:42:13+08:00" content="2019-01-23">
+              2019-01-23
             </time>
           </span>
 
@@ -288,8 +280,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Laravel/" itemprop="url" rel="index">
-                    <span itemprop="name">Laravel</span>
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
                   </a>
                 </span>
 
@@ -304,8 +296,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/06/30/laravelandswagger/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/30/laravelandswagger/" itemprop="commentsCount"></span>
+                <a href="/2019/01/23/20190123/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/01/23/20190123/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -328,32 +320,24 @@
       
 
       
-        <blockquote>
-<p>刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧</p>
-<p>先放个包的网址 <a href="https://packagist.org" target="_blank" rel="external">https://packagist.org</a></p>
-<p>之前都是直接在里面搜索<code>swagger</code> 然后又个<code>laterll/swagger</code>使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 <code>jlapp/swaggervel</code> 很好用哦 就用这个吧<br><a id="more"></a></p>
-</blockquote>
+        <p>之前有遇到需要打印出执行SQL的问题，在Laravel的ORM关联模型中 之前都是用 <code>builder</code> 对象执行 <code>toSql()</code> 方法 或者写错一个字段名 这样会报错显示出SQL（满脑子的骚操作…） 感觉不能在懒下去了 还是要回归正途使用 <a href="https://github.com/barryvdh/laravel-debugbar" target="_blank" rel="external"><strong>Laravel-Debugbar</strong></a> 然后安装又遇到了幺蛾子<br><a id="more"></a></p>
 <hr>
-<h3 id="创建一个Laravel项目"><a href="#创建一个Laravel项目" class="headerlink" title="创建一个Laravel项目"></a>创建一个Laravel项目</h3><p>进入自己的本地环境目录<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer create-project laravel/laravel swaggertest <span class="number">5.1</span>.*</div></pre></td></tr></table></figure></p>
-<h6 id="对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><a href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限" class="headerlink" title="对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限"></a>对了有时候在linux测试环境下搭建项目的话 要记得查看下 <code>storage</code>目录的读写权限</h6><h6 id="复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><a href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了" class="headerlink" title="复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了"></a>复制项目下的<code>.env.example</code>文件 重命名为<code>.env</code> 一般创建的时候都会帮你复制过了</h6><p>上面swaggertest是我的项目名 这个随意 另外Laravel的版本用的是 <strong>5.1</strong> 的 不知道为什么 每次用5.2的都非常慢，慢到爆炸 用5.1就好很多 难道错觉</p>
-<p>进入项目目录 编辑文件<code>composer.json</code>  在最下面加上下面这段代码 增加镜像 以后下载安装什么的可以跑的快点 这一步可以无视不操作 没啥影响</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"repositories"</span>: &#123;</div><div class="line">   <span class="string">"packagist"</span>: &#123;</div><div class="line">      <span class="string">"type"</span>: <span class="string">"composer"</span>,</div><div class="line">      <span class="string">"url"</span>: <span class="string">"https://packagist.phpcomposer.com"</span></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="集成Swagger"><a href="#集成Swagger" class="headerlink" title="集成Swagger"></a>集成Swagger</h3><h4 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h4><p>运行</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> jlapp/swaggervel:dev-master</div></pre></td></tr></table></figure>
-<p>上面这个swaggervel包有3个版本的 分别是<code>dev-master</code>    <code>2.0.x-dev</code>（这个是给laravel5用的）     <code>1.0.x-dev</code>（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
-<h4 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h4><p>编辑 <code>config/app.php</code>文件 找到 <code>providers</code>数组在其中添加 如下代码<code>Jlapp\Swaggervel\SwaggervelServiceProvider::class,</code><br>网上也有些说要在app/config/app.php文件中添加 但我的项目app文件夹下并没有config文件夹 so就没按照app/config/app.php增加目录创建来编辑</p>
-<p>执行<code>php artisan vendor:publish</code> 命令</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publish.png" alt="publish List" title="publish list"></p>
-<p>这句话就是把刚安装的swaggervel-ui一些东西帮你弄到根目录public目录下<br>成功的话目录是这样的</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publicvendor.png" alt="vendor List" title="vendor list"></p>
-<p>运行下<code>php artisan route:list</code> 刷新下路由<br><img src="http://obomwzenb.bkt.clouddn.com/route.png" alt="route List" title="route list"></p>
-<p>其实就是把他默认的<code>api/docs</code> 这个路由帮你加进来了<br>到这里基本已经完成 但是这个时候你去访问你的项目 他可能会报错缺少swg的注释info信息啥的 也并没有生成他运行需要的 <strong>json文件</strong><br><a href="http://localhost/api/docs" target="_blank" rel="external">http://localhost/api/docs</a> &nbsp;&nbsp;&nbsp;&nbsp;[这个是我的项目地址 具体的自己配置吧]</p>
-<p>默认情况下他会在 <code>storage/docs</code>这个文件夹下生成所需要的json文件的 因为我们还没有写controller注释 他没有生成json文件 但是把目录已经创建好了</p>
-<p>需要注意下<code>vendor/jlapp/swaggervel/src/config/swaggervel.php</code> 这个文件 其中有一个 参数 <code>generateAlways</code> 这个变量 他是控制是否每次都刷新生成json 文件， 推荐在<code>.env</code>中配置一个变量参数设置到这里 这样就不用每次来改这里了 毕竟这个路径找起来挺麻烦的</p>
-<p>好了 整个<code>Controller</code> 国际惯例 <code>hello world</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@SWG</span>\Swagger(</div><div class="line"> *   <span class="doctag">@SWG</span>\Info(</div><div class="line"> *      title="测试类",</div><div class="line"> *      version="1.0.0",</div><div class="line"> *      description="测试测试"</div><div class="line"> *   )</div><div class="line"> * )</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@SWG</span>\Get(</div><div class="line">     *      path="/testindex",</div><div class="line">     *      tags=&#123;"测试相关模块"&#125;,</div><div class="line">     *      summary="测试输出hello world",</div><div class="line">     *      <span class="doctag">@SWG</span>\Response(</div><div class="line">     *          response=200,</div><div class="line">     *          description="success",</div><div class="line">     *      )</div><div class="line">     * )</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"hello world"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>访问自己配置的域名 看到下面就成功了<br><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png" alt="swagger success" title="swagger success"></p>
-<h2 id="最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><a href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多" class="headerlink" title="最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多"></a>最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</h2>
+<h3 id="打印Laravel执行SQL"><a href="#打印Laravel执行SQL" class="headerlink" title="打印Laravel执行SQL"></a>打印Laravel执行SQL</h3><p>一般都是修改 <code>app/Provider/AppServiceProvider</code> 文件 在 <code>boot()</code> 方法中加入代码 记得在上面 引入 <code>use DB;</code></p>
+<p>比如下面</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">DB::listen(<span class="function"><span class="keyword">function</span><span class="params">($sql, $bindings, $time)</span> </span>&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">'SQL语句执行：'</span>.$sql.<span class="string">'，参数：'</span>.json_encode($bindings).<span class="string">',耗时：'</span>.$time.<span class="string">'ms'</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>今天还看到一种写法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">\DB::listen(</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="params">($sql)</span> </span>&#123;</div><div class="line">        <span class="keyword">foreach</span> ($sql-&gt;bindings <span class="keyword">as</span> $i =&gt; $binding) &#123;</div><div class="line">            <span class="keyword">if</span> ($binding <span class="keyword">instanceof</span> \DateTime) &#123;</div><div class="line">                $sql-&gt;bindings[$i] = $binding-&gt;format(<span class="string">'\'Y-m-d H:i:s\''</span>);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">if</span> (is_string($binding)) &#123;</div><div class="line">                    $sql-&gt;bindings[$i] = <span class="string">"'$binding'"</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// Insert bindings into query</span></div><div class="line">        $query = str_replace(<span class="keyword">array</span>(<span class="string">'%'</span>, <span class="string">'?'</span>), <span class="keyword">array</span>(<span class="string">'%%'</span>, <span class="string">'%s'</span>), $sql-&gt;sql);</div><div class="line"></div><div class="line">        $query = vsprintf($query, $sql-&gt;bindings);</div><div class="line"></div><div class="line">        <span class="comment">// Save the query to file</span></div><div class="line">        $logFile = fopen(</div><div class="line">            storage_path(<span class="string">'logs'</span> . DIRECTORY_SEPARATOR . date(<span class="string">'Y-m-d'</span>) . <span class="string">'_query.log'</span>),</div><div class="line">            <span class="string">'a+'</span></div><div class="line">        );</div><div class="line">        fwrite($logFile, date(<span class="string">'Y-m-d H:i:s'</span>) . <span class="string">': '</span> . $query . PHP_EOL);</div><div class="line">        fclose($logFile);</div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>这个会记录下Laravel执行过程中所有执行过的SQL语句 写入到 <code>storage\logs\xxxx-xx-xx_query.log</code> 中 也挺方便的</p>
+<h3 id="安装Laravel-Debugbar"><a href="#安装Laravel-Debugbar" class="headerlink" title="安装Laravel-Debugbar"></a>安装Laravel-Debugbar</h3><p>Laravel-debugbar是一个laravel调试神器 Github 地址在 <a href="https://github.com/barryvdh/laravel-debugbar" target="_blank" rel="external">https://github.com/barryvdh/laravel-debugbar</a> 跟着步骤一步步安装就好了</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>使用 Composer 直接运行 <code>composer require barryvdh/laravel-debugbar --dev</code> 然后在 <code>.env</code> 配置文件中设置 <code>APP_DEBUG=true</code> 即打开 debug 模式</p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>编辑 <code>config/app.php</code> 文件 在中 <code>providers</code> 数组下 增加 <code>Barryvdh\Debugbar\ServiceProvider::class,</code> 注册服务提供者</p>
+<p>同时在该文件的 <code>aliases</code> 数组下 增加 <code>&#39;Debugbar&#39; =&gt; Barryvdh\Debugbar\Facade::class,</code> 给门面起个别名 方便后续使用</p>
+<p>然后执行 <code>php artisan vendor:publish --provider=&quot;Barryvdh\Debugbar\ServiceProvider&quot;</code> 它会自动帮你在 <code>config</code> 目录下 生成 <code>debugbar.php</code> 配置文件 其主要配置都在这个文件里了</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>上面安装完了后就可以测试下了，访问你的项目 如果在浏览器看到下面就成功了</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel_debugbar.png" alt="laravel_debugbar"></p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p><strong>debugbar</strong> 是基于前端内容显示的 所以你的访问路由要有页面 <strong>内容输出</strong>，不要在你的代码中间加入 <code>exit();</code>, <code>dd();</code> 等中断操作 不然他是显示不了的。我测试的时候就加了 <code>dd()</code> 中断输出，然后一直没有debugbar内容显示 郁闷了好久！！！ 更多详细文档看官网吧 <a href="http://phpdebugbar.com/docs/readme.html#php-debug-bar" target="_blank" rel="external">http://phpdebugbar.com/docs/readme.html#php-debug-bar</a></p>
+<hr>
+
       
     </div>
 
@@ -374,7 +358,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Laravel/" rel="tag">#Laravel</a>
+            <a href="/tags/PHP/" rel="tag">#PHP</a>
           
         </div>
       
@@ -383,16 +367,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/04/21/ubuntuaddanddeleteuser/" rel="next" title="Ubuntu 16.04下添加和删除用户">
-                <i class="fa fa-chevron-left"></i> Ubuntu 16.04下添加和删除用户
+              <a href="/2019/01/16/20190116/" rel="next" title="PHP内存的一些简单理解">
+                <i class="fa fa-chevron-left"></i> PHP内存的一些简单理解
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/03/lumenandswagger/" rel="prev" title="Lumen集成Swagger使用总结">
-                Lumen集成Swagger使用总结 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/01/24/20190124/" rel="prev" title="记一次Laravel中with()方法事故">
+                记一次Laravel中with()方法事故 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -419,8 +403,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/30/laravelandswagger/"
-           data-title="Laravel集成Swagger使用总结" data-url="https://caihongtengxu.github.io/2016/06/30/laravelandswagger/">
+      <div class="ds-thread" data-thread-key="2019/01/23/20190123/"
+           data-title="Laraval-Debugbar的简单使用" data-url="https://caihongtengxu.github.io/2019/01/23/20190123/">
       </div>
     
   </div>
@@ -457,7 +441,7 @@
       <section class="site-overview sidebar-panel ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/linux.jpg"
+               src="/images/che2.png"
                alt="teng xu" />
           <p class="site-author-name" itemprop="name">teng xu</p>
           <p class="site-description motion-element" itemprop="description"></p>
@@ -465,7 +449,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">54</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -473,7 +457,7 @@
           
             <div class="site-state-item site-state-categories">
               <a href="/categories">
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -482,7 +466,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -511,7 +495,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个Laravel项目"><span class="nav-number">1.</span> <span class="nav-text">创建一个Laravel项目</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成Swagger"><span class="nav-number">2.</span> <span class="nav-text">集成Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装包"><span class="nav-number">2.1.</span> <span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑配置"><span class="nav-number">2.2.</span> <span class="nav-text">编辑配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><span class="nav-number"></span> <span class="nav-text">最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#打印Laravel执行SQL"><span class="nav-number">1.</span> <span class="nav-text">打印Laravel执行SQL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Laravel-Debugbar"><span class="nav-number">2.</span> <span class="nav-text">安装Laravel-Debugbar</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">2.2.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意"><span class="nav-number">4.</span> <span class="nav-text">注意</span></a></li></ol></div>
             
           </div>
         </section>
@@ -530,11 +514,12 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">teng xu</span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
 </div>
 
 <div class="powered-by">
@@ -547,7 +532,6 @@
     NexT.Pisces
   </a>
 </div>
-
         
 
         
