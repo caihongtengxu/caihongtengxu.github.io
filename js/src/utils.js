@@ -24,13 +24,9 @@ NexT.utils = NexT.$u = {
       }
     });
 
-    $('.fancybox').fancybox({
-      helpers: {
-        overlay: {
-          locked: false
-        }
-      }
-    });
+      $('.fancybox').fancybox({
+          'showCloseButton': true,
+      });
   },
 
   lazyLoadPostsImages: function () {
