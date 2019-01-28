@@ -33,12 +33,12 @@ $(document).ready(function () {
     var footerOffset = parseInt($('.main').css('padding-bottom'), 10);
     var sidebarTop = headerHeight + 10;
 
-    // $('.sidebar-inner').affix({
-    //   offset: {
-    //     top: sidebarTop,
-    //     bottom: footerOffset
-    //   }
-    // });
+    $('.sidebar-inner').affix({
+      offset: {
+        top: sidebarTop,
+        bottom: footerOffset
+      }
+    });
 
     $(document)
       .on('affixed.bs.affix', function () {
