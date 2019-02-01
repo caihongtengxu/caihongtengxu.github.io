@@ -1549,7 +1549,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #125eff;
+  background: #c3c72a;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2067,13 +2067,6 @@ a.search-result {
 .page-pv .busuanzi-value {
   margin: 0 5px;
 }
-.site-uv {
-  margin-right: 10px;
-}
-.site-uv::after {
-  content: "|";
-  padding-left: 10px;
-}
 .use-motion .post {
   opacity: 0;
 }
@@ -2533,5 +2526,23 @@ body {
   body .headband {
     height: 0px;
     background: #222;
+  }
+  .header .algolia-popup .algolia-results {
+    padding: 0px 30px;
+  }
+  .header .menu .menu-item .badge {
+    display: inline-block;
+    padding: 2px 5px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    background-color: #ccc;
+    border-radius: 10px;
+    float: right;
+    margin: 0.35em 0 0 0;
+    text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
   }
 }
