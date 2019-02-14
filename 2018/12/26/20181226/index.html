@@ -138,7 +138,7 @@
             
             归档
             
-                <span class="badge">56</span>
+                <span class="badge">58</span>
             
             
             
@@ -170,7 +170,7 @@
             
             
             
-                <span class="badge">29</span>
+                <span class="badge">30</span>
             
           </a>
         </li>
@@ -322,7 +322,7 @@
 <h3 id="SSH-首次登陆"><a href="#SSH-首次登陆" class="headerlink" title="SSH 首次登陆"></a>SSH 首次登陆</h3><p>当重新上传<code>SSH Key</code> 然后设置完 <code>Git</code> 远端项目地址后 发现有个小提示信息 如下</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">$ git fetch</div><div class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</div><div class="line">@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @</div><div class="line">@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@</div><div class="line">IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!</div><div class="line">Someone could be eavesdropping on you right now (man-in-the-middle attack)!</div><div class="line">It is also possible that a host key has just been changed.</div><div class="line">The fingerprint <span class="keyword">for</span> the ECDSA key sent by the remote host is</div><div class="line">SHA256:<span class="number">7</span>g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</div><div class="line">Please contact your system administrator.</div><div class="line">Add correct host key in /c/Users/reggie/.ssh/known_hosts to get rid of this message.</div><div class="line">Offending ECDSA key in /c/Users/reggie/.ssh/known_hosts:<span class="number">2</span></div><div class="line">ECDSA host key <span class="keyword">for</span> [xxx.xxx.com]:<span class="number">12222</span> has changed <span class="keyword">and</span> you have requested strict checking.</div><div class="line">Host key verification failed.</div><div class="line">fatal: Could not read from remote repository.</div><div class="line"></div><div class="line">Please make sure you have the correct access rights</div><div class="line"><span class="keyword">and</span> the repository exists.</div></pre></td></tr></table></figure>
 <p>和</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git fetch</div><div class="line">The authenticity of host <span class="string">'[host]:12222 ([xxx.xxx.xx.xxx]:12222)'</span> can<span class="string">'t be established.</span></div><div class="line">ECDSA key fingerprint is SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</div><div class="line">Are you sure you want to continue connecting (yes/no)? yes</div><div class="line">Warning: Permanently added '[host]:<span class="number">12222</span><span class="string">' (ECDSA) to the list of known hosts.</span></div><div class="line">Warning: the ECDSA host key for '[host]:<span class="number">12222</span><span class="string">' differs from the key for the IP address '</span>[<span class="number">121.201</span><span class="number">.57</span><span class="number">.228</span>]:<span class="number">10022</span><span class="string">'</span></div><div class="line">Offending key for IP in /c/Users/reggie/.ssh/known_hosts:7</div><div class="line">Are you sure you want to continue connecting (yes/no)? yes</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">$ git fetch</div><div class="line">The authenticity of host '[host]:12222 ([xxx.xxx.xx.xxx]:12222)' can't be established.</div><div class="line">ECDSA key fingerprint is SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</div><div class="line">Are you sure you want to continue connecting (yes/no)? yes</div><div class="line">Warning: Permanently added '[host]:12222' (ECDSA) to the list of known hosts.</div><div class="line">Warning: the ECDSA host key for '[host]:12222' differs from the key for the IP address '[121.201.57.228]:10022'</div><div class="line">Offending key for IP in /c/Users/reggie/.ssh/known_hosts:7</div><div class="line">Are you sure you want to continue connecting (yes/no)? yes</div></pre></td></tr></table></figure>
 <blockquote>
 <p>大概翻译下就是有可能有某人在服务器做了些 “坏事” (还能什么坏事 就是被攻击了被)<br>有人可能在窃听你（中间人攻击）<br>还可能更换了主机密钥<br>下面是主机发送的 <code>公钥指纹</code> 其值<br><strong>SHA256:7g/bojcSbdVWBrfNrQ5+k+XQZuo4mp0V7MnUPD21nec.</strong></p>
 </blockquote>
@@ -467,7 +467,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">56</span>
+              <span class="site-state-item-count">58</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -484,7 +484,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
