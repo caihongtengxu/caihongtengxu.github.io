@@ -35,16 +35,25 @@
 
 
 
-<meta name="description" content="今天遇到一个问题 就是有个查询需要按照指定的 ID 值顺序来返回结果集 其实也可以放在程序中做排序 但是突然想看看能不能直接使用Mysql直接查询返回 就找了下 还真有辅助函数实现">
+<meta name="description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql按指定 ID 顺序返回结果">
-<meta property="og:url" content="https://caihongtengxu.github.io/2019/01/02/20190102/index.html">
+<meta property="og:title" content="优化Mysql随机取出N条记录">
+<meta property="og:url" content="https://caihongtengxu.github.io/2019/02/20/20190220/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="今天遇到一个问题 就是有个查询需要按照指定的 ID 值顺序来返回结果集 其实也可以放在程序中做排序 但是突然想看看能不能直接使用Mysql直接查询返回 就找了下 还真有辅助函数实现">
-<meta property="og:updated_time" content="2019-01-03T08:16:34.807Z">
+<meta property="og:description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain11.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain12.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain13.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain14.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain15.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain16.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain17.png">
+<meta property="og:updated_time" content="2019-02-21T02:19:55.461Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql按指定 ID 顺序返回结果">
-<meta name="twitter:description" content="今天遇到一个问题 就是有个查询需要按照指定的 ID 值顺序来返回结果集 其实也可以放在程序中做排序 但是突然想看看能不能直接使用Mysql直接查询返回 就找了下 还真有辅助函数实现">
+<meta name="twitter:title" content="优化Mysql随机取出N条记录">
+<meta name="twitter:description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png">
 
 
 
@@ -65,7 +74,7 @@
 
 
 
-  <title> Mysql按指定 ID 顺序返回结果 | 指尖的彩虹 </title>
+  <title> 优化Mysql随机取出N条记录 | 指尖的彩虹 </title>
 </head>
 
 <body itemscope  lang="zh-Hans">
@@ -258,7 +267,7 @@
             
             
               
-                Mysql按指定 ID 顺序返回结果
+                优化Mysql随机取出N条记录
               
             
           </h1>
@@ -271,8 +280,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-01-02T14:05:35+08:00" content="2019-01-02">
-              2019-01-02
+            <time itemprop="dateCreated" datetime="2019-02-20T12:22:07+08:00" content="2019-02-20">
+              2019-02-20
             </time>
           </span>
 
@@ -317,22 +326,50 @@
       
 
       
-        <p>今天遇到一个问题 就是有个查询需要按照指定的 ID 值顺序来返回结果集 其实也可以放在程序中做排序 但是突然想看看能不能直接使用Mysql直接查询返回 就找了下 还真有辅助函数实现<br><a id="more"></a></p>
+        <p>今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 <strong>不重复</strong> 记录的需求，然后我以前都是上去就是这样 <code>SELECT * FROM table ORDER BY RAND() LIMIT 1</code> 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化<br><a id="more"></a></p>
 <hr>
-<h3 id="Field-函数"><a href="#Field-函数" class="headerlink" title="Field()函数"></a>Field()函数</h3><p>Mysql中有提供一个函数 <code>Field()</code> 可以按照我们给定的顺序来自定义排序</p>
-<p>示例：</p>
-<p>假设现在有张城市信息表 叫 <code>regions</code> 有 主键 <code>id</code> 和 一个名称属性 <code>name</code>, 现在想查询 ID 为 <code>2、3、1</code> 并按照这个顺序返回</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">select id, name from regions;</div><div class="line"><span class="comment">#id		name</span></div><div class="line"> <span class="number">1</span>		北京</div><div class="line"> <span class="number">2</span>		上海</div><div class="line"> <span class="number">3</span>		深圳</div></pre></td></tr></table></figure>
-<p>使用 <code>field()</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">select id, name from regions order by field(id, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>);</div><div class="line"><span class="comment">#id		name</span></div><div class="line"> <span class="number">2</span>		上海</div><div class="line"> <span class="number">3</span>		深圳</div><div class="line"> <span class="number">1</span>		北京</div></pre></td></tr></table></figure>
-<p>这样就达到按按自定义顺序排序的目的了</p>
-<h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">mysql&gt; explain select id from regions order by field(id, <span class="number">2</span>, <span class="number">3</span>, <span class="number">1</span>);</div><div class="line">+---+-------------+---------+------+---------------+-----+---------+-----+------+-----------------------------+</div><div class="line">|id | select_type | table   | type | possible_keys | key | key_len | ref | rows | Extra                       |</div><div class="line">|-- | ----------- | ------- | ---- | ------------- | --- | ------- | --- | ---- | ----------------------------|  </div><div class="line">|<span class="number">1</span>  | SIMPLE      | regions | index| <span class="keyword">NULL</span>          | id  | <span class="number">4</span>       | <span class="keyword">NULL</span>| <span class="number">3</span>    | Using index; Using filesort |</div><div class="line">+---+-------------+---------+------+---------------+-----+---------+-----+------+-----------------------------+</div></pre></td></tr></table></figure>
-<p>因为我们在使用 <code>Order By Field</code> 的时候指定了是按照 <strong>主键ID</strong> 来排序 主键有个 <code>Primary</code> 的主键索引 他会使用id来寻找条件等于 2,3,1 的记录 所以可以看到在 <strong>Extra</strong> 中有 <strong>Using index</strong> 如果你换个别的没有索引的字段这里就不会有它了。而 <strong>Order By</strong> 子句不能使用该索引 只能使用 <strong>Filesort</strong> 排序 也就是 <strong>Extra</strong> 中有 <strong>Using filesort</strong> 的原因</p>
-<p>大概过程如下：</p>
-<p>从id索引的第一个叶子节点出发，按顺序扫描所有叶子节点<br>根据每个叶子节点记录的主键id去主键索引(聚簇索引))找到真实的行数据<br>判断行数据是否满足 <code>id = 2、3、1</code> 条件，若满足，则取出并返回</p>
-<p>基本要遍历全表了 有人说 它把选出的记录的 id 在 FIELD 列表中进行查找，并返回位置，以位置作为排序依据。<br>这样的用法，会导致 Using filesort（当然使用了Filesort 并不一定就会慢 有时候比不是用要更快），是效率很低的排序方式。</p>
-<p>通常ORDER BY子句会与LIMIT子句配合，只取出部分行。如果只是为了取出top1的行 却对所有行进行排序，这显然不是一种高效的做法。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Field() 函数可以帮助我们在数据库层直接完成一些需要的排序 可以简化业务代码，但是同时它还会有兼容性和性能问题 建议可以用在数据变化频率低 或者有长时间缓存的地方，而在数据量很大的情况下 可以采用数据库查询出数据在到程序中来排序吧</p>
+<p>先来分析下需求 一般这种需求有两种实现方式</p>
+<h3 id="使用程序处理"><a href="#使用程序处理" class="headerlink" title="使用程序处理"></a>使用程序处理</h3><p>当数据量很大的时候 其实可以通过随机数在程序中随机生成N个ID 然后一条SQL <code>select * from uuid_test where id in (100000,232323,23232322,23232366);</code> 直接获取到结果</p>
+<p>看下他的性能 使用 <code>explain extended sql</code>, <strong>extended</strong> 参数可以显示更详细的信息 不加也可以，如果后面还有 <code>show warnings</code> 的话还可以显示Mysql优化的SQL过程 虽然不一定是最终执行的优化SQL</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png" alt="explain"></p>
+<p>使用了 <code>using where</code> 但是 预计遍历的 <code>row=4</code> 很少 性能还凑合 不算太差</p>
+<h3 id="使用Mysql处理"><a href="#使用Mysql处理" class="headerlink" title="使用Mysql处理"></a>使用Mysql处理</h3><p>如果使用Mysql处理的话 又会有几种情况需要区分。不过在此之前先来看下我经常写的那个SQL的性能</p>
+<p><code>explain select * from uuid_test order by RAND() limit 1;</code> 你不要尝试直接查询 我试了下 查询近2分钟 直接用 explain 来分析</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain11.png" alt="explain"></p>
+<p>可以看到这条SQL 使用了索引 使用了临时表 使用了文件排序 并且是全表扫描 3000多W行。 下面讲下优化</p>
+<h4 id="如果ID是连续分布的"><a href="#如果ID是连续分布的" class="headerlink" title="如果ID是连续分布的"></a>如果ID是连续分布的</h4><p>如果ID属性在数据库中是连续分布的 可以使用 <code>Max()</code> + <code>RAND()</code> 来获取随机ID</p>
+<p><code>explain select CEIL(RAND() * MAX(id)) from uuid_test;</code></p>
+<p>上面因为 <code>RAND() * MAX(id)</code> 的结果是一个小数 可以通过 <code>CEIL</code> 或者 <code>FLOOR</code> 来取整</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain12.png" alt="explain"></p>
+<p>因为是主键 使用了一个索引 虽然这样会加速查询 但它同时还是全表扫描 我测了下基本要 <strong>6S</strong> 左右 还有很大的优化空间</p>
+<p><code>explain select CEIL(RAND() * (select MAX(id) from uuid_test));</code></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain13.png" alt="explain"></p>
+<p>使用了子查询后 性能回到了等同于 单查询 <code>max</code> 的程度 看上面分析 分别是没有使用表 和 最优化查询 然后测试了下 执行时间 <strong>0.005S</strong> 比上面差距了 <strong>1000</strong> 倍… （不知道有没有算错…）</p>
+<p>经过上面已经拿到了 ID 下一步就是获取对应的记录了 用了个常规查询 直接 <code>id = x</code> 然后又死了</p>
+<p><code>explain select * from uuid_test where id = (select CEIL(RAND() * (select MAX(id) from uuid_test)));</code></p>
+<p>性能如下</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain14.png" alt="explain"></p>
+<p>虽然子查询中已经很快了 但是外面的 where 导致了使用where使用索引 并且全表扫描。经过测试 查询时间为 <strong>10S</strong> 左右</p>
+<p>可以通过 <code>show warnings;</code> 来获取警告信息 顺便说下 <code>show warnings;</code> 是什么 根据官方文档说明</p>
+<blockquote>
+<p>是一个诊断语句，显示有关在当前会话中执行语句所产生的条件（错误，警告和注释）的信息<br>在EXPLAIN之后也使用SHOW WARNINGS来显示EXPLAIN生成的扩展信息</p>
+</blockquote>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain15.png" alt="explain"></p>
+<p>必须换一种方法确保随机ID只被生成一次</p>
+<p><code>explain SELECT * FROM uuid_test JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM uuid_test)) AS id ) AS r2 USING (id);</code></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain16.png" alt="explain"></p>
+<p>SQL换成这样后只选择了一行 没有排序没有应用 查询被大部分优化</p>
+<h4 id="如果ID是不连续的"><a href="#如果ID是不连续的" class="headerlink" title="如果ID是不连续的"></a>如果ID是不连续的</h4><p>考虑数据库ID是不连贯的情况，可以根据随机的ID 然后取出比它或者小的数据 然后 <code>Limit</code> 限制返回的条数</p>
+<p><code>explain SELECT * FROM uuid_test as r1 JOIN (SELECT (RAND() * (SELECT MAX(id) FROM uuid_test)) AS id ) AS r2 where r1.id &gt;= r2.id limit 10;</code></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain17.png" alt="explain"></p>
+<p>这条SQL的性能和上面基本差不多 关键在于外面的where查询上 有可能会遍历半个表 因为我又3000多W数据 它预计的差不多1500W的样子 即使这样 他的速度也是很快</p>
+<p>不过他取出来的结果是在那个ID上或下 连续的10条记录…好像没啥办法优化成完全不规则随机</p>
+<h4 id="完全随机N条"><a href="#完全随机N条" class="headerlink" title="完全随机N条"></a>完全随机N条</h4><p>如果想完全随机N条记录的话 数据量很大的时候还是建议在程序里随机记录ID吧</p>
+<p>或者建立一个映射表把不连贯的ID都存进去变成连贯</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建映射表</span></div><div class="line">create table uuid_holes_map ( row_id bigint not <span class="keyword">NULL</span> primary key, random_id int not <span class="keyword">null</span>);</div><div class="line">SET @id = <span class="number">0</span>;</div><div class="line">INSERT INTO uuid_holes_map SELECT @id := @id + <span class="number">1</span>, id FROM uuid_test;</div><div class="line">select * from uuid_holes_map;</div><div class="line"></div><div class="line"><span class="comment"># 最后执行SQL如下 limit 部分是限制返回的条数</span></div><div class="line">SELECT * FROM uuid_test</div><div class="line">  JOIN (SELECT r1.random_id</div><div class="line">         FROM uuid_holes_map <span class="keyword">AS</span> r1</div><div class="line">         JOIN (SELECT (RAND() *</div><div class="line">                      (SELECT MAX(row_id)</div><div class="line">                         FROM uuid_holes_map)) <span class="keyword">AS</span> row_id)</div><div class="line">               <span class="keyword">AS</span> r2</div><div class="line">        WHERE r1.row_id &gt;= r2.row_id</div><div class="line">        ORDER BY r1.row_id ASC</div><div class="line">        LIMIT <span class="number">10</span>) <span class="keyword">as</span> rows ON (id = random_id);</div></pre></td></tr></table></figure>
+<p>差不多就这样了</p>
+<h3 id="原文地址"><a href="#原文地址" class="headerlink" title="原文地址"></a>原文地址</h3><p><a href="http://jan.kneschke.de/projects/mysql/order-by-rand/" target="_blank" rel="external">http://jan.kneschke.de/projects/mysql/order-by-rand/</a> 英文</p>
+<p><a href="http://shiningray.cn/order-by-rand.html" target="_blank" rel="external">http://shiningray.cn/order-by-rand.html</a> 中文</p>
 <hr>
 
       
@@ -374,17 +411,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/01/20190101/" rel="next" title="关于Alpine Linux">
-                <i class="fa fa-chevron-left"></i> 关于Alpine Linux
+              <a href="/2019/02/06/20190206/" rel="next" title="使用Docker搭建PHP环境">
+                <i class="fa fa-chevron-left"></i> 使用Docker搭建PHP环境
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/03/20190103/" rel="prev" title="关于Mysql8的远程连接">
-                关于Mysql8的远程连接 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -498,7 +531,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Field-函数"><span class="nav-number">1.</span> <span class="nav-text">Field()函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#性能"><span class="nav-number">2.</span> <span class="nav-text">性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用程序处理"><span class="nav-number">1.</span> <span class="nav-text">使用程序处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Mysql处理"><span class="nav-number">2.</span> <span class="nav-text">使用Mysql处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如果ID是连续分布的"><span class="nav-number">2.1.</span> <span class="nav-text">如果ID是连续分布的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果ID是不连续的"><span class="nav-number">2.2.</span> <span class="nav-text">如果ID是不连续的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全随机N条"><span class="nav-number">2.3.</span> <span class="nav-text">完全随机N条</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原文地址"><span class="nav-number">3.</span> <span class="nav-text">原文地址</span></a></li></ol></div>
             
           </div>
         </section>
