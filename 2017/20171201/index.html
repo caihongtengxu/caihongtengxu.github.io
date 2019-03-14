@@ -41,14 +41,14 @@
 <meta property="og:url" content="https://www.tokme.cn/2017/20171201/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="一直以来感觉学的都很浮躁，所以最近开始补基础知识。重新看了下TCP/IP协议 下面都是自己的一些理解吧 整理下方便以后复习内容大多来自《Linux高性能服务器编程》一书，书已经停刊。某宝上找了个店家印了个复印版的！！！质量还算满意 当然肯定比不了原装书 莫强求">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/encapsulate.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/fenyong.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/arp.png">
-<meta property="og:updated_time" content="2018-06-08T05:46:25.886Z">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/encapsulate.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/fenyong.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/arp.png">
+<meta property="og:updated_time" content="2019-03-14T06:37:54.707Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TCP/IP协议族的体系结构扫盲">
 <meta name="twitter:description" content="一直以来感觉学的都很浮躁，所以最近开始补基础知识。重新看了下TCP/IP协议 下面都是自己的一些理解吧 整理下方便以后复习内容大多来自《Linux高性能服务器编程》一书，书已经停刊。某宝上找了个店家印了个复印版的！！！质量还算满意 当然肯定比不了原装书 莫强求">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/encapsulate.png">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/encapsulate.png">
 
 
 
@@ -357,20 +357,20 @@
 </ul>
 <p>应用层协议（也可能是应用程序）可能跳过传输层直接使用网络层提供的服务。</p>
 <h4 id="数据传递"><a href="#数据传递" class="headerlink" title="数据传递"></a>数据传递</h4><h5 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h5><p>上层协议是如何使用下层协议的服务，主要是通过封装（Encapsulate）来实现的。<strong>应用程序的数据在发送到物理网络上之前，将沿着协议栈从上往下依次传递，每一层协议都讲在上一层协议的基础上加上自己的头部信息，以实现该层的功能 这个过程就是封装</strong>。如下图</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/encapsulate.png" alt="封装"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/encapsulate.png" alt="封装"></p>
 <p>首先应用程序发送数据 会先给传输层之间建立一个TCP连接，<br>当应用程序使用 <code>send</code> 或者 <code>write</code> 函数向TCP连接写入数据时，<br>内核中的TCP模块会先将这些数据复制到与该连接对应的 <strong>TCP内核发送缓冲区</strong> 中,<br>然后带上自己的 <strong>TCP头部信息</strong> 组成 <strong>TCP报文段</strong><br>之后调用网络层的 IP 模块的服务把数据传输给网络层。<br>这里还需要补充一个UDP的封装 经过UDP封装后的数据称为 <strong>UDP数据报</strong> 它与TCP类似 只是他不需要为数据保存副本 因为他提供的服务是不可靠 当他在把UDP数据报发送成功后 他就把UDP内核缓冲区中的该数据给删除了</p>
 <p>数据通过IP协议来到网络层后，经过IP的封装后的数据称为 <strong>IP数据报</strong> （其实他也是拿了上一层的数据拼上自己的头信息，这里上一层的数据也就是上面的TCP报文段或者UDP数据报了）。最后IP把IP数据报通过以太网驱动程序等（也可以是别的 具体还有啥我理解的不是很详细了~）把数据传递给了数据链路层</p>
 <p>数据链路层封装的数据称为 <strong>帧（frame）</strong> 其实它也是在上一层数据的基础上拼上了自己的头部信息或者也加上尾部信息。根据传输媒介的不同，帧的类型也不同。比如以太网传输的就是以太网帧，令牌环上的传输就是令牌环帧。帧的最大传输单元 最多能携带的上层协议数据 通常受网络类型的限制 比如以太网帧是最大数据量是1500字节 所以过长的IP数据报可能会被分片（fragment）传输</p>
 <p><strong>帧才是最终在物理网络上传送的字节序列，至此封装过程完成</strong></p>
 <h5 id="分用"><a href="#分用" class="headerlink" title="分用"></a>分用</h5><p>当帧到达目标机的时候，将沿着协议栈从底而上依次传递。各层协议依次处理本层负责的头部信息，获取自己需要的数据，并最终将处理后的帧交给应用目标，这个过程叫 <strong>分用</strong>。分用是依靠头部信息中的类型字段实现的 下面举例一个以太网帧的 <strong>分用过程</strong> </p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/fenyong.png" alt="分用"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/fenyong.png" alt="分用"></p>
 <p>因为IP协议、ARP协议和RARP协议都使用帧传输数据，帧的头部提供一个2个字节的类型字段来标识上层协议。同样的因为ICMP协议、TCP协议和UDP协议都使用IP协议 所以IP数据报的头部采用16位的协议字段来区分他们。TCP的报文段和UDP数据报则通过其头部的16位端口号来区分上层应用程序 比如 <strong>DNS协议对应的端口是53</strong>，<strong>HTTP协议对用的端口是80</strong> 所有这些知名的应用层协议使用的端口都可以在 <code>etc/services</code> 文件中找到</p>
 <h5 id="ARP协议的工作原理"><a href="#ARP协议的工作原理" class="headerlink" title="ARP协议的工作原理"></a>ARP协议的工作原理</h5><blockquote>
 <p>ARP协议能实现任意网络层地址到任意物理地址的转换（一般来说是讲ip地址到MAC地址的转换）。</p>
 <p>工作原理：主机向自己所在网络广播一个ARP请求，该请求包含目标机器的网络地址，在此网络上（一般是LAN的局域网吧）的其他机器都会收到这个请求，但是只有被请求的主机才会回应一个ARP应答，其中带上自己的物理地址。</p>
 </blockquote>
 <p>ARP请求和应答的报文详细内容如下图</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/arp.png" alt="ARP"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/arp.png" alt="ARP"></p>
 <p>从上面可以看到一个ARP请求/应答的报文长度为28字节 如果在加上帧的头部和尾部的18字节（上图以太网帧的目的物理地址6字节、源物理地址6字节、类型2字节、CRC4字节）则一个携带ARP请求/应答的以太网帧长度为46字节。不过有些实现要求以太网帧的 <strong>数据部分</strong> 长度至少要46字节（对应这个例子也就是ARP请求的28个字节长度要填充到46字节 因为他正对应的是帧的数据部分），这种情况下一个携带ARP请求的以太网帧的长度为64字节（46+18）</p>
 <h5 id="ARP协议的通信过程"><a href="#ARP协议的通信过程" class="headerlink" title="ARP协议的通信过程"></a>ARP协议的通信过程</h5><p>可以使用 <code>tcpdump</code> 命令来进行抓包(对了系统一般不会有这个工具的 需要自己安装) 我在本地搭建了两个虚拟机 一个是Centos系统 ip地址 <code>192.168.234.129</code> 一个是Minix3系统 ip地址是 <code>192.168.234.130</code> 下面来抓包下ARP的通信过程.</p>
 <p>因为我是用ip 129的那台机器来请求ip 130的机器 执行步骤如下</p>

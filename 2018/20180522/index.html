@@ -43,13 +43,13 @@
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近收到通知说微信支付HTTPS服务器 由于 根证书即将在8.23号过期 
 所以更换了新的服务器证书 需要商户确认服务器上是否已经部署了新的CA根证书">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png">
-<meta property="og:updated_time" content="2018-09-28T03:22:10.679Z">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png">
+<meta property="og:updated_time" content="2019-03-14T06:37:54.478Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于微信支付升级替换证书问题">
 <meta name="twitter:description" content="最近收到通知说微信支付HTTPS服务器 由于 根证书即将在8.23号过期 
 所以更换了新的服务器证书 需要商户确认服务器上是否已经部署了新的CA根证书">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png">
 
 
 
@@ -336,7 +336,7 @@
 <p>如果我们本地没有DigiCert的根证书 也没有 Baltimore 的根证书 这个时候根本没办法校验微信证书的真假</p>
 <p>浏览器直接弹出提示 说对方不安全 <strong>有可能直接中断请求（比如chrome就准备这么搞事情）</strong></p>
 <p>微信主要就是防止这个 所有需要我们校验自己的服务器是否已经内置了 相应的 Baltimore 或者 DigiCert 根证书</p>
-<h3 id="根证书和其他证书关系"><a href="#根证书和其他证书关系" class="headerlink" title="根证书和其他证书关系"></a>根证书和其他证书关系</h3><p><img src="http://obomwzenb.bkt.clouddn.com/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png" alt="证书"></p>
+<h3 id="根证书和其他证书关系"><a href="#根证书和其他证书关系" class="headerlink" title="根证书和其他证书关系"></a>根证书和其他证书关系</h3><p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/%E8%AF%81%E4%B9%A6%E5%85%B3%E7%B3%BB.png" alt="证书"></p>
 <p>证书的关系类似这样 因为只要根证书是可信任的 他就可以校验他的下面所有签发的证书是不是有效真实的</p>
 <h3 id="我们需要做什么"><a href="#我们需要做什么" class="headerlink" title="我们需要做什么"></a>我们需要做什么</h3><p>我们只需要在我们自己的服务器中安装下 <strong>Baltimore</strong> 或者 <strong>DigiCert</strong> 的根证书就可以了</p>
 <p>至于微信官网写的那些校验只是校验这些的</p>

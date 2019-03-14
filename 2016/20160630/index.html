@@ -45,17 +45,17 @@
 <meta property="og:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
 先放个包的网址 https://packagist.org
 之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/publicvendor.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/route.png">
-<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
-<meta property="og:updated_time" content="2018-09-28T03:19:24.300Z">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publish.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publicvendor.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/route.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/testlumen.png">
+<meta property="og:updated_time" content="2019-03-14T06:37:54.547Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laravel集成Swagger使用总结">
 <meta name="twitter:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
 先放个包的网址 https://packagist.org
 之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/publish.png">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publish.png">
 
 
 
@@ -343,16 +343,16 @@
 <p>上面这个swaggervel包有3个版本的 分别是<code>dev-master</code>    <code>2.0.x-dev</code>（这个是给laravel5用的）     <code>1.0.x-dev</code>（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
 <h4 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h4><p>编辑 <code>config/app.php</code>文件 找到 <code>providers</code>数组在其中添加 如下代码<code>Jlapp\Swaggervel\SwaggervelServiceProvider::class,</code><br>网上也有些说要在app/config/app.php文件中添加 但我的项目app文件夹下并没有config文件夹 so就没按照app/config/app.php增加目录创建来编辑</p>
 <p>执行<code>php artisan vendor:publish</code> 命令</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publish.png" alt="publish List" title="publish list"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publish.png" alt="publish List" title="publish list"></p>
 <p>这句话就是把刚安装的swaggervel-ui一些东西帮你弄到根目录public目录下<br>成功的话目录是这样的</p>
-<p><img src="http://obomwzenb.bkt.clouddn.com/publicvendor.png" alt="vendor List" title="vendor list"></p>
-<p>运行下<code>php artisan route:list</code> 刷新下路由<br><img src="http://obomwzenb.bkt.clouddn.com/route.png" alt="route List" title="route list"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publicvendor.png" alt="vendor List" title="vendor list"></p>
+<p>运行下<code>php artisan route:list</code> 刷新下路由<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/route.png" alt="route List" title="route list"></p>
 <p>其实就是把他默认的<code>api/docs</code> 这个路由帮你加进来了<br>到这里基本已经完成 但是这个时候你去访问你的项目 他可能会报错缺少swg的注释info信息啥的 也并没有生成他运行需要的 <strong>json文件</strong><br><a href="http://localhost/api/docs" target="_blank" rel="external">http://localhost/api/docs</a> &nbsp;&nbsp;&nbsp;&nbsp;[这个是我的项目地址 具体的自己配置吧]</p>
 <p>默认情况下他会在 <code>storage/docs</code>这个文件夹下生成所需要的json文件的 因为我们还没有写controller注释 他没有生成json文件 但是把目录已经创建好了</p>
 <p>需要注意下<code>vendor/jlapp/swaggervel/src/config/swaggervel.php</code> 这个文件 其中有一个 参数 <code>generateAlways</code> 这个变量 他是控制是否每次都刷新生成json 文件， 推荐在<code>.env</code>中配置一个变量参数设置到这里 这样就不用每次来改这里了 毕竟这个路径找起来挺麻烦的</p>
 <p>好了 整个<code>Controller</code> 国际惯例 <code>hello world</code></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@SWG</span>\Swagger(</div><div class="line"> *   <span class="doctag">@SWG</span>\Info(</div><div class="line"> *      title="测试类",</div><div class="line"> *      version="1.0.0",</div><div class="line"> *      description="测试测试"</div><div class="line"> *   )</div><div class="line"> * )</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@SWG</span>\Get(</div><div class="line">     *      path="/testindex",</div><div class="line">     *      tags=&#123;"测试相关模块"&#125;,</div><div class="line">     *      summary="测试输出hello world",</div><div class="line">     *      <span class="doctag">@SWG</span>\Response(</div><div class="line">     *          response=200,</div><div class="line">     *          description="success",</div><div class="line">     *      )</div><div class="line">     * )</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"hello world"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>访问自己配置的域名 看到下面就成功了<br><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png" alt="swagger success" title="swagger success"></p>
+<p>访问自己配置的域名 看到下面就成功了<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/testlumen.png" alt="swagger success" title="swagger success"></p>
 <h2 id="最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><a href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多" class="headerlink" title="最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多"></a>最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</h2>
       
     </div>

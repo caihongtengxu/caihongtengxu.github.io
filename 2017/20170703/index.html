@@ -41,7 +41,7 @@
 <meta property="og:url" content="https://www.tokme.cn/2017/20170703/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近心血来潮想自己搭建个Git仓库玩玩 折腾了一番~ 服务器就架在了虚拟机上，用的centos">
-<meta property="og:updated_time" content="2018-06-08T05:46:42.390Z">
+<meta property="og:updated_time" content="2019-03-14T06:37:54.776Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="搭建自己的Git仓库">
 <meta name="twitter:description" content="最近心血来潮想自己搭建个Git仓库玩玩 折腾了一番~ 服务器就架在了虚拟机上，用的centos">
@@ -325,7 +325,7 @@
 <p>SSH：Secure Shell 它是建立在应用层基础上的安全协议，用于对传输的信息进行加密 另外他传输的数据是经过加密的 还可以加快传输</p>
 <p>OpenSSH:它是SSH协议的免费开源实现。官网的话 :OpenSSH is the premier connectivity tool for remote login with the SSH protocol.大概是 openssh 是使用ssh协议进行远程登录的首选连接工具</p>
 </blockquote>
-<h5 id="安装OpenSSH【如果已经安装请忽略本步】"><a href="#安装OpenSSH【如果已经安装请忽略本步】" class="headerlink" title="安装OpenSSH【如果已经安装请忽略本步】"></a>安装OpenSSH【如果已经安装请忽略本步】</h5><p>安装Git的话 由于我们以后会使用基于ssh服务的登录 所以需要安装<code>OpenSSH</code> 而 OpenSSH又依赖OpenSSL 所以先检查你的系统是否已经安装了这些 如果没有请先安装 贴3个地址:<br><a href="http://obomwzenb.bkt.clouddn.com/openssl-1.0.2l.tar.gz" target="_blank" rel="external">OpenSSL</a><br><a href="http://obomwzenb.bkt.clouddn.com/openssh-7.5p1.tar.gz" target="_blank" rel="external">OpenSSH</a><br><a href="http://obomwzenb.bkt.clouddn.com/git-2.13.2.tar.gz" target="_blank" rel="external">Git</a></p>
+<h5 id="安装OpenSSH【如果已经安装请忽略本步】"><a href="#安装OpenSSH【如果已经安装请忽略本步】" class="headerlink" title="安装OpenSSH【如果已经安装请忽略本步】"></a>安装OpenSSH【如果已经安装请忽略本步】</h5><p>安装Git的话 由于我们以后会使用基于ssh服务的登录 所以需要安装<code>OpenSSH</code> 而 OpenSSH又依赖OpenSSL 所以先检查你的系统是否已经安装了这些 如果没有请先安装 贴3个地址:<br><a href="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/openssl-1.0.2l.tar.gz" target="_blank" rel="external">OpenSSL</a><br><a href="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/openssh-7.5p1.tar.gz" target="_blank" rel="external">OpenSSH</a><br><a href="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/git-2.13.2.tar.gz" target="_blank" rel="external">Git</a></p>
 <p>基本就是解压 然后安装 <code>make &amp;&amp; make install</code>了</p>
 <p>安装完如果想测试是否成功可以直接使用<code>ssh login_username@serverIP</code>来验证下 如果输入密码可以顺利登陆 OK 安装成功</p>
 <h5 id="创建Git用户"><a href="#创建Git用户" class="headerlink" title="创建Git用户"></a>创建Git用户</h5><p>为了防止冲突建议新建一个git用户<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@root ~]<span class="comment"># useradd git</span></div><div class="line">[root@root ~]<span class="comment"># passwd git</span></div><div class="line"><span class="comment">#输入新密码就可以了</span></div></pre></td></tr></table></figure></p>
