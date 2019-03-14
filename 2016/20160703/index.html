@@ -1,0 +1,815 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Lumen," />
+
+
+
+
+
+
+<meta name="description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
+Lumen:
+
+Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发
+
+Swagger:
+
+可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lumen集成Swagger使用总结">
+<meta property="og:url" content="https://www.tokme.cn/2016/20160703/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
+Lumen:
+
+Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发
+
+Swagger:
+
+可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/artisanlist.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/lumensuccess.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/swagger1.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/swagger2.png">
+<meta property="og:updated_time" content="2018-09-28T03:19:10.895Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lumen集成Swagger使用总结">
+<meta name="twitter:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
+Lumen:
+
+Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发
+
+Swagger:
+
+可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/caihong/blog/artisanlist.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Lumen集成Swagger使用总结 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Lumen集成Swagger使用总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-07-03T11:30:30+08:00" content="2016-07-03">
+              2016-07-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧</p>
+<p><strong>Lumen:</strong></p>
+<blockquote>
+<p>Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合做微服务架构和API开发</p>
+</blockquote>
+<p><strong>Swagger:</strong></p>
+<blockquote>
+<p>可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的，有时后端修改了API参数或者其他设置 直接通过这个swagger的ui就可以看了方便测试 调试等等<br><a id="more"></a></p>
+</blockquote>
+</blockquote>
+<hr>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><pre><code>1. 确保PHP版本 &gt;5.5.9
+2. OpenSSL PHP Extension
+3. 确保已经安装 Composer 并配置到环境变量中
+</code></pre><h3 id="创建一个Lumen项目"><a href="#创建一个Lumen项目" class="headerlink" title="创建一个Lumen项目"></a>创建一个Lumen项目</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer create-project laravel/lumen --prefer-dist lumen-swagger <span class="string">"5.1.*"</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>其中 lumen-swagger是项目名 可以随便起一个自己喜欢的名字</p>
+</blockquote>
+<ol>
+<li>安装好后进入 lumen-swagger 目录 复制其中的.env.example 重命名为.env文件</li>
+<li>修改.env这个文件中的参数<br><code>APP_KEY=P5B4DQdsKGVjczjdnTTiJBzj90ZJBh2F</code><br>这个值需要32位的一个随机字符串 你可以不用使用我上面这个，先暂时用下<br>等程序可以跑起来可以自己写个随机生成的随机function 去生成在替换掉好了 0-9 a-z A-Z 【这个东东加密用的 安全作用吧】</li>
+</ol>
+<p>注意Lumen里好多artisan命令都用不了 不然我也想直接用<code>php artisan key:generate</code> 来生成这个key了<br>使用<code>php artisan list</code>可以看到当前的lumen框架中支持的artisan命令</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/artisanlist.png" alt="Artisan List" title="artisan list"></p>
+<p>下一步修改 <code>bootstap/app.php</code>文件 把下面这个注释去掉<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	<span class="keyword">require_once</span> <span class="keyword">__DIR__</span>.<span class="string">'/../vendor/autoload.php'</span>;</div><div class="line">	<span class="comment">//（这里下面这行原本是注释掉的）打开这里告诉lumen通过 .env配置文件来设置</span></div><div class="line">	Dotenv::load(<span class="keyword">__DIR__</span>.<span class="string">'/../'</span>);</div></pre></td></tr></table></figure></p>
+<p>然后lumen就算安装完成了 你可以自己配置虚拟主机啦之类的来访问测试 或者使用<br><code>php artisan sreve --port=8888</code><br>这个命令就是启动一个server，上面的artisan列表里也有 【ps:这个端口号你随便设置 别和你已经在用的冲突好了】<br>当你看到下面的提示就说明启动成功了哦<br><code>Lumen development server started on http://localhost:8888/</code><br>这时你访问浏览器 输入 <a href="http://localhost:8888/" target="_blank" rel="external">http://localhost:8888/</a></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/lumensuccess.png" alt="lumen success" title="lumen success"></p>
+<p><strong>看到这个就算Lumen安装完成了</strong></p>
+<h3 id="集成-Swagger"><a href="#集成-Swagger" class="headerlink" title="集成 Swagger"></a>集成 Swagger</h3><p>可以去 <a href="https://packagist.org" target="_blank" rel="external">https://packagist.org</a> 去找下 <code>Swagger</code>相关的包 这里直接推荐 <code>darkaonline/swagger-lume</code> 这个包<br>贴个作者项目地址： <a href="https://github.com/DarkaOnLine/SwaggerLume" target="_blank" rel="external">https://github.com/DarkaOnLine/SwaggerLume</a> (感谢下)</p>
+<h4 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> <span class="string">"darkaonline/swagger-lume 1.*"</span></div></pre></td></tr></table></figure>
+<h4 id="二、修改配置"><a href="#二、修改配置" class="headerlink" title="二、修改配置"></a>二、修改配置</h4><p>安装完成后编辑 <code>bootstrap/app.php</code> 文件 在大概 <strong>26</strong> 行处添加如下内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//注册门面</span></div><div class="line">$app-&gt;withFacades();</div><div class="line"><span class="comment">//配置swagger的config文件</span></div><div class="line">$app-&gt;configure(<span class="string">'swagger-lume'</span>);</div><div class="line"><span class="comment">//注册swagger到服务容器</span></div><div class="line">$app-&gt;register(\SwaggerLume\ServiceProvider::class);</div></pre></td></tr></table></figure>
+<h4 id="三、生成文件"><a href="#三、生成文件" class="headerlink" title="三、生成文件"></a>三、生成文件</h4><ol>
+<li>运行 <code>php artisan swagger-lume:publish-config</code> 生成配置文件 如果成功的话 你会看到你的项目目录下多了一个config文件夹 并且下面有一个<code>swagger-lume.php</code>的配置文件 这个文件里的配置就是swagger运行需要的配置参数</li>
+<li>运行 <code>php artisan swagger-lume:publish</code> 它会帮你把以前swagger前端显示的一些UI啦 配置文件什么帮你统统搞定 如果成功的话你会发现在你项目的根目录下的 <strong>public</strong> 和<strong>resource</strong> 文件夹下多了一个 <strong>vendor/swagger-lume</strong>的文件夹</li>
+<li>运行 <code>php artisan swagger-lume:generate</code> 这个是帮助你生成swagger运行锁需要的一个json文件 这一步可以先不操作 因为我们还没有写API的Controller以及Swagger的标签 运行的话会报错 <code>Required @SWG\Info() not found</code>类似这样一个错误 这是正常的哦<br>同时我们可以看到 在 <code>storage</code>目录下多了一个<code>api-docs</code>的文件夹（swagger运行需要的json文件就是存放在这里的） 虽然他是空的 看到这个说明刚刚那个命令有效 等我们写完测试Controller就生成了</li>
+</ol>
+<p>进入目录 <code>app/Http/Controllers</code> 下新建一个<strong>TestController.php</strong> （这个随便你了哦）<br>国际惯例  <strong>hello world</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>;</div><div class="line">    <span class="keyword">use</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Controllers</span>\<span class="title">Controller</span>;</div><div class="line">    <span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Http</span>\<span class="title">Request</span>;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@SWG</span>\Swagger(</div><div class="line">     *   <span class="doctag">@SWG</span>\Info(</div><div class="line">     *      title="测试类",</div><div class="line">     *      version="1.0.0",</div><div class="line">     *      description="测试测试"</div><div class="line">     *   )</div><div class="line">     * )</div><div class="line">     */</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span>&#123;</div><div class="line">        <span class="comment">/**</span></div><div class="line">         * <span class="doctag">@SWG</span>\Get(</div><div class="line">         *      path="/testindex",</div><div class="line">         *      tags=&#123;"测试相关模块"&#125;,</div><div class="line">         *      summary="测试输出hello world",</div><div class="line">         *      <span class="doctag">@SWG</span>\Parameter(</div><div class="line">         *       name="say",</div><div class="line">         *       required=true,</div><div class="line">         *       in="query",</div><div class="line">         *       type="string",</div><div class="line">         *       description="传递的参数"</div><div class="line">         *   ),</div><div class="line">         *      <span class="doctag">@SWG</span>\Response(</div><div class="line">         *          response=200,</div><div class="line">         *          description="success",</div><div class="line">         *      )</div><div class="line">         * )</div><div class="line">         */</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">(Request $request)</span></span>&#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">"hello "</span>.$request-&gt;get(<span class="string">'say'</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>写完TestController记得去<code>route.php</code> 中去添加路由<br><code>$app-&gt;get(&#39;/testindex&#39;,&#39;TestController@index&#39;);</code><br>路由你可以随便定的 不一定我写的这个</p>
+<blockquote>
+<p>注意：上面的<code>index()</code>方法上面的swagger标签中的<code>path</code>参数那个斜线 <code>/</code>一定要带上，像这样 <code>path=&quot;/testindex&quot;</code> 不然它会很傻的在你访问的时候也没有，那你的请求就变成这样了<br><code>http://localhost:8888testindex?say=d</code><br>而你原意想请求的地址是<code>http://localhost:8888/testindex?say=d</code></p>
+</blockquote>
+<h4 id="四、修改Swagger配置文件"><a href="#四、修改Swagger配置文件" class="headerlink" title="四、修改Swagger配置文件"></a>四、修改Swagger配置文件</h4><p>swagger 的配置文件 <code>config/swagger-lume.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="string">'routes'</span> =&gt; [</div><div class="line">        <span class="comment">//这个是swagger的默认路由 输入我们自己配置的地址拼上这个就可以访问了</span></div><div class="line">        <span class="comment">//不喜欢的可以改 我比较习惯用 api-docs 随便改 如果用上面的8888server的话</span></div><div class="line">        <span class="comment">//访问地址就是 http://localhost:8888/api/documentation</span></div><div class="line">        <span class="string">'api'</span> =&gt; <span class="string">'api/documentation'</span>,</div><div class="line">        <span class="comment">//这个就是访问json文件的路由</span></div><div class="line">        <span class="string">'docs'</span> =&gt; <span class="string">'docs'</span>,</div><div class="line">    ],</div><div class="line">    ........[此处分割 N 行]</div><div class="line">    <span class="comment">//这个参数是设置swagger是否每次都检测重新生成json文件 如果为true的话访问速度会有点慢</span></div><div class="line">    <span class="comment">//可以在新加api功能的时候设为true把接口列表加载出来后设为false下次就不用重新生成了</span></div><div class="line">    <span class="comment">//另外如果不想改这里可以设置一个配置参数放到.env里（好像区别不大，总要改一个地方 ）</span></div><div class="line">    <span class="string">'generate_always'</span> =&gt; env(<span class="string">'SWAGGER_GENERATE_ALWAYS'</span>, <span class="keyword">true</span>),</div></pre></td></tr></table></figure>
+<h4 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h4><p>启动server <code>php artisan serve --port=8888</code><br>浏览器访问 <code>http://localhost:8888/api/documentation</code><br>看到下图就算完成了<br><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/testlumen.png" alt="test success" title="test success"></p>
+<h5 id="最后附上2张伟哥做的swagger详细用法的图示"><a href="#最后附上2张伟哥做的swagger详细用法的图示" class="headerlink" title="最后附上2张伟哥做的swagger详细用法的图示"></a>最后附上2张伟哥做的swagger详细用法的图示</h5><p><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/swagger1.png" alt="swagger 1" title="swagger1"></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/caihong/blog/swagger2.png" alt="swagger2" title="swagger2"></p>
+<h5 id="在具体的用法去官网看吧QAQ"><a href="#在具体的用法去官网看吧QAQ" class="headerlink" title="在具体的用法去官网看吧QAQ"></a>在具体的用法去官网看吧QAQ</h5><hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Lumen/" rel="tag"><i class="fa fa-tag"></i>Lumen</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/20160630/index.html" rel="next" title="Laravel集成Swagger使用总结">
+                <i class="fa fa-chevron-left"></i> Laravel集成Swagger使用总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/20160816/index.html" rel="prev" title="GitFlow日常使用总结">
+                GitFlow日常使用总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个Lumen项目"><span class="nav-number">2.</span> <span class="nav-text">创建一个Lumen项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成-Swagger"><span class="nav-number">3.</span> <span class="nav-text">集成 Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、安装"><span class="nav-number">3.1.</span> <span class="nav-text">一、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、修改配置"><span class="nav-number">3.2.</span> <span class="nav-text">二、修改配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、生成文件"><span class="nav-number">3.3.</span> <span class="nav-text">三、生成文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#四、修改Swagger配置文件"><span class="nav-number">3.4.</span> <span class="nav-text">四、修改Swagger配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#五、测试"><span class="nav-number">3.5.</span> <span class="nav-text">五、测试</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#最后附上2张伟哥做的swagger详细用法的图示"><span class="nav-number">3.5.1.</span> <span class="nav-text">最后附上2张伟哥做的swagger详细用法的图示</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在具体的用法去官网看吧QAQ"><span class="nav-number">3.5.2.</span> <span class="nav-text">在具体的用法去官网看吧QAQ</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

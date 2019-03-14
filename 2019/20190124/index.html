@@ -1,0 +1,792 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="之前有一段代码使用了Laravel模型关联的预加载with()方法，代码类似如下
+123$masters = Master::with([&apos;servant&apos; =&amp;gt; function($query) &amp;#123;    $query-&amp;gt;select(&apos;id&apos;, &apos;master_id&apos;, &apos;name&apos;, &apos;level&apos;)-&amp;gt;orderBy(&apos;level&apos;, &apos;DESC&apos;)-&amp;gt;f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次Laravel中with()方法事故">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190124/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="之前有一段代码使用了Laravel模型关联的预加载with()方法，代码类似如下
+123$masters = Master::with([&apos;servant&apos; =&amp;gt; function($query) &amp;#123;    $query-&amp;gt;select(&apos;id&apos;, &apos;master_id&apos;, &apos;name&apos;, &apos;level&apos;)-&amp;gt;orderBy(&apos;level&apos;, &apos;DESC&apos;)-&amp;gt;f">
+<meta property="og:updated_time" content="2019-01-25T01:55:19.415Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一次Laravel中with()方法事故">
+<meta name="twitter:description" content="之前有一段代码使用了Laravel模型关联的预加载with()方法，代码类似如下
+123$masters = Master::with([&apos;servant&apos; =&amp;gt; function($query) &amp;#123;    $query-&amp;gt;select(&apos;id&apos;, &apos;master_id&apos;, &apos;name&apos;, &apos;level&apos;)-&amp;gt;orderBy(&apos;level&apos;, &apos;DESC&apos;)-&amp;gt;f">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 记一次Laravel中with()方法事故 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                记一次Laravel中with()方法事故
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-01-24T18:25:53+08:00" content="2019-01-24">
+              2019-01-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前有一段代码使用了Laravel模型关联的预加载<code>with()</code>方法，代码类似如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$masters = Master::with([<span class="string">'servant'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">($query)</span> </span>&#123;</div><div class="line">    $query-&gt;select(<span class="string">'id'</span>, <span class="string">'master_id'</span>, <span class="string">'name'</span>, <span class="string">'level'</span>)-&gt;orderBy(<span class="string">'level'</span>, <span class="string">'DESC'</span>)-&gt;first();</div><div class="line">&#125;])-&gt;get();</div></pre></td></tr></table></figure>
+<p>结果类似如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">array</span>:<span class="number">2</span> [▼</div><div class="line">  <span class="number">0</span> =&gt; <span class="keyword">array</span>:<span class="number">8</span> [▼</div><div class="line">    <span class="string">"id"</span> =&gt; <span class="number">1</span></div><div class="line">    ...</div><div class="line">    <span class="string">"servant"</span> =&gt; <span class="keyword">array</span>:<span class="number">1</span> [▼</div><div class="line">      <span class="number">0</span> =&gt; <span class="keyword">array</span>:<span class="number">4</span> [▼]</div><div class="line">    ]</div><div class="line">  ]</div><div class="line">  <span class="number">1</span> =&gt; <span class="keyword">array</span>:<span class="number">8</span> [▼</div><div class="line">    <span class="string">"id"</span> =&gt; <span class="number">2</span></div><div class="line">    ...</div><div class="line">    <span class="string">"servant"</span> =&gt; []</div><div class="line">  ]</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>造成了某些结果的servant属性对应的是空，但事实上他们在数据库中是有对应关联数据的，然后造成了一个bug. 今天重新看了下 <code>with()</code> 的源码感觉终于知道了原因<br><a id="more"></a></p>
+<hr>
+<h3 id="创建测试数据"><a href="#创建测试数据" class="headerlink" title="创建测试数据"></a>创建测试数据</h3><p>为了复现上面的问题 现在建2个表来模拟下，首先创建 <strong>master</strong> 当作主表，然后创建 <strong>servant</strong> 作为子表，他们之间的对应关系是 <strong>一对多</strong> 即一个 master 有多个 servant。另外我没有建立主外键关系，大概知道就好了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"># 创建主表</div><div class="line">CREATE TABLE `master` (</div><div class="line">`id` INT NOT NULL AUTO_INCREMENT,</div><div class="line">`name` VARCHAR(45) NOT NULL,</div><div class="line">`age` INT NOT NULL,</div><div class="line">`sex` TINYINT(1) NOT NULL DEFAULT 1,</div><div class="line">`level` TINYINT(1) NOT NULL DEFAULT 1,</div><div class="line">`created_at` INT NOT NULL,</div><div class="line">`updated_at` INT NOT NULL,</div><div class="line">PRIMARY KEY (`id`),</div><div class="line">UNIQUE INDEX `id_UNIQUE` (`id` ASC));</div><div class="line"></div><div class="line"># 添加测试数据</div><div class="line">insert into `master` (`id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;1&apos;,&apos;纪晓岚&apos;,&apos;48&apos;,&apos;1&apos;,&apos;7&apos;,&apos;1548231053&apos;,&apos;1548231053&apos;);</div><div class="line">insert into `master` (`id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;2&apos;,&apos;和珅&apos;,&apos;50&apos;,&apos;1&apos;,&apos;7&apos;,&apos;1548231056&apos;,&apos;1548231056&apos;);</div><div class="line"></div><div class="line"># 创建子表</div><div class="line">CREATE TABLE `servant` (</div><div class="line">`id` INT NOT NULL AUTO_INCREMENT,</div><div class="line">`master_id` INT NOT NULL,</div><div class="line">`name` VARCHAR(45) NOT NULL,</div><div class="line">`age` INT NOT NULL,</div><div class="line">`sex` TINYINT(1) NOT NULL DEFAULT 1,</div><div class="line">`level` TINYINT(1) NOT NULL DEFAULT 1,</div><div class="line">`created_at` INT NOT NULL,</div><div class="line">`updated_at` INT NOT NULL,</div><div class="line">PRIMARY KEY (`id`),</div><div class="line">UNIQUE INDEX `id_UNIQUE` (`id` ASC));</div><div class="line"></div><div class="line"># 添加测试数据</div><div class="line">insert into `servant` (`id`, `master_id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;1&apos;,&apos;1&apos;,&apos;杀手A&apos;,&apos;18&apos;,&apos;1&apos;,&apos;6&apos;,&apos;1548231055&apos;,&apos;1548231055&apos;);</div><div class="line">insert into `servant` (`id`, `master_id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;2&apos;,&apos;1&apos;,&apos;杀手B&apos;,&apos;17&apos;,&apos;2&apos;,&apos;7&apos;,&apos;1548231054&apos;,&apos;1548231054&apos;);</div><div class="line">insert into `servant` (`id`, `master_id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;3&apos;,&apos;1&apos;,&apos;杀手C&apos;,&apos;28&apos;,&apos;1&apos;,&apos;5&apos;,&apos;1548231050&apos;,&apos;1548231050&apos;);</div><div class="line">insert into `servant` (`id`, `master_id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;4&apos;,&apos;2&apos;,&apos;刺客1&apos;,&apos;23&apos;,&apos;1&apos;,&apos;7&apos;,&apos;1548231051&apos;,&apos;1548231051&apos;);</div><div class="line">insert into `servant` (`id`, `master_id`, `name`, `age`, `sex`, `level`, `created_at`, `updated_at`) values(&apos;5&apos;,&apos;2&apos;,&apos;刺客2&apos;,&apos;19&apos;,&apos;2&apos;,&apos;6&apos;,&apos;1548231052&apos;,&apos;1548231052&apos;);</div></pre></td></tr></table></figure>
+<p>正常的对应关系如下 纪晓岚有3个从者 和珅有2个从者</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 获取全部数据</span></div><div class="line">$masters = Master::with(<span class="string">'servant'</span>)-&gt;get();</div><div class="line">dd($masters-&gt;toArray());</div><div class="line"></div><div class="line"><span class="comment"># 结果</span></div><div class="line"><span class="keyword">array</span>:<span class="number">2</span> [▼</div><div class="line">  <span class="number">0</span> =&gt; <span class="keyword">array</span>:<span class="number">3</span> [▼</div><div class="line">    <span class="string">"id"</span> =&gt; <span class="number">1</span></div><div class="line">    <span class="string">"name"</span> =&gt; <span class="string">"纪晓岚"</span></div><div class="line">    <span class="string">"servant"</span> =&gt; <span class="keyword">array</span>:<span class="number">3</span> [▶]</div><div class="line">  ]</div><div class="line">  <span class="number">1</span> =&gt; <span class="keyword">array</span>:<span class="number">3</span> [▼</div><div class="line">    <span class="string">"id"</span> =&gt; <span class="number">2</span></div><div class="line">    <span class="string">"name"</span> =&gt; <span class="string">"和珅"</span></div><div class="line">    <span class="string">"servant"</span> =&gt; <span class="keyword">array</span>:<span class="number">2</span> [▶]</div><div class="line">  ]</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>下面来看源码，一步步找到出现问题的原因</p>
+<h3 id="一对多关联"><a href="#一对多关联" class="headerlink" title="一对多关联"></a>一对多关联</h3><p>Laravel中实现一对多关联关系可以通过使用 <code>hasMany()</code> 方法，所以在Master的Model中我加入了</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">servant</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;hasMany(<span class="string">'App\Models\Servant'</span>, <span class="string">'master_id'</span>, <span class="string">'id'</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看下源码中 在 <code>\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Concerns\HasRelationships.php</code> 文件中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Define a one-to-many relationship.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  string  $related</div><div class="line"> * <span class="doctag">@param</span>  string  $foreignKey</div><div class="line"> * <span class="doctag">@param</span>  string  $localKey</div><div class="line"> * <span class="doctag">@return</span> \Illuminate\Database\Eloquent\Relations\HasMany</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hasMany</span><span class="params">($related, $foreignKey = null, $localKey = null)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">// 实例化传进来的关联的model</span></div><div class="line">    $instance = <span class="keyword">$this</span>-&gt;newRelatedInstance($related);</div><div class="line">	<span class="comment">// 获取子表中关联的字段</span></div><div class="line">    $foreignKey = $foreignKey ?: <span class="keyword">$this</span>-&gt;getForeignKey();</div><div class="line">	<span class="comment">// 获取主表中关联的字段</span></div><div class="line">    $localKey = $localKey ?: <span class="keyword">$this</span>-&gt;getKeyName();</div><div class="line">	<span class="comment">// 返回 \Illuminate\Database\Eloquent\Relations\HasMany 实例化后的对象</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;newHasMany(</div><div class="line">        $instance-&gt;newQuery(), <span class="keyword">$this</span>, $instance-&gt;getTable().<span class="string">'.'</span>.$foreignKey, $localKey</div><div class="line">    );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Instantiate a new HasMany relationship.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  \Illuminate\Database\Eloquent\Builder  $query</div><div class="line"> * <span class="doctag">@param</span>  \Illuminate\Database\Eloquent\Model  $parent</div><div class="line"> * <span class="doctag">@param</span>  string  $foreignKey</div><div class="line"> * <span class="doctag">@param</span>  string  $localKey</div><div class="line"> * <span class="doctag">@return</span> \Illuminate\Database\Eloquent\Relations\HasMany</div><div class="line"> */</div><div class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">newHasMany</span><span class="params">(Builder $query, Model $parent, $foreignKey, $localKey)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> HasMany($query, $parent, $foreignKey, $localKey);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其创建过程就是一些设置 父模型、子模型、关联字段、关联约束等</p>
+<h3 id="预加载-with-方法"><a href="#预加载-with-方法" class="headerlink" title="预加载 with() 方法"></a>预加载 <code>with()</code> 方法</h3><p>Laravel提供了预加载的功能 这样可以避免出现重复查询 并且可以把查询降低到2次</p>
+<p>看下 <code>with()</code> 方法的源码， 在文件 <code>\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Model.php</code> 中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Begin querying a model with eager loading.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  array|string  $relations</div><div class="line"> * <span class="doctag">@return</span> \Illuminate\Database\Eloquent\Builder|static</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">with</span><span class="params">($relations)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">// 先获取一个当前模型表的查询 \Illuminate\Database\Eloquent\Builder 对象</span></div><div class="line">    <span class="comment">// 然后执行 with() 方法 参数是一个字符串或者数组 对应上面的测试就是servant关联方法的方法名字了</span></div><div class="line">    <span class="keyword">return</span> (<span class="keyword">new</span> <span class="keyword">static</span>)-&gt;newQuery()-&gt;with(</div><div class="line">        is_string($relations) ? func_get_args() : $relations</div><div class="line">    );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后看下 <strong>Builder</strong> 下的 <code>with()</code> 方法 在文件 <code>\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Builder.php</code> 中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Set the relationships that should be eager loaded.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  mixed  $relations</div><div class="line"> * <span class="doctag">@return</span> $this</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">with</span><span class="params">($relations)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">// 判断传递进来的参数是字符串还是数组，如果是字符串就或取包含函数参数的列表 这里会是一个数组 形如：['servant'] 如果是数组就直接传递进去</span></div><div class="line">    <span class="comment">// 然后执行 parseWithRelations() 方法</span></div><div class="line">    $eagerLoad = <span class="keyword">$this</span>-&gt;parseWithRelations(is_string($relations) ? func_get_args() : $relations);</div><div class="line">	<span class="comment">// 把返回的关联关系数组重新合并赋值给了 $eagerLoad 数组中</span></div><div class="line">    <span class="keyword">$this</span>-&gt;eagerLoad = array_merge(<span class="keyword">$this</span>-&gt;eagerLoad, $eagerLoad);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面看下 <code>parseWithRelations()</code> 方法 还是和上面同一个文件中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 将一系列关联关系解析为单个</div><div class="line"> * Parse a list of relations into individuals.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  array  $relations</div><div class="line"> * <span class="doctag">@return</span> array</div><div class="line"> */</div><div class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">parseWithRelations</span><span class="params">(array $relations)</span></span></div><div class="line">&#123;</div><div class="line">    $results = [];</div><div class="line"></div><div class="line">    <span class="keyword">foreach</span> ($relations <span class="keyword">as</span> $name =&gt; $constraints) &#123;</div><div class="line">        <span class="comment">// If the "relation" value is actually a numeric key, we can assume that no</span></div><div class="line">        <span class="comment">// constraints have been specified for the eager load and we'll just put</span></div><div class="line">        <span class="comment">// an empty Closure with the loader so that we can treat all the same.</span></div><div class="line">        <span class="comment">// 大概就是说如果 key 是一个数字的话就给他设置一个空的闭包</span></div><div class="line">        <span class="keyword">if</span> (is_numeric($name)) &#123;</div><div class="line">        	<span class="comment">// 把name 设置 成了constraints 对应测试例子 此时 $name = 'servant';</span></div><div class="line">            $name = $constraints;</div><div class="line">			<span class="comment">// 然后name里没有: 就设置了一个空闭包 此时 是 </span></div><div class="line">            <span class="comment">// name = servant; constraints = 闭包</span></div><div class="line">            <span class="keyword">list</span>($name, $constraints) = Str::contains($name, <span class="string">':'</span>)</div><div class="line">                        ? <span class="keyword">$this</span>-&gt;createSelectWithConstraint($name)</div><div class="line">                        : [$name, <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">                            <span class="comment">//</span></div><div class="line">                        &#125;];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// We need to separate out any nested includes. Which allows the developers</span></div><div class="line">        <span class="comment">// to load deep relationships using "dots" without stating each level of</span></div><div class="line">        <span class="comment">// the relationship with its own key in the array of eager load names.</span></div><div class="line">        <span class="comment">// 大概就是说 给 类似 with('servant.power') 这种嵌套的关联预加载上约束条件</span></div><div class="line">        $results = <span class="keyword">$this</span>-&gt;addNestedWiths($name, $results);</div><div class="line"></div><div class="line">        $results[$name] = $constraints;</div><div class="line">    &#125;</div><div class="line">	<span class="comment">// 这里返回的按照上面例子应该是</span></div><div class="line">    <span class="comment">// [</span></div><div class="line">    <span class="comment">//    'servant' =&gt; function() &#123;&#125;</span></div><div class="line">    <span class="comment">// ];</span></div><div class="line">    <span class="keyword">return</span> $results;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>所以在执行完 <code>Master::with(&#39;servant&#39;)</code> 后 在Builder的with() 方法中设置了一个 <code>eagerLoad</code> 属性 其值为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$eagarLoad = [</div><div class="line">    <span class="string">'servant'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;&#125;</div><div class="line">];</div></pre></td></tr></table></figure>
+<p>然后返回了该 Builder 对象</p>
+<h3 id="get-方法"><a href="#get-方法" class="headerlink" title="get() 方法"></a><code>get()</code> 方法</h3><p>在看下最后执行的 <code>get()</code> 方法 还是在上面的同一个文件中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Execute the query as a "select" statement.</div><div class="line"> * 将查询作为 select 语句执行</div><div class="line"> * <span class="doctag">@param</span>  array  $columns</div><div class="line"> * <span class="doctag">@return</span> \Illuminate\Database\Eloquent\Collection|static[]</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">get</span><span class="params">($columns = [<span class="string">'*'</span>])</span></span></div><div class="line">&#123;</div><div class="line">    $builder = <span class="keyword">$this</span>-&gt;applyScopes();</div><div class="line"></div><div class="line">    <span class="comment">// If we actually found models we will also eager load any relationships that</span></div><div class="line">    <span class="comment">// have been specified as needing to be eager loaded, which will solve the</span></div><div class="line">    <span class="comment">// n+1 query issue for the developers to avoid running a lot of queries.</span></div><div class="line">    <span class="comment">// 主要就是讲为了避免 n+1 查询问题 会去加载需要预加载的关联模型</span></div><div class="line">    <span class="comment">// 下面的count 里是 \Illuminate\Database\Eloquent\Model[] 的模型数组 基本命中了都会大于0</span></div><div class="line">    <span class="comment">// 然后执行 eagerLoadRelations() 方法</span></div><div class="line">    <span class="keyword">if</span> (count($models = $builder-&gt;getModels($columns)) &gt; <span class="number">0</span>) &#123;</div><div class="line">        $models = $builder-&gt;eagerLoadRelations($models);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $builder-&gt;getModel()-&gt;newCollection($models);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面看 <code>eagerLoadRelations()</code> 方法 还是同一个文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Eager load the relationships for the models.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  array  $models</div><div class="line"> * <span class="doctag">@return</span> array</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">eagerLoadRelations</span><span class="params">(array $models)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">// 从上面的测试中 此时 $this-&gt;eagerLoad 应该是 ['servant' =&gt; function() &#123;&#125;]</span></div><div class="line">    <span class="keyword">foreach</span> (<span class="keyword">$this</span>-&gt;eagerLoad <span class="keyword">as</span> $name =&gt; $constraints) &#123;</div><div class="line">        <span class="comment">// For nested eager loads we'll skip loading them here and they will be set as an</span></div><div class="line">        <span class="comment">// eager load on the query to retrieve the relation so that they will be eager</span></div><div class="line">        <span class="comment">// loaded on that query, because that is where they get hydrated as models.</span></div><div class="line">        <span class="comment">// 如果key 里没有 . 就去执行  eagerLoadRelation() 方法</span></div><div class="line">        <span class="keyword">if</span> (strpos($name, <span class="string">'.'</span>) === <span class="keyword">false</span>) &#123;</div><div class="line">            $models = <span class="keyword">$this</span>-&gt;eagerLoadRelation($models, $name, $constraints);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $models;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面看 <code>eagerLoadRelation()</code> 方法的实现 还是同一个文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Eagerly load the relationship on a set of models.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  array  $models</div><div class="line"> * <span class="doctag">@param</span>  string  $name</div><div class="line"> * <span class="doctag">@param</span>  \Closure  $constraints</div><div class="line"> * <span class="doctag">@return</span> array</div><div class="line"> */</div><div class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">eagerLoadRelation</span><span class="params">(array $models, $name, Closure $constraints)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// First we will "back up" the existing where conditions on the query so we can</span></div><div class="line">    <span class="comment">// add our eager constraints. Then we will merge the wheres that were on the</span></div><div class="line">    <span class="comment">// query back to it in order that any where conditions might be specified.</span></div><div class="line">    <span class="comment">// 获取关联关系对应的方法 也就是 servant()了</span></div><div class="line">    $relation = <span class="keyword">$this</span>-&gt;getRelation($name);</div><div class="line">	<span class="comment">// 给关联关系设置约束 传递进去的是查询全部数据的 \Illuminate\Database\Eloquent\Collection 对象数组 也就是全部数据了</span></div><div class="line">    <span class="comment">// 这是一个抽象方法需要各自去实现</span></div><div class="line">    $relation-&gt;addEagerConstraints($models);</div><div class="line">	<span class="comment">// 放到闭包执行 然后原来的空闭包就变成了类似下面这样</span></div><div class="line">    <span class="comment">// function(Relation $query) &#123;</span></div><div class="line">    <span class="comment">//    </span></div><div class="line">    <span class="comment">// &#125;;</span></div><div class="line">    $constraints($relation);</div><div class="line"></div><div class="line">    <span class="comment">// Once we have the results, we just match those back up to their parent models</span></div><div class="line">    <span class="comment">// using the relationship instance. Then we just return the finished arrays</span></div><div class="line">    <span class="comment">// of models which have been eagerly hydrated and are readied for return.</span></div><div class="line">    <span class="comment">// 大概就是说一旦获取到结果 我们可以和父模型进行匹配 把对应的结果设置到关联中 然后返回完整的模型数组</span></div><div class="line">    <span class="comment">// 在简单点就是把关联匹配的数据分别根据主表关联的字段（比如id）然后对应设置到主表Collection对象中关联的key上 也就是上面的servant</span></div><div class="line">    <span class="keyword">return</span> $relation-&gt;match(</div><div class="line">        $relation-&gt;initRelation($models, $name),</div><div class="line">        $relation-&gt;getEager(), $name</div><div class="line">    );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 然后是一对多关联 hasMany()方法最终继承自 HasOneOrMany 类 在文件 `\vendor\laravel\framework\src\Illuminate\Database\Eloquent\Relations\HasOneOrMany.php` 看下它的实现</span></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Set the constraints for an eager load of the relation.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  array  $models</div><div class="line"> * <span class="doctag">@return</span> void</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addEagerConstraints</span><span class="params">(array $models)</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">// 就是使用了一个wherein查询 查询的值是从上面传递进来的所有数据的集合中取出关联的lcoalKey(也就是设置hasMany中的localKey 所以是id)</span></div><div class="line">    <span class="comment">// 对应本例子就是 wherein('master_id', [1, 2]);</span></div><div class="line">    <span class="keyword">$this</span>-&gt;query-&gt;whereIn(</div><div class="line">        <span class="keyword">$this</span>-&gt;foreignKey, <span class="keyword">$this</span>-&gt;getKeys($models, <span class="keyword">$this</span>-&gt;localKey)</div><div class="line">    );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 上面的match()方法最终执行到了这里</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Match the eagerly loaded results to their many parents.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  array   $models</div><div class="line"> * <span class="doctag">@param</span>  \Illuminate\Database\Eloquent\Collection  $results</div><div class="line"> * <span class="doctag">@param</span>  string  $relation</div><div class="line"> * <span class="doctag">@param</span>  string  $type</div><div class="line"> * <span class="doctag">@return</span> array</div><div class="line"> */</div><div class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">matchOneOrMany</span><span class="params">(array $models, Collection $results, $relation, $type)</span></span></div><div class="line">&#123;</div><div class="line">    $dictionary = <span class="keyword">$this</span>-&gt;buildDictionary($results);</div><div class="line"></div><div class="line">    <span class="comment">// Once we have the dictionary we can simply spin through the parent models to</span></div><div class="line">    <span class="comment">// link them up with their children using the keyed dictionary to make the</span></div><div class="line">    <span class="comment">// matching very convenient and easy work. Then we'll just return them.</span></div><div class="line">    <span class="keyword">foreach</span> ($models <span class="keyword">as</span> $model) &#123;</div><div class="line">        <span class="keyword">if</span> (<span class="keyword">isset</span>($dictionary[$key = $model-&gt;getAttribute(<span class="keyword">$this</span>-&gt;localKey)])) &#123;</div><div class="line">            $model-&gt;setRelation(</div><div class="line">                $relation, <span class="keyword">$this</span>-&gt;getRelationValue($dictionary, $key, $type)</div><div class="line">            );</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $models;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>好了一通设置后最终返回了 <code>\Illuminate\Database\Eloquent\Collection</code> 对象数组 这个很熟悉了吧 走到这里每个master下都设置上了一个名为 servant 的属性其值对应的是 <code>Collection(Servant)</code>，所以后续的操作比如直接取出关联子表中的属性其实都是从这里直接取出，并不会去查询数据库了</p>
+<h3 id="预加载SQL执行过程"><a href="#预加载SQL执行过程" class="headerlink" title="预加载SQL执行过程"></a>预加载SQL执行过程</h3><p>讲完了底层实现，下面看下执行过程中到底都执行了什么SQL。为了方便看结果 直接使用 Laravel-debugbar 来监测</p>
+<p>1.加载全部</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$masters = Master::with(<span class="string">'servant'</span>)-&gt;get();</div><div class="line"><span class="comment">// select * from `master`</span></div><div class="line"><span class="comment">// select * from `servant` where `servant`.`master_id` in (1, 2)</span></div></pre></td></tr></table></figure>
+<p>2.给关联增加条件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$masters = Master::with([<span class="string">'servant'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">($query)</span> </span>&#123;</div><div class="line">    $query-&gt;select(<span class="string">'id'</span>, <span class="string">'master_id'</span>, <span class="string">'name'</span>, <span class="string">'level'</span>)-&gt;orderBy(<span class="string">'level'</span>, <span class="string">'DESC'</span>);</div><div class="line">&#125;])-&gt;get();</div><div class="line"><span class="comment">// select * from `master`</span></div><div class="line"><span class="comment">// select `id`, `master_id`, `name`, `level` from `servant` where `servant`.`master_id` in (1, 2) order by `level` desc</span></div></pre></td></tr></table></figure>
+<p>其实增加条件过滤、筛选字段过滤、排序等都不影响。其最终只会执行2条SQL</p>
+<p>3.给关联设置first()</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$masters = Master::with([<span class="string">'servant'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">($query)</span> </span>&#123;</div><div class="line">    $query-&gt;select(<span class="string">'id'</span>, <span class="string">'master_id'</span>, <span class="string">'name'</span>, <span class="string">'level'</span>)-&gt;orderBy(<span class="string">'level'</span>, <span class="string">'ASC'</span>)-&gt;first();</div><div class="line">&#125;])-&gt;get();</div><div class="line"><span class="comment">// select * from `mi_master`</span></div><div class="line"><span class="comment">// select `id`, `master_id`, `name`, `level` from `mi_servant` where `mi_servant`.`master_id` in (1, 2) order by `level` asc limit 1</span></div><div class="line"><span class="comment">// select `id`, `master_id`, `name`, `level` from `mi_servant` where `mi_servant`.`master_id` in (1, 2) order by `level` asc limit 1</span></div></pre></td></tr></table></figure>
+<p>这个时候他查询的都是同一条SQL。因为根据源码分析 他最后的关联是使用了 <code>wherein(关联字段, [所有主表关联主键的数组])</code> 这种形式来设置约束条件 所有执行的都是同一条SQL。（PS：上面为什么是in(1, 2) 因为我只有2条测试数据，关联主键分别是1 和 2 如果你有3条记录主键分别是 5 6 7 那他就是in(5, 6, 7)了）。</p>
+<p>正常来说会在执行 <code>get()</code> 的时候发生2条SQL查询 一条是查询全部的 一条是根据全部的id查询匹配条件的，总共2条SQL</p>
+<p>为什么会变成3条SQL呢，因为在 <code>eagerLoadRelation()</code> 中  <code>$constraints($relation);</code> 这里把同一个 <code>Relation</code> 传进了闭包 然后在外面执行 <code>$query-&gt;select(&#39;id&#39;, &#39;master_id&#39;, &#39;name&#39;, &#39;level&#39;)-&gt;orderBy(&#39;level&#39;, &#39;ASC&#39;)-&gt;first();</code> 会多一次查询出来 查询内容是一样的。</p>
+<p>然后 <code>first()</code> 会使用 <code>limit 1</code> 来过滤结果 所以最终查询到的子结果只有一条，然后在给Master设置属性的时候会有一个关联条件的匹配，而限制了只有一条基本只会命中一个Master的ID了，所以造成了最终的结果中 有些有关联属性 有些却为空</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>一种就是先给主表查询全部（或者按指定条件查询主表），然后在用到的子表数据的时候去动态属性的形式来加载出子表的数据</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$masters = Master::get();</div><div class="line"></div><div class="line"><span class="keyword">foreach</span> ($masters <span class="keyword">as</span> $key =&gt; $val) &#123;</div><div class="line">    $servant = $val-&gt;servant()-&gt;select(<span class="string">'id'</span>, <span class="string">'master_id'</span>, <span class="string">'name'</span>, <span class="string">'level'</span>)-&gt;orderBy(<span class="string">'level'</span>, <span class="string">'DESC'</span>)-&gt;first();</div><div class="line">    dd($servant-&gt;toArray());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>不过这样会造成一个问题就是每天子表数据取出来都会有一次查询产生</p>
+<p>第二种办法就是查询的时候只按需要条件过滤 然后在取数据的时候自己去获取需要的数据 如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$masters = Master::with([<span class="string">'servant'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">($query)</span> </span>&#123;</div><div class="line">    $query-&gt;select(<span class="string">'id'</span>, <span class="string">'master_id'</span>, <span class="string">'name'</span>, <span class="string">'level'</span>)-&gt;orderBy(<span class="string">'level'</span>, <span class="string">'DESC'</span>);</div><div class="line">&#125;])-&gt;get();</div><div class="line"></div><div class="line"><span class="keyword">foreach</span> ($masters <span class="keyword">as</span> $key =&gt; $val) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190123/index.html" rel="next" title="Laraval-Debugbar的简单使用">
+                <i class="fa fa-chevron-left"></i> Laraval-Debugbar的简单使用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20190127/index.html" rel="prev" title="关于 Vagrant Up 启动空间不足问题">
+                关于 Vagrant Up 启动空间不足问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建测试数据"><span class="nav-number">1.</span> <span class="nav-text">创建测试数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一对多关联"><span class="nav-number">2.</span> <span class="nav-text">一对多关联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预加载-with-方法"><span class="nav-number">3.</span> <span class="nav-text">预加载 with() 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get-方法"><span class="nav-number">4.</span> <span class="nav-text">get() 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#预加载SQL执行过程"><span class="nav-number">5.</span> <span class="nav-text">预加载SQL执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决办法"><span class="nav-number">6.</span> <span class="nav-text">解决办法</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

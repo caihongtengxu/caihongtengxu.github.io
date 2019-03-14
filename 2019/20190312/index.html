@@ -1,0 +1,779 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+<meta name="description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法-数组的实现">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190312/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array2.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/erwei_array.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/c_stack.png">
+<meta property="og:updated_time" content="2019-03-13T06:37:25.638Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法-数组的实现">
+<meta name="twitter:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 算法-数组的实现 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                算法-数组的实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-12T20:08:19+08:00" content="2019-03-12">
+              2019-03-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在每一种语言当中都会有数组这种 <strong>数据类型</strong>，同时它还是一种最基础的 <strong>数据结构</strong>。<br><a id="more"></a></p>
+<hr>
+<h3 id="数组是什么"><a href="#数组是什么" class="headerlink" title="数组是什么"></a>数组是什么</h3><blockquote>
+<p>数组：是一种 <strong>线性表</strong> 数据结构，它用一组 <strong>连续的内存空间来存储一组具有相同类型的数据</strong></p>
+</blockquote>
+<p>线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 <strong>数组、链表、队列、栈</strong><br>非线性表：数据排序不是简单的前后关系数据结构，比如 <strong>二叉树、堆、图</strong></p>
+<h3 id="数组的随机访问"><a href="#数组的随机访问" class="headerlink" title="数组的随机访问"></a>数组的随机访问</h3><p>数组有个杀手级的特性：<code>随机访问</code>，因为在它 <strong>根据下标查找数据</strong> 的时候其时间复杂度为 <strong>O(1)</strong>。如果你用别的查找方法那就不是这个复杂度了，比如你用 <strong>二分查找</strong> 他的复杂度就变成了 <strong>O(logn)</strong>。</p>
+<p>假设用一个10个int类型的数组来举例 如下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png" alt="array_data1"></p>
+<p>在申请内存的时候，系统会给数组分配10块连续的内存空间地址从 <strong>1000 - 1039</strong>（都是假设值） 假设首地址为 <code>base_address = 1000</code>。其中每块内存空间都有一个地址，计算机是通过这个内存地址来访问数据的。当访问数组中的某个元素(假设第i个元素)的时候，系统会根据下面的公式直接计算出内存的地址 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a[i]_address = base_address + i * data_type_size</div></pre></td></tr></table></figure>
+<p>计算出了内存地址后直接读取，所以对于数组这种结构而言对它随机访问的时候，它的复杂度只有 <strong>O(1)</strong>，因为系统一次计算就得出了具体的内存地址。</p>
+<h3 id="数组的插入和删除"><a href="#数组的插入和删除" class="headerlink" title="数组的插入和删除"></a>数组的插入和删除</h3><p>有利就有弊，数组有快速的查找，但是对于 <strong>插入</strong> 和 <strong>删除</strong> 操作，为了保证数据的连续性需要做大量的数据搬移工作，所以比较低效。</p>
+<h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>先来分析下数组插入操作的时间复杂度。</p>
+<p>假设数组长度为n，现在需要将一个数插入到数组的第k的位置上。这时为了把k的位置让出来就需要把 <code>k ~ n</code> 这个范围内的数据都向后移动一位，然后在把数据插入到k的位置。这个时候时间复杂度就需要求一个平均的值也就是 <strong>平均时间复杂度</strong>，因为会出现很多种情况，如果要操作的k是最后一位就不需要移动数组元素了这时是 <strong>最好时间复杂度</strong> 为O(1)，如果要操作的是数组第一位这时就是 <strong>最坏时间复杂度</strong> 为O(n)。因为在每个位置插入元素的概率是一样的都是 1/n 所以平均情况时间复杂度为 <code>(1 + 2 + ...n)/n = O(n)</code> 因为时间复杂度需要去掉常量、系数等。</p>
+<h4 id="优化数组的插入"><a href="#优化数组的插入" class="headerlink" title="优化数组的插入"></a>优化数组的插入</h4><p>当数组中的元素都是无序的时候并且也不要求有序，只是当做一个存储数据的集合。在这种情况下是可以优化数组的，当需要在第k的位置插入数据的时候，只需要先把第k位置的元素移动到数组的末尾，然后k位置空出来插入新的数据即可。利用这种方式 在特定场景下 可以将k位置插入数据这种时间复杂度降低为 <strong>O(1)</strong></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array2.png" alt="array_data2"></p>
+<h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>和插入操作一样，对数组的删除操作为了保证数据的连续性也需要大量搬移数据，不然就会出现空洞，内存就不连续了。</p>
+<p>和插入的时间复杂度也一样，最好的情况时间复杂度为 O(1),也就是删除数组最后一个元素的时候。最坏的情况时间复杂度为O(n)也就是删除数组第一个元素的时候。平均时间复杂度为O(n)。</p>
+<h4 id="优化数组的删除"><a href="#优化数组的删除" class="headerlink" title="优化数组的删除"></a>优化数组的删除</h4><p>在某些不需要数组中数据连续的情况下，可以将多次删除操作集中在一起执行，这样就是多次删除只做一次数据连续迁移。比如可以这样，先给数组中的元素标记为已删除，并不会真正的去执行删除，当数组没有更多的存储空间的时候在去执行一次真正的删除，这样就可以大大减少删除操作导致的数据搬移问题。这只是一种思路不要抬杠 具体还会有很多的细节需要处理的。</p>
+<h3 id="数组下标从0开始的原因"><a href="#数组下标从0开始的原因" class="headerlink" title="数组下标从0开始的原因"></a>数组下标从0开始的原因</h3><p>从学编程开始就都知道下标是从0开始的，为什么不是从1开始呢？</p>
+<p>从数组存储的内存模型上看，<strong>下标</strong> 更确切的说应该是 <strong>偏移（offset）</strong>。主要看下首地址，首地址对应的是 <code>a[0]</code> 也就是偏移为0的位置。那么 <code>a[k]</code> 就是偏移为k个 <code>type_size</code> 的位置，所以计算 <code>a[k]</code> 的内存地址为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a[k]_address = base_address + k * type_size</div></pre></td></tr></table></figure>
+<p>如果数组下标是从1开始的 那么计算 <code>a[k]</code>的内存地址就变为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a[k]_address = base_address + (k - 1) * type_size</div></pre></td></tr></table></figure>
+<p>可以发现如果从1开始的话每次计算地址都会多一次减法运算，会有一次资源浪费。对于数组这种基础数据结构，随机访问又多，把性能最大话肯定是必须的 所以从0开始更合理。</p>
+<p>其实最主要的还是历史原因，因为从C语言的下标就是从0开始计数的，后面的语言大多是借鉴了C语言，减少学习成本，数组就都从0开始计数了</p>
+<h3 id="二维数组的内存地址计算"><a href="#二维数组的内存地址计算" class="headerlink" title="二维数组的内存地址计算"></a>二维数组的内存地址计算</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$a = [</div><div class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</div><div class="line">    [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>],</div><div class="line">    [<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</div><div class="line">];</div></pre></td></tr></table></figure>
+<p>元素在内存中的地址应该是下面的样子</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/erwei_array.png" alt="erwei_array"></p>
+<p>所以对于一个二维数组 (n为元素个数) 其内存地址计算公式(求 <code>$array[i][j]</code>)为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">address = base_address + ( i * n + j) * type_size</div></pre></td></tr></table></figure>
+<h3 id="C语言中的数组越界问题"><a href="#C语言中的数组越界问题" class="headerlink" title="C语言中的数组越界问题"></a>C语言中的数组越界问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int i = 0;</div><div class="line">int arr[3] = &#123;0&#125;;</div><div class="line">arr[3] = 0;</div></pre></td></tr></table></figure>
+<p>正常来说 <code>arr[3]</code> 已经越界了是访问不到的，但是在C语言中</p>
+<font color="red"><strong>栈的内存地址是由高到低位增长的（也就是越往下地址位越小），而数组的内存地址是从低到高位增长的</strong></font>
+
+<p>先声明的i在内存地址的最高位，然后数组是一个整体，对 arr[0] 分配空间的时候是从最低位开始的 然后就是这块数组内存的最低位了 依次上来</p>
+<p>所以，i 和数组的数据从高位地址到低位地址依次是：<code>i, a[2], a[1], a[0]</code>。<code>a[3]</code>通过寻址公式，计算得到地址正好是 i 的存储地址，所以<code>a[3] = 0</code>，就相当于 <code>i = 0</code> 并不会报错.</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/c_stack.png" alt="c_stack"></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i>算法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190310/index.html" rel="next" title="算法复杂度科普">
+                <i class="fa fa-chevron-left"></i> 算法复杂度科普
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数组是什么"><span class="nav-number">1.</span> <span class="nav-text">数组是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组的随机访问"><span class="nav-number">2.</span> <span class="nav-text">数组的随机访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组的插入和删除"><span class="nav-number">3.</span> <span class="nav-text">数组的插入和删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入操作"><span class="nav-number">3.1.</span> <span class="nav-text">插入操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化数组的插入"><span class="nav-number">3.2.</span> <span class="nav-text">优化数组的插入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除操作"><span class="nav-number">3.3.</span> <span class="nav-text">删除操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#优化数组的删除"><span class="nav-number">3.4.</span> <span class="nav-text">优化数组的删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组下标从0开始的原因"><span class="nav-number">4.</span> <span class="nav-text">数组下标从0开始的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二维数组的内存地址计算"><span class="nav-number">5.</span> <span class="nav-text">二维数组的内存地址计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#C语言中的数组越界问题"><span class="nav-number">6.</span> <span class="nav-text">C语言中的数组越界问题</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

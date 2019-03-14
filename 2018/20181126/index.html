@@ -1,0 +1,768 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="最近遇到一个问题，我在 Trait 中写了个写了个 构造函数 然后妄图注入一个 Laravel服务 后面再使用这个 Trait 的时候发生服务的初始化报错(别问我为什么这么干,也是脑子瓦特了才能有这种骚操作…) 找了一圈发现是优先级的问题 顺带补了下 Trait 的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于PHP中 Trait 的使用">
+<meta property="og:url" content="https://www.tokme.cn/2018/20181126/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近遇到一个问题，我在 Trait 中写了个写了个 构造函数 然后妄图注入一个 Laravel服务 后面再使用这个 Trait 的时候发生服务的初始化报错(别问我为什么这么干,也是脑子瓦特了才能有这种骚操作…) 找了一圈发现是优先级的问题 顺带补了下 Trait 的使用">
+<meta property="og:updated_time" content="2018-12-11T02:39:14.104Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于PHP中 Trait 的使用">
+<meta name="twitter:description" content="最近遇到一个问题，我在 Trait 中写了个写了个 构造函数 然后妄图注入一个 Laravel服务 后面再使用这个 Trait 的时候发生服务的初始化报错(别问我为什么这么干,也是脑子瓦特了才能有这种骚操作…) 找了一圈发现是优先级的问题 顺带补了下 Trait 的使用">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于PHP中 Trait 的使用 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于PHP中 Trait 的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-11-26T10:38:33+08:00" content="2018-11-26">
+              2018-11-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近遇到一个问题，我在 <strong>Trait</strong> 中写了个写了个 <strong>构造函数</strong> 然后妄图注入一个 Laravel服务 后面再使用这个 <strong>Trait</strong> 的时候发生服务的初始化报错(别问我为什么这么干,也是脑子瓦特了才能有这种骚操作…) 找了一圈发现是优先级的问题 顺带补了下 <strong>Trait</strong> 的使用<br><a id="more"></a></p>
+<hr>
+<h3 id="Trait-是什么"><a href="#Trait-是什么" class="headerlink" title="Trait 是什么"></a>Trait 是什么</h3><blockquote>
+<p>自 PHP 5.4.0 起，PHP 实现了一种代码复用的方法，称为 trait。</p>
+<p>Trait 是为类似 PHP 的单继承语言而准备的一种代码复用机制。Trait 为了减少单继承语言的限制，使开发人员能够自由地在不同层次结构内独立的类中复用 method。Trait 和 Class 组合的语义定义了一种减少复杂性的方式，避免传统多继承和 Mixin 类相关典型问题。</p>
+<p>Trait 和 Class 相似，但仅仅旨在用细粒度和一致的方式来组合功能。 无法通过 trait 自身来实例化。它为传统继承增加了水平特性的组合；也就是说，应用的几个 Class 之间不需要继承。</p>
+</blockquote>
+<p>Trait 翻译过来就是：特性的意思。 他提供了另一种维度的代码复用 我的理解就是你在引入的时候就等于帮他你把 <strong>Trait</strong> 中的 <strong>Function</strong> 复制到了你当前类中 可以让你直接调用</p>
+<h3 id="优先级问题"><a href="#优先级问题" class="headerlink" title="优先级问题"></a>优先级问题</h3><p>对于我上面犯的错就是典型的优先级问题 官方说的是 <code>优先顺序是当前类中的方法会覆盖 trait 方法，而 trait 方法又覆盖了基类中的方法</code></p>
+<p>首先我定义了一个 <code>trait</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">trait</span> TestTrait</div><div class="line">&#123;</div><div class="line">    <span class="keyword">protected</span> $service;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">(TestService $service)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;service = $service;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">showHello</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        $hello = <span class="keyword">$this</span>-&gt;service-&gt;sayHello(<span class="string">"reggie"</span>);</div><div class="line">        <span class="keyword">echo</span> $hello;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后在类中引入 <code>trait</code> 调用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span></div><div class="line">&#123;</div><div class="line">	<span class="keyword">use</span> <span class="title">TestTrait</span>;</div><div class="line">    </div><div class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">showTest</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;showHello();</div><div class="line">        &#125; <span class="keyword">catch</span> (\<span class="keyword">Exception</span> $exception) &#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">"have some exception:"</span> . $exception-&gt;getMessage();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个时候会有一个报错 <code>Call to a member function sayHello() on null</code> 这里其实就是优先级的问题 从本质上 你引用trait 就是把他里面的方法复制到了你当前类中， 而我当前类中有一个空的构造函数 就算你在trait中定义了构造(除了我这种脑抽的人应该也没有人会在taint中在定义构造函数了…)，根据优先级顺序是当前类覆盖trait，所以trait使用的是当前类的空的构造函数 并不会使用他本身的那个带注入 <code>TestService</code> 的构造函数 所以导致在 <code>showHello</code> 方法中 <code>$this-&gt;service</code> 就是一个 <code>null</code> 无法调用到最终的方法</p>
+<h3 id="多个Trait处理"><a href="#多个Trait处理" class="headerlink" title="多个Trait处理"></a>多个Trait处理</h3><p>在来看一种情况 如果你引入了2个Trait 而且其中都包含一个同名的方法 这个时候调用问题</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">    <span class="keyword">trait</span> A</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">showName</span><span class="params">()</span></span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'reggie'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">trait</span> B</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">showName</span><span class="params">()</span></span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">echo</span> <span class="string">'zyan'</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">use</span> <span class="title">A</span>,<span class="title">B</span>;</div><div class="line"></div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">$this</span>-&gt;showName();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $test = <span class="keyword">new</span> Test();</div><div class="line">    $test-&gt;showName();</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<p>这个时候如果你运行的话会有报错</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">vagrant@homestead:~/code$ php index.php</div><div class="line">PHP Fatal error:  <span class="keyword">Trait</span> method showName has not been applied, because there are collisions with other <span class="keyword">trait</span> methods on Test in /home/vagrant/code/index.php on line <span class="number">18</span></div><div class="line"></div><div class="line">Fatal error: <span class="keyword">Trait</span> method showName has not been applied, because there are collisions with other <span class="keyword">trait</span> methods on Test in /home/vagrant/code/index.php on line <span class="number">18</span></div></pre></td></tr></table></figure>
+<h3 id="解决冲突"><a href="#解决冲突" class="headerlink" title="解决冲突"></a>解决冲突</h3><h4 id="使用-insteadof-代替"><a href="#使用-insteadof-代替" class="headerlink" title="使用 insteadof(代替)"></a>使用 insteadof(代替)</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">use</span> <span class="title">A</span>,<span class="title">B</span> &#123;</div><div class="line">    	// 这里就声明了使用<span class="title">TraitA</span>中的<span class="title">showName</span>方法代替<span class="title">TraitB</span>中的方法</div><div class="line">    	<span class="title">A</span>::<span class="title">showName</span> <span class="title">insteadof</span> <span class="title">B</span>;</div><div class="line">        <span class="comment">// 注意这个时候不能再去声明 B::showName insteadof A 这样的话又回到了原来了 有2个同名方法会报错 还是找不到你要调用哪个</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">    	<span class="comment">// 所以这里执行的话会输出 reggie</span></div><div class="line">        <span class="keyword">$this</span>-&gt;showName();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="使用-insteadof-as"><a href="#使用-insteadof-as" class="headerlink" title="使用 insteadof + as"></a>使用 insteadof + as</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">use</span> <span class="title">A</span>,<span class="title">B</span> &#123;</div><div class="line">    	// 这里就声明了使用<span class="title">TraitA</span>中的<span class="title">showName</span>方法代替<span class="title">TraitB</span>中的方法</div><div class="line">    	<span class="title">A</span>::<span class="title">showName</span> <span class="title">insteadof</span> <span class="title">B</span>;</div><div class="line">        B::showName <span class="keyword">insteadof</span> A;</div><div class="line">        A::showName <span class="keyword">as</span> showNameA;</div><div class="line">        B::showName <span class="keyword">as</span> showNameB;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">show</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">    	<span class="comment">// 所以这里执行的话会输出 reggie</span></div><div class="line">        <span class="keyword">$this</span>-&gt;showNameA();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="关于代码拆分"><a href="#关于代码拆分" class="headerlink" title="关于代码拆分"></a>关于代码拆分</h3><p>其中看了 <a href="https://overtrue.me" target="_blank" rel="external">安正超</a> 的文章后感觉学到了很多 引用下</p>
+<blockquote>
+<p>Trait的优点在于随意组合，耦合性低，可读性高。</p>
+<p>平常写代码的时候也许怎么拆分才是大家的痛点，分享以下几个技巧：</p>
+<p>从需求或功能描述拆分，而不是写了两段代码发现代码一样就提到一起；<br>拆分时某些属性也一起带走，比如上面第一个例子里的价格，它是“可卖性”必备的属性；<br>拆分时如果给 Trait 起名困难时，请认真思考你是否真的拆分对了，因为正确的拆分是很容易描述 “它是一个具有什么功能的特性” 的；</p>
+</blockquote>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://php.net/manual/zh/language.oop5.traits.php" target="_blank" rel="external">http://php.net/manual/zh/language.oop5.traits.php</a></p>
+<p><a href="https://overtrue.me/articles/2016/04/about-php-trait.html" target="_blank" rel="external">https://overtrue.me/articles/2016/04/about-php-trait.html</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/31362082" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/31362082</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20181114/index.html" rel="next" title="微信支付的准备工作">
+                <i class="fa fa-chevron-left"></i> 微信支付的准备工作
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20181203/index.html" rel="prev" title="关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法">
+                关于Chrome报错 ERR_NAME_NOT_RESOLVED 解决办法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Trait-是什么"><span class="nav-number">1.</span> <span class="nav-text">Trait 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优先级问题"><span class="nav-number">2.</span> <span class="nav-text">优先级问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多个Trait处理"><span class="nav-number">3.</span> <span class="nav-text">多个Trait处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决冲突"><span class="nav-number">4.</span> <span class="nav-text">解决冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-insteadof-代替"><span class="nav-number">4.1.</span> <span class="nav-text">使用 insteadof(代替)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-insteadof-as"><span class="nav-number">4.2.</span> <span class="nav-text">使用 insteadof + as</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于代码拆分"><span class="nav-number">5.</span> <span class="nav-text">关于代码拆分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

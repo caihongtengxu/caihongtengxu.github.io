@@ -1,0 +1,823 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="微信支付," />
+
+
+
+
+
+
+<meta name="description" content="最近因为一些原因 另一个项目中不允许继续使用现在的支付账户 无奈只能重新申请一个微信支付账户， 申请下来后配置参数那里却懵逼了不知道去哪里找来对应的参数值 接口调用各种不通 乱七八糟的 现在整理下准备工作以及配置防止以后手忙脚乱">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信支付的准备工作">
+<meta property="og:url" content="https://www.tokme.cn/2018/20181114/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近因为一些原因 另一个项目中不允许继续使用现在的支付账户 无奈只能重新申请一个微信支付账户， 申请下来后配置参数那里却懵逼了不知道去哪里找来对应的参数值 接口调用各种不通 乱七八糟的 现在整理下准备工作以及配置防止以后手忙脚乱">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/apppay_detail.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpaysuccess.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu.jpg">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu2.jpg">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu3.jpg">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu4.jpg">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu5.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpayset.png">
+<meta property="og:updated_time" content="2018-11-14T07:16:09.665Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信支付的准备工作">
+<meta name="twitter:description" content="最近因为一些原因 另一个项目中不允许继续使用现在的支付账户 无奈只能重新申请一个微信支付账户， 申请下来后配置参数那里却懵逼了不知道去哪里找来对应的参数值 接口调用各种不通 乱七八糟的 现在整理下准备工作以及配置防止以后手忙脚乱">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/apppay_detail.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 微信支付的准备工作 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                微信支付的准备工作
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-11-14T15:15:22+08:00" content="2018-11-14">
+              2018-11-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近因为一些原因 另一个项目中不允许继续使用现在的支付账户 无奈只能重新申请一个微信支付账户， 申请下来后配置参数那里却懵逼了不知道去哪里找来对应的参数值 接口调用各种不通 乱七八糟的 现在整理下准备工作以及配置防止以后手忙脚乱<br><a id="more"></a></p>
+<hr>
+<h3 id="微信APP支付准备工作"><a href="#微信APP支付准备工作" class="headerlink" title="微信APP支付准备工作"></a>微信APP支付准备工作</h3><h4 id="注册开放平台"><a href="#注册开放平台" class="headerlink" title="注册开放平台"></a>注册开放平台</h4><p>首先如果你需要申请 <code>微信APP支付</code> 需要登录 <strong>微信开放平台</strong> 链接地址：<a href="https://open.weixin.qq.com" target="_blank" rel="external">https://open.weixin.qq.com</a> 没有账户的需要先注册</p>
+<h4 id="创建移动应用"><a href="#创建移动应用" class="headerlink" title="创建移动应用"></a>创建移动应用</h4><p>在 <code>管理中心</code> 下 选择 <code>创建移动应用</code> 然后就是一套填写资料等审核通过</p>
+<p>如果应用审核通过了 在应用详情中会有如下接口内容</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/apppay_detail.png" alt="AppPay Detail"></p>
+<p>其中 <strong>微信支付</strong> 一栏应该是没有开通的 后面会有点击开通 点击进去后就到了 微信支付的官网那边填资料啥的 然后等待审核通过</p>
+<p>审核通过后 会受到一封邮件</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpaysuccess.png" alt="WchatPay Success"></p>
+<p>改绑定的就绑定 然后记录下 <code>应用APPID</code> 和 <code>商户号</code> 这个其实和你在 <code>微信开放平台里</code> 申请的移动应用的 <code>APPID</code> 是一致</p>
+<h4 id="操作证书配置"><a href="#操作证书配置" class="headerlink" title="操作证书配置"></a>操作证书配置</h4><p>在 <strong>微信支付官网</strong> 链接：<a href="https://pay.weixin.qq.com" target="_blank" rel="external">https://pay.weixin.qq.com</a> 需要设置相关 支付 <code>API参数</code> 但是设置这些参数需要先安装 <code>操作证书</code> </p>
+<p>第一步</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu.jpg" alt="nozhengshu1"></p>
+<p>第二步</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu2.jpg" alt="nozhengshu2"></p>
+<p>到这里就完成了 <strong>操作证书</strong> 的安装</p>
+<h4 id="设置API密钥"><a href="#设置API密钥" class="headerlink" title="设置API密钥"></a>设置API密钥</h4><p>要发起支付的话 还需要 <code>设置密钥</code> </p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu3.jpg" alt="nozhengshu3"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu4.jpg" alt="nozhengshu4"></p>
+<h4 id="下载API安全证书"><a href="#下载API安全证书" class="headerlink" title="下载API安全证书"></a>下载API安全证书</h4><p>讲下这个 <code>API安全证书</code> 做什么用的 在 微信支付接口中，涉及资金回滚的接口会使用到API证书，包括 <strong>退款</strong>、<strong>撤销</strong> 接口 都会需要用到这个证书</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu5.png" alt="nozhengshu5"></p>
+<p>在下面这个位置 使用管理员账户下载下来 里面包含4个文件 <code>apiclient_cert.p12</code>,<code>apiclient_cert.pem</code>,<code>apiclient_key.pem</code> 和 一个说明文件</p>
+<p>这里我们主要用到了 2个 <code>pem</code> 文件</p>
+<p>至此 <strong>微信APP支付</strong> 相关配置已经搞定</p>
+<h3 id="微信H5支付"><a href="#微信H5支付" class="headerlink" title="微信H5支付"></a>微信H5支付</h3><p>以前申请微信的H5支付审核比较严格 现在已经全面开放了 只需要申请开通即可 因为 <strong>微信H5支付</strong> 是在微信外的普通手机浏览器中调起微信然后发起支付 底层用的参数和 <strong>微信APP支付</strong> 是一样的配置所以不需要设置什么了 <strong>唯一需要设置一个调用的域名地址即可</strong> </p>
+<p>在 <strong>微信支付官网</strong> 控制台里的 <code>产品中心-&gt;APPID授权管理</code> 中 如下</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpayset.png" alt="wechatpay_set"></p>
+<p>在其中 <code>H5支付</code> 一项中添加你要发起支付的域名即可</p>
+<h4 id="H5支付常见错误说明"><a href="#H5支付常见错误说明" class="headerlink" title="H5支付常见错误说明"></a>H5支付常见错误说明</h4><p>关于 <strong>微信H5支付</strong> 的一些常见错误提示 在官网已经列出来了 链接：<a href="https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4" target="_blank" rel="external">https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4</a> 我在写下自己经常遇见的一些问题吧</p>
+<p>1.网络环境未能通过安全验证，请稍后再试 遇到这个错误其实是在发起支付的时候传递的 IP 地址错误问题 需要获取 <strong>发起支付端</strong> 的 <strong>公网IP地址</strong> 特别是在PHP里注意下获取到的IP地址是本地的还是公网的<br>2.商家参数格式有误，请联系商家解决 关于这个错误提示 其实是 <strong>Referer</strong> 丢失问题 就是你在请求最终的 H5支付 链接的时候没有传递 <strong>Referer</strong> 头信息导致 具体 <strong>Referer</strong> 丢失原因可以看我另一篇博客 地址： <a href="https://caihongtengxu.github.io/2018/11/01/20181101/" target="_blank" rel="external">这里</a> 或者自行 <a href="https://www.google.com" target="_blank" rel="external">Google</a><br>3.商家存在未配置的参数，请联系商家解决 关于这个错误 其实就是上一步中设置的域名地址 设置好就不会出现这个问题了</p>
+<h3 id="微信JS支付"><a href="#微信JS支付" class="headerlink" title="微信JS支付"></a>微信JS支付</h3><p>顺便讲下 <strong>微信JS支付</strong> 的申请吧</p>
+<p>首先公众号的官网 链接：<a href="https://mp.weixin.qq.com/" target="_blank" rel="external">https://mp.weixin.qq.com/</a> 注册登录老套路</p>
+<p>然后需要建立 <strong>微信商户平台</strong> 和 <strong>公众号</strong> 的绑定关系 链接地址见： <a href="https://pay.weixin.qq.com/static/pay_setting/appid_protocol.shtml" target="_blank" rel="external">https://pay.weixin.qq.com/static/pay_setting/appid_protocol.shtml</a></p>
+<p>最后在 <code>公众号平台-&gt;微信支付-&gt;商户号管理</code> 中可以看到绑定关系 至此绑定完成</p>
+<h3 id="支付参数说明"><a href="#支付参数说明" class="headerlink" title="支付参数说明"></a>支付参数说明</h3><p>上面的配置都是些准备工作 下面讲下在调用支付接口中的参数配置</p>
+<p>最关键的4个参数</p>
+<table>
+<thead>
+<tr>
+<th>参数名</th>
+<th>参数说明</th>
+<th>长度</th>
+<th>示例值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mchid</td>
+<td>商户号</td>
+<td>10 【不保证以后不会变】</td>
+<td>1000000000</td>
+</tr>
+<tr>
+<td>appid</td>
+<td>应用APPID - APP支付和H5支付会用到</td>
+<td>18</td>
+<td>wxeef97e0000000000</td>
+</tr>
+<tr>
+<td>mp_appid</td>
+<td>公众号的appid</td>
+<td>18</td>
+<td>wxeef97e0000000000</td>
+</tr>
+<tr>
+<td>pay_key</td>
+<td>支付的API密钥-在微信商户平台设置的</td>
+<td>32</td>
+<td>x…x</td>
+</tr>
+</tbody>
+</table>
+<h4 id="奇葩问题"><a href="#奇葩问题" class="headerlink" title="奇葩问题"></a>奇葩问题</h4><p>如果你不幸遇到了 <code>mchid商户号与appid不匹配</code> 这种报错</p>
+<p>而且满足下面条件<br>1.想要发起微信APP支付 并配置正确<br>2.没有绑定公众号JS支付 也没有想过配置</p>
+<p>如果是这种情况下 请直接把 <code>mp_appid</code> 的值设置成 <code>appid</code> 的值 他不会格外校验值是否正确 只要长度够就行了 我也不知道为什么</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微信支付/" rel="tag"><i class="fa fa-tag"></i>微信支付</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20181113/index.html" rel="next" title="使用 腾讯云存储 做图床">
+                <i class="fa fa-chevron-left"></i> 使用 腾讯云存储 做图床
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20181126/index.html" rel="prev" title="关于PHP中 Trait 的使用">
+                关于PHP中 Trait 的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#微信APP支付准备工作"><span class="nav-number">1.</span> <span class="nav-text">微信APP支付准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注册开放平台"><span class="nav-number">1.1.</span> <span class="nav-text">注册开放平台</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建移动应用"><span class="nav-number">1.2.</span> <span class="nav-text">创建移动应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作证书配置"><span class="nav-number">1.3.</span> <span class="nav-text">操作证书配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置API密钥"><span class="nav-number">1.4.</span> <span class="nav-text">设置API密钥</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#下载API安全证书"><span class="nav-number">1.5.</span> <span class="nav-text">下载API安全证书</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微信H5支付"><span class="nav-number">2.</span> <span class="nav-text">微信H5支付</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#H5支付常见错误说明"><span class="nav-number">2.1.</span> <span class="nav-text">H5支付常见错误说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微信JS支付"><span class="nav-number">3.</span> <span class="nav-text">微信JS支付</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#支付参数说明"><span class="nav-number">4.</span> <span class="nav-text">支付参数说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#奇葩问题"><span class="nav-number">4.1.</span> <span class="nav-text">奇葩问题</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

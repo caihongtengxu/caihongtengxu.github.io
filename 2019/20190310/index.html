@@ -1,0 +1,777 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+<meta name="description" content="对于算法自己确实很菜，吃了很多亏就不说了，所以最近准备好好补充下相关知识，先拿复杂度分析来说吧。惯用三联 是什么？ 为什么？ 如何学习与改进？">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法复杂度科普">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190310/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="对于算法自己确实很菜，吃了很多亏就不说了，所以最近准备好好补充下相关知识，先拿复杂度分析来说吧。惯用三联 是什么？ 为什么？ 如何学习与改进？">
+<meta property="og:updated_time" content="2019-03-14T01:06:32.685Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法复杂度科普">
+<meta name="twitter:description" content="对于算法自己确实很菜，吃了很多亏就不说了，所以最近准备好好补充下相关知识，先拿复杂度分析来说吧。惯用三联 是什么？ 为什么？ 如何学习与改进？">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 算法复杂度科普 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                算法复杂度科普
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-10T11:15:21+08:00" content="2019-03-10">
+              2019-03-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于算法自己确实很菜，吃了很多亏就不说了，所以最近准备好好补充下相关知识，先拿复杂度分析来说吧。惯用三联 <strong>是什么？ 为什么？ 如何学习与改进？</strong><br><a id="more"></a></p>
+<hr>
+<h3 id="什么是复杂度分析"><a href="#什么是复杂度分析" class="headerlink" title="什么是复杂度分析"></a>什么是复杂度分析</h3><p>数据结构和算法本身就是为了解决 『运行效率』 和 『占用空间』 这个问题的。 如何让程序代码运行的更快，更节省存储空间，这就需要算法了，而执行效率是考核质量的一个很重要的标准。</p>
+<p>一般说到算法，我们都会用一个复杂度来说明这个算法的 <strong>好与坏</strong> 其实这个好与坏就是 <strong>优秀算法</strong> 和 <strong>垃圾算法</strong> 的区别了。那么怎么区别呢？这就引出了一个概念 <strong>复杂度分析</strong> 。</p>
+<p>因为涉及到『运行效率』 和 『占用空间』，所以有2个复杂度分析 分别是 <code>时间复杂度分析</code> 和 <code>空间复杂度分析</code></p>
+<h3 id="为什么需要复杂度分析"><a href="#为什么需要复杂度分析" class="headerlink" title="为什么需要复杂度分析"></a>为什么需要复杂度分析</h3><p>一般我们会通过 <strong>执行一遍代码</strong>，通过统计和监控等手段来得到运行的时间和占用内存空间，这种评估算法的执行效率的方法是正确的，一般叫做 <strong>事后统计法</strong>。但是对于算法我们没有必要都去执行一遍得到一个十分准确的值，而且这种方式会有很多的限制。</p>
+<p><strong>1.测试结果依赖测试环境</strong></p>
+<p>测试环境硬件的不同会对测试结果产生影响。比如你在一个 <strong>I9</strong> 的处理器上 和 <strong>I3</strong> 处理器同时跑想同的代码执行的时间会不一样，毕竟I9处理器的处理速度快了很多</p>
+<p><strong>2.测试结果受测试规模的影响</strong></p>
+<p>对于同一个算法，数据的有序度和数据量大小都会产生影响</p>
+<p>所以我们需要一个可以粗略的统计出算法的分析，也就是复杂度分析。</p>
+<blockquote>
+<p>1.和性能测试相比，复杂度分析有不依赖执行环境、成本低、效率高、易操作、指导性强的特点。<br>2.掌握复杂度分析，将能编写出性能更优的代码，有利于降低系统开发和维护成本</p>
+</blockquote>
+<h3 id="时间复杂度分析"><a href="#时间复杂度分析" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h3><h4 id="大-O-表示法"><a href="#大-O-表示法" class="headerlink" title="大 O 表示法"></a>大 O 表示法</h4><p>执行效率粗略的讲就是算法的执行时间。看一段代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">cal</span><span class="params">($n)</span></span></div><div class="line">&#123;</div><div class="line">    $sum = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span>($i = <span class="number">1</span>; $i &lt; $n; $i++) &#123;</div><div class="line">        $sum += $i;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>假设每一行的代码执行效率都是一样的 需要执行的时间是 <code>unit_time</code>, 第一行声明了 <code>$sum</code> 需要一个 <code>unit_time</code>,然后来到循环需要执行 <code>$n</code> 次循环 也就是 n 个 <code>unit_time</code> 所以最终的执行时间是 <code>T(n) = ($n + 1) * unit_time</code>。 可以看出 所有代码的执行时间与每行代码的执行次数成正比。所以可以写作 <code>T(n) = O(f(n))</code></p>
+<blockquote>
+<p>这就是大O时间复杂度表示法<br>算法的执行时间与每行代码的执行次数成正比，用T(n) = O(f(n))表示，其中T(n)表示算法执行总时间，f(n)表示每行代码执行总次数，而n往往表示数据的规模。<br><strong>它表示的不是真正的执行时间，而是代码执行时间随着数据规则的增长而变化的趋势，也叫做『渐进时间复杂度』 简称 『时间复杂度』</strong></p>
+</blockquote>
+<h4 id="时间复杂度分析-1"><a href="#时间复杂度分析-1" class="headerlink" title="时间复杂度分析"></a>时间复杂度分析</h4><p>因为时间复杂度是表示的一种变化趋势，所以可以忽略掉公式中的<strong>低阶、常亮、系数</strong> 这些并不会影响增长趋势，只需要记录一个 <strong>最大量级</strong> 就可以了。</p>
+<p>如何观察一段代码的变化趋势用大O表示呢？</p>
+<p>1.看循环次数最多的一段代码 比如单循环<br>2.取量级最大的那段代码次数 比如嵌套循环<br>3.嵌套代码求乘积 比如递归 多重循环<br>4.多个规模的求加法 比如方法有2个参数控制循环次数的 这种就是取2者复杂度相加</p>
+<h4 id="复杂度量级"><a href="#复杂度量级" class="headerlink" title="复杂度量级"></a>复杂度量级</h4><blockquote>
+<p>随着数据规模的增长，算法的执行时间和空间占用，按照多项式的比例增长。复杂度的量级可以粗略的分为两类 <strong>多项式量级</strong> 和 <strong>非多项式量级</strong><br>常用的多项式量级： O(1)（常数阶）、O(logn)（对数阶）、O(n)（线性阶）、O(nlogn)（线性对数阶）、O(n^2)（平方阶）、O(n^3)（立方阶）<br>非多项式量级：O(2^n)（指数阶）、O(n!)（阶乘阶）</p>
+</blockquote>
+<h5 id="O-1-复杂度"><a href="#O-1-复杂度" class="headerlink" title="O(1)复杂度"></a>O(1)复杂度</h5><p><strong> <code>O(1)</code> 这种代码是执行时间不会随着 <code>n</code> 的增大而改变，这样的代码复杂度统统记作 <code>O(1)</code>。一般情况下，只要算法中不存在循环语句、递归等 即使代码有成千上万行他的复杂度也是 <code>O(1)</code></strong></p>
+<h5 id="O-logn-和-O-nlogn-复杂度"><a href="#O-logn-和-O-nlogn-复杂度" class="headerlink" title="O(logn) 和 O(nlogn) 复杂度"></a><code>O(logn)</code> 和 <code>O(nlogn)</code> 复杂度</h5><p>这种代码其实就是一个<strong>等比数列</strong>。比如代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">cal</span><span class="params">($n)</span></span></div><div class="line">&#123;</div><div class="line">    $i = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> ($i &lt;= $n) &#123;</div><div class="line">        $i = $i * <span class="number">2</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也就是他每次的 i 都是乘 2，所以就变成了2的x次方等于n的问题，也就是 <code>x=log2n</code> 所以他的时间复杂度就是 <code>O(log2n)</code>。而实际上不管第数是2还是3还是10都是一样的统一记作<code>O(logn)</code></p>
+<p>而当循环执行了上面n次后就变成了 <code>O(nlogn)</code></p>
+<h5 id="O-m-n-和-O-m-n"><a href="#O-m-n-和-O-m-n" class="headerlink" title="O(m+n) 和 O(m*n)"></a>O(m+n) 和 O(m*n)</h5><p>看下代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">cal</span><span class="params">($m, $n)</span></span></div><div class="line">&#123;</div><div class="line">    $sum_1 = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">1</span>; $i &lt; $m; $i++) &#123;</div><div class="line">        $sum_1 = $sum_1 + $i;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $sum_2 = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ($j = <span class="number">1</span>; $j &lt; $n; $j++) &#123;</div><div class="line">        $sum_2 = $sum_2 + $j;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $sum_1 + $sum_2;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种一般都是由2个参数来决定的规模，而我们并不能评估m和n的规模大小所以就表示成了 <code>O(m+n)</code> 乘法的同理</p>
+<h3 id="空间复杂度分析"><a href="#空间复杂度分析" class="headerlink" title="空间复杂度分析"></a>空间复杂度分析</h3><p>空间复杂度其实和时间复杂度相似，它表示的是算法的 <strong>存储空间与数据规模之间的增加关系</strong> 也叫做 <strong>渐进空间复杂度</strong> 简称<strong>空间复杂度</strong></p>
+<p>如代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">cal</span><span class="params">($n)</span></span></div><div class="line">&#123;</div><div class="line">    $a = [];</div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $n; $i++) &#123;</div><div class="line">        $a[$i] = $i * $i;</div><div class="line">    &#125;   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到声明了一个数组 每次循环给数组添加元素，所以内存会变化的就是数组哪里了，也就是数组循环了几次就会有多少个元素 它的空间复杂度记作 <code>O(n)</code>。<br>而空间复杂度比时间复杂度要简单一些 常用的 <code>O(1)</code>, <code>O(n)</code>, <code>O(n^2)</code></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i>算法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190220/index.html" rel="next" title="优化Mysql随机取出N条记录">
+                <i class="fa fa-chevron-left"></i> 优化Mysql随机取出N条记录
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20190312/index.html" rel="prev" title="算法-数组的实现">
+                算法-数组的实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是复杂度分析"><span class="nav-number">1.</span> <span class="nav-text">什么是复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么需要复杂度分析"><span class="nav-number">2.</span> <span class="nav-text">为什么需要复杂度分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间复杂度分析"><span class="nav-number">3.</span> <span class="nav-text">时间复杂度分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#大-O-表示法"><span class="nav-number">3.1.</span> <span class="nav-text">大 O 表示法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#时间复杂度分析-1"><span class="nav-number">3.2.</span> <span class="nav-text">时间复杂度分析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复杂度量级"><span class="nav-number">3.3.</span> <span class="nav-text">复杂度量级</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#O-1-复杂度"><span class="nav-number">3.3.1.</span> <span class="nav-text">O(1)复杂度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#O-logn-和-O-nlogn-复杂度"><span class="nav-number">3.3.2.</span> <span class="nav-text">O(logn) 和 O(nlogn) 复杂度</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#O-m-n-和-O-m-n"><span class="nav-number">3.3.3.</span> <span class="nav-text">O(m+n) 和 O(m*n)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#空间复杂度分析"><span class="nav-number">4.</span> <span class="nav-text">空间复杂度分析</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

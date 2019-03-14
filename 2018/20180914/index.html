@@ -1,0 +1,767 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="CURL," />
+
+
+
+
+
+
+<meta name="description" content="之前有个接口一直返回错误信息 28 找了一圈没找到 郁闷了好久
+最后把参数什么全部抓来 debug 了一番 发现是 使用 curl 请求一个外部接口的时候报错了 方法里只返回了 curl 对应的错误号 没有返回错误提示信息 所以就只返回了一个 28 数字
+所以以后还是把错误号 和 错误提示信息都一并返回才对 到这里问题是解决了 顺便讲下 Curl 吧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于PHP cURL 的用法">
+<meta property="og:url" content="https://www.tokme.cn/2018/20180914/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="之前有个接口一直返回错误信息 28 找了一圈没找到 郁闷了好久
+最后把参数什么全部抓来 debug 了一番 发现是 使用 curl 请求一个外部接口的时候报错了 方法里只返回了 curl 对应的错误号 没有返回错误提示信息 所以就只返回了一个 28 数字
+所以以后还是把错误号 和 错误提示信息都一并返回才对 到这里问题是解决了 顺便讲下 Curl 吧">
+<meta property="og:updated_time" content="2018-09-29T08:29:50.969Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于PHP cURL 的用法">
+<meta name="twitter:description" content="之前有个接口一直返回错误信息 28 找了一圈没找到 郁闷了好久
+最后把参数什么全部抓来 debug 了一番 发现是 使用 curl 请求一个外部接口的时候报错了 方法里只返回了 curl 对应的错误号 没有返回错误提示信息 所以就只返回了一个 28 数字
+所以以后还是把错误号 和 错误提示信息都一并返回才对 到这里问题是解决了 顺便讲下 Curl 吧">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于PHP cURL 的用法 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于PHP cURL 的用法
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-14T14:44:23+08:00" content="2018-09-14">
+              2018-09-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前有个接口一直返回错误信息 <strong>28</strong> 找了一圈没找到 郁闷了好久</p>
+<p>最后把参数什么全部抓来 <code>debug</code> 了一番 发现是 使用 <code>curl</code> 请求一个外部接口的时候报错了 方法里只返回了 <code>curl</code> 对应的错误号 没有返回错误提示信息 所以就只返回了一个 <strong>28</strong> 数字</p>
+<p>所以以后还是把错误号 和 错误提示信息都一并返回才对 到这里问题是解决了 顺便讲下 <code>Curl</code> 吧<br><a id="more"></a></p>
+<hr>
+<h3 id="科普"><a href="#科普" class="headerlink" title="科普"></a>科普</h3><p><code>cURL</code> 是一个计算机软件项目，提供了一个库和命令行工具，用于使用各种协议传输数据。</p>
+<p><code>cURL</code> 项目生成两个产品 <code>libcurl</code> 和 <code>cURL</code>。</p>
+<p>它于1997年首次发布。</p>
+<p>该名称代表 Client URL (客户端URL)</p>
+<h4 id="libcurl"><a href="#libcurl" class="headerlink" title="libcurl"></a>libcurl</h4><p>libcurl是一个免费的客户端URL传输库，[6]支持cookie，DICT，FTP，FTPS，Gopher，HTTP（支持HTTP / 2），HTTP POST，HTTP PUT，HTTP代理隧道，HTTPS，IMAP，Kerberos，LDAP，POP3，RTSP，SCP和SMTP。该库支持文件URI方案，SFTP，Telnet，TFTP，文件传输恢复，FTP上传，基于HTTP表单的上传，HTTPS证书，LDAPS，代理和用户加密码验证</p>
+<h4 id="cURL"><a href="#cURL" class="headerlink" title="cURL"></a>cURL</h4><p>cURL是一个使用URL语法获取或发送文件的命令行工具。</p>
+<p>由于cURL使用libcurl，它支持一系列常见的Internet协议，目前包括HTTP，HTTPS，FTP，FTPS，SCP，SFTP，TFTP，LDAP，DAP，DICT，TELNET，FILE，IMAP，POP3，SMTP和RTSP（最后一个）仅在7.20.0或2010年2月9日之前的版本中有四个版本。</p>
+<p><strong>命令行下的简单使用</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">发送 get 请求</div><div class="line">curl https:<span class="comment">//local.test.com/gateway/main.do?parame1=xx1&amp;parame2=xx2</span></div><div class="line"></div><div class="line">发送 post 请求</div><div class="line">curl -X POST --data <span class="string">"parame1=xx1"</span> https:<span class="comment">//local.test.com/gateway/main.do</span></div><div class="line"></div><div class="line">指定发送json格式数据</div><div class="line">curl -H <span class="string">"Content-Type:application/json"</span> -X POST -d <span class="string">'&#123;"access_token":"xx"&#125;'</span> https:<span class="comment">//local.test.com/gateway/main.do</span></div><div class="line"></div><div class="line">指定referer</div><div class="line">curl --referer http:<span class="comment">//www.before.com https://local.test.com/gateway/main.do</span></div><div class="line"></div><div class="line">指定user-agent</div><div class="line">curl --user-agent <span class="string">"[User Agent]"</span> https:<span class="comment">//local.test.com/gateway/main.do</span></div></pre></td></tr></table></figure>
+<p>大概我常用的就这么几个了 具体的用法请自行 <a href="https://www.google.com" target="_blank" rel="external">https://www.google.com</a></p>
+<h3 id="PHP-里的-cUrl"><a href="#PHP-里的-cUrl" class="headerlink" title="PHP 里的 cUrl"></a>PHP 里的 cUrl</h3><p>PHP 里有 libcurl 库</p>
+<p>能够连接通讯各种服务器、使用各种协议。libcurl 目前支持的协议有 http、https、ftp、gopher、telnet、dict、file、ldap。 libcurl 同时支持 HTTPS 证书、HTTP POST、HTTP PUT、 FTP 上传(也能通过 PHP 的 FTP 扩展完成)、HTTP 基于表单的上传、代理、cookies、用户名+密码的认证。</p>
+<p>下面写一个我常用的 <code>curl</code> 方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curlPost</span><span class="params">($url, $data, $needJson = <span class="number">1</span>, $timeout = <span class="number">30</span>)</span></span></div><div class="line">&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    <span class="comment">//各种header设置自己在这里补充添加</span></div><div class="line">    $header = [</div><div class="line">        <span class="string">"Accept-Charset: utf-8"</span>,</div><div class="line">        <span class="comment">//"Accept-Encoding: gzip, deflate",</span></div><div class="line">        <span class="comment">//"Cache-Control: no-cache",</span></div><div class="line">        <span class="comment">//"Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)",</span></div><div class="line">    ];</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($needJson == <span class="number">1</span>) &#123;</div><div class="line">        <span class="comment">//如果是json格式的数据需要指定content-type</span></div><div class="line">        $data = json_encode($data);</div><div class="line">        $header = [</div><div class="line">            <span class="string">"Content-Length:"</span>.strlen($data),</div><div class="line">            <span class="string">"Content-type: application/json;charset='utf-8'"</span>,</div><div class="line">        ];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    curl_setopt($ch, CURLOPT_URL, $url);</div><div class="line">    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, <span class="string">"POST"</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, <span class="keyword">FALSE</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, <span class="keyword">FALSE</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout); <span class="comment">//设置cURL允许执行的最长秒数</span></div><div class="line">    curl_setopt($ch, CURLOPT_HTTPHEADER, $header);</div><div class="line">    curl_setopt($ch, CURLOPT_USERAGENT, <span class="string">'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)'</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, <span class="number">1</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_AUTOREFERER, <span class="number">1</span>);</div><div class="line">    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);</div><div class="line">    curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="keyword">true</span>);</div><div class="line">    <span class="comment">//获取执行结果</span></div><div class="line">    $result = curl_exec($ch);</div><div class="line">    <span class="comment">//获取错误号</span></div><div class="line">    $errorNo = curl_errno($ch);</div><div class="line">    <span class="comment">//获取错误信息</span></div><div class="line">    $errorMsg = curl_error($ch);</div><div class="line">    <span class="comment">//关闭资源</span></div><div class="line">    curl_close($ch);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($errorNo) &#123;</div><div class="line">        <span class="keyword">return</span> json_encode([<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'msg'</span> =&gt; $errorNo.<span class="string">':'</span>.$errorMsg]);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> $result;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curlGet</span><span class="params">($url, $timeout = <span class="number">5</span>)</span></span></div><div class="line">&#123;</div><div class="line">    $ch = curl_init();</div><div class="line">    curl_setopt($ch, CURLOPT_URL, $url);</div><div class="line">    curl_setopt($ch, CURLOPT_TIMEOUT, $timeout); <span class="comment">//设置cURL允许执行的最长秒数</span></div><div class="line">    curl_setopt($ch, CURLOPT_RETURNTRANSFER, <span class="keyword">TRUE</span>);</div><div class="line">    $result  = curl_exec($ch);</div><div class="line">    $errorNo = curl_errno($ch);</div><div class="line">    $errorMsg = curl_error($ch);</div><div class="line">    curl_close($ch);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($errorNo) &#123;</div><div class="line">        <span class="keyword">return</span> json_encode([<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'msg'</span> =&gt; $errorNo.<span class="string">':'</span>.$errorMsg]);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> $result;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="php-cURL-错误码说明"><a href="#php-cURL-错误码说明" class="headerlink" title="php cURL 错误码说明"></a>php cURL 错误码说明</h3><p>下面是不完整的 <code>curl</code> 返回错误码 完整的请看</p>
+<p><a href="http://php.net/manual/en/function.curl-errno.php" target="_blank" rel="external">http://php.net/manual/en/function.curl-errno.php</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[<span class="number">1</span>] =&gt; <span class="string">'CURLE_UNSUPPORTED_PROTOCOL'</span>, </div><div class="line">[<span class="number">2</span>] =&gt; <span class="string">'CURLE_FAILED_INIT'</span>, </div><div class="line">[<span class="number">3</span>] =&gt; <span class="string">'CURLE_URL_MALFORMAT'</span>, </div><div class="line">[<span class="number">4</span>] =&gt; <span class="string">'CURLE_URL_MALFORMAT_USER'</span>, </div><div class="line">[<span class="number">5</span>] =&gt; <span class="string">'CURLE_COULDNT_RESOLVE_PROXY'</span>, </div><div class="line">[<span class="number">6</span>] =&gt; <span class="string">'CURLE_COULDNT_RESOLVE_HOST'</span>, </div><div class="line">[<span class="number">7</span>] =&gt; <span class="string">'CURLE_COULDNT_CONNECT'</span>, </div><div class="line">[<span class="number">8</span>] =&gt; <span class="string">'CURLE_FTP_WEIRD_SERVER_REPLY'</span>,</div><div class="line">[<span class="number">9</span>] =&gt; <span class="string">'CURLE_REMOTE_ACCESS_DENIED'</span>,</div><div class="line">[<span class="number">11</span>] =&gt; <span class="string">'CURLE_FTP_WEIRD_PASS_REPLY'</span>,</div><div class="line">[<span class="number">13</span>] =&gt; <span class="string">'CURLE_FTP_WEIRD_PASV_REPLY'</span>,</div><div class="line">[<span class="number">14</span>]=&gt;<span class="string">'CURLE_FTP_WEIRD_227_FORMAT'</span>,</div><div class="line">[<span class="number">15</span>] =&gt; <span class="string">'CURLE_FTP_CANT_GET_HOST'</span>,</div><div class="line">[<span class="number">17</span>] =&gt; <span class="string">'CURLE_FTP_COULDNT_SET_TYPE'</span>,</div><div class="line">[<span class="number">18</span>] =&gt; <span class="string">'CURLE_PARTIAL_FILE'</span>,</div><div class="line">[<span class="number">19</span>] =&gt; <span class="string">'CURLE_FTP_COULDNT_RETR_FILE'</span>,</div><div class="line">[<span class="number">21</span>] =&gt; <span class="string">'CURLE_QUOTE_ERROR'</span>,</div><div class="line">[<span class="number">22</span>] =&gt; <span class="string">'CURLE_HTTP_RETURNED_ERROR'</span>,</div><div class="line">[<span class="number">23</span>] =&gt; <span class="string">'CURLE_WRITE_ERROR'</span>,</div><div class="line">[<span class="number">25</span>] =&gt; <span class="string">'CURLE_UPLOAD_FAILED'</span>,</div><div class="line">[<span class="number">26</span>] =&gt; <span class="string">'CURLE_READ_ERROR'</span>,</div><div class="line">[<span class="number">27</span>] =&gt; <span class="string">'CURLE_OUT_OF_MEMORY'</span>,</div><div class="line">[<span class="number">28</span>] =&gt; <span class="string">'CURLE_OPERATION_TIMEDOUT'</span>,</div><div class="line">[<span class="number">30</span>] =&gt; <span class="string">'CURLE_FTP_PORT_FAILED'</span>,</div></pre></td></tr></table></figure>
+<p>所以我遇见的 返回28 其实是请求超时了！！！</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CURL/" rel="tag"><i class="fa fa-tag"></i>CURL</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20180910/index.html" rel="next" title="Chrome升级63版本后虚拟主机访问不了问题">
+                <i class="fa fa-chevron-left"></i> Chrome升级63版本后虚拟主机访问不了问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20180920/index.html" rel="prev" title="PHP中RSA加密算法的使用">
+                PHP中RSA加密算法的使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#科普"><span class="nav-number">1.</span> <span class="nav-text">科普</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#libcurl"><span class="nav-number">1.1.</span> <span class="nav-text">libcurl</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cURL"><span class="nav-number">1.2.</span> <span class="nav-text">cURL</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-里的-cUrl"><span class="nav-number">2.</span> <span class="nav-text">PHP 里的 cUrl</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-cURL-错误码说明"><span class="nav-number">3.</span> <span class="nav-text">php cURL 错误码说明</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

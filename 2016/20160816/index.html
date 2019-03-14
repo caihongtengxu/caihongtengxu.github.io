@@ -1,0 +1,793 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git," />
+
+
+
+
+
+
+<meta name="description" content="GitFlow使用
+Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目Git是一个开源的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理以上都是扯犊子 我就只知道用他来做项目版本管理的 下面说下git flow 这是个什么东西呢 度娘都没有百科呢（丢） 大概就是他提供了一种方便快捷的管理项目版本/分支的功能吧 把你需要用git分几步命令的操作 使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GitFlow日常使用总结">
+<meta property="og:url" content="https://www.tokme.cn/2016/20160816/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="GitFlow使用
+Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目Git是一个开源的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理以上都是扯犊子 我就只知道用他来做项目版本管理的 下面说下git flow 这是个什么东西呢 度娘都没有百科呢（丢） 大概就是他提供了一种方便快捷的管理项目版本/分支的功能吧 把你需要用git分几步命令的操作 使用">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/gitflow.png">
+<meta property="og:updated_time" content="2018-06-08T05:45:55.664Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GitFlow日常使用总结">
+<meta name="twitter:description" content="GitFlow使用
+Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目Git是一个开源的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理以上都是扯犊子 我就只知道用他来做项目版本管理的 下面说下git flow 这是个什么东西呢 度娘都没有百科呢（丢） 大概就是他提供了一种方便快捷的管理项目版本/分支的功能吧 把你需要用git分几步命令的操作 使用">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/gitflow.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> GitFlow日常使用总结 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                GitFlow日常使用总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-16T18:22:39+08:00" content="2016-08-16">
+              2016-08-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="GitFlow使用"><a href="#GitFlow使用" class="headerlink" title="GitFlow使用"></a>GitFlow使用</h3><blockquote>
+<p>Git是一款免费、开源的分布式版本控制系统，用于敏捷高效地处理任何或小或大的项目<br>Git是一个开源的分布式版本控制系统，可以有效、高速的处理从很小到非常大的项目版本管理<br>以上都是扯犊子 我就只知道用他来做项目版本管理的 下面说下git flow 这是个什么东西呢 度娘都没有百科呢（丢） 大概就是他提供了一种方便快捷的管理项目版本/分支的功能吧 把你需要用git分几步命令的操作 使用git flow 仅仅只需一个命令就搞定了 另外团队成员都是使用这种 统一规范 创建的版本啦 分支不会乱套 大概就是这样吧 个人用到的就这么多 233 更多高级玩意自己去发现吧<br><a id="more"></a></p>
+</blockquote>
+<hr>
+<h3 id="GitFlow安装"><a href="#GitFlow安装" class="headerlink" title="GitFlow安装"></a>GitFlow安装</h3><ul>
+<li>需要先安装 <strong>Git</strong>  现在一些高版本的Git中已经集成了<code>gitflow</code></li>
+<li>如果没有的话 上跳  <strong><a href="https://github.com/nvie/gitflow/" target="_blank" rel="external">github-&gt;gitflow</a></strong> 这里有详细的安装说明</li>
+</ul>
+<h3 id="GitFlow的简单实用"><a href="#GitFlow的简单实用" class="headerlink" title="GitFlow的简单实用"></a>GitFlow的简单实用</h3><h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><ol>
+<li>更新<code>master</code>分支</li>
+<li>更新<code>develop</code>分支</li>
+</ol>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git flow init</div></pre></td></tr></table></figure>
+<p>然后他会询问你一些基本的命名设置直接一路 <strong>回车</strong> 默认就可以了</p>
+<blockquote>
+<p>注意：如果是第一次创建的项目或者有命名不规范的分支结构的时候 在执行init初始化的时候会让你多选择一些选项</p>
+<ol>
+<li>Which branch should be used for bringing forth production releases?<br>master【这里就是列出的可选分支列表】<br>Branch name for production releases: [master]</li>
+</ol>
+<p>像这个就是在询问你准备生产环境的一个分支 他默认给了你推荐的是master 就是最后那个中括号的内容就是默认推荐的 像我之前有过不规范的命名分支瞎写的 这里他就会给你推荐最新的那个分支如果你不想用默认的可以直接在后面打上需要作为生产环境的分支的名字 以前不是很懂就胡乱打了个分支 结果跪了都是泪，推荐master哦</p>
+<ol>
+<li>Branch name for “next release” development: [develop]</li>
+</ol>
+<p>这个是在问你选择开发环境的一个分支 一般推荐是develop 他默认的也是的 不想选别的直接回车<br>后面还有一些选择统统默认好了<br><img src="http://obomwzenb.bkt.clouddn.com/gitflow.png" alt="git flow init"></p>
+</blockquote>
+<h4 id="Git-flow-feature"><a href="#Git-flow-feature" class="headerlink" title="Git flow feature"></a>Git flow feature</h4><p>如果你准备开发一个新的功能</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git flow feature start your-branch-name</div></pre></td></tr></table></figure>
+<p><strong>start</strong> 后面就是你要创建的分支的名字 一般新功能使用<code>feature</code>分支 在后面默认中他是帮你从<code>develop</code>分支为基础创建的这个新的分支<br>当你完成功能开发 需要推送到服务器上时</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git flow feature finish your-branch-name</div></pre></td></tr></table></figure>
+<p>他会帮你新功能分支上的内容合并到develop分支上 并删除该feature分支，然后切换回<code>develop</code>分支 你可以通过<code>git log</code>命令来查看他的具体操作哦</p>
+<h4 id="Git-flow-release"><a href="#Git-flow-release" class="headerlink" title="Git flow release"></a>Git flow release</h4><p>当你的功能点都完成后 你需要发一个发布的版本 我们可以创建一个<code>release</code>分支 这个也是基于<code>develop</code>分支创建的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git flow release start v0<span class="number">.0</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>注意这个release版本的命名 我们一般习惯是v+3位数 因为这是一个新的项目还没有tag标签就从0开始了 那就是v0.0.1了 这个看公司规定吧<br>如果有tag标签 请先使用<code>git tag</code> 命令来查询最近的release版本 在此基础上+1作为新的版本号 比如查询出来的最近的是<code>v1.2.3</code> 那新创建的版本推荐名：<code>v1.2.4</code> 因为我们开发中3位的都是release版本号所以只需要找最近的一个3位数的release版本号就行了 如果你们固定的不是3位数就要看具体的喽</p>
+</blockquote>
+<p>当我们完成这个发布分支 验证测试完需要正式发布了 我们只需要执行</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git flow release finish v0<span class="number">.0</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<p>他在后面会帮我们合并到<code>master</code> 并打上<code>tag</code>标签 并删除该release分支 同时合并到<code>develop</code> 保证2个分支的同步</p>
+<p>那现在我们在使用<code>git tag</code>命令就能看到tag标签了  就是我们刚刚完成的那个分支的版本号<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git tag</div><div class="line">v0<span class="number">.0</span><span class="number">.1</span></div></pre></td></tr></table></figure></p>
+<h4 id="Git-flow-hotfix"><a href="#Git-flow-hotfix" class="headerlink" title="Git flow hotfix"></a>Git flow hotfix</h4><p>当我们出现bug需要修复又不想影响发布分支 可以新建一个<code>hotfix</code>分支来修复bug</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git flow hotfix start v0<span class="number">.0</span><span class="number">.1</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<p>它在后面是从<code>master</code>分支帮我们创建的这个<code>hotfix</code>新分支</p>
+<blockquote>
+<p>注意这个命名版本号：我们一般习惯使用v+4位数来命名版本号 需要先查询最新的一个<code>release</code>分支因为 <strong>release</strong> 是3位的 在他的基础上加一位 因为我们上面刚刚完成的release版本号是v0.0.1所以我们新建的hotfix分支的名字就是<code>v0.0.1.1</code><br>eg: 如果我们<code>git tag</code>出的最新 <strong>release</strong> 为 <code>v1.2.3</code> 那我们的hotfix分支可以命名为<code>v1.2.3.1</code> 以此类推</p>
+</blockquote>
+<p>当我们彻底修复bug 需求提交合并</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git flow hotfix finish v0<span class="number">.0</span><span class="number">.1</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+<p>他会在后面帮我们把分支合并到<code>master</code>然后打上标签 并删除该分支 这些都是可以通过<code>git log</code>看到的<br>现在我们的tag标签又增加了<code>git tag</code> 方便我们后续的创建</p>
+<p>OK 我经常用到的暂时就这么多 写下加深自己的印象，因为真的坑爹了我好多次 都是命名不规范导致的问题</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i>Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/20160703/index.html" rel="next" title="Lumen集成Swagger使用总结">
+                <i class="fa fa-chevron-left"></i> Lumen集成Swagger使用总结
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/20160817/index.html" rel="prev" title="关于Laravel中TokenMismatchException报错的一点点总结">
+                关于Laravel中TokenMismatchException报错的一点点总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#GitFlow使用"><span class="nav-number">1.</span> <span class="nav-text">GitFlow使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitFlow安装"><span class="nav-number">2.</span> <span class="nav-text">GitFlow安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitFlow的简单实用"><span class="nav-number">3.</span> <span class="nav-text">GitFlow的简单实用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#准备工作"><span class="nav-number">3.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#初始化"><span class="nav-number">3.2.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Git-flow-feature"><span class="nav-number">3.3.</span> <span class="nav-text">Git flow feature</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Git-flow-release"><span class="nav-number">3.4.</span> <span class="nav-text">Git flow release</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Git-flow-hotfix"><span class="nav-number">3.5.</span> <span class="nav-text">Git flow hotfix</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

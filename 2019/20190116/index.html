@@ -1,0 +1,798 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="今天在群里看到一个问题 “PHP执行中内存是什么样子的?”，我还真不知道…找了点资料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP内存的一些简单理解">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190116/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="今天在群里看到一个问题 “PHP执行中内存是什么样子的?”，我还真不知道…找了点资料">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_memory_manager.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_memory_monitor.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/memory_runtime.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_gc.png">
+<meta property="og:updated_time" content="2019-01-21T07:42:23.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP内存的一些简单理解">
+<meta name="twitter:description" content="今天在群里看到一个问题 “PHP执行中内存是什么样子的?”，我还真不知道…找了点资料">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_memory_manager.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP内存的一些简单理解 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP内存的一些简单理解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-01-16T15:33:46+08:00" content="2019-01-16">
+              2019-01-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>今天在群里看到一个问题 “PHP执行中内存是什么样子的?”，我还真不知道…找了点资料<br><a id="more"></a></p>
+<hr>
+<h3 id="内存，是什么"><a href="#内存，是什么" class="headerlink" title="内存，是什么"></a>内存，是什么</h3><p>1.来自硬件的内存<br>2.来自软件的内存</p>
+<p>内存映像是按 <strong>段</strong> 来分配的</p>
+<blockquote>
+<p>1.文本（Text）这个一般就是代码段了 通常用来存储程序执行的代码 比如函数和方法。代码段需要防止在运行时被非法修改，所以只准读取操作，而不允许写入（修改）操作。<br>2.数据（Data）通常是指用来存放程序中已初始化且不为0的全局变量，如：静态变量和常量。<br>3.堆（Heap） 用来存放进程运行中被动态分配的内存段，它的大小并不固定，可动态扩张或缩减。用于存储数据长度可变或占用内存比较大的数据。例如，字符串、数组和对象就存储在这段内存中。<br>4.栈（Stack） 他的特点是空间小但被CPU访问的速度快，是用户存放程序中临时创建的变量。由于栈的后进先出特点，所以栈特别方便用来保存和恢复调用现场。从这个意义上讲，我们可以把堆栈看成一个临时数据寄存、交换的内存区。用于存储占用空间长度不变且占用空间小的数据类型的内存段，例如整型1、100、100000等在内存中占用空间是等长的，占用的空间都是32位4个字节。还有double、boolean等都可以存储在栈空间段中。</p>
+</blockquote>
+<h3 id="Zend内存管理"><a href="#Zend内存管理" class="headerlink" title="Zend内存管理"></a>Zend内存管理</h3><p>Zend Memory Manager(Zend内存管理) 就是php内部请求绑定堆分配器。</p>
+<p>它会一次申请很多的内存放在内存池中，当我们需要内存的时候就会从内存池当取出一块，然后判断有没有时候的内存给调用，如果够的话直接给一块内存 如果不够的话ZendMM就会再次向系统申请内存，另外他里面还有个CopyOnWrite（复制代替写入？）的机制也可以提高内存管理的效率，对了还有垃圾回收机制！</p>
+<p>可以通过 <code>phpinfo()</code> 来查看 如果发现 有 <code>Zend Memory Manager = enabled</code> 就表示开启了Zend内存管理</p>
+<blockquote>
+<p>允许通过基本计算 malloc() / free() 调用来监视请求限制的堆使用<br>允许PHP用户限制堆内存使用量<br>允许缓存已分配的块以防止内存碎片和系统调用<br>允许预先分配PHP内部结构的已知大小的块以对齐的方式适应<br>简化核心和扩展中的内存泄露调试</p>
+</blockquote>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_memory_manager.png" alt="zend_memory_manager"></p>
+<p>看一个Zend内存管理的例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">ini_set(<span class="string">'memory_limit'</span>, <span class="number">-1</span>); <span class="comment">/*不设置Zend Memory Manager 的堆内存限制*/</span></div><div class="line">    </div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">heap</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> shell_exec(sprintf(<span class="string">'grep "VmRSS:" /proc/%d/status'</span>, getmypid()));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">echo</span> heap();</div><div class="line"></div><div class="line">$a = range(<span class="number">1</span>, <span class="number">1024</span> * <span class="number">1024</span>); <span class="comment">// 分配内存</span></div><div class="line"></div><div class="line"><span class="keyword">echo</span> heap();</div><div class="line"></div><div class="line"><span class="keyword">unset</span>($a); <span class="comment">// 或者 $a = null; 释放内存</span></div><div class="line"></div><div class="line"><span class="keyword">echo</span> heap();</div><div class="line"></div><div class="line"><span class="comment">// 结果分别是</span></div><div class="line"><span class="comment">// VmRSS:	87268 kB </span></div><div class="line"><span class="comment">// VmRSS:	120036 kB </span></div><div class="line"><span class="comment">// VmRSS:	87268 kB</span></div></pre></td></tr></table></figure>
+<h3 id="PHP内存函数"><a href="#PHP内存函数" class="headerlink" title="PHP内存函数"></a>PHP内存函数</h3><p>在PHP中有些函数可以设置与获取内存</p>
+<blockquote>
+<p>ini_set(‘memory_limit’, xxx); // 这个可以设置内存<br>memory_get_usage(); // 返回分配给PHP的内存量<br>memory_get_usage(true); // 返回所有已分配段的大小<br>memory_get_peak_usage(); // 返回已分配给PHP脚本的内存峰值（以字节为单位）</p>
+</blockquote>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_memory_monitor.png" alt="zend_memory_monitor"></p>
+<p>说下 <code>memory_get_usage()</code> 函数 它只显示请求绑定的分配，而不是持久分配（通过请求驻留）。PHP扩展可以分配持久内存,如果你不会用到他们的话不要启用。被PHP用到的库也会分配持久内存，使用你的系统来准确的监控你的进程内存消耗</p>
+<h3 id="管理PHP内存"><a href="#管理PHP内存" class="headerlink" title="管理PHP内存"></a>管理PHP内存</h3><p>在PHP中 所有的变量类型都会消耗内存，每个要被编译的脚本都会吃掉内存， 这部分内存可以使用zned内存管理来分配。请求结束时释放已解析脚本的内存。</p>
+<p>当用户变量不在使用的时候 这部分用户变量将会被释放，虽然是这么讲 这里会有个问题 什么时候这些变量才是不被需要 不会在使用的呢？（垃圾回收机制）</p>
+<p>编译脚本的时候会占用请求限制的内存。如果你编译了一个类，那将会吃掉更多的内存，所以最好是在运行时使用它（那个类） 并确保使用了 <code>autoloader</code> 自动加载</p>
+<p>在PHP中所有的变量在底层都是一个 <strong>zval</strong> 结构</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">typedef struct _zval_struct &#123;</div><div class="line">    zvalue_value value;</div><div class="line">    zend_uint refcount;</div><div class="line">    zend_uchar type;</div><div class="line">    zend_uchar is_ref;</div><div class="line">&#125; zval;</div><div class="line">...</div><div class="line">typedef union _zvalue_value &#123;</div><div class="line">    long lval;</div><div class="line">    double dval;</div><div class="line">    struct &#123;</div><div class="line">        char *val;</div><div class="line">        int len;</div><div class="line">    &#125; str;</div><div class="line">    HashTable *ht;</div><div class="line">    zend_object_value obj;</div><div class="line">&#125; zvalue_value;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>吃掉内存的时候 zval 中的东西 而不是 zval 结构本身，比如一个很长的字符串 一个很复杂的数组或者对象，资源类型不会真正的消耗zval中的内存。<br>尽量避免让PHP复制zval，另外PHP只计算有多少符号指向zval 这是他的引用计数<br>PHP对zval操作是使用复制代替写入的系统，只有当发生改变的时候内存才会得到分配</p>
+</blockquote>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/memory_runtime.png" alt="memory_runtime"></p>
+<p>如上图（注意引用计数的变化） 假设我们执行了4行代码</p>
+<p>当执行 <code>$a = &#39;foo&#39;;</code> 的时候首先会在内存申请一块空间 其中存有他的值 和 他的引用计数<br>当执行 <code>$b = $a;</code> 的时候 $a 和 $b 都是指向了同一块内存地址<br>当执行 <code>$a = 17;</code> 的时候，$a 发生了类型改变 这个时候就会重新分配内存 所以发生了上面的操作 $b 还是指向一开始申请的内存地址 也就是字符串 foo 的内存，而$a 已经指向了新申请的内存地址 int 17上<br>当执行 <code>$b = null;</code> 的时候会回收内存 $b 就不存在了 就只剩下 $a了</p>
+<p>看下内存消耗情况 代码太渣 直接看结果吧 因为在浏览器输出的 加了 <code>&lt;br/&gt;</code> 为了明显看出内存的变化 我把 <code>$a = 17</code> 换了重新赋值字符串 这样内存变化比较明显</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">ini_set(<span class="string">'memory_limit'</span>, <span class="number">-1</span>); <span class="comment">/*不设置Zend Memory Manager 的堆内存限制*/</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">get_mem_status</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        printf(<span class="string">"Memory usage: %.2f Kb &lt;br/&gt;"</span>, memory_get_usage() / <span class="number">1024</span>);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> ($segmentSize = getenv(<span class="string">'ZEND_MM_SEG_SIZE'</span>)) &#123;</div><div class="line">            printf(<span class="string">"Heap segmentation : %d segments of %d bytes (%d kb used)\n\r"</span>, memory_get_usage(<span class="number">1</span>) / $segmentSize, $segmentSize, memory_get_usage(<span class="number">1</span>) / <span class="number">1024</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> <span class="string">"初始化内存："</span>;</div><div class="line">    get_mem_status();</div><div class="line"></div><div class="line">    $a = str_repeat(<span class="string">'a'</span>, <span class="number">1024</span> * <span class="number">1024</span>);</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> <span class="string">"声明了变量a之后的内存："</span>;</div><div class="line">    get_mem_status();</div><div class="line"></div><div class="line">    $b = $a;</div><div class="line">    <span class="comment">// $a = 17;</span></div><div class="line">    $a = str_repeat(<span class="string">'b'</span>, <span class="number">1024</span>);</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">echo</span> <span class="string">"变量b的类型是："</span>.gettype($b).<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"变量a的类型是："</span>.gettype($a).<span class="string">"&lt;br/&gt;"</span>;</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> <span class="string">"此时的内存："</span>;</div><div class="line">    get_mem_status();</div><div class="line"></div><div class="line">    $b = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> <span class="string">"手动释放变量b后的类型是："</span>.gettype($b).<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"变量a的类型是："</span>.gettype($a).<span class="string">"&lt;br/&gt;"</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">echo</span> <span class="string">"手动释放变量b最后的内存："</span>;</div><div class="line">    get_mem_status();</div><div class="line"></div><div class="line">    $a = str_repeat(<span class="string">'a'</span>, <span class="number">1024</span> * <span class="number">1024</span>);</div><div class="line">    $b = $a;</div><div class="line">    $a = <span class="number">17</span>;</div><div class="line">    $b = <span class="keyword">null</span>; <span class="comment">// or unset($b);</span></div></pre></td></tr></table></figure>
+<font color="red">下面是结果 结合上面的图就好理解一点了</font>
+
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">初始化内存：Memory usage: <span class="number">348.51</span> Kb </div><div class="line">声明了变量a之后的内存：Memory usage: <span class="number">1376.51</span> Kb</div><div class="line">变量b的类型是：string</div><div class="line">变量a的类型是：string</div><div class="line">此时的内存：Memory usage: <span class="number">1377.76</span> Kb </div><div class="line">手动释放变量b后的类型是：<span class="keyword">NULL</span></div><div class="line">变量a的类型是：string</div><div class="line">手动释放变量b最后的内存：Memory usage: <span class="number">349.76</span> Kb</div></pre></td></tr></table></figure>
+<p>可以看出声明了变量 $a 后内存变成了 1376.51 可以计算得出$a占用内存 1028 Kb<br>当执行$b = $a; 的时候只是把$b指向了同一块内存地址 堆内存中并没有发生改变 内存大小没变<br>当执行$a = str_repeat(‘b’, 1024); 的时候$a发生了改变需要重新分配内存 所以$a重新开辟了内存出来, 而$b还是指向原来的内存地址（那个地址还是占用1028kb） 这时候的内存因为$a新分配的内存而增加了 变成 1377.76kb 可以计算出新的$a的 内存是 1.25kb<br>当执行 $b = null; 的时候相当于释放了$b 也就是他指向的那块内存（大小1028kb）被释放，所以后面获取的内存是 1377.76-1028 = 349.76kb</p>
+<h3 id="PHP用户空间内存泄露"><a href="#PHP用户空间内存泄露" class="headerlink" title="PHP用户空间内存泄露"></a>PHP用户空间内存泄露</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_mem_status</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"&lt;br/&gt;"</span>;</div><div class="line">    printf(<span class="string">"Memory usage: %.2f Kb &lt;br/&gt;"</span>, memory_get_usage() / <span class="number">1024</span>);</div><div class="line">    <span class="keyword">echo</span> <span class="string">"&lt;br/&gt;"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> $b;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> $a;</div><div class="line">&#125;</div><div class="line"></div><div class="line">get_mem_status();</div><div class="line">$a = <span class="keyword">new</span> A(); <span class="comment">// 这时 $a 指向 ObjectA refcount = 1</span></div><div class="line">get_mem_status();</div><div class="line">$b = <span class="keyword">new</span> B(); <span class="comment">// 这时 $b 指向 ObjectB refcount = 1</span></div><div class="line">get_mem_status();</div><div class="line">$a-&gt;b = $b; <span class="comment">// 这个时候 $a-&gt;b 指向了 ObjectB refcount = 2</span></div><div class="line">$b-&gt;a = $a; <span class="comment">// 这个时候 $b-&gt;a 指向 ObjectA refcount = 2</span></div><div class="line"><span class="keyword">unset</span>($a, $b); <span class="comment">// 这个时候 $a-&gt;b 还是指向了 ObjectB 只是 refcount = 1   $b-&gt;a 还是指向了 ObjectA 只是 refcount = 1</span></div><div class="line">get_mem_status();</div><div class="line"><span class="comment">// 结果</span></div><div class="line"><span class="comment">// Memory usage: 349.30 Kb </span></div><div class="line"><span class="comment">// Memory usage: 349.36 Kb </span></div><div class="line"><span class="comment">// Memory usage: 349.41 Kb </span></div><div class="line"><span class="comment">// Memory usage: 349.41 Kb</span></div></pre></td></tr></table></figure>
+<p>如上代码 最后你会发现即使释放了$a 和 $b 内存也没有减少，因为这种情况下，对象仍然存在内存当中即使没有别的东西引用他但他的引用计数是1 所以还会占用内存 这种就是PHP的用户空间内存泄露</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/zend_gc.png" alt="zend_gc"></p>
+<h3 id="监控内存"><a href="#监控内存" class="headerlink" title="监控内存"></a>监控内存</h3><p>Linux下可以使用 <code>top</code> 命令等查看</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[test@web110 www]$ top</div><div class="line">top - <span class="number">17</span>:<span class="number">38</span>:<span class="number">17</span> up <span class="number">41</span> days,  <span class="number">1</span>:<span class="number">30</span>, <span class="number">13</span> users,  load average: <span class="number">1.23</span>, <span class="number">1.30</span>, <span class="number">1.44</span></div><div class="line">Tasks: <span class="number">1579</span> total,   <span class="number">2</span> running, <span class="number">1576</span> sleeping,   <span class="number">0</span> stopped,   <span class="number">1</span> zombie</div><div class="line">%Cpu(s): <span class="number">33.1</span> us,  <span class="number">3.2</span> sy,  <span class="number">0.0</span> ni, <span class="number">63.7</span> id,  <span class="number">0.0</span> wa,  <span class="number">0.0</span> hi,  <span class="number">0.1</span> si,  <span class="number">0.0</span> st</div><div class="line">KiB Mem :  <span class="number">8011568</span> total,   <span class="number">507840</span> free,  <span class="number">5467360</span> used,  <span class="number">2036368</span> buff/cache</div><div class="line">KiB Swap:  <span class="number">4325372</span> total,  <span class="number">1001356</span> free,  <span class="number">3324016</span> used.  <span class="number">1433472</span> avail Mem </div><div class="line"></div><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                                                                         </div><div class="line">  <span class="number">910</span> root      <span class="number">20</span>   <span class="number">0</span> <span class="number">4277076</span> <span class="number">563328</span>  <span class="number">13820</span> S  <span class="number">52.6</span>  <span class="number">7.0</span>   <span class="number">3671</span>:<span class="number">10</span> dockerd                                                                                                                                         </div><div class="line"> <span class="number">1687</span> root      <span class="number">20</span>   <span class="number">0</span> <span class="number">2595720</span>  <span class="number">72488</span>   <span class="number">3532</span> S  <span class="number">35.5</span>  <span class="number">0.9</span>   <span class="number">3328</span>:<span class="number">52</span> java</div></pre></td></tr></table></figure>
+<p>找到上面的 <code>pid</code> 比如上面 910 的 docker 然后执行 <code>cat /proc/910/status</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[test@lcoalhost ~]$ cat /proc/<span class="number">910</span>/status</div><div class="line">Name:	dockerd</div><div class="line">State:	S (sleeping)</div><div class="line">Pid:	<span class="number">910</span></div><div class="line">...</div><div class="line">FDSize:	<span class="number">1024</span></div><div class="line">Groups:	</div><div class="line">VmPeak:	 <span class="number">4277588</span> kB</div><div class="line">VmSize:	 <span class="number">4277076</span> kB</div><div class="line">VmHWM:	  <span class="number">581216</span> kB</div><div class="line">VmRSS:	  <span class="number">564340</span> kB  这个是常驻内存大小</div><div class="line">VmData:	 <span class="number">4188136</span> kB  这个是 Data段的内存大小</div><div class="line">VmStk:	     <span class="number">136</span> kB	 这个是 Stack段的内存大小</div><div class="line">VmExe:	   <span class="number">37352</span> kB  这个是 Text段的内存大小</div><div class="line">VmLib:	    <span class="number">5896</span> kB</div><div class="line">VmPTE:	    <span class="number">2328</span> kB</div><div class="line">VmSwap:	   <span class="number">51004</span> kB</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>还可以通过 <code>cat /proc/910/smaps</code>来查看更具体的内存</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[test@localhost ~]<span class="comment"># cat /proc/910/smaps</span></div><div class="line"><span class="number">7</span>f8dc9414000<span class="number">-7</span>f8dc9454000 r--s <span class="number">00000000</span> fd:<span class="number">00</span> <span class="number">25365236</span>                   /<span class="keyword">var</span>/lib/docker/containerd/daemon/io.containerd.metadata.v1.bolt/meta.db</div><div class="line">Size:                <span class="number">256</span> kB</div><div class="line">Shared_Clean:          <span class="number">0</span> kB  这个是已经分享的内存</div><div class="line">Shared_Dirty:          <span class="number">0</span> kB  这个同上</div><div class="line">Private_Clean:        <span class="number">80</span> kB  这个是私有内存</div><div class="line">Private_Dirty:         <span class="number">0</span> kB  同上</div><div class="line">Referenced:           <span class="number">80</span> kB</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>PHP他本身也只是像其他进程一样 只是个进程而已，也可以使用上面的系统命令来监控他的内存</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">heap</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> shell_exec(sprintf(<span class="string">'grep "VmRSS:" /proc/%d/status'</span>, getmypid()));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">echo</span> heap();</div></pre></td></tr></table></figure>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://www.laruence.com/2008/08/22/412.html" target="_blank" rel="external">http://www.laruence.com/2008/08/22/412.html</a>;</p>
+<p><a href="http://mars.run/2016/01/Understanding-PHP-memory-management/" target="_blank" rel="external">http://mars.run/2016/01/Understanding-PHP-memory-management/</a></p>
+<p><a href="https://gywbd.github.io/posts/2015/4/php-variable-in-memory.html" target="_blank" rel="external">https://gywbd.github.io/posts/2015/4/php-variable-in-memory.html</a></p>
+<p><a href="https://www.slideshare.net/jpauli/understanding-php-memory" target="_blank" rel="external">https://www.slideshare.net/jpauli/understanding-php-memory</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190110/index.html" rel="next" title="PHP中glob()和json_encode()函数">
+                <i class="fa fa-chevron-left"></i> PHP中glob()和json_encode()函数
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20190123/index.html" rel="prev" title="Laraval-Debugbar的简单使用">
+                Laraval-Debugbar的简单使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#内存，是什么"><span class="nav-number">1.</span> <span class="nav-text">内存，是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zend内存管理"><span class="nav-number">2.</span> <span class="nav-text">Zend内存管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP内存函数"><span class="nav-number">3.</span> <span class="nav-text">PHP内存函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理PHP内存"><span class="nav-number">4.</span> <span class="nav-text">管理PHP内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP用户空间内存泄露"><span class="nav-number">5.</span> <span class="nav-text">PHP用户空间内存泄露</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#监控内存"><span class="nav-number">6.</span> <span class="nav-text">监控内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1019 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Base64," />
+
+
+
+
+
+
+<meta name="description" content="昨天对接一个客户的接口, 踩了一些坑, 和 base64 有关, 顺便补了下 有关 Base64 的一些知识">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Base64的一些理解">
+<meta property="og:url" content="https://www.tokme.cn/2018/20180928/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="昨天对接一个客户的接口, 踩了一些坑, 和 base64 有关, 顺便补了下 有关 Base64 的一些知识">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/base64.png">
+<meta property="og:updated_time" content="2018-09-29T08:31:51.636Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Base64的一些理解">
+<meta name="twitter:description" content="昨天对接一个客户的接口, 踩了一些坑, 和 base64 有关, 顺便补了下 有关 Base64 的一些知识">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/base64.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于Base64的一些理解 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于Base64的一些理解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-28T13:58:55+08:00" content="2018-09-28">
+              2018-09-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>昨天对接一个客户的接口, 踩了一些坑, 和 <strong>base64</strong> 有关, 顺便补了下 有关 <strong>Base64</strong> 的一些知识<br><a id="more"></a></p>
+<hr>
+<h3 id="事件起因"><a href="#事件起因" class="headerlink" title="事件起因"></a>事件起因</h3><p>最近对接了一个客户的平台 </p>
+<p>中间有接受异步通知验证签名的一个环节 </p>
+<p>结果拿到对方的签名后 怎么都校验不通过</p>
+<p>无奈请求对方协助</p>
+<p>最终发现是对方发来的 签名有问题 正常签名都会进行 <code>base64</code> 转码后再发送出去</p>
+<p>但是对方 将标准Base64中的 <code>+</code> 和 <code>/</code> 分别改成了 <code>-</code> 和 <code>_</code></p>
+<p>文档上也没有明确声明处理过了这些东西 真的坑爹！</p>
+<p>而我拿到签名后也没有注意过签名的格式是否正确 直接进行了 <code>base64_decode</code> (毕竟之前对接那些大厂的签名都是直接解析的)</p>
+<p>所以导致最终怎么验证签名都不正确</p>
+<h3 id="Base64-编码"><a href="#Base64-编码" class="headerlink" title="Base64 编码"></a>Base64 编码</h3><p>Base64编码是一种可以将任意二进制数据转到文本字符串的编码方法</p>
+<p>由于 2^{6}=64}，所以每6个比特为一个单元，对应某个可打印字符。</p>
+<p>3个字节有24个比特，对应于4个Base64单元，即3个字节可由4个可打印字符来表示。</p>
+<p>常用在传输少量的二进制数据 比如 <code>邮件</code>, <code>URL</code>, <code>Cookie</code>, <code>网页</code> 中</p>
+<p>在Base64中可打印的字符 包括  <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, 这样共有62个字符</p>
+<font color="red">此外还剩下的两个可打印符号在不同的系统中而不同</font>
+
+<p>在MIME格式的电子邮件中，Base64可以用来将binary的字节序列数据编码成ASCII字符序列构成的文本。</p>
+<p>使用时，在传输编码方式中指定Base64, 使用的字符包括大小写拉丁字母各26个、数字10个、加号 <code>+</code> 和斜杠 <code>/</code> ,共64个字符, 等号 <code>=</code> 用来作为后缀用途</p>
+<p>这种也是我们现在常用的了</p>
+<p>另外 Base64 转码后的长度会比原文增加 33% 左右 不太适合太长数据的传输</p>
+<h3 id="Base64-索引表"><a href="#Base64-索引表" class="headerlink" title="Base64 索引表"></a>Base64 索引表</h3><table>
+<thead>
+<tr>
+<th>数值</th>
+<th>字符</th>
+<th></th>
+<th>数值</th>
+<th>字符</th>
+<th></th>
+<th>数值</th>
+<th>字符</th>
+<th></th>
+<th>数值</th>
+<th>字符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>A</td>
+<td></td>
+<td>16</td>
+<td>Q</td>
+<td></td>
+<td>32</td>
+<td>g</td>
+<td></td>
+<td>48</td>
+<td>w</td>
+</tr>
+<tr>
+<td>0</td>
+<td>A</td>
+<td></td>
+<td>16</td>
+<td>Q</td>
+<td></td>
+<td>32</td>
+<td>g</td>
+<td></td>
+<td>48</td>
+<td>w</td>
+</tr>
+<tr>
+<td>1</td>
+<td>B</td>
+<td></td>
+<td>17</td>
+<td>R</td>
+<td></td>
+<td>33</td>
+<td>h</td>
+<td></td>
+<td>49</td>
+<td>x</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C</td>
+<td></td>
+<td>18</td>
+<td>S</td>
+<td></td>
+<td>34</td>
+<td>i</td>
+<td></td>
+<td>50</td>
+<td>y</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D</td>
+<td></td>
+<td>19</td>
+<td>T</td>
+<td></td>
+<td>35</td>
+<td>j</td>
+<td></td>
+<td>51</td>
+<td>z</td>
+</tr>
+<tr>
+<td>4</td>
+<td>E</td>
+<td></td>
+<td>20</td>
+<td>U</td>
+<td></td>
+<td>36</td>
+<td>k</td>
+<td></td>
+<td>52</td>
+<td>0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>F</td>
+<td></td>
+<td>21</td>
+<td>V</td>
+<td></td>
+<td>37</td>
+<td>l</td>
+<td></td>
+<td>53</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>G</td>
+<td></td>
+<td>22</td>
+<td>W</td>
+<td></td>
+<td>38</td>
+<td>m</td>
+<td></td>
+<td>54</td>
+<td>2</td>
+</tr>
+<tr>
+<td>7</td>
+<td>H</td>
+<td></td>
+<td>23</td>
+<td>X</td>
+<td></td>
+<td>39</td>
+<td>n</td>
+<td></td>
+<td>55</td>
+<td>3</td>
+</tr>
+<tr>
+<td>8</td>
+<td>I</td>
+<td></td>
+<td>24</td>
+<td>Y</td>
+<td></td>
+<td>40</td>
+<td>o</td>
+<td></td>
+<td>56</td>
+<td>4</td>
+</tr>
+<tr>
+<td>9</td>
+<td>J</td>
+<td></td>
+<td>25</td>
+<td>Z</td>
+<td></td>
+<td>41</td>
+<td>p</td>
+<td></td>
+<td>57</td>
+<td>5</td>
+</tr>
+<tr>
+<td>10</td>
+<td>K</td>
+<td></td>
+<td>26</td>
+<td>a</td>
+<td></td>
+<td>42</td>
+<td>q</td>
+<td></td>
+<td>58</td>
+<td>6</td>
+</tr>
+<tr>
+<td>11</td>
+<td>L</td>
+<td></td>
+<td>27</td>
+<td>b</td>
+<td></td>
+<td>43</td>
+<td>r</td>
+<td></td>
+<td>59</td>
+<td>7</td>
+</tr>
+<tr>
+<td>12</td>
+<td>M</td>
+<td></td>
+<td>28</td>
+<td>c</td>
+<td></td>
+<td>44</td>
+<td>s</td>
+<td></td>
+<td>60</td>
+<td>8</td>
+</tr>
+<tr>
+<td>13</td>
+<td>N</td>
+<td></td>
+<td>29</td>
+<td>d</td>
+<td></td>
+<td>45</td>
+<td>t</td>
+<td></td>
+<td>61</td>
+<td>9</td>
+</tr>
+<tr>
+<td>14</td>
+<td>O</td>
+<td></td>
+<td>30</td>
+<td>e</td>
+<td></td>
+<td>46</td>
+<td>u</td>
+<td></td>
+<td>62</td>
+<td>+</td>
+</tr>
+<tr>
+<td>15</td>
+<td>P</td>
+<td></td>
+<td>31</td>
+<td>f</td>
+<td></td>
+<td>47</td>
+<td>v</td>
+<td></td>
+<td>63</td>
+<td>/</td>
+</tr>
+</tbody>
+</table>
+<p>下面来看一个示例</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/base64.png" alt="base64--Man解析"></p>
+<p>第一步，”M”、”a”、”n”的ASCII值分别是77、97、110，对应的二进制值是01001101、01100001、01101110，将它们连成一个24位的二进制字符串010011010110000101101110。</p>
+<p>第二步，将这个24位的二进制字符串分成4组，每组6个二进制位：010011、010110、000101、101110。</p>
+<p>第三步，在每组前面加两个00，扩展成32个二进制位，即四个字节：00010011、00010110、00000101、00101110。它们的十进制值分别是19、22、5、46。</p>
+<p>第四步，根据上表，得到每个值对应Base64编码，即T、W、F、u。</p>
+<p>因此，Man的Base64编码就是TWFu。</p>
+<h3 id="Base64-URL"><a href="#Base64-URL" class="headerlink" title="Base64 - URL"></a>Base64 - URL</h3><p>有时候我们可能需要在 <code>URL</code> 传递信息 如果使用 <code>Base64</code> 转码的话 </p>
+<p>其中的 <code>+</code> 和 <code>/</code> 会被转换成 <code>%2b</code> 和 <code>%2f</code> 类似这种(被转成什么 这个和当前的文件编码有关系的)</p>
+<p>这些会给存储数据库 解码等造成歧义</p>
+<p>所以有些处理就是把 <code>+</code> 和 <code>/</code> 分别改成了 <code>-</code> 和 <code>_</code> 来传输</p>
+<p>我遇到的就是这种情况 希望大家以后可以注意下这个格式！</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="https://zh.wikipedia.org/wiki/Base64" target="_blank" rel="external">https://zh.wikipedia.org/wiki/Base64</a></p>
+<p><a href="http://www.ruanyifeng.com/blog/2008/06/base64.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2008/06/base64.html</a></p>
+<p><a href="https://segmentfault.com/a/1190000004533485" target="_blank" rel="external">https://segmentfault.com/a/1190000004533485</a></p>
+<p><a href="https://blog.csdn.net/m0_37661961/article/details/78825129" target="_blank" rel="external">https://blog.csdn.net/m0_37661961/article/details/78825129</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Base64/" rel="tag"><i class="fa fa-tag"></i>Base64</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20180920/index.html" rel="next" title="PHP中RSA加密算法的使用">
+                <i class="fa fa-chevron-left"></i> PHP中RSA加密算法的使用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20180929/index.html" rel="prev" title="编码问题、时区问题整理">
+                编码问题、时区问题整理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事件起因"><span class="nav-number">1.</span> <span class="nav-text">事件起因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Base64-编码"><span class="nav-number">2.</span> <span class="nav-text">Base64 编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Base64-索引表"><span class="nav-number">3.</span> <span class="nav-text">Base64 索引表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Base64-URL"><span class="nav-number">4.</span> <span class="nav-text">Base64 - URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#致谢"><span class="nav-number">5.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

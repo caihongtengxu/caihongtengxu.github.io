@@ -1,0 +1,765 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Nginx," />
+
+
+
+
+
+
+<meta name="description" content="目前公司所有项目已经全线是 Docker 部署了 为了做 反向代理 （其实也就是一个服务器了 这里使用nginx） 先单独创建一个容器 里面只有 一个 Nginx 做web服务器 代号 欧几里德号 然后每个项目单独一个容器 Nginx + PHP 服务 代号 GNT-00 然后每个歼灭任务（请求）过来的时候先进过 欧几里德号 根据不同的配置 转发到 具体的 GNT-00 中来执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于同服务器多项目多域名配置">
+<meta property="og:url" content="https://www.tokme.cn/2018/20181106/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="目前公司所有项目已经全线是 Docker 部署了 为了做 反向代理 （其实也就是一个服务器了 这里使用nginx） 先单独创建一个容器 里面只有 一个 Nginx 做web服务器 代号 欧几里德号 然后每个项目单独一个容器 Nginx + PHP 服务 代号 GNT-00 然后每个歼灭任务（请求）过来的时候先进过 欧几里德号 根据不同的配置 转发到 具体的 GNT-00 中来执行">
+<meta property="og:updated_time" content="2018-11-13T03:00:25.838Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于同服务器多项目多域名配置">
+<meta name="twitter:description" content="目前公司所有项目已经全线是 Docker 部署了 为了做 反向代理 （其实也就是一个服务器了 这里使用nginx） 先单独创建一个容器 里面只有 一个 Nginx 做web服务器 代号 欧几里德号 然后每个项目单独一个容器 Nginx + PHP 服务 代号 GNT-00 然后每个歼灭任务（请求）过来的时候先进过 欧几里德号 根据不同的配置 转发到 具体的 GNT-00 中来执行">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于同服务器多项目多域名配置 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于同服务器多项目多域名配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-11-06T10:57:42+08:00" content="2018-11-06">
+              2018-11-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">网络编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目前公司所有项目已经全线是 Docker 部署了 为了做 <code>反向代理</code> （其实也就是一个服务器了 这里使用nginx） 先单独创建一个容器 里面只有 一个 <code>Nginx</code> 做web服务器 代号 <strong>欧几里德号</strong> 然后每个项目单独一个容器 <code>Nginx + PHP</code> 服务 代号 <strong>GNT-00</strong> 然后每个歼灭任务（请求）过来的时候先进过 <strong>欧几里德号</strong> 根据不同的配置 转发到 具体的 <strong>GNT-00</strong> 中来执行<br><a id="more"></a></p>
+<hr>
+<h3 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h3><p>域名 全称 Domain Name 简称域名、网域，是由一串用点分隔的字符组成的互联网上某一台计算机或计算机组的名称，用于在数据传输时标识计算机的电子方位。域名可以说是一个IP地址的代称，目的是为了便于记忆后者</p>
+<p>域名的核心是 域名系统 全称 Domain Name System 缩写 DNS </p>
+<p>其主要功能用来解析域名 因为计算机中间的通信是找 <code>IP</code> 地址的 那你不可能让用户去记住你的服务器IP地址吧 当然是记住一个有意义的名字（也就是域名） 当输入域名的时候会先去 <code>DNS</code> 根据域名解析找到 正确的IP地址 然后访问 这个过程叫做正向解析</p>
+<p>那么反向解析就是根据IP地址找域名了</p>
+<p>注意中间的解析过程是一个递归的过程 比如 输入abc.com 会先到最近的DNS服务查找IP地址 如果没有会去下一个DNS服务器查找 这样递归下去</p>
+<h3 id="域名分级"><a href="#域名分级" class="headerlink" title="域名分级"></a>域名分级</h3><p>域名的第一级是顶级域，它包括通用顶级域，例如.com、.net和.org；以及国家和地区顶级域，例如.us、.cn和.tk</p>
+<p>举例：<code>google.com</code> 其中 <code>com</code> 是顶级域名， <code>google</code> 是二级域名 如果在来 <code>mail.google.com</code> 其中 <code>mail</code> 就是三级域名了</p>
+<p>但是我们平时可能存在误区 把 <code>google.com</code> 整体当作是 一级域名(顶级域名) <code>mail.google.com</code> 这种当作是二级域名 这种理论是上错误的 但是感觉都这么讲 也就将错就错了</p>
+<h3 id="域名注册"><a href="#域名注册" class="headerlink" title="域名注册"></a>域名注册</h3><p>域名注册商：主要提供域名注册服务，负责域名的技术维护和服务，并负责维护其管理的顶级域名的注册名称数据库。</p>
+<p>要成为一个域名的注册商，需得到ICANN和该域名的域名注册局的认可</p>
+<p>域名注册人在注册商处登记域名信息后，域名注册管理机构和域名注册商通常会收取费用，一般是按域名的有效期计算，单位是年。收到费用后，向域名注册管理机构发去注册信息，后者授权前者在相应的顶级域名中分配名称，并使用一种特殊协议——WHOIS协议，发布域名注册信息。最后，注册商将域名的使用权限发放给域名注册人。此交易在注册商的角度看，被称为域名的销售或租赁；在注册人的角度看，被称为域名的注册或购买。目前，这一过程大多已经自动化。顶级域名注册管理机构和域名注册商的完整列表由ICANN发布</p>
+<h3 id="二级域名配置（三级域名）"><a href="#二级域名配置（三级域名）" class="headerlink" title="二级域名配置（三级域名）"></a>二级域名配置（三级域名）</h3><p>以阿里云为例 链接 见这里 <a href="https://help.aliyun.com/knowledge_detail/39785.html" target="_blank" rel="external">https://help.aliyun.com/knowledge_detail/39785.html</a></p>
+<p>在填写域名指向IP地址后 Nginx配置</p>
+<p>还是用我们公司的服务架构来说明</p>
+<p>官网 <code>gundam.com</code> 这个其实是二级域名</p>
+<p>现在需要配置 API服务 需要域名 <code>api.gundam.com</code> 三级域名</p>
+<p>在阿里云后台我们配置 <code>api.gundam.com</code> 指向 <code>192.168.1.100</code> 这个IP(举例的IP请换真实公网的) 这个IP其实是我们的最外层的代理服务器（这里是一个单独的Nginx容器）</p>
+<p>在Nginx中有很多的项目的配置文件 一般 <code>sites-enabled</code>（文件夹随便你开心命名） 下会放很多的项目配置文件 如果你是多项目 可以按项目来命名等等</p>
+<p>比如下面这种 <code>nginx 配置文件片段</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    proxy_connect_timeout <span class="number">300</span>s;</div><div class="line">    proxy_send_timeout <span class="number">600</span>s;</div><div class="line">    proxy_read_timeout <span class="number">300</span>s;</div><div class="line">    proxy_buffer_size <span class="number">128</span>k;</div><div class="line">    proxy_buffers <span class="number">8</span> <span class="number">128</span>k;</div><div class="line">    proxy_busy_buffers_size <span class="number">256</span>k;</div><div class="line">    proxy_temp_file_write_size <span class="number">128</span>m;</div><div class="line"></div><div class="line">    client_header_buffer_size <span class="number">16</span>k;</div><div class="line">    large_client_header_buffers <span class="number">4</span> <span class="number">64</span>k;</div><div class="line">    fastcgi_buffers <span class="number">8</span> <span class="number">128</span>k;</div><div class="line">    send_timeout <span class="number">60</span>;</div><div class="line">    client_max_body_size <span class="number">20</span>M;</div><div class="line">    listen <span class="number">8000</span>;</div><div class="line"></div><div class="line">    server_name api.gundam.com;</div><div class="line">    location / &#123;</div><div class="line">    	proxy_pass http:<span class="comment">//192.168.1.100:10000;</span></div><div class="line">    	<span class="keyword">include</span> /conf.d/proxy-params.conf;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当请求 <code>api.gundam.com</code> 首先根据域名解析找到 <code>192.168.1.100</code> 请求发进来的时候 Nginx会读取配置文件 然后发现 <code>server_name</code> 是这个 </p>
+<p>Nginx 就会转发请求到 <code>192.168.1.100:10000</code> 下 因为都是 <code>docker</code> 容器的， 在服务器的 <code>10000</code> 端口下映射的是 当前的API项目</p>
+<p>当请求进入到 10000 端口下的容器中时候就是正常的解析 各种处理 然后返回结果了，其他多项目配置同理</p>
+<p>这样就完成了公司 <strong>同服务器</strong> <strong>多项目</strong>  <strong>多域名</strong> 的配置</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Nginx/" rel="tag"><i class="fa fa-tag"></i>Nginx</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20181101/index.html" rel="next" title="微信H5支付 - Referer丢失问题">
+                <i class="fa fa-chevron-left"></i> 微信H5支付 - Referer丢失问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20181113/index.html" rel="prev" title="使用 腾讯云存储 做图床">
+                使用 腾讯云存储 做图床 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#域名"><span class="nav-number">1.</span> <span class="nav-text">域名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#域名分级"><span class="nav-number">2.</span> <span class="nav-text">域名分级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#域名注册"><span class="nav-number">3.</span> <span class="nav-text">域名注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二级域名配置（三级域名）"><span class="nav-number">4.</span> <span class="nav-text">二级域名配置（三级域名）</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

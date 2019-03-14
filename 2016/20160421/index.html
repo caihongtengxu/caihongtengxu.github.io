@@ -1,0 +1,795 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Ubuntu," />
+
+
+
+
+
+
+<meta name="description" content="前言
+当我们创建一个新的系统的时候 最最基础且重要的一件事 是你应当知道 如何给系统增加或者删除用户，但是我们往往只是会给一个默认的 root 用户
+当我们使用 root 用户的时候 它给我们很大的权限和灵活性，但同时它也是很危险的和具有毁灭性的 比如一些误操作。我们几乎总是使用它来创建一个额外的、没有权限的用户来做普通的工作，同时我们也应该为我们系统上的其他用户创建一些额外的账户，每一个用户都应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu 16.04下添加和删除用户">
+<meta property="og:url" content="https://www.tokme.cn/2016/20160421/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="前言
+当我们创建一个新的系统的时候 最最基础且重要的一件事 是你应当知道 如何给系统增加或者删除用户，但是我们往往只是会给一个默认的 root 用户
+当我们使用 root 用户的时候 它给我们很大的权限和灵活性，但同时它也是很危险的和具有毁灭性的 比如一些误操作。我们几乎总是使用它来创建一个额外的、没有权限的用户来做普通的工作，同时我们也应该为我们系统上的其他用户创建一些额外的账户，每一个用户都应">
+<meta property="og:updated_time" content="2018-06-08T05:45:44.220Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu 16.04下添加和删除用户">
+<meta name="twitter:description" content="前言
+当我们创建一个新的系统的时候 最最基础且重要的一件事 是你应当知道 如何给系统增加或者删除用户，但是我们往往只是会给一个默认的 root 用户
+当我们使用 root 用户的时候 它给我们很大的权限和灵活性，但同时它也是很危险的和具有毁灭性的 比如一些误操作。我们几乎总是使用它来创建一个额外的、没有权限的用户来做普通的工作，同时我们也应该为我们系统上的其他用户创建一些额外的账户，每一个用户都应">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Ubuntu 16.04下添加和删除用户 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Ubuntu 16.04下添加和删除用户
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-21T00:00:00+08:00" content="2016-04-21">
+              2016-04-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><blockquote>
+<p>当我们创建一个新的系统的时候 最最基础且重要的一件事 是你应当知道 如何给系统增加或者删除用户，但是我们往往只是会给一个默认的 <strong>root</strong> 用户</p>
+<p>当我们使用 <strong>root</strong> 用户的时候 它给我们很大的权限和灵活性，但同时它也是很危险的和具有毁灭性的 比如一些误操作。我们几乎总是使用它来创建一个额外的、没有权限的用户来做普通的工作，同时我们也应该为我们系统上的其他用户创建一些额外的账户，每一个用户都应该有一个不同的账户</p>
+<p>当你通过使用<code>sudo</code> 你仍然可以使用系统管理员的权限，下面我们将介绍如何创建用户账号，分配<code>sudo</code>特权以及删除用户<br><a id="more"></a></p>
+</blockquote>
+<hr>
+<h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4><p>如果你是使用 <strong>root</strong> 用户登录的，你可以使用如下代码在任何时候创建一个用户：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ adduser newuser</div></pre></td></tr></table></figure>
+<p>如果你使用一个拥有<code>sudo</code>特权的非 <strong>root</strong> 用户，你可以使用如下的命令来添加一个用户</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo adduser newuser</div></pre></td></tr></table></figure>
+<p>无论哪一种方法，程序都要经过下面的步骤：</p>
+<ul>
+<li>给新用户分配并确认一个密码</li>
+</ul>
+<ul>
+<li>给新用户输入一些额外的描述信息，如果你不想这样做 完成可以直接敲击<code>Enter</code>键来跳过这一步操作</li>
+</ul>
+<ul>
+<li>最后，你会被询问确认你提供的信息是否正确，输入<code>Y</code> 即可继续</li>
+</ul>
+<p>你的新用户现在可以使用了，你现在可以使用你刚刚刚设置的新密码来登录</p>
+<h4 id="给一个用户分配sudo特权"><a href="#给一个用户分配sudo特权" class="headerlink" title="给一个用户分配sudo特权"></a>给一个用户分配<code>sudo</code>特权</h4><p>如果你的新用户需要去执行一些 <strong>root</strong> 权限的命令，你需要给你的新用户增加<code>sudo</code>权限</p>
+<h5 id="添加新用户到sudo分组"><a href="#添加新用户到sudo分组" class="headerlink" title="添加新用户到sudo分组"></a>添加新用户到sudo分组</h5><p>默认情况下，在  <strong>Ubuntu 16.04</strong> 系统上 <code>sudo</code>特权被配置到了 任何继承了  <strong>sudo</strong> 分组的用户特权中<br>你可以使用<code>groups</code>命令 来查看你的新用户当前所处的分组</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ groups newuser</div></pre></td></tr></table></figure>
+<p>输出类似这种结构 已实际为准</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ newuser : newuser</div></pre></td></tr></table></figure>
+<p>在默认情况下，在我们创建一个新用户的同时，也会用这个用户名创建一个同名的分组，这个用户只属于这个分组 我们可以使用<code>usermod</code>命令来把用户加入到一个新的分组</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ usermod -aG sudo newuser</div></pre></td></tr></table></figure>
+<p>上面的<code>-aG</code>参数代表把用户添加到某一组通常这2个参数是要连在一起使用的，那上面的意思就是把newuser用户添加到sudo分组</p>
+<h5 id="测试新用户的-Sudo-权限"><a href="#测试新用户的-Sudo-权限" class="headerlink" title="测试新用户的 Sudo 权限"></a>测试新用户的 Sudo 权限</h5><p>现在的你的新用户已经可以使用系统管理员权限的命令了<br>当你使用你的新用户作为常用用户登录的时候，你可以执行普通的命令如<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ some_command</div></pre></td></tr></table></figure></p>
+<p>同时你也可以通过在命令的前面使用<code>sudo</code> 来执行一些需要系统管理员权限的命令</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo some_command</div></pre></td></tr></table></figure>
+<h5 id="在-etc-sudoers文件中明确的指定用户权限"><a href="#在-etc-sudoers文件中明确的指定用户权限" class="headerlink" title="在/etc/sudoers文件中明确的指定用户权限"></a>在<code>/etc/sudoers</code>文件中明确的指定用户权限</h5><p>你还可以使用<code>visudo</code>命令来替代上面那种把新用户分配到 <strong>sudo</strong>分组的方法，该命令会使用系统中的编辑器打开<code>/etc/sudoers</code> 文件，在这里可以为每一个用户明确的指定用户权限</p>
+<p><code>visudo</code>是被唯一一种推荐的方法来编辑改变<code>/etc/sudoers</code>,因为在重写这个文件之前 它会锁定文件以防止多个同时编辑并且会检查文件内容的完整性<br>这将有助于防止你错误的配置<code>sudo</code>的情形，因为你已经失去了<code>sudo</code>权限 无法解决此问题了</p>
+<p>如果你当前是使用 <strong>root</strong> 用户登录的：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ visudo</div></pre></td></tr></table></figure></p>
+<p>如果你是使用一个具有<code>sudo</code>权限的非 root 用户登录的：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo visudo</div></pre></td></tr></table></figure>
+<p>一般来讲，<code>visudo</code>会在<code>vi</code>编辑器中打开<code>/etc/sudoers</code>文件，这对一些不熟悉vi的用户来讲会很麻烦.在一个新安装的Ubuntu系统中可以使用<code>nano</code>来替换，他提供了更多样化的编辑 总之使用熟悉的就好 应该没几个不熟悉 vi vim的吧 使用查找命令找到像下面这样的一行</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">root    ALL=(ALL:ALL) ALL</div></pre></td></tr></table></figure>
+<p>在这行的下面 复制这一行 并把前面的root替换成你的新用户名 就像下面这样</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root    ALL=(ALL:ALL) ALL</div><div class="line">newuser ALL=(ALL:ALL) ALL</div></pre></td></tr></table></figure>
+<p>你还可以为每一个用户都新启一行 配置具体的权限，当你完成编辑时保存文件退出就可以了</p>
+<h4 id="删除一个用户给"><a href="#删除一个用户给" class="headerlink" title="删除一个用户给"></a>删除一个用户给</h4><p>如果你长时间的不使用、不需要的一个用户，最好还是删除了吧<br>如果你是使用 <strong>root</strong> 登录的 你可以使用如下命令来删除一个用户 同时保留他们的文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ deluser newuser</div></pre></td></tr></table></figure>
+<p>如果你是使用一个拥有<code>sudo</code>权限的非root用户登录的：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo deluser newuser</div></pre></td></tr></table></figure>
+<p>在root权限下 如果一个用户已经被删除，你想删除该用户的家目录 你可以使用如下的命令：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ deluser --remove-home newuser</div></pre></td></tr></table></figure>
+<p>如果你当前正在使用一个拥有<code>sudo</code>权限的非root用户，你应该使用如下命令：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo deluser --remove-home newuser</div></pre></td></tr></table></figure>
+<p>如果你以前有给你删除的用户配置过<code>sudo</code>权限  你应该删除有关的内容 使用：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ visudo</div></pre></td></tr></table></figure>
+<p>或者如果你是一个有sudo的非root用户：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sudo visudo</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">root    ALL=(ALL:ALL) ALL</div><div class="line">newuser ALL=(ALL:ALL) ALL   <span class="comment"># 删除类似这一行</span></div></pre></td></tr></table></figure>
+<h2 id="这可以防止以后使用了相同名称创建的用户-被意外的分配了-sudo-权限"><a href="#这可以防止以后使用了相同名称创建的用户-被意外的分配了-sudo-权限" class="headerlink" title="这可以防止以后使用了相同名称创建的用户 被意外的分配了 sudo 权限"></a>这可以防止以后使用了相同名称创建的用户 被意外的分配了 <strong>sudo</strong> 权限</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Ubuntu/" rel="tag"><i class="fa fa-tag"></i>Ubuntu</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/20160630/index.html" rel="prev" title="Laravel集成Swagger使用总结">
+                Laravel集成Swagger使用总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加用户"><span class="nav-number">2.</span> <span class="nav-text">添加用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#给一个用户分配sudo特权"><span class="nav-number">3.</span> <span class="nav-text">给一个用户分配sudo特权</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#添加新用户到sudo分组"><span class="nav-number">3.1.</span> <span class="nav-text">添加新用户到sudo分组</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试新用户的-Sudo-权限"><span class="nav-number">3.2.</span> <span class="nav-text">测试新用户的 Sudo 权限</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在-etc-sudoers文件中明确的指定用户权限"><span class="nav-number">3.3.</span> <span class="nav-text">在/etc/sudoers文件中明确的指定用户权限</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除一个用户给"><span class="nav-number">4.</span> <span class="nav-text">删除一个用户给</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这可以防止以后使用了相同名称创建的用户-被意外的分配了-sudo-权限"><span class="nav-number"></span> <span class="nav-text">这可以防止以后使用了相同名称创建的用户 被意外的分配了 sudo 权限</span></a></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

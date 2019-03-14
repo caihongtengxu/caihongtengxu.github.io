@@ -1,0 +1,783 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="编码," />
+
+
+
+
+
+
+<meta name="description" content="前几天对接某第三方支付的时候发生了2个鬼问题,都是些坑 关于 编码 和 时区 的问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="编码问题、时区问题整理">
+<meta property="og:url" content="https://www.tokme.cn/2018/20180929/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="前几天对接某第三方支付的时候发生了2个鬼问题,都是些坑 关于 编码 和 时区 的问题">
+<meta property="og:updated_time" content="2018-09-29T08:25:48.676Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="编码问题、时区问题整理">
+<meta name="twitter:description" content="前几天对接某第三方支付的时候发生了2个鬼问题,都是些坑 关于 编码 和 时区 的问题">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 编码问题、时区问题整理 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                编码问题、时区问题整理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-29T15:42:45+08:00" content="2018-09-29">
+              2018-09-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前几天对接某第三方支付的时候发生了2个鬼问题,都是些坑 关于 <strong>编码</strong> 和 <strong>时区</strong> 的问题<br><a id="more"></a></p>
+<hr>
+<h3 id="服务器时区导致的问题"><a href="#服务器时区导致的问题" class="headerlink" title="服务器时区导致的问题"></a>服务器时区导致的问题</h3><p>第一个问题就是 请求对方的 <strong>下单</strong> 接口 一直返回 <strong>下单超时</strong> 的错误信息</p>
+<p>找了好久最后发现是测试服务器的时区不对 是 <strong>UTC</strong> 而对方是东八区的 <strong>CST</strong> 整整晚了别人8个小时 下单不超时都怪了</p>
+<h4 id="UTC"><a href="#UTC" class="headerlink" title="UTC"></a>UTC</h4><p>UTC (Universal Time Coordinated) 世界协调时 又称 世界标准时间</p>
+<p>是最主要的世界时间标准，其以原子时秒长为基础，在时刻上尽量接近于格林尼治标准时间</p>
+<p>协调世界时是世界上调节时钟和时间的主要时间标准，它与0度经线的平太阳时相差不超过1秒[4]，并不遵守夏令时。</p>
+<p>协调世界时是最接近格林威治标准时间（GMT）的几个替代时间系统之一。</p>
+<p>对于大多数用途来说，UTC时间被认为能与GMT时间互换，但GMT时间已不再被科学界所确定</p>
+<p><strong>这套时间系统被应用于许多互联网和万维网的标准中 例如，网络时间协议（NTP, Network Time Protocol）就是协调世界时在互联网中使用的一种方式 </strong></p>
+<blockquote>
+<p>表示形式：</p>
+<p>如果本地时间比UTC时间快</p>
+<p>例如中国大陆[注 1]、香港、澳门、台湾、蒙古国、新加坡、马来西亚、澳大利亚西部的时间比UTC快8小时 就会写作 <code>UTC+8</code>，俗称 <strong>东八区</strong>。</p>
+<p>相反，如果本地时间比UTC时间慢，例如夏威夷的时间比UTC时间慢10小时，就会写作 <code>UTC-10</code>，俗称<strong>西十区</strong></p>
+</blockquote>
+<h4 id="CST"><a href="#CST" class="headerlink" title="CST"></a>CST</h4><p>CST的话 可以代表 4个 不同的时区</p>
+<p>大中华地区时区，China Standard Time<br>澳洲中部时间，Central Standard Time (Australia)<br>北美中部时区，Central Standard Time (North America)<br>古巴标准时间，Cuba Standard Time，参见北美东部时区</p>
+<p>这些都可以记作 <code>CST</code></p>
+<p>讲下中国 因幅员辽阔，依地理事实上可划分为东五区、东六区、东七区、东八区、东九区等5个时区。</p>
+<p>中华民国大陆时期依据国际标准，将全国时区划分为昆仑时区、回藏时区（后改称新藏时区）、陇蜀时区、中原时区、以及长白时区。</p>
+<p>1949年中华人民共和国成立后，改将中国大陆全境统一划为东八区（UTC+8），同时采用北京时间做为全国唯一的标准时间</p>
+<p>所以我们现在都是已北京时间做为标准</p>
+<p>中国属于东八区 比 标准时间 UTC 块了8个小时 所以 <code>UTC+8</code></p>
+<h3 id="编码方式导致的问题"><a href="#编码方式导致的问题" class="headerlink" title="编码方式导致的问题"></a>编码方式导致的问题</h3><p>第二个问题 支付成功异步通知中的验签老是错误 </p>
+<p>各种排查没找到问题 也是郁闷了好久 最后看了下日志</p>
+<p>发现其中有个订单描述的字段 我传递过去的时候其中有中文描述 现在记录到日志里出现了乱码</p>
+<p>最后请求对方协助 对方发送的还真是 <code>GBK</code> 编码 在我本地 <code>UTF-8</code> 变成了乱码 导致验签一直失败</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mb_convert_encoding(urldecode($params[<span class="string">'chinese'</span>]), <span class="string">'utf-8'</span>, <span class="string">'gb2312'</span>);</div></pre></td></tr></table></figure>
+<p>然后转换了个编码过验签通过了 至此 问题解决！</p>
+<p>补了下编码的知识 感觉又要掉进去海里去了 非常多的内容</p>
+<h4 id="ASCII码"><a href="#ASCII码" class="headerlink" title="ASCII码"></a>ASCII码</h4><p>ASCII码是美国定义的一套用于 <strong>英语字符</strong> 和 <strong>二进制位</strong> 之间的关系的一种标准 包含了 128个字符</p>
+<h4 id="Unicode码"><a href="#Unicode码" class="headerlink" title="Unicode码"></a>Unicode码</h4><p>一开始的编码是很乱的 每个国家都有自己的编码形式 后来为了统一 出现了 <strong>Unicode</strong> 编码 他是一个很大的集合 包含了 所有的字符编码</p>
+<p>更多的可以看这里<a href="http://www.unicode.org/" target="_blank" rel="external">http://www.unicode.org/</a></p>
+<h4 id="UTF-8编码"><a href="#UTF-8编码" class="headerlink" title="UTF-8编码"></a>UTF-8编码</h4><p><strong>UTF-8</strong> 是 <strong>Unicode</strong> 编码 的实现方式之一</p>
+<p>它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度</p>
+<h4 id="GBK编码"><a href="#GBK编码" class="headerlink" title="GBK编码"></a>GBK编码</h4><p>GBK是国家标准GB2312基础上扩容后兼容GB2312的标准。</p>
+<p>GBK的文字编码是用双字节来表示的，即不论中、英文字符均使用双字节来表示，为了区分中文，将其最高位都设定成1。</p>
+<p>GBK包含全部中文字符，是国家编码，通用性比UTF8差</p>
+<h4 id="编码之间的转换"><a href="#编码之间的转换" class="headerlink" title="编码之间的转换"></a>编码之间的转换</h4><p>各编码中间的转换基本都是 通过 <strong>Unicode</strong> 编码才能相互转换</p>
+<p>内容好多 我自己也看的有点迷糊了！！！</p>
+<h3 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h3><p><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html" target="_blank" rel="external">http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html</a></p>
+<p><a href="https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431664106267f12e9bef7ee14cf6a8776a479bdec9b9000" target="_blank" rel="external">https://www.liaoxuefeng.com/wiki/0014316089557264a6b348958f449949df42a6d3a2e542c000/001431664106267f12e9bef7ee14cf6a8776a479bdec9b9000</a></p>
+<p><a href="https://zh.wikipedia.org/wiki/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编码/" rel="tag"><i class="fa fa-tag"></i>编码</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20180928/index.html" rel="next" title="关于Base64的一些理解">
+                <i class="fa fa-chevron-left"></i> 关于Base64的一些理解
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20181009/index.html" rel="prev" title="Laravel跨库跨连接的事务操作">
+                Laravel跨库跨连接的事务操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器时区导致的问题"><span class="nav-number">1.</span> <span class="nav-text">服务器时区导致的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UTC"><span class="nav-number">1.1.</span> <span class="nav-text">UTC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CST"><span class="nav-number">1.2.</span> <span class="nav-text">CST</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编码方式导致的问题"><span class="nav-number">2.</span> <span class="nav-text">编码方式导致的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASCII码"><span class="nav-number">2.1.</span> <span class="nav-text">ASCII码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Unicode码"><span class="nav-number">2.2.</span> <span class="nav-text">Unicode码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UTF-8编码"><span class="nav-number">2.3.</span> <span class="nav-text">UTF-8编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GBK编码"><span class="nav-number">2.4.</span> <span class="nav-text">GBK编码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编码之间的转换"><span class="nav-number">2.5.</span> <span class="nav-text">编码之间的转换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#致谢"><span class="nav-number">3.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

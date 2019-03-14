@@ -1,0 +1,822 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="计算机操作系统," />
+
+
+
+
+
+
+<meta name="description" content="最近看了下《计算机操作系统设计与实现 第三版》 感觉写的很棒（PS：虽然目前还没看完·尴尬脸·）同时感觉自己也收获了很多 以前都没认真学过 写一份总结给自己当做对操作系统的扫盲吧~以下内容纯粹是自己个人的理解与整理~">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计算机操作系统扫盲">
+<meta property="og:url" content="https://www.tokme.cn/2017/20171127/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近看了下《计算机操作系统设计与实现 第三版》 感觉写的很棒（PS：虽然目前还没看完·尴尬脸·）同时感觉自己也收获了很多 以前都没认真学过 写一份总结给自己当做对操作系统的扫盲吧~以下内容纯粹是自己个人的理解与整理~">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/process1.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/mount1.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/pipe1.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/system1.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.png">
+<meta property="og:updated_time" content="2018-09-28T03:21:18.827Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计算机操作系统扫盲">
+<meta name="twitter:description" content="最近看了下《计算机操作系统设计与实现 第三版》 感觉写的很棒（PS：虽然目前还没看完·尴尬脸·）同时感觉自己也收获了很多 以前都没认真学过 写一份总结给自己当做对操作系统的扫盲吧~以下内容纯粹是自己个人的理解与整理~">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/process1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 计算机操作系统扫盲 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                计算机操作系统扫盲
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-11-27T16:11:33+08:00" content="2017-11-27">
+              2017-11-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">网络编程</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近看了下《计算机操作系统设计与实现 第三版》 感觉写的很棒（PS：虽然目前还没看完·尴尬脸·）<br>同时感觉自己也收获了很多 以前都没认真学过 写一份总结给自己当做对操作系统的扫盲吧~<br>以下内容纯粹是自己个人的理解与整理~<br><a id="more"></a></p>
+<hr>
+<h4 id="计算机的组成"><a href="#计算机的组成" class="headerlink" title="计算机的组成"></a>计算机的组成</h4><ol>
+<li>首先最底层是硬件设备（主板 硬盘 电子元件 内存条 CPU 显卡 等等） 至于最底层的硬件是怎么工作的就不知道了（因为牵扯到电气工程学 想想老爱因斯坦也折腾过 这些玩意一辈子估计也学不完）</li>
+<li>硬件设备上是微结构体（比如CPU里的寄存器）就是这些东西接受电气信号来操作硬件的</li>
+<li>在上面就是机器语言 汇编一类的吧 用来发送信息操控硬件</li>
+<li>在机器语言上面就是操作系统（Windows.Linux等）操作系统其实就是封装了对底层硬件的操作<br>留出一些基本的接口给外面 好让程序猿这群生物来做开发设计 不用老是考虑硬件的东东 不然累死他们了啊</li>
+<li>操作系统上面是系统应用 （比如shell 编译器等等）这些都是不可更改的</li>
+<li>在上面就是我们用的用户级应用了（比如QQ 网易云音乐..）这些都是为了解决某些实际 或者满足某些需求而设计的应用</li>
+</ol>
+<h4 id="操作系统的概念"><a href="#操作系统的概念" class="headerlink" title="操作系统的概念"></a>操作系统的概念</h4><ul>
+<li>操作系统提供了一系列服务和接口 让用户程序可以很方便的调用底层硬件（这些接口服务称为系统调用 System Call）</li>
+<li>操作系统还提供资源管理的功能 包括分配磁盘 跟踪记录磁盘块等 不然怎么保证每次操作的数据完整和可靠</li>
+</ul>
+<h4 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h4><ul>
+<li>进程简单点讲就是一个正在运行的程序 他会有一块内存地址 他可以操作这块内存读写等 这块内存中存有他的程序、程序数据、堆栈</li>
+<li>当进程被挂起后 在恢复的时候 要能接着他上次挂起时候的状态继续执行 才能保证整个进程的完成 是怎么做的呢？操作系统中有一张表 称为进程表（process table）这个表里记录了每个进程的数据外的所有信息(进程数据是在他占用的内存里啊！！)</li>
+<li><p>被挂起的进程主要有2个信息</p>
+<ol>
+<li>进程的地址空间 称为 内核映像 core image</li>
+<li>进程表项 包含寄存器值和其他信息</li>
+</ol>
+</li>
+<li><p>一个进程可以创建一个或多个其他进程(称为子进程) 这些子进程又可以创建他们自己的子进程 这样就行程了一棵树 如下图<br>有时这些进程间需要互相通信访问数据等 这种通信称为 进程间通信 interprocess communication<br><img src="http://obomwzenb.bkt.clouddn.com/process1.png" alt="进程树"></p>
+</li>
+</ul>
+<h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><ul>
+<li>操作系统有一个主要功能就是屏蔽磁盘和其他IO操作的细节<br>给程序猿提供一个简洁与设备无关的文件模型<br>很显然系统需要帮我们处理很多<br>这时设计的系统调用有 创建文件 删除文件 读取文件 写入文件等<br>在读一个文件前还需要打开文件 在操作完后还需要关闭他这些都需要相应的系统调用来完成操作</li>
+<li>当我们需要使用系统调用来创建一个目录以及把某一个文件放到一个指定目录 或者删除一个指定目录的文件这样就得到一个层次结构也就是文件系统</li>
+</ul>
+<h5 id="进程和文件树的区别"><a href="#进程和文件树的区别" class="headerlink" title="进程和文件树的区别"></a>进程和文件树的区别</h5><ol>
+<li>进程树的层次结构一般不会太深 3层已经很多了，而文件树的层次可以很深6层+都有</li>
+<li>进程间的层次结构是短暂的一般几分钟 执行完就关闭了，而文件树的层次结构会很久 几年都可以</li>
+<li>在所有者和保护方面 进程只有父进程可以访问控制子进程，而文件和目录除了所有者别的用户也可以访问</li>
+</ol>
+<h4 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h4><ul>
+<li>以Minix3系统为例 文件和目录的保护机制是有一个11位的二进制码来保护的。<br>保护码包含三个3位的域 分别来描述其所有者、同组用户、其他用户的访问权限。<br>这一个3位域 分别由1位标识读取权限 1位标识写的操作权限 1位标识执行的权限<br>也就是传说中的 <code>rwx</code> 其中x的可以执行权限一般来讲就是可以访问 可以搜索之类</li>
+<li>在对一个文件进程读写的时候 系统需要先打开他这个时候需要进程访问权限的判断<br>如果访问权限是允许的 这个时候将会返回一个整数 称为文件描述符 如果没有访问权限将会返回一个错误码（-1）</li>
+<li>文件系统的挂载 对于大多数个人计算机而已都配有一个CD-ROM去东区（ 类似光驱的玩意）<br>还是以Minix3系统为例 操作系统允许将光驱上的文件挂载到主文件树上。<br>在进行mount挂载系统调用之前 在硬盘上一个根文件系统 在CD-Rom上也有一个文件系统 这2个还没挂载的时候是互相对立互不干扰的。<br>在没有挂载的时候CD-ROM中的文件也是不能访问的 (因为没有路径啊)。<br>程序猿可以使用mount系统调用吧CD-ROM下的文件挂载到根文件系统的任意一个位置 如下图<br><img src="http://obomwzenb.bkt.clouddn.com/mount1.png" alt="mount挂载"><br>这个图展示了把驱动中的 <code>x</code> 和 <code>y</code> 挂载到 <code>b</code> 目录下</li>
+<li><p>设备文件（special file） 设备文件的目标是使IO设备操作起来更类似文件。<br>这样对设备的读写就可以和文件读写调用相同的系统调用。<br>设备文件分为2类 </p>
+<ol>
+<li>一是块设备文件（block special files） </li>
+<li>一个是字符设备文件（character special files）。</li>
+</ol>
+<p>设备文件描述的是以随机访问数据块为单元的设备 比如硬盘。<br>字符设备文件是以字符流方式进行操作的文件 比如打印机等 一般设备文件都存在/dev目录下 比如/dev/lp 就可能是一个打印机</p>
+</li>
+<li>管道（pipe） 管道是一种用来连接2个进程的虚拟文件<br>比如下图如果进程A想要和进程B通信<br><img src="http://obomwzenb.bkt.clouddn.com/pipe1.png" alt="管道"><br>首先要创建一个管道 然后进程A把数据输出到管道中 进程B在从管道中把数据读取出来 这样就完成了通信。<br>一个进程想要判断他输出的是普通文件还是管道需要一个特殊的系统调用</li>
+<li><p>命令解释器 shell 他是终端用户和操作系统之间的 主要接口 shell分为2种<br>第一种是图形界面shell 如CDE GNOME KDE XFCE等<br>第二种是命令行shell 如果bash sh ksh csh等</p>
+<blockquote>
+<p>他们都来源最初的 <code>sh</code> 当用户登录系统(服务器)的时候 同时将启动一个shell<br>他以终端作为标准的输入输出 然后显示一个系统提示符 比如熟悉的美元 $ 符号 标识等待接受一条用户的命令<br>这时 比如用户输入了date 那么shell将会创建一个子进程来运行date程序 并等待子进程的运行结束。<br>当子进程运行结束后会再次显示系统提示符 等待用户输入。</p>
+<p>通过使用管道可以把一个程序的输出结果当作另外一个程序的输入。<br>比如: cat file1 file2 file3 | sort  &gt;  /dev/lp 这条命令先调用cat程序把3个文件进行了合并<br>然后调用sort程序把合并结果传进来进行排序 然后把排序结果重定向到了/dev/lp 这正是打印机的设备文件</p>
+<p>另外还可以在一条命令的最后加上一个 “&amp;” 符号表示不等待程序的执行结束直接显示系统提示符<br>可以直接执行别的程序 上一个带&amp;没执行结束的程序将当作后台程序执行</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="系统调用的基本分类"><a href="#系统调用的基本分类" class="headerlink" title="系统调用的基本分类"></a>系统调用的基本分类</h4><p>大致分为下面几个分类的系统调用(每一个里面有很多的调用 先了解下！)</p>
+<ul>
+<li>进程相关系统调用</li>
+<li>信号相关系统调用</li>
+<li>文件相关系统调用</li>
+<li>文件系统相关系统调用</li>
+<li>保护机制相关系统调用</li>
+<li>时间相关系统调用</li>
+</ul>
+<h4 id="操作系统的结构-结构发展史"><a href="#操作系统的结构-结构发展史" class="headerlink" title="操作系统的结构[结构发展史]"></a>操作系统的结构[结构发展史]</h4><ol>
+<li>整体结构 这个是最开始的设计<ul>
+<li>有一个主程序 用来调用被请求的服务例程</li>
+<li>一组服务例程 用来实现相应的系统调用</li>
+<li>一组工具函数 用来帮助服务例程的实现</li>
+<li><img src="http://obomwzenb.bkt.clouddn.com/system1.png" alt="操作系统结构"></li>
+</ul>
+</li>
+<li>分层结构 在上面整体结构上做了更加具体的分层 每一层都是在上一层的基础上扩展出来 不用管他上一层的实现<br><img src="http://obomwzenb.bkt.clouddn.com/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.png" alt=""></li>
+<li>虚拟机</li>
+<li>外核（ps:这个看的不是很懂 了解下好了）</li>
+<li>客户端-服务器 这种就类似我们先的结构了<br>对于用户而言他不会关心请求发送到哪里的服务器 是在本地处理还是在某个地方服务器处理 他只要得到回复就可以了</li>
+</ol>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机操作系统/" rel="tag"><i class="fa fa-tag"></i>计算机操作系统</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/20170926/index.html" rel="next" title="C语言的指针初步理解">
+                <i class="fa fa-chevron-left"></i> C语言的指针初步理解
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/20171128/index.html" rel="prev" title="计算机操作系统之进程扫盲">
+                计算机操作系统之进程扫盲 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#计算机的组成"><span class="nav-number">1.</span> <span class="nav-text">计算机的组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作系统的概念"><span class="nav-number">2.</span> <span class="nav-text">操作系统的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程的概念"><span class="nav-number">3.</span> <span class="nav-text">进程的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件"><span class="nav-number">4.</span> <span class="nav-text">文件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#进程和文件树的区别"><span class="nav-number">4.1.</span> <span class="nav-text">进程和文件树的区别</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件系统"><span class="nav-number">5.</span> <span class="nav-text">文件系统</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#系统调用的基本分类"><span class="nav-number">6.</span> <span class="nav-text">系统调用的基本分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#操作系统的结构-结构发展史"><span class="nav-number">7.</span> <span class="nav-text">操作系统的结构[结构发展史]</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,828 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Laravel," />
+
+
+
+
+
+
+<meta name="description" content="最近修复一个很久前的bug Laravel的项目 发现了一个 大大的惊喜发现代码里写一个 for 循环然后每次循环都开启了一个事务,由于中间有些数据校验失败的情况下 直接返回了没有做任何别的处理 就仅仅只是简单的直接返回了 然后 continue 继续执行 ,没有任何的 rollback 或者 commit 的操作(不要问我为什么这么写 估计当时脑子进 S 了吧)最后惊喜发生了 操作了2条数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql && Laravel 事务总结">
+<meta property="og:url" content="https://www.tokme.cn/2018/20180509/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近修复一个很久前的bug Laravel的项目 发现了一个 大大的惊喜发现代码里写一个 for 循环然后每次循环都开启了一个事务,由于中间有些数据校验失败的情况下 直接返回了没有做任何别的处理 就仅仅只是简单的直接返回了 然后 continue 继续执行 ,没有任何的 rollback 或者 commit 的操作(不要问我为什么这么写 估计当时脑子进 S 了吧)最后惊喜发生了 操作了2条数据">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit1.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit2.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit3.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit4.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit5.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit6.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit7.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit8.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit10.png">
+<meta property="og:image" content="http://obomwzenb.bkt.clouddn.com/autocommit9.png">
+<meta property="og:updated_time" content="2018-09-28T03:19:46.509Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql && Laravel 事务总结">
+<meta name="twitter:description" content="最近修复一个很久前的bug Laravel的项目 发现了一个 大大的惊喜发现代码里写一个 for 循环然后每次循环都开启了一个事务,由于中间有些数据校验失败的情况下 直接返回了没有做任何别的处理 就仅仅只是简单的直接返回了 然后 continue 继续执行 ,没有任何的 rollback 或者 commit 的操作(不要问我为什么这么写 估计当时脑子进 S 了吧)最后惊喜发生了 操作了2条数据">
+<meta name="twitter:image" content="http://obomwzenb.bkt.clouddn.com/autocommit1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Mysql && Laravel 事务总结 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mysql && Laravel 事务总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-05-09T09:28:11+08:00" content="2018-05-09">
+              2018-05-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>最近修复一个很久前的bug <code>Laravel的项目</code> 发现了一个 <strong>大大的惊喜</strong><br>发现代码里写一个 <code>for</code> 循环然后每次循环都开启了一个事务,由于中间有些数据校验失败的情况下 直接返回了<br>没有做任何别的处理 就仅仅只是简单的直接返回了 然后 <code>continue</code> 继续执行 ,没有任何的 <code>rollback</code> 或者 <code>commit</code> 的操作(不要问我为什么这么写 估计当时脑子进 <strong>S</strong> 了吧)<br>最后惊喜发生了 操作了2条数据 第一条失败了 直接返回 然后继续执行循环 第二条成功了 然后 <code>commit</code> 循环结束 这时候数据库并没有写入那条成功的记录 What 到底发生了什么鬼事情<br>最后一顿折腾 收获如下<br><a id="more"></a></p>
+</blockquote>
+<hr>
+<h2 id="Mysql-中的事务总结"><a href="#Mysql-中的事务总结" class="headerlink" title="Mysql 中的事务总结"></a>Mysql 中的事务总结</h2><blockquote>
+<p>Mysql不支持 <strong>嵌套事务</strong>。对于事务 Mysql 的存储引擎 <code>MyISAM</code> 是不支持事务的 如果你需要使用事务 需要是像 <code>InnoDB</code> 类的存储引擎。还有一点一般来说最好不要使用嵌套事务 有毒 有毒 有毒！当然如果写代码中不小心使用到了 比如先定义了一个 function A 开启了事务 然后在写了个function B 也开启了事务 并且调用 A() 方法 这种就形成了嵌套事务 这种我只能说自己去处理….</p>
+</blockquote>
+<font color="red">注意 下面的设置 <strong>开启/关闭</strong> 自动提交都是针对当前会话中的 如果你新开一个会话 来查询 <code>@@autocommit</code> 的值 并不受当前设置的影响 全局的设置方法我没有研究！</font>
+
+
+<h3 id="Mysql-的自动提交"><a href="#Mysql-的自动提交" class="headerlink" title="Mysql 的自动提交"></a>Mysql 的自动提交</h3><p>在默认情况下 Mysql是开启了自动提交的 也就是每一个数据库操作和查询都是一个 <strong>事务</strong>, Mysql会在每一个 <code>Query</code> 后执行一个 <code>Commit</code> 来提交写入数据库</p>
+<p>你可以使用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select @@autocommit;</div><div class="line">+--------------+</div><div class="line">| @@autocommit |</div><div class="line">+--------------+</div><div class="line">|            <span class="number">1</span> |</div><div class="line">+--------------+</div><div class="line"><span class="number">1</span> row in set (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure>
+<p>来查询 当前会话中的自动提交设置 默认情况下是 <code>1</code> 也可以是 <code>On</code> 都是一样的</p>
+<p>然后如果你想要关闭自动提交的话可以使用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; set @@autocommit = <span class="number">0</span>;</div><div class="line">Query OK, <span class="number">0</span> rows affected (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure>
+<p>来关闭当前会话中的自动提交 当然也可以使用 <code>set @@autocommit = Off;</code> 都是一样的</p>
+<h3 id="事务外-没有开启事务的情况-Mysql的自动提交测试"><a href="#事务外-没有开启事务的情况-Mysql的自动提交测试" class="headerlink" title="事务外(没有开启事务的情况) Mysql的自动提交测试"></a>事务外(没有开启事务的情况) Mysql的自动提交测试</h3><p>一.测试事务外开启自动提交 <code>set @@autocommit = 1;</code></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit1.png" alt="自动提交1"></p>
+<p>可以看到左边的会话中添加了一条记录 然后在右边的会话可以查询可以立马看到 说话数据已经写入到了数据库中</p>
+<p>二.测试事务外关闭自动提交 <code>set @@autocommit = 0;</code></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit2.png" alt="自动提交2"></p>
+<p>这个时候我们可以看到 左边的会话中已经有记录了 但是右边的会话中确实是没有记录的 说明他还没有真正的写入到数据库中</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit3.png" alt="自动提交3"></p>
+<p>然后我们在去执行一次 <code>commit</code> 然后数据就真正的提交了 写入到了数据库中</p>
+<h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><font color="red">在Mysql中 没有开启事务的情况下 <strong>autocommit</strong> 的配置只是告诉数据库，<code>autocommit = 1</code> 的时候，每个数据库操作和查询都是一个 事务, 每一个 Query 都自动带一个隐性的 <code>commit</code> 以保证数据真正的写入到了数据库<br>在 <code>autocommit = 0</code> 的时候整个会话是一个事务 在你执行 <code>commit / rollback</code> 之前 所有的操作都是在事务内 另一个会话的访问是不受当前这个会话影响的 也就是当前会话的东西没有真正写入到数据库中</font>
+
+<h3 id="事务内-Mysql-的自动提交测试"><a href="#事务内-Mysql-的自动提交测试" class="headerlink" title="事务内 Mysql 的自动提交测试"></a>事务内 Mysql 的自动提交测试</h3><p>一.测试事务内开启自动提交 <code>set @@autocommit = 1;</code></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit4.png" alt="自动提交4"></p>
+<p>这时候我们可以看到在右边的会话中并没有看到数据 也就是他并没有真正的提交到数据库中</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit5.png" alt="自动提交5"></p>
+<p>这是我们执行一下 <code>commit</code> 数据才真正添加到数据库</p>
+<p>二.测试事务内关闭自动提交 <code>set @@autocommit = 0;</code></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit6.png" alt="自动提交6"></p>
+<p>可以看出和上面一样 数据更加不会提交到数据库中 右边的会话中是不会看到数据的</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit7.png" alt="自动提交7"></p>
+<p>最后执行一次 <code>commit</code> 数据真正加到数据库中 右边的会话中也可以读取到数据了</p>
+<p>三.测试事务内 <font color="blue"><strong>所谓的嵌套事务</strong> </font></p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit8.png" alt="自动提交8"></p>
+<p>整个流程 ①开始一个事务 ②插入一条记录 值700 ③然后开启第二个事务 这个时候其实被Mysql执行了一次 <code>commit</code> 数据已经提交到了数据库 所以右边的会话中是可以查询到的 ④第二个插入 值800 然后右边的会话中查询是没有800这条记录的 所有说明没有被提交到数据库 ⑤回滚第二条记录 事务结束 右边的会话中获取最终的数据</p>
+<h4 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a>总结：</h4><font color="red">对于Mysql而言,他是不支持 嵌套事务 的,在上一个事务未关闭的情况下,开启一个新的事务 它会隐式的对上一个事务 执行 <code>commit</code> 操作 数据会真正的写入到数据库中,在这种所谓的嵌套事务中 自动提交的参数 autocommit = 0 或者 1 对它都没有影响！</font>
+
+<h3 id="Mysql的-savepoint-功能"><a href="#Mysql的-savepoint-功能" class="headerlink" title="Mysql的 savepoint 功能"></a>Mysql的 savepoint 功能</h3><p>创建 <code>savepoint your_point_name</code></p>
+<p>回滚 <code>rollback to savepoint your_point_name</code> <strong>他的回滚范围就是创建的point 到rollback的这一段的范围</strong></p>
+<p>删除 <code>release savepoint your_point_name;</code></p>
+<p>如下来 先来一个测试</p>
+<p><img src="http://obomwzenb.bkt.clouddn.com/autocommit10.png" alt="自动提交10"></p>
+<p>讲解下 上图例子中的 <code>savepoint</code> 用法</p>
+<p>第一步.我们开启了一个事务 首先我们插入一条记录 值 100 在右边的会话中我们并没有查询到数据库有记录</p>
+<p>第二步.然后创建了一个 <code>savepoint</code> 取名 <code>sp1</code></p>
+<p>第三步.然后插入第二条记录 值 200 这时我们在右边的会话中也是查询不到数据库有记录的 但是当前事务中是可以看到有2条记录了</p>
+<p>第四步.然后我们回滚到记录点 <code>sp1</code> 在查询 可以看到只有一条记录了 同时右边的会话中也是没有记录的</p>
+<p>第五步.最后我们提交 由于 已经提前回滚了 <code>sp1</code> 而记录100的记录在 <code>sp1</code> 范围外 所以我们提交了 只有第一条记录会写入到数据库 同时右边的会话中是可以查询到结果的</p>
+<h4 id="总结：-2"><a href="#总结：-2" class="headerlink" title="总结："></a>总结：</h4><font color="red">在Mysql中 <code>savepoint</code> 的作用范围 只是从创建到 <code>rollback</code> 这一段 其作用就是保证中间这一段的数据 当然如果你在事务内使用他 他是受包裹他的事务的 提交或者回滚 影响的</font>
+
+<h2 id="Laravel-中的事务总结"><a href="#Laravel-中的事务总结" class="headerlink" title="Laravel 中的事务总结"></a>Laravel 中的事务总结</h2><p>先来一个小测试 来重复一开始的那个问题 <strong>所谓的嵌套循环</strong> 来看看 <strong>Laravel</strong> 是怎么处理的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">       * this is a test</div><div class="line">       */</div><div class="line">      <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span></span></div><div class="line">      &#123;</div><div class="line">          <span class="comment">//2个测试循环</span></div><div class="line">          <span class="keyword">for</span> ($i = <span class="number">1</span>; $i &lt;= <span class="number">2</span>; $i++)&#123;</div><div class="line">              <span class="keyword">$this</span>-&gt;add($i);</div><div class="line">          &#125;</div><div class="line">          $list = Ceshi::get();</div><div class="line">          dd($list-&gt;toArray());</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($i)</span></span></div><div class="line">      &#123;</div><div class="line">          DB::beginTransaction();</div><div class="line">          <span class="comment">//return 中断第一个</span></div><div class="line">          <span class="keyword">if</span>($i == <span class="number">1</span>)&#123;</div><div class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">          &#125;</div><div class="line">          $a = Ceshi::create([</div><div class="line">              <span class="string">'n'</span> =&gt; $i,</div><div class="line">          ]);</div><div class="line">          <span class="keyword">if</span>($a !== <span class="keyword">false</span>)&#123;</div><div class="line">              DB::commit();</div><div class="line">          &#125;<span class="keyword">else</span>&#123;</div><div class="line">              DB::rollback();</div><div class="line">          &#125;</div><div class="line">      &#125;</div></pre></td></tr></table></figure>
+<h3 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h3><p>1.首先我写了一个循环 执行了2次 为了模拟效果 第一次循环进入添加的方法直接 <strong>return</strong> 了 也就只是开启了 <strong>第一个事务</strong><br>2.继续走 <strong>return</strong> 返回 然后开始第二次循环进入 开启 <strong>第二个事务</strong> 然后正常添加数据记录 然后执行 <code>commit</code><br>3.循环结束打印 获取表数据 整个测试结束<br>4.我们来看下结果 <img src="http://obomwzenb.bkt.clouddn.com/autocommit9.png" alt="自动提交9"><br>5.在数组的打印中有一条记录 但是我们另外开一个会话去查询数据库 却是空 说明 数据并没有真正的写入到数据库中 按道理说 如果是Mysql的嵌套循环 第二次事务开启的时候 上一次的事务内容就会被提交了 但是现在事实却并没有 到底发生了什么鬼事情 于是挖了下 <strong>Laravel</strong> 底层的数据库处理 下面来分析一波</p>
+<h3 id="Laravel中的事务处理"><a href="#Laravel中的事务处理" class="headerlink" title="Laravel中的事务处理"></a>Laravel中的事务处理</h3><blockquote>
+<p>当前测试框架Laravel5.2 最新版的 Laravel 需要PHP很高的版本 之前升级了 <strong>PHP7.2.5</strong> 搞出了一堆幺蛾子 就不说了 测试还是先用当前的这个 Laravel5.2吧</p>
+</blockquote>
+<p>在框架内的目录 <code>\vendor\laravel\framework\src\Illuminate\Database</code> 下就是Laravel的相关数据库处理 先来看下 <code>Connection.php</code> 文件</p>
+<p>可以看到 在 100 行的地方有一个事务的变量 看说明应该是一个活动事务的数量记录数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * The number of active transactions.</div><div class="line">    *</div><div class="line">    * <span class="doctag">@var</span> int</div><div class="line">    */</div><div class="line">   <span class="keyword">protected</span> $transactions = <span class="number">0</span>;</div></pre></td></tr></table></figure>
+<h3 id="Laravel-的-beginTransaction-方法处理"><a href="#Laravel-的-beginTransaction-方法处理" class="headerlink" title="Laravel 的 beginTransaction 方法处理"></a>Laravel 的 <code>beginTransaction</code> 方法处理</h3><p>然后我们来找下 <code>beginTransaction</code> 方法 在 570 行的地方</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * Start a new database transaction.</div><div class="line">    *</div><div class="line">    * <span class="doctag">@return</span> void</div><div class="line">    * <span class="doctag">@throws</span> Exception</div><div class="line">    */</div><div class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">beginTransaction</span><span class="params">()</span></span></div><div class="line">   &#123;</div><div class="line">       ++<span class="keyword">$this</span>-&gt;transactions;</div><div class="line"></div><div class="line">       <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;transactions == <span class="number">1</span>) &#123;</div><div class="line">           <span class="keyword">try</span> &#123;</div><div class="line">               <span class="keyword">$this</span>-&gt;getPdo()-&gt;beginTransaction();</div><div class="line">           &#125; <span class="keyword">catch</span> (<span class="keyword">Exception</span> $e) &#123;</div><div class="line">               --<span class="keyword">$this</span>-&gt;transactions;</div><div class="line"></div><div class="line">               <span class="keyword">throw</span> $e;</div><div class="line">           &#125;</div><div class="line">       &#125; <span class="keyword">elseif</span> (<span class="keyword">$this</span>-&gt;transactions &gt; <span class="number">1</span> &amp;&amp; <span class="keyword">$this</span>-&gt;queryGrammar-&gt;supportsSavepoints()) &#123;</div><div class="line">           <span class="keyword">$this</span>-&gt;getPdo()-&gt;exec(</div><div class="line">               <span class="keyword">$this</span>-&gt;queryGrammar-&gt;compileSavepoint(<span class="string">'trans'</span>.<span class="keyword">$this</span>-&gt;transactions)</div><div class="line">           );</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">$this</span>-&gt;fireConnectionEvent(<span class="string">'beganTransaction'</span>);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>1.先来看 <code>beginTransaction</code> 方法的处理。 进入后直接把当前会话的活动 <strong>事务数量 + 1</strong> 然后判断事务数量 如果是只有一个的时候 就是那个 <code>if = 1</code> 的判断 这个时候才会真正的去开启一个事务. 如果发生异常把 <strong>事务数量 - 1</strong> 然后抛出异常<br>2.如果事务数量 <strong>大于 1</strong> 的话 并且支持 <code>savepoint</code> (这个东西参考上面的 <strong>savepoint</strong> 用法讲解) 他就会添加一个 <code>savepoint</code> 保存记录点<br>3.最后触发连接事件 这个没什么<br>4.从这里可以看出来 如果我们在代码中发生了嵌套事务 其实Laravel是把他当作 <strong>一个整体的 一个大的事务</strong> 如果你后面又开启了事务 他并没有去真正的在开启一个事务 而只是把事务的 数量+1 记录了下 然后开启了 <strong>savepoint</strong> 来做记录点</p>
+<h3 id="Laravel-的-commit-方法处理"><a href="#Laravel-的-commit-方法处理" class="headerlink" title="Laravel 的 commit 方法处理"></a>Laravel 的 <code>commit</code> 方法处理</h3><p>来看下 <code>commit</code> 方法 在同一个文件中 596 行</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * Commit the active database transaction.</div><div class="line">    *</div><div class="line">    * <span class="doctag">@return</span> void</div><div class="line">    */</div><div class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">commit</span><span class="params">()</span></span></div><div class="line">   &#123;</div><div class="line">       <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;transactions == <span class="number">1</span>) &#123;</div><div class="line">           <span class="keyword">$this</span>-&gt;getPdo()-&gt;commit();</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">$this</span>-&gt;transactions = max(<span class="number">0</span>, <span class="keyword">$this</span>-&gt;transactions - <span class="number">1</span>);</div><div class="line"></div><div class="line">       <span class="keyword">$this</span>-&gt;fireConnectionEvent(<span class="string">'committed'</span>);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>1.进入 <code>commit</code> 方法 他首先判断了当前的事务数量 是否只有一个 如果只有一个的时候才会去真正的提交 去执行 <font color="red"><strong>Mysql 的 commit</strong> </font> 操作<br>2.如果当前的事务不是只有一个 他就把 <strong>事务数量进行了减1</strong> 操作<br>3.触发事件监听</p>
+<h3 id="Laravel-的-rollback-方法处理"><a href="#Laravel-的-rollback-方法处理" class="headerlink" title="Laravel 的 rollback 方法处理"></a>Laravel 的 <code>rollback</code> 方法处理</h3><p>最后来看下 <code>rollback</code> 方法的处理 在 612 行</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    * Rollback the active database transaction.</div><div class="line">    *</div><div class="line">    * <span class="doctag">@return</span> void</div><div class="line">    */</div><div class="line">   <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">rollBack</span><span class="params">()</span></span></div><div class="line">   &#123;</div><div class="line">       <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;transactions == <span class="number">1</span>) &#123;</div><div class="line">           <span class="keyword">$this</span>-&gt;getPdo()-&gt;rollBack();</div><div class="line">       &#125; <span class="keyword">elseif</span> (<span class="keyword">$this</span>-&gt;transactions &gt; <span class="number">1</span> &amp;&amp; <span class="keyword">$this</span>-&gt;queryGrammar-&gt;supportsSavepoints()) &#123;</div><div class="line">           <span class="keyword">$this</span>-&gt;getPdo()-&gt;exec(</div><div class="line">               <span class="keyword">$this</span>-&gt;queryGrammar-&gt;compileSavepointRollBack(<span class="string">'trans'</span>.<span class="keyword">$this</span>-&gt;transactions)</div><div class="line">           );</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">$this</span>-&gt;transactions = max(<span class="number">0</span>, <span class="keyword">$this</span>-&gt;transactions - <span class="number">1</span>);</div><div class="line"></div><div class="line">       <span class="keyword">$this</span>-&gt;fireConnectionEvent(<span class="string">'rollingBack'</span>);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>1.进入 <code>rollback</code> 方法 他也是首先判断了当前事务数量 如果只有一个事务 则会真正的去执行回滚 去执行 <font color="red"><strong>Mysql 的 rollback</strong></font> 操作<br>2.如果事务数量 <strong>大于1</strong> 并且支持 <code>savepoint</code> 他就去根据数量把当前的内容回滚到对应的 <strong>savepoint</strong> 记录点<br>3.然后把 <strong>事务的数量进行减1</strong> 操作<br>4.触发事件监听</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><font color="red">在Laravel框架中 对于 <strong>嵌套事务</strong> 框架本身做了处理。当你开启一个事务的时候 Laravel会先判断当前会话中事务数量 如果只有一个 他会真正的去开启一个事务，如果已经存在了一个事务 后续的在执行 <code>beginTransaction</code> 都是只是做了事务数量的计数+1 然后创建 <code>savepoint</code> 记录保存点 来继续操作，对于嵌套事务中的 <code>commit</code> 和 <code>rollback</code> 他的处理同样。在这个过程中间执行的<code>commit</code> 和 <code>rollback</code> 都只是把事务数量减1操作 当然<code>rollback</code> 有个回滚 <code>savepoint</code>记录保存点的操作。<br><br><font color="green">只有当事务数量只有 <strong>一个</strong> 的时候 也就是回到了一开始创建的事务 这样就对应上了 这是一个完整的事务(因为他只创建了一个事务嘛) 这个时候操作的 <code>commit</code> 或者 <code>rollback</code> 操作才会真正的对数据库来提交 然后 <strong>结束整个事务 (只有这个时候的提交才会对数据库生效 真正的写入到数据库中 别的会话也就可以访问到了)</strong>。</font>
+
+<p></p></font><p></p>
+<h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><p>大半年没写过博客了 人确实是懒了 并且人生迷惘中<br>另外本人能力有限 对Mysql 和 Laravel框架的理解都太差 还需要多多学习 有错误还请指正 不过好像博客没有完善评论回复功能(笑哭~)</p>
+<p>共勉</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Laravel/" rel="tag"><i class="fa fa-tag"></i>Laravel</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/20171201/index.html" rel="next" title="TCP/IP协议族的体系结构扫盲">
+                <i class="fa fa-chevron-left"></i> TCP/IP协议族的体系结构扫盲
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20180522/index.html" rel="prev" title="关于微信支付升级替换证书问题">
+                关于微信支付升级替换证书问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mysql-中的事务总结"><span class="nav-number">1.</span> <span class="nav-text">Mysql 中的事务总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql-的自动提交"><span class="nav-number">1.1.</span> <span class="nav-text">Mysql 的自动提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务外-没有开启事务的情况-Mysql的自动提交测试"><span class="nav-number">1.2.</span> <span class="nav-text">事务外(没有开启事务的情况) Mysql的自动提交测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结："><span class="nav-number">1.2.1.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务内-Mysql-的自动提交测试"><span class="nav-number">1.3.</span> <span class="nav-text">事务内 Mysql 的自动提交测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结：-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">总结：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql的-savepoint-功能"><span class="nav-number">1.4.</span> <span class="nav-text">Mysql的 savepoint 功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结：-2"><span class="nav-number">1.4.1.</span> <span class="nav-text">总结：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laravel-中的事务总结"><span class="nav-number">2.</span> <span class="nav-text">Laravel 中的事务总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析过程"><span class="nav-number">2.1.</span> <span class="nav-text">分析过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Laravel中的事务处理"><span class="nav-number">2.2.</span> <span class="nav-text">Laravel中的事务处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Laravel-的-beginTransaction-方法处理"><span class="nav-number">2.3.</span> <span class="nav-text">Laravel 的 beginTransaction 方法处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Laravel-的-commit-方法处理"><span class="nav-number">2.4.</span> <span class="nav-text">Laravel 的 commit 方法处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Laravel-的-rollback-方法处理"><span class="nav-number">2.5.</span> <span class="nav-text">Laravel 的 rollback 方法处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">2.7.</span> <span class="nav-text">最后</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

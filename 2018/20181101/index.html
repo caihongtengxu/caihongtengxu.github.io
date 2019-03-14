@@ -1,0 +1,773 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Referer," />
+
+
+
+
+
+
+<meta name="description" content="最近公司申请了微信的H5支付 相关支付文档见这里 https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4 发布上线后发起支付 一直报错 商家参数格式有误，请联系商家解决 根据微信官方文档的错误提示 应该是 referer 丢失的问题 于是定位一通发现还真是 referer 丢失了 记录下解决问题过程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信H5支付 - Referer丢失问题">
+<meta property="og:url" content="https://www.tokme.cn/2018/20181101/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近公司申请了微信的H5支付 相关支付文档见这里 https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4 发布上线后发起支付 一直报错 商家参数格式有误，请联系商家解决 根据微信官方文档的错误提示 应该是 referer 丢失的问题 于是定位一通发现还真是 referer 丢失了 记录下解决问题过程">
+<meta property="og:updated_time" content="2018-11-13T08:14:23.681Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信H5支付 - Referer丢失问题">
+<meta name="twitter:description" content="最近公司申请了微信的H5支付 相关支付文档见这里 https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4 发布上线后发起支付 一直报错 商家参数格式有误，请联系商家解决 根据微信官方文档的错误提示 应该是 referer 丢失的问题 于是定位一通发现还真是 referer 丢失了 记录下解决问题过程">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 微信H5支付 - Referer丢失问题 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                微信H5支付 - Referer丢失问题
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-11-01T17:36:24+08:00" content="2018-11-01">
+              2018-11-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近公司申请了微信的H5支付 相关支付文档见这里 <a href="https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4" target="_blank" rel="external">https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4</a> 发布上线后发起支付 一直报错 <code>商家参数格式有误，请联系商家解决</code> 根据微信官方文档的错误提示 应该是 <code>referer</code> 丢失的问题 于是定位一通发现还真是 <code>referer</code> 丢失了 记录下解决问题过程<br><a id="more"></a></p>
+<hr>
+<h3 id="Referer-是什么"><a href="#Referer-是什么" class="headerlink" title="Referer 是什么"></a>Referer 是什么</h3><p>HTTP Referer是 <code>HTTP</code> 请求 <code>header</code> 头信息的一部分 当浏览器向web服务器发送请求的时候，一般会带上Referer</p>
+<p>告诉服务器我是从哪个页面链接过来的，服务器藉此可以获得一些信息用于处理。</p>
+<p>比如我们在 <code>Chrome</code> 浏览器的控制台下 可以看到 <code>Request Headers</code> 下有类似如下的信息</p>
+<blockquote>
+<p>Provisional headers are shown<br>Accept: <em>/</em><br>Origin: <a href="https://local.test5.show" target="_blank" rel="external">https://local.test5.show</a><br>Referer: <a href="https://local.test5.show/test/show" target="_blank" rel="external">https://local.test5.show/test/show</a><br>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36</p>
+</blockquote>
+<p>其中 <code>Referer</code> 就是该属性了</p>
+<p><strong>Referer</strong> 的正确英语拼法是 <strong>referrer</strong>。由于早期 HTTP 规范的拼写错误，为了保持向后兼容就将错就错了</p>
+<h3 id="Referer-的作用"><a href="#Referer-的作用" class="headerlink" title="Referer 的作用"></a>Referer 的作用</h3><h4 id="防盗链"><a href="#防盗链" class="headerlink" title="防盗链"></a>防盗链</h4><p>比如你发现访问加载自己的资源 而 referer不是自己的站点 就可以屏蔽它</p>
+<h4 id="防止恶意请求"><a href="#防止恶意请求" class="headerlink" title="防止恶意请求"></a>防止恶意请求</h4><p>这点同上</p>
+<h4 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h4><p>比如微信H5支付 也需要这个 就不知道他们做啥用了(hhh</p>
+<h3 id="Referer-丢失"><a href="#Referer-丢失" class="headerlink" title="Referer 丢失"></a>Referer 丢失</h3><p>关于 <code>Referer</code> 丢失的问题 首先 referer 是由客户端的浏览器发送到服务器上，且在客户端可以通过 <code>document.referrer</code> 来获取，也就是说referer的发送实际上是一个浏览器行为，发送与否的决定权是在浏览器手里。虽然这样说，但是HTTP协议对什么情况下，浏览器该发送，什么情况下不该发送有着严格的规定。</p>
+<h4 id="总结下-Referer-丢失的几种情况"><a href="#总结下-Referer-丢失的几种情况" class="headerlink" title="总结下 Referer 丢失的几种情况"></a>总结下 Referer 丢失的几种情况</h4><p>1.当网站使用refresh字段进行跳转的时候，大多数浏览器不发送referer</p>
+<p>2.从用户从一个HTTPS的网站点击链接到另一个HTTP的网站时，不发送referer</p>
+<p>3.html5中，a标签的rel = “noreferrer”, 可以让浏览器不发送referer</p>
+<p>4.使用Data URI scheme链接的，浏览器也不发送referer</p>
+<p>5.使用Content Security Policy, 也可以让浏览器不发送referer</p>
+<p>6.在html头部中使用meta标签来控制不让浏览器发送referer</p>
+<h3 id="自动生成URL链接HTTPS变HTTP"><a href="#自动生成URL链接HTTPS变HTTP" class="headerlink" title="自动生成URL链接HTTPS变HTTP"></a>自动生成URL链接HTTPS变HTTP</h3><p>有时候需要在API项目中生成一些URL链接返回 但是服务器端已经配置了支持HTTPS，通过HTTPS访问的时候生成的URL仍然是HTTP</p>
+<p>关于这个问题其实是服务器 <strong>配置</strong> 问题 和 下面类似</p>
+<p>回到我遇到的微信支付问题 跟踪了一圈浏览器的跳转之后发现是属性第二种情况 从 HTTPS 站点跳到 HTTP 站点 丢失了 Referer【ps:反过来从HTTP到HTTPS是没问题的 不会丢失 Referer】 中间藏的比较深</p>
+<p>当然我一开始没有发现这个问题 因为从前端请求到 API 整个都没有问题 全部项目已经全线部署了 HTTPS , Referer 信息也有携带 然后到最后一步微信的支付请求URL的时候 Referer 就丢失了.</p>
+<p>后面发现在请求到API项目的时候 API项目返回了一个 URL 给前端 这个 URL 是后端代码根据规则生成的(Laravel 里的 action 辅助函数) 这个函数本身并没有什么问题 但是生成的URL链接 是 HTTP 了 又搞事情！！！</p>
+<p>API项目配置的是 HTTPS 请求 但是生成的URL是 HTTP 问题就是这里了 请求运维哥协助 最后发现是 Nginx 反向代理中配置的问题</p>
+<p>nginx服务器配置片段如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">location / &#123;</div><div class="line">    proxy_pass http:<span class="comment">//114.114.114.114:80;</span></div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>可以看到 proxy_pass 参数 指向的是 HTTP的协议 所以在 后台获取的 URL 都是HTTP协议的</p>
+<p>把代理这设置成 <code>https://114.114.114.114:443;</code> 即可 问题终解决</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://blog.csdn.net/diyiday/article/details/83376857?tdsourcetag=s_pctim_aiomsg" target="_blank" rel="external">https://blog.csdn.net/diyiday/article/details/83376857?tdsourcetag=s_pctim_aiomsg</a></p>
+<p><a href="https://www.jianshu.com/p/bed000e1830b" target="_blank" rel="external">https://www.jianshu.com/p/bed000e1830b</a></p>
+<p><a href="https://blog.csdn.net/samxx8/article/details/53508078" target="_blank" rel="external">https://blog.csdn.net/samxx8/article/details/53508078</a></p>
+<p><a href="https://www.zhihu.com/question/37101927" target="_blank" rel="external">https://www.zhihu.com/question/37101927</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Referer/" rel="tag"><i class="fa fa-tag"></i>Referer</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20181030/index.html" rel="next" title="关于Laravel的一些小事 不定时更新">
+                <i class="fa fa-chevron-left"></i> 关于Laravel的一些小事 不定时更新
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20181106/index.html" rel="prev" title="关于同服务器多项目多域名配置">
+                关于同服务器多项目多域名配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-是什么"><span class="nav-number">1.</span> <span class="nav-text">Referer 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-的作用"><span class="nav-number">2.</span> <span class="nav-text">Referer 的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#防盗链"><span class="nav-number">2.1.</span> <span class="nav-text">防盗链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防止恶意请求"><span class="nav-number">2.2.</span> <span class="nav-text">防止恶意请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#高级用法"><span class="nav-number">2.3.</span> <span class="nav-text">高级用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Referer-丢失"><span class="nav-number">3.</span> <span class="nav-text">Referer 丢失</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#总结下-Referer-丢失的几种情况"><span class="nav-number">3.1.</span> <span class="nav-text">总结下 Referer 丢失的几种情况</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动生成URL链接HTTPS变HTTP"><span class="nav-number">4.</span> <span class="nav-text">自动生成URL链接HTTPS变HTTP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

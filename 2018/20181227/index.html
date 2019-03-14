@@ -1,0 +1,781 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Git," />
+
+
+
+
+
+
+<meta name="description" content="事情起因还是昨天 公司的 Git服务器 进行了升级 导致之前的 SSH Key 都不能使用了需要重新上传 然后配置项目地址 开通项目权限即可 很简单的一个事情
+可是某些人踏马来了公司1年了连生成 公钥私钥都不会 最搞笑的是设置密码的时候提示密码太短 他居然看不懂 跑过来抱怨说生成不了，心里一万只草泥马路过…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于SSH登录">
+<meta property="og:url" content="https://www.tokme.cn/2018/20181227/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="事情起因还是昨天 公司的 Git服务器 进行了升级 导致之前的 SSH Key 都不能使用了需要重新上传 然后配置项目地址 开通项目权限即可 很简单的一个事情
+可是某些人踏马来了公司1年了连生成 公钥私钥都不会 最搞笑的是设置密码的时候提示密码太短 他居然看不懂 跑过来抱怨说生成不了，心里一万只草泥马路过…">
+<meta property="og:updated_time" content="2018-12-27T06:24:31.004Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于SSH登录">
+<meta name="twitter:description" content="事情起因还是昨天 公司的 Git服务器 进行了升级 导致之前的 SSH Key 都不能使用了需要重新上传 然后配置项目地址 开通项目权限即可 很简单的一个事情
+可是某些人踏马来了公司1年了连生成 公钥私钥都不会 最搞笑的是设置密码的时候提示密码太短 他居然看不懂 跑过来抱怨说生成不了，心里一万只草泥马路过…">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于SSH登录 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">61</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于SSH登录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-12-27T14:19:23+08:00" content="2018-12-27">
+              2018-12-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>事情起因还是昨天 公司的 <code>Git服务器</code> 进行了升级 导致之前的 <code>SSH Key</code> 都不能使用了需要重新上传 然后配置项目地址 开通项目权限即可 很简单的一个事情</p>
+<p>可是某些人踏马来了公司1年了连生成 公钥私钥都不会 最搞笑的是设置密码的时候提示密码太短 他居然看不懂 跑过来抱怨说生成不了，心里一万只草泥马路过…<br><a id="more"></a></p>
+<hr>
+<h3 id="生成公钥私钥"><a href="#生成公钥私钥" class="headerlink" title="生成公钥私钥"></a>生成公钥私钥</h3><p>一般文件都在用户下的 <code>.ssh</code> 文件夹中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$ ls -l</div><div class="line">total <span class="number">9</span></div><div class="line">-rw-r--r-- <span class="number">1</span> reggie <span class="number">197121</span> <span class="number">1675</span> <span class="number">7</span>月  <span class="number">17</span> <span class="number">16</span>:<span class="number">36</span> id_rsa</div><div class="line">-rw-r--r-- <span class="number">1</span> reggie <span class="number">197121</span>  <span class="number">400</span> <span class="number">7</span>月  <span class="number">17</span> <span class="number">16</span>:<span class="number">36</span> id_rsa.pub</div><div class="line">-rw-r--r-- <span class="number">1</span> reggie <span class="number">197121</span>  <span class="number">211</span> <span class="number">12</span>月 <span class="number">26</span> <span class="number">17</span>:<span class="number">36</span> known_hosts</div></pre></td></tr></table></figure>
+<p>这个是我已有的</p>
+<p>新生成的话可以执行下面的命令</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</div><div class="line">Generating public/private rsa key pair</div><div class="line">Enter file in which to save the key (/用户/.ssh/id_rsa):</div><div class="line">Created directory '/用户/.ssh'.</div><div class="line">Enter passphrase (empty for no passphrase): </div><div class="line">Enter same passphrase again: </div><div class="line">Your identification has been saved in /用户/.ssh/id_rsa.</div><div class="line">Your public key has been saved in /用户/.ssh/id_rsa.pub.</div><div class="line">The key fingerprint is:</div><div class="line">SHA256:gbaLAiKKUm8lv2INJYu4KxXLRF1GT8nTt24geNGI6Co your_email@example.com</div><div class="line">The key's randomart image is:</div><div class="line">+---[RSA 4096]----+</div><div class="line">|   . ++o.=       |</div><div class="line">|  . o..+* o .    |</div><div class="line">| . .  o.oo . .   |</div><div class="line">|  o o.o.o.. .    |</div><div class="line">|++.=.+o.S. o     |</div><div class="line">|Eo*.o= .    o    |</div><div class="line">|++. +oo    .     |</div><div class="line">|+  oo ..         |</div><div class="line">|o. . ..          |</div><div class="line">+----[SHA256]-----+</div></pre></td></tr></table></figure>
+<p>一路回车就好了 为了更安全还可以设置密码 不过一般都是默认设置没有就好了。</p>
+<p>其中 <code>id_rsa</code> 是你的私钥文件 <code>id_rsa.pub</code> 是你的公钥文件 把公钥文件上传到服务器上就可以 比如 Github 的 SSH Key 管理中</p>
+<p>下面在记录几个常用的命令</p>
+<p>修改密钥密码 <code>ssh-keygen -p</code><br>切换Git仓库地址 <code>git remote set-url origin git-repository-address</code></p>
+<h3 id="目录权限问题"><a href="#目录权限问题" class="headerlink" title="目录权限问题"></a>目录权限问题</h3><p>一般服务器端的SSH密钥都在 <code>/etc/ssh</code> 下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@localhost ssh]<span class="comment"># ls -l /etc/ssh/</span></div><div class="line">$ ls <span class="number">-1</span> /etc/ssh/ssh_host*</div><div class="line">/etc/ssh/ssh_host_dsa_key</div><div class="line">/etc/ssh/ssh_host_dsa_key.pub</div><div class="line">/etc/ssh/ssh_host_ecdsa_key</div><div class="line">/etc/ssh/ssh_host_ecdsa_key.pub</div><div class="line">/etc/ssh/ssh_host_ed25519_key</div><div class="line">/etc/ssh/ssh_host_ed25519_key.pub</div><div class="line">/etc/ssh/ssh_host_rsa_key</div><div class="line">/etc/ssh/ssh_host_rsa_key.pub</div></pre></td></tr></table></figure>
+<p>根据一开始的提示 需要使用 <code>ECDSA</code> 所以选择使用 <code>ssh_host_ecdsa_key.pub</code> 文件</p>
+<p>另外讲下目录权限问题</p>
+<p>一般 <code>.ssh</code>目录权限为 <strong>755</strong> 或者 <strong>700</strong><br><code>rsa.id.pub</code> 和 <code>authiruzed_keys</code> 权限为 <strong>644</strong><br><code>rsa.id</code> 权限必须是 <strong>600</strong></p>
+<h3 id="SSH-是什么"><a href="#SSH-是什么" class="headerlink" title="SSH 是什么"></a>SSH 是什么</h3><p>SSH 是一种协议标准，其目的是实现安全远程登录以及其它安全网络服务。 其实现种类有很多 最出名的就是开源的 <code>OpenSSH</code></p>
+<h3 id="SSH-实现原理"><a href="#SSH-实现原理" class="headerlink" title="SSH 实现原理"></a>SSH 实现原理</h3><p>SSH是为了保证更安全的登录等 当然就是对数据进行加密</p>
+<h4 id="对称加密"><a href="#对称加密" class="headerlink" title="对称加密"></a>对称加密</h4><p>关于这个更多请自己去科普</p>
+<p>简单点讲就是 <strong>加密</strong> 和 <strong>解密</strong> 都是使用的 <strong>同一组密钥</strong></p>
+<p>1.客户端请求登录 发送密码 假设原始密码为 <code>123abc</code> 然后使用 <code>密钥β</code> 进行加密 得到加密内容 <code>xxxxxx....</code><br>2.然后把加密内容 <code>xxxxxx....</code> 发送给服务器<br>3.服务器接受到内容 然后使用 <code>密钥β</code> 进行解密 得到密码 然后登录<br>4.返回登录结果</p>
+<p>使用这种对称加密的方式加密的强度是很高，但是如何保存密钥不泄露呢，比如你有很多的客户端需要使用 他们都需要有一份密钥，如果其中一个泄露了 这个系统就不在试安全了 因为你都是使用的同一个嘛</p>
+<h4 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h4><p>为了解决上面的问题 就有了 <strong>非对称加密</strong></p>
+<p>简单来讲就是会生成生成 2个密钥 一个是 <strong>公钥</strong> 一个是 <strong>私钥</strong> 一般私钥放在服务端 自己保重安全不泄露</p>
+<p>他们有个特性就是：使用公钥加密的内容 只能使用私钥来解密。如果你想通过公钥来推出私钥 其几率低的发指（数学家说的…我不知道有多低 大家都说低那就低喽）大概 <strong>约等于</strong> 不可能吧！！！</p>
+<p>1.客户端发起登录请求 然后服务器返回公钥给客户端<br>2.客户端拿到公钥后 对密码 <code>123abc</code> 进行加密 得到内容 <code>xxxxx...</code><br>3.然后把加密内容发送给服务器<br>4.服务器收到加密内容后使用私钥进行解密<br>5.然后验证用户身份 执行登录操作<br>6.返回登录结果</p>
+<h4 id="中间人攻击"><a href="#中间人攻击" class="headerlink" title="中间人攻击"></a>中间人攻击</h4><p>理论上上面这样是安全的，但是这里会有个问题，就是 <strong>你不能保证在上面的流程第一步当中获取到的公钥就是你想要连接的服务器的公钥</strong></p>
+<p>中间人攻击：</p>
+<blockquote>
+<p>如果有攻击者在第一步获取服务器公钥的时候就拦截掉 然后把自己的公钥发送给了 客户端。然后用户用攻击者的公钥进行加密并发送到了攻击者的服务器，然后&gt; 攻击者就可以拿自己的私钥解密获取你的信息，然后他在去请求真正的服务器从而完成了登录 这就是中间人攻击</p>
+</blockquote>
+<p>更多详细内容自己搜索</p>
+<h3 id="SSH-公钥认证"><a href="#SSH-公钥认证" class="headerlink" title="SSH 公钥认证"></a>SSH 公钥认证</h3><p>SSH 怎么避免中间人攻击呢。 好像并没有什么好办法，只是在第一次连接的时候他会给出提示 并给出服务器的公钥指纹 需要我们自己去做对比 服务器是否真实！！！ 这个可以在 <code>known_hosts</code> 讲解中看到。</p>
+<p>公钥认证的登录流程如下</p>
+<blockquote>
+<p>首先使用 <strong>ssh-keygen</strong> 程序生成公钥 <code>id_dsa.pub</code> 和私钥 <code>id_dsa</code>，一般是在客户端上生成，然后把 <code>id_dsa.pub</code> 通过某种方式发送给服务端。 服务端放在将要远程登录过来的那个 <strong>账号</strong>的目录的 <code>.ssh</code> 目录下面。</p>
+</blockquote>
+<p>1.客户端需要生成自己的公钥和私钥文件，并把公钥文件上传到服务器端<br>2.客户端发起登录请求 发送一个 <code>Keyid</code> 给服务器 这个keyid 会唯一对应一个客户端的公钥 然后服务器就可以拿这个标识去找客户端的公钥<br>3.服务器生成一个随机串 然后用客户端的公钥进行加密 最后将加密后的内容发送给客户端<br>4.客户端收到密文后用自己的私钥进行解密得到服务器发送的随机串， 然后对随机串做MD5哈希 生成摘要<br>5.客户端在把最终的摘要发送给服务端，同时服务端也会用同样的方法对进行生成摘要<br>6.最后服务端比较2个摘要内容是否一致 完成认证过程</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i>Git</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/20181226/index.html" rel="next" title="关于SSH登录中 公钥指纹 科普">
+                <i class="fa fa-chevron-left"></i> 关于SSH登录中 公钥指纹 科普
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/20181231/index.html" rel="prev" title="Docker入门梳理">
+                Docker入门梳理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成公钥私钥"><span class="nav-number">1.</span> <span class="nav-text">生成公钥私钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录权限问题"><span class="nav-number">2.</span> <span class="nav-text">目录权限问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-是什么"><span class="nav-number">3.</span> <span class="nav-text">SSH 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-实现原理"><span class="nav-number">4.</span> <span class="nav-text">SSH 实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#对称加密"><span class="nav-number">4.1.</span> <span class="nav-text">对称加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非对称加密"><span class="nav-number">4.2.</span> <span class="nav-text">非对称加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中间人攻击"><span class="nav-number">4.3.</span> <span class="nav-text">中间人攻击</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH-公钥认证"><span class="nav-number">5.</span> <span class="nav-text">SSH 公钥认证</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>
