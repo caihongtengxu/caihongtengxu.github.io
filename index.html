@@ -139,7 +139,7 @@
             
             归档
             
-                <span class="badge">61</span>
+                <span class="badge">62</span>
             
             
             
@@ -383,6 +383,132 @@
             
               
                 
+                <a class="post-title-link" href="/2019/20190315/index.html" itemprop="url">
+                  算法-链表的实现
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-15T21:50:45+08:00" content="2019-03-15">
+              2019-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="什么是缓存"><a href="#什么是缓存" class="headerlink" title="什么是缓存"></a>什么是缓存</h3><blockquote>
+<p>缓存是一种提高数据读取性能的技术，在硬件和软件中都有很多应用。比如常见的CPU缓存、数据库缓存、浏览器缓存</p>
+<p>缓存淘汰机制：缓存的大小是有限制的，当缓存满了后哪些数据需要被清除 哪里需要被保留，这些都需要缓存淘汰策略来决定。一般分为 <strong>先进先出策略 FIFO、最少使用策略 LFU、最近最少使用 LRU</strong></p>
+</blockquote>
+<h3 id="链表是什么"><a href="#链表是什么" class="headerlink" title="链表是什么"></a>链表是什么</h3><p>链表（Linked List）是一种稍微复杂一点的 <strong>数据结构</strong>。通过 <strong>指针</strong> 把零散的内存串联起来，其中内存块一般称为 <strong>结点</strong>。为了把内存串联起来，每个结点存储数据外还需要存储下一个结点的地址。</p>
+<p>它和数组的区别是，数组需要一组 <strong>连续的内存空间</strong> 来存储，对内存要求比较高。比如我们需要一块100M的内存空间，假如内存还有足够剩余空间但是没有连续的100M内存空间了，这个时候就会申请失败。</p>
+<p>而链表和数组相反，它不需要一块连续的内存空间，它通过<strong>指针</strong>将一组 <strong>零散的内存空间</strong> 串联起来，最后拼起来内存空间总和足够即可。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list1.png" alt="linked_list1"></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/20190315/index.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2019/20190312/index.html" itemprop="url">
                   算法-数组的实现
                 </a>
@@ -445,7 +571,11 @@
 
       
         
-          <p>在每一种语言当中都会有数组这种 <strong>数据类型</strong>，同时它还是一种最基础的 <strong>数据结构</strong>。<br>
+          <p>在每一种语言当中都会有数组这种 <strong>数据类型</strong>，同时它还是一种最基础的 <strong>数据结构</strong>。</p>
+<h3 id="数组是什么"><a href="#数组是什么" class="headerlink" title="数组是什么"></a>数组是什么</h3><blockquote>
+<p>数组：是一种 <strong>线性表</strong> 数据结构，它用一组 <strong>连续的内存空间来存储一组具有相同类型的数据</strong></p>
+</blockquote>
+<p>线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 <strong>数组、链表、队列、栈</strong><br>非线性表：数据排序不是简单的前后关系数据结构，比如 <strong>二叉树、堆、图</strong></p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2019/20190312/index.html#more" rel="contents">
               阅读全文 &raquo;
@@ -564,7 +694,10 @@
 
       
         
-          <p>对于算法自己确实很菜，吃了很多亏就不说了，所以最近准备好好补充下相关知识，先拿复杂度分析来说吧。惯用三联 <strong>是什么？ 为什么？ 如何学习与改进？</strong><br>
+          <p>对于算法自己确实很菜，吃了很多亏就不说了，所以最近准备好好补充下相关知识，先拿复杂度分析来说吧。惯用三联 <strong>是什么？ 为什么？ 如何学习与改进？</strong></p>
+<h3 id="什么是复杂度分析"><a href="#什么是复杂度分析" class="headerlink" title="什么是复杂度分析"></a>什么是复杂度分析</h3><p>数据结构和算法本身就是为了解决 『运行效率』 和 『占用空间』 这个问题的。 如何让程序代码运行的更快，更节省存储空间，这就需要算法了，而执行效率是考核质量的一个很重要的标准。</p>
+<p>一般说到算法，我们都会用一个复杂度来说明这个算法的 <strong>好与坏</strong> 其实这个好与坏就是 <strong>优秀算法</strong> 和 <strong>垃圾算法</strong> 的区别了。那么怎么区别呢？这就引出了一个概念 <strong>复杂度分析</strong> 。</p>
+<p>因为涉及到『运行效率』 和 『占用空间』，所以有2个复杂度分析 分别是 <code>时间复杂度分析</code> 和 <code>空间复杂度分析</code></p>
           <div class="post-more-link text-center">
             <a class="btn" href="/2019/20190310/index.html#more" rel="contents">
               阅读全文 &raquo;
@@ -1318,125 +1451,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/20190110/index.html" itemprop="url">
-                  PHP中glob()和json_encode()函数
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-              
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-01-10T08:20:11+08:00" content="2019-01-10">
-              2019-01-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>最近遇到个小问题，需要遍历出某文件夹下所有文件内容并最终生成一个 <strong>JSON</strong> 数据格式 然后使用了 glob() 函数来遍历文件 然后使用 json_encode() 函数来处理json数据格式,主要记录下这2个函数的参数 以前都怎么认真看过，其实他们有很多小功能<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/20190110/index.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1482,7 +1496,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">62</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

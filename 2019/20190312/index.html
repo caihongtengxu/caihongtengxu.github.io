@@ -35,20 +35,32 @@
 
 
 
-<meta name="description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。">
+<meta name="description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。
+数组是什么
+数组：是一种 线性表 数据结构，它用一组 连续的内存空间来存储一组具有相同类型的数据
+
+线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 数组、链表、队列、栈非线性表：数据排序不是简单的前后关系数据结构，比如 二叉树、堆、图">
 <meta property="og:type" content="article">
 <meta property="og:title" content="算法-数组的实现">
 <meta property="og:url" content="https://www.tokme.cn/2019/20190312/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。">
+<meta property="og:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。
+数组是什么
+数组：是一种 线性表 数据结构，它用一组 连续的内存空间来存储一组具有相同类型的数据
+
+线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 数组、链表、队列、栈非线性表：数据排序不是简单的前后关系数据结构，比如 二叉树、堆、图">
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png">
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array2.png">
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/erwei_array.png">
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/c_stack.png">
-<meta property="og:updated_time" content="2019-03-13T06:37:25.638Z">
+<meta property="og:updated_time" content="2019-03-19T09:54:14.677Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法-数组的实现">
-<meta name="twitter:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。">
+<meta name="twitter:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。
+数组是什么
+数组：是一种 线性表 数据结构，它用一组 连续的内存空间来存储一组具有相同类型的数据
+
+线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 数组、链表、队列、栈非线性表：数据排序不是简单的前后关系数据结构，比如 二叉树、堆、图">
 <meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png">
 
 
@@ -143,7 +155,7 @@
             
             归档
             
-                <span class="badge">61</span>
+                <span class="badge">62</span>
             
             
             
@@ -322,12 +334,13 @@
       
 
       
-        <p>在每一种语言当中都会有数组这种 <strong>数据类型</strong>，同时它还是一种最基础的 <strong>数据结构</strong>。<br><a id="more"></a></p>
-<hr>
+        <p>在每一种语言当中都会有数组这种 <strong>数据类型</strong>，同时它还是一种最基础的 <strong>数据结构</strong>。</p>
 <h3 id="数组是什么"><a href="#数组是什么" class="headerlink" title="数组是什么"></a>数组是什么</h3><blockquote>
 <p>数组：是一种 <strong>线性表</strong> 数据结构，它用一组 <strong>连续的内存空间来存储一组具有相同类型的数据</strong></p>
 </blockquote>
 <p>线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 <strong>数组、链表、队列、栈</strong><br>非线性表：数据排序不是简单的前后关系数据结构，比如 <strong>二叉树、堆、图</strong></p>
+<a id="more"></a>
+<hr>
 <h3 id="数组的随机访问"><a href="#数组的随机访问" class="headerlink" title="数组的随机访问"></a>数组的随机访问</h3><p>数组有个杀手级的特性：<code>随机访问</code>，因为在它 <strong>根据下标查找数据</strong> 的时候其时间复杂度为 <strong>O(1)</strong>。如果你用别的查找方法那就不是这个复杂度了，比如你用 <strong>二分查找</strong> 他的复杂度就变成了 <strong>O(logn)</strong>。</p>
 <p>假设用一个10个int类型的数组来举例 如下图</p>
 <p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png" alt="array_data1"></p>
@@ -410,6 +423,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/20190315/index.html" rel="prev" title="算法-链表的实现">
+                算法-链表的实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -476,7 +493,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">61</span>
+              <span class="site-state-item-count">62</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

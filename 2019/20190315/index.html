@@ -1,0 +1,821 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+<meta name="description" content="什么是缓存
+缓存是一种提高数据读取性能的技术，在硬件和软件中都有很多应用。比如常见的CPU缓存、数据库缓存、浏览器缓存
+缓存淘汰机制：缓存的大小是有限制的，当缓存满了后哪些数据需要被清除 哪里需要被保留，这些都需要缓存淘汰策略来决定。一般分为 先进先出策略 FIFO、最少使用策略 LFU、最近最少使用 LRU
+
+链表是什么链表（Linked List）是一种稍微复杂一点的 数据结构。通过 指针 把">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法-链表的实现">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190315/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="什么是缓存
+缓存是一种提高数据读取性能的技术，在硬件和软件中都有很多应用。比如常见的CPU缓存、数据库缓存、浏览器缓存
+缓存淘汰机制：缓存的大小是有限制的，当缓存满了后哪些数据需要被清除 哪里需要被保留，这些都需要缓存淘汰策略来决定。一般分为 先进先出策略 FIFO、最少使用策略 LFU、最近最少使用 LRU
+
+链表是什么链表（Linked List）是一种稍微复杂一点的 数据结构。通过 指针 把">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list1.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list2.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list3.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list4.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list5.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list6.png">
+<meta property="og:updated_time" content="2019-03-19T09:52:16.281Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法-链表的实现">
+<meta name="twitter:description" content="什么是缓存
+缓存是一种提高数据读取性能的技术，在硬件和软件中都有很多应用。比如常见的CPU缓存、数据库缓存、浏览器缓存
+缓存淘汰机制：缓存的大小是有限制的，当缓存满了后哪些数据需要被清除 哪里需要被保留，这些都需要缓存淘汰策略来决定。一般分为 先进先出策略 FIFO、最少使用策略 LFU、最近最少使用 LRU
+
+链表是什么链表（Linked List）是一种稍微复杂一点的 数据结构。通过 指针 把">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 算法-链表的实现 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">62</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">11</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">31</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                算法-链表的实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-03-15T21:50:45+08:00" content="2019-03-15">
+              2019-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="什么是缓存"><a href="#什么是缓存" class="headerlink" title="什么是缓存"></a>什么是缓存</h3><blockquote>
+<p>缓存是一种提高数据读取性能的技术，在硬件和软件中都有很多应用。比如常见的CPU缓存、数据库缓存、浏览器缓存</p>
+<p>缓存淘汰机制：缓存的大小是有限制的，当缓存满了后哪些数据需要被清除 哪里需要被保留，这些都需要缓存淘汰策略来决定。一般分为 <strong>先进先出策略 FIFO、最少使用策略 LFU、最近最少使用 LRU</strong></p>
+</blockquote>
+<h3 id="链表是什么"><a href="#链表是什么" class="headerlink" title="链表是什么"></a>链表是什么</h3><p>链表（Linked List）是一种稍微复杂一点的 <strong>数据结构</strong>。通过 <strong>指针</strong> 把零散的内存串联起来，其中内存块一般称为 <strong>结点</strong>。为了把内存串联起来，每个结点存储数据外还需要存储下一个结点的地址。</p>
+<p>它和数组的区别是，数组需要一组 <strong>连续的内存空间</strong> 来存储，对内存要求比较高。比如我们需要一块100M的内存空间，假如内存还有足够剩余空间但是没有连续的100M内存空间了，这个时候就会申请失败。</p>
+<p>而链表和数组相反，它不需要一块连续的内存空间，它通过<strong>指针</strong>将一组 <strong>零散的内存空间</strong> 串联起来，最后拼起来内存空间总和足够即可。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list1.png" alt="linked_list1"></p>
+<a id="more"></a>
+<hr>
+<h4 id="单链表"><a href="#单链表" class="headerlink" title="单链表"></a>单链表</h4><p>单链表是一种最简单的链表 结构如下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list2.png" alt="linked_list2"></p>
+<p>其中有2个结点比较特殊，分别是第一个结点和最后一个结点。一般习惯把第一个结点叫做 <strong>头结点</strong>，最后一个结点叫做<strong>尾结点</strong></p>
+<p>头结点用来记录链表的基地址，尾结点比较特殊，他的指针不是指向下一个结点，而是指向一个 <strong>空地址NULL</strong>，表示这是链表的最后一个结点。</p>
+<p>和数组一样，链表也支持数据的查找、插入和删除。对于链表的 <strong>插入和删除</strong> 操作速度是很快的。因为链表本身的存储空间就不是连续的，所以在插入和删除后并不需要搬移结点。只需要改变他前一个结点的指针指向后一个结点即可，所以链表在操作 插入和删除的时候时间复杂度为 O(1)。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list3.png" alt="linked_list3"></p>
+<p>对于链表的随机访问K元素就会比数组差很多，因为它在内存中不是连续的，无法通过固定的公式计算出内存地址，只能通过结点一个一个的遍历寻找，时间复杂度为O(1)。</p>
+<h4 id="循环链表"><a href="#循环链表" class="headerlink" title="循环链表"></a>循环链表</h4><p>循环链表和单链表基本一样，唯一的不同在于循环链表的尾结点指向的是头结点。当处理的数据结构具有环形的特点时采用循环链表结构比较适合。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list4.png" alt="linked_list4"></p>
+<h4 id="双向链表"><a href="#双向链表" class="headerlink" title="双向链表"></a>双向链表</h4><p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list5.png" alt="linked_list5"></p>
+<p>双向链表如上图，它需要额外两个空间来存储 <strong>前一个结点</strong> 和 <strong>后一个结点</strong>，所以他会比一般的链表多占用空间。好处就是支持双向遍历</p>
+<blockquote>
+<p>对于寻找前一个结点这种需求 复杂度为O(1)</p>
+</blockquote>
+<p>用 <strong>删除操作</strong> 举例来说明双向链表的优势</p>
+<p>删除链表中的一个数据有2中情况</p>
+<ul>
+<li>给定值，删除等于该值的结点</li>
+<li>删除给定指针的结点</li>
+</ul>
+<p>这里要说明下其实删除本身操作很简单，只是删除一个结点，然后把前一个结点指向被删除结点的后一个结点即可，时间复杂度为O(1)。但是删除操作前需要找到该结点，也就是要遍历链表，对于遍历链表的时间复杂度都是一样的，都是O(n)。根据时间复杂度分析法，删除操作的时间复杂度变为了O(n)，这是对应上面第一种给定值 删除的情况</p>
+<p>对于第二种情况给定指针删除结点的需求，双向链表的优势就体现出来了。首先我们给定一个指针，要求删除它，这个操作很简单直接删除，但是删除还有一步操作就是把被删除结点的前一个结点指向被删除结点的后一个结点，这里假设被删除结点为B，B结点前一个结点是A，B结点后一个结点是C，删除B结点的操作是</p>
+<p>1.删除B结点<br>2.更改A结点指向C结点</p>
+<p>对于一般的链表因为不知道A结点是谁，所以只能遍历链表寻找到某个结点的下一个结点是B结点才能确定A结点是哪个，然后做删除的第二步操作。所以单向链表的删除操作时间复杂度还是O(n)。双向链表因为本身就存储了前一个结点的指针，直接一步获取到A结点，然后做删除的第二步操作，所以双向两边的删除操作时间复杂度就为O(1)。</p>
+<p>双向链表除了添加、删除块以外，对于给定值的查询也要比单向链表块。因为每次查询我们可以记录每次查找的位置P，每次查询根据要查找的值和P的大小比较，决定是哪一半继续查询，所以平均只需要查找一半的数据。</p>
+<p>尽管双向链表比较耗内存，但是很多好多的实现还是使用双向链表，这是典型的 <strong>空间换时间</strong>。对于执行较慢的程序，可以通过空间换时间消耗更多的内存来优化，而消耗过多内存的程序，可以通过时间换空间的思想来降低内存消耗，具体还需要视情况而定。</p>
+<h3 id="链表-VS-数组"><a href="#链表-VS-数组" class="headerlink" title="链表 VS 数组"></a>链表 VS 数组</h3><p>链表和数组是2种不同的内存组织方式。他们的 <strong>插入</strong>、<strong>删除</strong>、<strong>随机访问</strong>操作的时间复杂度是完全相反的</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>数组</th>
+<th>链表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>插入、删除</td>
+<td>O(n)</td>
+<td>O(1)</td>
+</tr>
+<tr>
+<td>随机访问</td>
+<td>O(1)</td>
+<td>O(n)</td>
+</tr>
+</tbody>
+</table>
+<p>数组的优势体现在它的内存空间是连续的，可以借助CPU的缓存机制，预读数组中的数据 随机访问效率较高。它的缺点是大小固定，需要整块连续空间，如果没有足够连续内存空间可能会导致内存不足的情况。还有一种情况如果内存过小，不够用的时候需要在申请一个更大的内存把原数组的内容复制进去比较费时（举个例子 假如数组1个G不够用了，在申请一个1.5G内存，然后把1G数据复制进去…）</p>
+<p>链表的优势体现在它没有大小限制，支持动态扩容，不足的地方就是对于随机访问效率很低，还有对于频繁的插入和删除可能会产生内存碎片。</p>
+<h3 id="判断链表是否有环-并找到入口点"><a href="#判断链表是否有环-并找到入口点" class="headerlink" title="判断链表是否有环 并找到入口点"></a>判断链表是否有环 并找到入口点</h3><p>这是一个很经典的面试问题，首先确定链表是否是闭环也就是是否是环形链表，然后找到链表的入口点</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/linked_list6.png" alt="linked_list6"></p>
+<p>思路：<br>1.遍历链表，一个每次走一步，一个每次走二步，如果走的快的追上了走的慢了就说明链表存在闭环 也就是有环，追上的点是相交点<br>2.如果有环，从链表的起点到环入口点的距离 = 上一步的相交点到环入口点的距离<br>3.然后遍历链表 一个从起点走 一个从相交点走，每次都走一步，相等的时候就是环入口点</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinkList</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">/**</span></div><div class="line">	 * 判断是否有闭环</div><div class="line">	 */</div><div class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getIsLoop</span><span class="params">(LNode $l)</span></span></div><div class="line">	&#123;</div><div class="line">		$slow = $l;</div><div class="line">		$fast = $l;</div><div class="line">		$isLoop = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">		<span class="keyword">do</span> &#123;</div><div class="line">			<span class="comment">// 先获取后判断</span></div><div class="line">			$slow = $slow-&gt;getNext();</div><div class="line">			$fast = $fast-&gt;getNext()-&gt;getNext();</div><div class="line"></div><div class="line">			<span class="keyword">if</span> ($slow == $fast) &#123;</div><div class="line">				<span class="comment">// 有闭环 当前是相交点</span></div><div class="line">				$isLoop = <span class="keyword">true</span>;</div><div class="line">				<span class="keyword">break</span>;</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">while</span>($fast != <span class="keyword">null</span> &amp;&amp; $fast-&gt;getNext() != <span class="keyword">null</span>);</div><div class="line"></div><div class="line">		<span class="keyword">if</span> (! $isLoop) &#123;</div><div class="line">			<span class="comment">// 没有环 直接返回</span></div><div class="line">			<span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// 如果找到了 开始找环入口点</span></div><div class="line">		<span class="comment">// 因为链表起点到环的入口点距离 = 相交点到环入口点的距离</span></div><div class="line">		<span class="comment">// 所以使用2个循环 分别从入口点 和 相交点走 是一定会相较于环入口点的</span></div><div class="line">		<span class="comment">// 经过上面 此时 slow = fast = 相交点</span></div><div class="line">		$slow = $l; <span class="comment">// 让slow重新回到入口 注意此时的fast就是相交点</span></div><div class="line">		</div><div class="line">		<span class="comment">// 循环退出条件是2个相等也就是相交了 = 环入口点</span></div><div class="line">		<span class="keyword">while</span> ($slow != $fast) &#123;</div><div class="line">			$slow = $slow-&gt;getNext();</div><div class="line">			$fast = $fast-&gt;getNext();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">// 循环结束后 此时的slow和fast都是环入口点</span></div><div class="line">		<span class="keyword">return</span> $slow;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="PHP模拟链表使用LRU策略"><a href="#PHP模拟链表使用LRU策略" class="headerlink" title="PHP模拟链表使用LRU策略"></a>PHP模拟链表使用LRU策略</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"><span class="comment">// 使用链表实现浏览器的LRU策略</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> $data;</div><div class="line">    <span class="keyword">private</span> $next;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($data, $next)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;data = $data;</div><div class="line">        <span class="keyword">$this</span>-&gt;next = $next;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setData</span><span class="params">($data)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;data = $data;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setNext</span><span class="params">($link)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;next = $link;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getData</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;data;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getNext</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;next;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinkTest</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 方便统计链表长度</span></div><div class="line">    <span class="keyword">public</span> $max = <span class="number">10</span>;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化N个链表元素</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">initLink</span><span class="params">($n)</span></span></div><div class="line">    &#123;</div><div class="line">        $end = <span class="keyword">new</span> LinkedList(<span class="number">0</span>, <span class="keyword">null</span>);</div><div class="line"></div><div class="line">        <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $n - <span class="number">1</span>; $i++) &#123;</div><div class="line">            $new = <span class="keyword">new</span> LinkedList($i + <span class="number">1</span>, $end);</div><div class="line">            $end = $new;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $end;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">	<span class="comment">/**</span></div><div class="line">     * 循环打印链表</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">loopLink</span><span class="params">(LinkedList $link)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> ($link == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">while</span> ($link-&gt;getNext()) &#123;</div><div class="line">            <span class="keyword">echo</span> $link-&gt;getData().<span class="string">"&lt;br /&gt;"</span>;</div><div class="line">            $link = $link-&gt;getNext();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 链表最后一个</span></div><div class="line">        <span class="keyword">if</span> ($link-&gt;getNext() == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">echo</span> $link-&gt;getData();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 查找链表中是否存在某个给定值</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">searchLink</span><span class="params">($link, $val)</span></span></div><div class="line">    &#123;</div><div class="line">        $flag = <span class="keyword">false</span>;</div><div class="line">        $prev = <span class="keyword">null</span>;</div><div class="line">        $now = <span class="keyword">null</span>;</div><div class="line">        $next = <span class="keyword">null</span>;</div><div class="line">        $i = <span class="number">1</span>; <span class="comment">// 计数</span></div><div class="line"></div><div class="line">        <span class="keyword">while</span> ($link &amp;&amp; $link-&gt;getNext()) &#123;</div><div class="line">            <span class="keyword">if</span> ($i == <span class="number">1</span>) &#123;</div><div class="line">                <span class="comment">// 第一次循环特殊设置</span></div><div class="line">                $prev = <span class="keyword">null</span>;</div><div class="line">                $now = $link;</div><div class="line">                $next = $link-&gt;getNext();</div><div class="line"></div><div class="line">                <span class="keyword">if</span> ($now-&gt;getData() == $val) &#123;</div><div class="line">                    $flag = <span class="keyword">true</span>;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line"></div><div class="line">                $link = $now;</div><div class="line">                $i = $i + <span class="number">1</span>;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                $prev = $link;</div><div class="line">                $now = $link-&gt;getNext();</div><div class="line">                $next = $now-&gt;getNext();</div><div class="line"></div><div class="line">                <span class="keyword">if</span> ($now-&gt;getData() == $val) &#123;</div><div class="line">                    $flag = <span class="keyword">true</span>;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">                </div><div class="line">                $link = $now;</div><div class="line">                $i = $i + <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> [</div><div class="line">            <span class="string">'flag'</span> =&gt; $flag,</div><div class="line">            <span class="string">'prev'</span> =&gt; $prev,</div><div class="line">            <span class="string">'now'</span> =&gt; $now,</div><div class="line">            <span class="string">'next'</span> =&gt; $next,</div><div class="line">        ];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 添加结点</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">insertLink</span><span class="params">($link, $val)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 1.遍历结点计算数量并把结点移动到尾结点</span></div><div class="line">        $i = <span class="number">1</span>;</div><div class="line">        $now = $link;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> ($now-&gt;getNext()) &#123;</div><div class="line">            <span class="comment">// 移动结点到最后一个结点</span></div><div class="line">            $now = $now-&gt;getNext();</div><div class="line">            ++$i;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> ($i &gt;= <span class="keyword">$this</span>-&gt;max) &#123;</div><div class="line">            <span class="comment">// 已经满了 删除链表最后一个结点 然后新值插入链表头</span></div><div class="line">            $lastVal = $now-&gt;getData();</div><div class="line">            $searchResult = <span class="keyword">$this</span>-&gt;searchLink($link, $lastVal);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> ($searchResult[<span class="string">'flag'</span>]) &#123;</div><div class="line">                $prev = $searchResult[<span class="string">'prev'</span>];</div><div class="line">                $prev-&gt;setNext(<span class="keyword">null</span>);</div><div class="line">                <span class="comment">// 新值直接插入链表头</span></div><div class="line">                $newLink = <span class="keyword">new</span> LinkedList($val, $link);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 未满 直接插入链表头</span></div><div class="line">            $newLink = <span class="keyword">new</span> LinkedList($val, $link);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $newLink;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$test = <span class="keyword">new</span> LinkTest();</div><div class="line"><span class="comment">// 初始化N个结点单向链表</span></div><div class="line">$link = $test-&gt;initLink(<span class="number">5</span>);</div><div class="line"><span class="comment">// 模拟LRU策略</span></div><div class="line"><span class="comment">// 判断改值在不在链表中</span></div><div class="line">$val = <span class="number">99</span>;</div><div class="line">$searchResult = $test-&gt;searchLink($link, $val);</div><div class="line"></div><div class="line"><span class="keyword">if</span> ($searchResult[<span class="string">'flag'</span>]) &#123;</div><div class="line">    <span class="comment">// 该值存在结点中</span></div><div class="line">    <span class="comment">// 删除该节点然后在链表开头补进去该值</span></div><div class="line">    $prev = $searchResult[<span class="string">'prev'</span>];</div><div class="line">    $next = $searchResult[<span class="string">'next'</span>];</div><div class="line">    $prev-&gt;setNext($next);</div><div class="line">    $newLink = <span class="keyword">new</span> LinkedList($val, $link);</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// 该值不在链表中</span></div><div class="line">    <span class="comment">// 1.换成未满 直接将值插入链表头</span></div><div class="line">    <span class="comment">// 2.换成已满 删除链表尾结点，将新的数据插入到链表头</span></div><div class="line">    $newLink = $test-&gt;insertLink($link, $val);</div><div class="line">&#125;</div><div class="line"></div><div class="line">$test-&gt;loopLink($newLink);</div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">"&lt;br /&gt;链表操作成功"</span>;</div><div class="line"></div><div class="line"><span class="comment">// var_dump($searchResult['flag']);</span></div><div class="line"><span class="comment">// echo "上一个结点";</span></div><div class="line"><span class="comment">// var_dump($searchResult['prev']);</span></div><div class="line"><span class="comment">// echo "当前结点";</span></div><div class="line"><span class="comment">// var_dump($searchResult['now']);</span></div><div class="line"><span class="comment">// echo "下一个结点";</span></div><div class="line"><span class="comment">// var_dump($searchResult['next']);</span></div><div class="line"></div><div class="line"><span class="keyword">exit</span>();</div></pre></td></tr></table></figure>
+<h3 id="PHP模拟链表实现回文串校验"><a href="#PHP模拟链表实现回文串校验" class="headerlink" title="PHP模拟链表实现回文串校验"></a>PHP模拟链表实现回文串校验</h3><p>假设数据是存储在链表中的 实现回文串 形如 <code>1 2 3 3 2 1</code> 或者 <code>1 2 1</code> 这种回文串校验</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 用数组模拟造链表吧</span></div><div class="line">$arr = [</div><div class="line">    <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span></div><div class="line">    <span class="comment">// 1, 2, 3, 2, 1</span></div><div class="line">];</div><div class="line"></div><div class="line">$link = <span class="keyword">null</span>;</div><div class="line"></div><div class="line"><span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; count($arr); $i++) &#123;</div><div class="line">    <span class="keyword">if</span> ($i == <span class="number">0</span>) &#123;</div><div class="line">        $link = <span class="keyword">new</span> LinkedList($arr[$i], <span class="keyword">null</span>);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        $link = <span class="keyword">new</span> LinkedList($arr[$i], $link);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 使用快慢指针找到中间点，快指针每次都2步 慢指针每次走一步，当快指针走到尾结点的时候慢指针刚好是中间节点</span></div><div class="line"><span class="comment">// 注意奇数偶数</span></div><div class="line"><span class="comment">// 1 2 3 2 1</span></div><div class="line">$slow = $link;</div><div class="line">$fast = $link;</div><div class="line">$i = <span class="number">0</span>;</div><div class="line">$j = <span class="number">0</span>;</div><div class="line">$count = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="comment">// 寻找中间结点</span></div><div class="line"><span class="keyword">while</span> ($fast &amp;&amp; $fast-&gt;getNext()) &#123;</div><div class="line">    $slow = $slow-&gt;getNext();</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($fast-&gt;getNext()) &#123;</div><div class="line">        $fast = $fast-&gt;getNext()-&gt;getNext();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ++$i;</div><div class="line">    ++$j;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 循环结束的fast要么在最后一个 要么在null</span></div><div class="line"><span class="keyword">if</span> (! $fast) &#123;</div><div class="line">    <span class="comment">// 说明为偶数 最后一个结点</span></div><div class="line">    $count = $j * <span class="number">2</span>;</div><div class="line">    $isDouble = <span class="keyword">true</span>;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// 说明为奇数</span></div><div class="line">    $count = $j * <span class="number">2</span> + <span class="number">1</span>;</div><div class="line">    $isDouble = <span class="keyword">false</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 声明一个新的链表存储半程数据</span></div><div class="line">$new = <span class="keyword">new</span> LinkedList(<span class="keyword">null</span>, <span class="keyword">null</span>);</div><div class="line">    </div><div class="line"><span class="comment">// 此时的slow刚好走了一半</span></div><div class="line"><span class="keyword">while</span> ($slow &amp;&amp; $slow-&gt;getNext()) &#123;</div><div class="line">    <span class="comment">// 进入链表后半程</span></div><div class="line">    $data = $slow-&gt;getData();</div><div class="line">    $new = <span class="keyword">new</span> LinkedList($data, $new);</div><div class="line">    $slow = $slow-&gt;getNext();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> ($slow-&gt;getNext() == <span class="keyword">null</span>) &#123;</div><div class="line">    <span class="comment">// 最后一个</span></div><div class="line">    $new = <span class="keyword">new</span> LinkedList($slow-&gt;getData(), $new);</div><div class="line">&#125;</div><div class="line"><span class="comment">// end 填充新链表</span></div><div class="line"></div><div class="line">$flag = <span class="keyword">true</span>;</div><div class="line"></div><div class="line"><span class="comment">// 遍历新链表 和 原链表半程是否全部相等</span></div><div class="line"><span class="keyword">while</span> ($new &amp;&amp; $new-&gt;getNext()) &#123;</div><div class="line">    <span class="keyword">if</span> ($link-&gt;getData() != $new-&gt;getData()) &#123;</div><div class="line">        $flag = <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    $link = $link-&gt;getNext();</div><div class="line">    $new = $new-&gt;getNext();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">if</span> ($flag) &#123;</div><div class="line">    <span class="keyword">echo</span> $isDouble ? <span class="string">"偶数"</span> : <span class="string">"奇数"</span>;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"回文串"</span>;</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">echo</span> <span class="string">"不是回文串"</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">exit</span>();</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i>算法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190312/index.html" rel="next" title="算法-数组的实现">
+                <i class="fa fa-chevron-left"></i> 算法-数组的实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">62</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是缓存"><span class="nav-number">1.</span> <span class="nav-text">什么是缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表是什么"><span class="nav-number">2.</span> <span class="nav-text">链表是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#单链表"><span class="nav-number">2.1.</span> <span class="nav-text">单链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#循环链表"><span class="nav-number">2.2.</span> <span class="nav-text">循环链表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双向链表"><span class="nav-number">2.3.</span> <span class="nav-text">双向链表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表-VS-数组"><span class="nav-number">3.</span> <span class="nav-text">链表 VS 数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断链表是否有环-并找到入口点"><span class="nav-number">4.</span> <span class="nav-text">判断链表是否有环 并找到入口点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP模拟链表使用LRU策略"><span class="nav-number">5.</span> <span class="nav-text">PHP模拟链表使用LRU策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP模拟链表实现回文串校验"><span class="nav-number">6.</span> <span class="nav-text">PHP模拟链表实现回文串校验</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>
