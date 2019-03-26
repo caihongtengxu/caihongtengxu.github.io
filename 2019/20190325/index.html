@@ -28,25 +28,41 @@
 <link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Git," />
+  <meta name="keywords" content="算法," />
 
 
 
 
 
 
-<meta name="description" content="最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种">
+<meta name="description" content="理解指针或引用的含义对于指针的理解可以用一句话概括
+
+将某个变量赋值给指针，实际上就是将这个变量的地址赋值给指针，或者反过来说，指针中存储了这个变量的内存地址，指向了这个变量，通过指针就能找到这个变量。
+
+比如下面的代码
+p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地址。p—&amp;gt;next = p—&amp;gt;next—&amp;gt;next; 表示p节点的后继指针存储了p节点的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="windows下给Gvim安装NERDTree目录树插件">
-<meta property="og:url" content="https://www.tokme.cn/2017/20170626/index.html">
+<meta property="og:title" content="算法-实现链表代码">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190325/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/nerdtree-github.png">
-<meta property="og:updated_time" content="2019-03-14T06:37:54.677Z">
+<meta property="og:description" content="理解指针或引用的含义对于指针的理解可以用一句话概括
+
+将某个变量赋值给指针，实际上就是将这个变量的地址赋值给指针，或者反过来说，指针中存储了这个变量的内存地址，指向了这个变量，通过指针就能找到这个变量。
+
+比如下面的代码
+p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地址。p—&amp;gt;next = p—&amp;gt;next—&amp;gt;next; 表示p节点的后继指针存储了p节点的">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx2.png">
+<meta property="og:updated_time" content="2019-03-26T03:27:25.681Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="windows下给Gvim安装NERDTree目录树插件">
-<meta name="twitter:description" content="最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/nerdtree-github.png">
+<meta name="twitter:title" content="算法-实现链表代码">
+<meta name="twitter:description" content="理解指针或引用的含义对于指针的理解可以用一句话概括
+
+将某个变量赋值给指针，实际上就是将这个变量的地址赋值给指针，或者反过来说，指针中存储了这个变量的内存地址，指向了这个变量，通过指针就能找到这个变量。
+
+比如下面的代码
+p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地址。p—&amp;gt;next = p—&amp;gt;next—&amp;gt;next; 表示p节点的后继指针存储了p节点的">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx.png">
 
 
 
@@ -67,7 +83,7 @@
 
 
 
-  <title> windows下给Gvim安装NERDTree目录树插件 | 指尖的彩虹 </title>
+  <title> 算法-实现链表代码 | 指尖的彩虹 </title>
 </head>
 
 <body itemscope  lang="zh-Hans">
@@ -260,7 +276,7 @@
             
             
               
-                windows下给Gvim安装NERDTree目录树插件
+                算法-实现链表代码
               
             
           </h1>
@@ -273,8 +289,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2017-06-26T14:10:23+08:00" content="2017-06-26">
-              2017-06-26
+            <time itemprop="dateCreated" datetime="2019-03-25T22:30:43+08:00" content="2019-03-25">
+              2019-03-25
             </time>
           </span>
 
@@ -287,8 +303,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -319,13 +335,37 @@
       
 
       
-        <blockquote>
-<p>最近在windows下想搞个vim玩玩 最后折腾了好久也算配置的差不多了。 网上有各种插件和配置都可以找到自己需要的，这里只说下NERDTree这个目录树插件的安装吧。这个插件就是在vim编辑器的左边列出一个目录结构就是我们平时看到的那种<br><a id="more"></a></p>
+        <h3 id="理解指针或引用的含义"><a href="#理解指针或引用的含义" class="headerlink" title="理解指针或引用的含义"></a>理解指针或引用的含义</h3><p>对于指针的理解可以用一句话概括</p>
+<blockquote>
+<p>将某个变量赋值给指针，实际上就是将这个变量的地址赋值给指针，或者反过来说，指针中存储了这个变量的内存地址，指向了这个变量，通过指针就能找到这个变量。</p>
 </blockquote>
+<p>比如下面的代码</p>
+<p><code>p—&gt;next = q;</code> 表示p节点的后继指针存储了q节点的内存地址。<br><code>p—&gt;next = p—&gt;next—&gt;next;</code> 表示p节点的后继指针存储了p节点的下下个节点的内存地址。</p>
+<a id="more"></a>
 <hr>
-<h4 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h4><p>1.可以去NERDTree的 <strong>Github</strong> 上去下载 贴个链接 <a href="https://github.com/scrooloose/nerdtree" target="_blank" rel="external">NERDTree</a><br>2.下载后解压出来会有大概如下目录<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/nerdtree-github.png" alt="NERDTree-PIC"><br>3.然后进入vim的运行目录 我的是<code>D:\Gvim\vimfiles</code> 然后把<code>plugin</code>和<code>doc</code>文件夹下的文件复制到vim的运行目录相同名字的文件夹内<br>4.最后重启vim 可惜我报错了！！ 缺少了变量 无奈之下把解压的文件夹内的 <strong>autoload</strong> 文件内的 <code>nerdtree</code>目录和<code>nerdtree.vim</code>复制到了vim的运行目录内对应的文件夹中 以及<code>lib</code>和<code>nerdtree-plugin</code>文件夹一并复制到运行目录下 重启 OK</p>
-<h4 id="快捷设置"><a href="#快捷设置" class="headerlink" title="快捷设置"></a>快捷设置</h4><p>打开vim后可以在命令行模式下 通过命令 <code>:NERDTree</code>来启用左侧目录树 关闭直接输入 <code>q</code><br>另外也可以通过配置快捷键来设置<br>1.找到你本地的vim安装目录下的配置文件<code>_vimrc</code><br>2.在最下面添加如下代码<br>3.<code>map &lt;F8&gt; :NERDTreeToggle&lt;CR&gt;</code><br>4.以后就可以通过快捷键 F8 来展开目录树了<br>5.重启OK</p>
-<h4 id="简单使用"><a href="#简单使用" class="headerlink" title="简单使用"></a>简单使用</h4><p>默认打开的Nerdtree会列出桌面的内容，可以通过命令<code>:NERDTree dir_path</code>的方式来切换要展开的目录<br>eg:<br><code>:NERDTree D:\</code><br>这样他就会显示D盘的目录结构了<br>更多的命令和用法可以通过命令 <code>?</code> 来获得详细实用方法介绍 同样是用<code>?</code>来退出使用介绍</p>
+<h3 id="警惕指针丢失和内存泄露（单链表）"><a href="#警惕指针丢失和内存泄露（单链表）" class="headerlink" title="警惕指针丢失和内存泄露（单链表）"></a>警惕指针丢失和内存泄露（单链表）</h3><h4 id="插入结点"><a href="#插入结点" class="headerlink" title="插入结点"></a>插入结点</h4><p>如下图结构</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx.png" alt="linked_listx"></p>
+<p>假设在结点A和结点B之间插入一个结点X，目前A结点的下一个结点是结点B，而当前指针P指向结点A。造成指针丢失和内存泄露的代码如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">P-&gt;next = X;</div><div class="line">X-&gt;next = P-&gt;next;</div></pre></td></tr></table></figure>
+<p>显然这会导致结点X的后继指针指向自身。为什么？在操作的时候，链表是连续的还没有中断，而指针P指向的是结点A，此时结点A的下一个结点还是结点B，当执行了第一段代码 <code>P-&gt;next = X</code>; 相当于把A结点的下一个结点指向了节点X，这里是没有问题的，关键是下一行代码 <code>X-next = P-&gt;next;</code> 需要注意的是 <code>P-&gt;next</code> 经过第一步的操作后变为了结点X，此时在赋值给 <code>X-&gt;next</code> 相当于给结点X的下一个结点指向的还是结点X，因此整个链表就会中断掉，从结点B开始以后的节点都不能访问了。</p>
+<p>现在只需要把2行代码换个位置即可解决问题。也就是</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">X-&gt;next = P-&gt;next;</div><div class="line">P-&gt;next = X;</div></pre></td></tr></table></figure>
+<p>这样写就是先给结点B前面增加了一个结点X，然后在把结点A的下一个结点指向结点X，这样就完成了链表的结点插入。</p>
+<h3 id="利用-“哨兵”-简化链表实现"><a href="#利用-“哨兵”-简化链表实现" class="headerlink" title="利用 “哨兵” 简化链表实现"></a>利用 “哨兵” 简化链表实现</h3><h4 id="什么是哨兵"><a href="#什么是哨兵" class="headerlink" title="什么是哨兵"></a>什么是哨兵</h4><blockquote>
+<p>链表中的“哨兵”节点是解决边界问题的，不参与业务逻辑。如果我们引入“哨兵”节点，则不管链表是否为空，head指针都会指向这个“哨兵”节点。我们把这种有“哨兵”节点的链表称为带头链表，相反，没有“哨兵”节点的链表就称为不带头链表。</p>
+</blockquote>
+<h4 id="哨兵处理"><a href="#哨兵处理" class="headerlink" title="哨兵处理"></a>哨兵处理</h4><p>如果在p节点后插入一个节点，只需2行代码即可搞定：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">new_node—&gt;next = p—&gt;next;</div><div class="line">p—&gt;next = new_node;</div></pre></td></tr></table></figure></p>
+<p>但，若向 <strong>空链表</strong> 中插入一个节点，则代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (head == <span class="keyword">null</span>) &#123;</div><div class="line">	head = new_node;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>如果要删除节点p的后继节点，只需1行代码即可搞定： <code>p—&gt;next = p—&gt;next—&gt;next;</code> 但，若是删除链表的最有一个节点（链表中只剩下这个节点），则代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (head—&gt;next == <span class="keyword">null</span>) &#123;</div><div class="line">	head = <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>从上面的情况可以看出，针对链表的插入、删除操作，需要对插入第一个节点和删除最后一个节点的情况进行特殊处理。这样代码就会显得很繁琐，所以引入 <strong>哨兵</strong> 节点来解决这个问题。</p>
+<p>哨兵结点不存储数据，无论链表是否为空，head指针都会指向它，作为链表的头结点始终存在。这样，插入第一个结点和插入其他结点，删除最后一个结点和删除其他结点都可以统一为相同的代码实现逻辑了。因为在逻辑上是第一个结点，而实际实现上我们其实已经有一个哨兵结点在内了，所以就不存在空的情况了，所有的结点操作都是一样的 无需额外的判断。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx2.png" alt="linked_listx2"></p>
+<h4 id="哨兵应用场景"><a href="#哨兵应用场景" class="headerlink" title="哨兵应用场景"></a>哨兵应用场景</h4><p>哨兵最大的作用就是简化边界条件的处理。别的不知道了。</p>
+<h3 id="链表边界处理"><a href="#链表边界处理" class="headerlink" title="链表边界处理"></a>链表边界处理</h3><p>经常用来检查链表是否正确的边界4个边界条件：</p>
+<p>1.如果链表为空时，代码是否能正常工作？<br>2.如果链表只包含一个节点时，代码是否能正常工作？<br>3.如果链表只包含两个节点时，代码是否能正常工作？<br>4.代码逻辑在处理头尾节点时是否能正常工作？</p>
+<p>同样平时写代码的时候也可以用这4个问题来检查自己的代码</p>
 <hr>
 
       
@@ -358,7 +398,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Git/" rel="tag"><i class="fa fa-tag"></i>Git</a>
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i>算法</a>
           
         </div>
       
@@ -367,17 +407,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/20161215/index.html" rel="next" title="使用Input type=file 原生上传使用总结">
-                <i class="fa fa-chevron-left"></i> 使用Input type=file 原生上传使用总结
+              <a href="/2019/20190315/index.html" rel="next" title="算法-链表的实现">
+                <i class="fa fa-chevron-left"></i> 算法-链表的实现
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/20170703/index.html" rel="prev" title="搭建自己的Git仓库">
-                搭建自己的Git仓库 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -491,7 +527,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装方法"><span class="nav-number">1.</span> <span class="nav-text">安装方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#快捷设置"><span class="nav-number">2.</span> <span class="nav-text">快捷设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#简单使用"><span class="nav-number">3.</span> <span class="nav-text">简单使用</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#理解指针或引用的含义"><span class="nav-number">1.</span> <span class="nav-text">理解指针或引用的含义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#警惕指针丢失和内存泄露（单链表）"><span class="nav-number">2.</span> <span class="nav-text">警惕指针丢失和内存泄露（单链表）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插入结点"><span class="nav-number">2.1.</span> <span class="nav-text">插入结点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用-“哨兵”-简化链表实现"><span class="nav-number">3.</span> <span class="nav-text">利用 “哨兵” 简化链表实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是哨兵"><span class="nav-number">3.1.</span> <span class="nav-text">什么是哨兵</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#哨兵处理"><span class="nav-number">3.2.</span> <span class="nav-text">哨兵处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#哨兵应用场景"><span class="nav-number">3.3.</span> <span class="nav-text">哨兵应用场景</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链表边界处理"><span class="nav-number">4.</span> <span class="nav-text">链表边界处理</span></a></li></ol></div>
             
           </div>
         </section>
