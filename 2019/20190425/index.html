@@ -1,0 +1,881 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+<meta name="description" content="之前买过某云的云服务器，一般都是控制台直接操作，然后使用。讲真很少关注服务器的安全问题，想着厂商不都处理了么。今天看到一篇写的不错的文章，补充了一些关于服务器安全的知识。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】简单七步使你的Linux服务器更加安全">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190425/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="之前买过某云的云服务器，一般都是控制台直接操作，然后使用。讲真很少关注服务器的安全问题，想着厂商不都处理了么。今天看到一篇写的不错的文章，补充了一些关于服务器安全的知识。">
+<meta property="og:updated_time" content="2019-04-30T00:50:52.435Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻译】简单七步使你的Linux服务器更加安全">
+<meta name="twitter:description" content="之前买过某云的云服务器，一般都是控制台直接操作，然后使用。讲真很少关注服务器的安全问题，想着厂商不都处理了么。今天看到一篇写的不错的文章，补充了一些关于服务器安全的知识。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 【翻译】简单七步使你的Linux服务器更加安全 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">66</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                【翻译】简单七步使你的Linux服务器更加安全
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-04-25T18:16:43+08:00" content="2019-04-25">
+              2019-04-25
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前买过某云的云服务器，一般都是控制台直接操作，然后使用。讲真很少关注服务器的安全问题，想着厂商不都处理了么。今天看到一篇写的不错的文章，补充了一些关于服务器安全的知识。</p>
+<a id="more"></a>
+<hr>
+<p>现在很多服务器都正遭受着攻击，以后也会有。所以我决定写一篇简短的教程来演示如何更轻松的保护你的Linux服务器</p>
+<p>这并不意味着这是一篇很全面的安全教程。</p>
+<p>但是它可以帮你预防将近90%的常见后端攻击，比如尝试 <strong>暴力登录</strong> 和 <strong>DDoS</strong>。</p>
+<p>最棒的部分就是你可以在1~2小时内轻松实现这些安全操作。</p>
+<h3 id="开始之前"><a href="#开始之前" class="headerlink" title="开始之前"></a>开始之前</h3><p>1.你需要一台Linux服务器<br>2.你需要对 <strong>命令行</strong> 有基本的理解。这里有一份常用的Linux命令行操作命令列表（包含了常用的参数，很不错），<a href="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/bash_cheat_sheet.pdf" target="_blank" rel="external">点我</a></p>
+<p>如果你已经拥有上面这些必须条件，让我们开始第一步吧！</p>
+<h3 id="配置-SSH-Keys"><a href="#配置-SSH-Keys" class="headerlink" title="配置 SSH Keys"></a>配置 SSH Keys</h3><p>开启服务器的远程访问，可以使用密码登录或者SSH登录，你都需要记录下它们的日志。</p>
+<p>使用密码登录的问题就是很容易使用暴力登录（下面你将会学习如何防止暴力登录）。此外，在任何你需要访问你服务器的时候都需要记录下这些。</p>
+<p>为了避免上面这些缺点，你需要设置 <strong>SSH 认证</strong>。这比密码更安全，因为黑客不能暴力攻击它。</p>
+<p>而且可以更容易更快速的连接到服务器，同时你不需要输入密码。</p>
+<p>下面是如何在你的服务器上设置 SSH 认证</p>
+<ul>
+<li>在你本地的电脑上，使用下面的命令</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen</div></pre></td></tr></table></figure>
+<p>在你的控制面板上将会需要你进行几步简单的设置来生成你的 <strong>SSH Keys</strong>。记录下你的Key文件将要保存的路径信息。</p>
+<ul>
+<li>使用下面的命令给你的服务器添加公钥</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-copy-id username@remote_host</div></pre></td></tr></table></figure>
+<p>确保使用你真实的 <code>username</code> 和 <code>remote_host</code>(这个是你真是的服务器IP地址) 来替换上面命令中的对应值。然后系统将提示你输入密码。</p>
+<ul>
+<li>尝试使用以下命令登录服务器</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh username@remote_host</div></pre></td></tr></table></figure>
+<p>不要忘记使用你真实的信息来替换其中的 <code>username</code> 和 <code>remote_host</code>。你会注意到这次你将不需要输入密码。</p>
+<h3 id="保证你的系统时间是最新的"><a href="#保证你的系统时间是最新的" class="headerlink" title="保证你的系统时间是最新的"></a>保证你的系统时间是最新的</h3><p>需要安全的协议依赖于你的系统时间来运行如 <strong>corn 定时计划</strong>、<strong>时间日志</strong>、<strong>其他关键任务</strong>等。</p>
+<p>如果你的系统时间不正确的，对你的服务器来说可能会导致负面的影响。为了预防这种事情发生，你可以按照一个 <strong>NTP</strong> 客户端。这个客户端可以保证你的系统时间持续同步 NTP 的全球服务器。</p>
+<p>使用下面的命令来安装 NTP 客户端：(根据具体系统使用安装命令)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt install ntp</div></pre></td></tr></table></figure>
+<p>从此你不必在担心你设置你的系统时间</p>
+<h3 id="查看活动端口"><a href="#查看活动端口" class="headerlink" title="查看活动端口"></a>查看活动端口</h3><p>在服务器上的一些应用会暴露某些端口，所有在网络上的其他应用可以访问他们。</p>
+<p>黑客们也可以在你的服务器上安装后门 并且 暴露出一个可以控制你服务器的端口。</p>
+<p>基于这个原因，我们不想让你的服务器监听所不知道的请求端口。</p>
+<p>查看活动端口可以使用下面的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ss -lntup</div></pre></td></tr></table></figure>
+<p>让我们看下输出内容，特别要注意下任何那些对你而言不是很熟的端口和进程。</p>
+<p>尝试跟踪那些不良的服务和进程</p>
+<p>为了帮助你入门，可以查看这个列表 <a href="https://www.garykessler.net/library/bad_ports.html" target="_blank" rel="external">恶意 TCP/UDP 端口</a></p>
+<h3 id="启用防火墙"><a href="#启用防火墙" class="headerlink" title="启用防火墙"></a>启用防火墙</h3><p>防火墙允许你 <strong>停止/启用</strong> 那些 <strong>进入/发出</strong> 自你服务器上的某些特殊端口的流量。</p>
+<p>对于防火墙，我经常使用的是 <strong>UFW</strong> (uncomplicated firewall)</p>
+<p><strong>UFW</strong> 依照你设置的规则工作：</p>
+<ul>
+<li><p>允许 / 禁用</p>
+</li>
+<li><p>进入 / 传出 流量</p>
+</li>
+<li><p>进入 / 传出</p>
+</li>
+<li><p>具体的 / 全部的 端口</p>
+</li>
+</ul>
+<p>在这个模块，你要阻断所有的网络流量除了那些你明确允许了的端口。在安装其他程序时，记得要启用对程序而言必须启用的端口。</p>
+<h4 id="设置UFW"><a href="#设置UFW" class="headerlink" title="设置UFW"></a>设置UFW</h4><ul>
+<li>安装ufw</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install ufw</div></pre></td></tr></table></figure>
+<ul>
+<li>你也可以禁用所有传出的流量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw default deny outgoing comment &apos;deny all outgoing traffic&apos;</div></pre></td></tr></table></figure>
+<ul>
+<li>或者允许所有传出的流量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw default allow outgoing comment &apos;allow all outgoing traffic&apos;</div></pre></td></tr></table></figure>
+<ul>
+<li>下一步，我们想禁止所有进入的流量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw default deny incoming comment &apos;deny all incoming traffic&apos;</div></pre></td></tr></table></figure>
+<ul>
+<li>除了SSH连接，如此我们可以这样设置系统</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw limit in ssh comment &apos;allow SSH connections in&apos;</div></pre></td></tr></table></figure>
+<ul>
+<li>如果你配置了 UFW 禁用了所有传出流量，别忘记允许你需要的具体的流量。下面是一些事例：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># allow traffic out on port 53 -- DNS</div><div class="line">sudo ufw allow out 53 comment &apos;allow DNS calls out&apos;</div><div class="line"></div><div class="line"># allow traffic out on port 123 -- NTP</div><div class="line">sudo ufw allow out 123 comment &apos;allow NTP out&apos;</div><div class="line"></div><div class="line"># allow traffic out for HTTP, HTTPS, or FTP</div><div class="line"># apt might needs these depending on which sources you&apos;re using</div><div class="line">sudo ufw allow out http comment &apos;allow HTTP traffic out&apos;</div><div class="line">sudo ufw allow out https comment &apos;allow HTTPS traffic out&apos;</div><div class="line">sudo ufw allow out ftp comment &apos;allow FTP traffic out&apos;</div><div class="line"></div><div class="line"># allow whois</div><div class="line">sudo ufw allow out whois comment &apos;allow whois&apos;</div><div class="line"></div><div class="line"># allow traffic out on port 68 -- the DHCP client</div><div class="line"># you only need this if you&apos;re using DHCP</div><div class="line">sudo ufw allow out 68 comment &apos;allow the DHCP client to update&apos;</div></pre></td></tr></table></figure>
+<ul>
+<li>禁用 端口号99上的所有流量,使用下面的流量</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw deny 99</div></pre></td></tr></table></figure>
+<ul>
+<li>最后 启用 UFW 使用下面的命令</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw enable</div></pre></td></tr></table></figure>
+<ul>
+<li>你还可以使用下面的命令来查看UFW的状态</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo ufw status</div></pre></td></tr></table></figure>
+<h3 id="防止自动化攻击"><a href="#防止自动化攻击" class="headerlink" title="防止自动化攻击"></a>防止自动化攻击</h3><p>这里有两种通用的方法你可以用来防止大多数的自动化攻击</p>
+<ul>
+<li><p><a href="http://www.cipherdyne.org/psad/" target="_blank" rel="external">PSAD</a></p>
+</li>
+<li><p><a href="https://www.fail2ban.org/wiki/index.php/Main_Page" target="_blank" rel="external">Fail2Ban</a></p>
+</li>
+</ul>
+<h4 id="PSAD-和-Fail2Ban-的不同之处"><a href="#PSAD-和-Fail2Ban-的不同之处" class="headerlink" title="PSAD 和 Fail2Ban 的不同之处"></a>PSAD 和 Fail2Ban 的不同之处</h4><p>我们了解到端口可以访问到你服务器上的应用程序。一个攻击者通常会扫描你服务器上的开放端口，然后用来访问你的服务器。</p>
+<p><strong>PSAD</strong> 通过监控网络活动 来检测和选择性的阻止此类扫描和其他可疑类的流量，比如 <strong>DDoS</strong> 或者 <strong>系统指纹攻击</strong>。</p>
+<p><strong>Fail2Ban</strong> 从另一方面来说，扫描各个应用(如 <strong>FTP</strong> )的日志文件，并自动禁止恶意(如尝试自动登录)的IP。</p>
+<p>下面两篇教程将会教你如何安装配置 <strong>PSAD 和 Fail2Ban</strong>，这样他们就可以和 UFW 组合起来一起工作。</p>
+<ul>
+<li><p><a href="https://gist.github.com/netson/c45b2dc4e835761fbccc" target="_blank" rel="external">安装PSAD</a></p>
+</li>
+<li><p><a href="https://zaiste.net/intro_fail2ban_with_ufw/" target="_blank" rel="external">安装Fail2Ban</a></p>
+</li>
+</ul>
+<h3 id="安装-Logwatch"><a href="#安装-Logwatch" class="headerlink" title="安装 Logwatch"></a>安装 Logwatch</h3><p>服务器上的应用经常会在日志文件中保存一些日期信息。你需要安装一个 logwatch 除非你想手动去监控你的日志文件。Logwatch 可以扫码系统日志文件并总结概述他们。</p>
+<p>你可以直接在命令行运行它，或者加入一个周期性的计划任务中。比如，你可以配置 Logwatch 来给你发送关于日志文件的日常概要邮件。注意，要实现这个你的服务器需要启用发送邮件服务。</p>
+<p>logwatch 使用服务文件来确定如何去读并且概述一个日志文件。你可以在 <code>/usr/share/logwatch/scripts/services</code> 看到所有的模版服务文件。</p>
+<p>logwatch 的配置文件 <code>/usr/share/logwatch/default.conf/logwatch.conf</code> 指定了默认选项，你可以覆盖其中的参数。</p>
+<p>在 <strong>Ubuntu 或者 Debian</strong> 下安装 logwatch 可以使用下面的命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">apt-get install logwatch</div></pre></td></tr></table></figure>
+<p>对于其他Linux发行版的用户，可以查看 <strong>Linode</strong> 的 <a href="https://www.linode.com/docs/uptime/monitoring/monitor-systems-logwatch/" target="_blank" rel="external">这篇教程</a></p>
+<p>你可以直接运行logwatch,得到一个示例 以便看下它是如何运行的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo /usr/sbin/logwatch --output stdout --format text --range yesterday --service all</div></pre></td></tr></table></figure>
+<p>最后，告诉logwatch 给我们发送一封关于我们日志文件的日常概要邮件。 之后，打开文件 <code>/etc/cron.daily/00logwatch</code>,然后找到 <code>execute</code>的行，然后用下面的替换他</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">/usr/sbin/logwatch --output mail --format html --mailto root --range yesterday --service all</div></pre></td></tr></table></figure>
+<h3 id="安全审计"><a href="#安全审计" class="headerlink" title="安全审计"></a>安全审计</h3><p>在此之后，你还需要进行安全审计，以便发现任何你可能错过的漏洞。</p>
+<p>你可以使用 <strong>Lynis</strong> 来做这个。这是一款开源的软件，他提供了如下功能：</p>
+<ul>
+<li><p>安全审计</p>
+</li>
+<li><p>常规测试（e.g. PCI, HIPAA, SOx）</p>
+</li>
+<li><p>渗透测试</p>
+</li>
+<li><p>漏洞检测</p>
+</li>
+<li><p>系统强化</p>
+</li>
+</ul>
+<h4 id="如何使用-Lynis"><a href="#如何使用-Lynis" class="headerlink" title="如何使用 Lynis"></a>如何使用 Lynis</h4><p>在所有开始之前，可以克隆他们的 Github 仓库来安装 Lynis. 使用下面的命令来安装最新版。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/CISOfy/lynis</div></pre></td></tr></table></figure>
+<p>如何进入到我们克隆下的项目目录中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd lynis</div></pre></td></tr></table></figure>
+<p>最后 使用下面的命令来运行你的第一次审计</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lynis audit system</div></pre></td></tr></table></figure>
+<p>你还可以在他们的 <a href="https://cisofy.com/lynis/" target="_blank" rel="external">官方网站</a> 学到更多关于Lynis的用法</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://medium.com/servers-101/how-to-secure-your-linux-server-6026cfcdefd8" target="_blank" rel="external">https://medium.com/servers-101/how-to-secure-your-linux-server-6026cfcdefd8</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i>Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190422/index.html" rel="next" title="Hello 水杯">
+                <i class="fa fa-chevron-left"></i> Hello 水杯
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20190429/index.html" rel="prev" title="Bash Shell常用命令备忘录">
+                Bash Shell常用命令备忘录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">66</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#开始之前"><span class="nav-number">1.</span> <span class="nav-text">开始之前</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置-SSH-Keys"><span class="nav-number">2.</span> <span class="nav-text">配置 SSH Keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保证你的系统时间是最新的"><span class="nav-number">3.</span> <span class="nav-text">保证你的系统时间是最新的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看活动端口"><span class="nav-number">4.</span> <span class="nav-text">查看活动端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启用防火墙"><span class="nav-number">5.</span> <span class="nav-text">启用防火墙</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#设置UFW"><span class="nav-number">5.1.</span> <span class="nav-text">设置UFW</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#防止自动化攻击"><span class="nav-number">6.</span> <span class="nav-text">防止自动化攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PSAD-和-Fail2Ban-的不同之处"><span class="nav-number">6.1.</span> <span class="nav-text">PSAD 和 Fail2Ban 的不同之处</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Logwatch"><span class="nav-number">7.</span> <span class="nav-text">安装 Logwatch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全审计"><span class="nav-number">8.</span> <span class="nav-text">安全审计</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如何使用-Lynis"><span class="nav-number">8.1.</span> <span class="nav-text">如何使用 Lynis</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">9.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

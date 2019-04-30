@@ -1,0 +1,913 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+<meta name="description" content="看到一个很基础的Linux下常用命令和参数集合，加了一些说明。都是很基础的命令和用法，可能很多人都会了，大佬请无视，给自己留了备忘！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bash Shell常用命令备忘录">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190429/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="看到一个很基础的Linux下常用命令和参数集合，加了一些说明。都是很基础的命令和用法，可能很多人都会了，大佬请无视，给自己留了备忘！">
+<meta property="og:updated_time" content="2019-04-30T00:50:56.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bash Shell常用命令备忘录">
+<meta name="twitter:description" content="看到一个很基础的Linux下常用命令和参数集合，加了一些说明。都是很基础的命令和用法，可能很多人都会了，大佬请无视，给自己留了备忘！">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Bash Shell常用命令备忘录 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">66</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Bash Shell常用命令备忘录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-04-29T21:31:53+08:00" content="2019-04-29">
+              2019-04-29
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>看到一个很基础的Linux下常用命令和参数集合，加了一些说明。都是很基础的命令和用法，可能很多人都会了，大佬请无视，给自己留了备忘！</p>
+<a id="more"></a>
+<hr>
+<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>在 <code>&lt; &gt;</code> 内的任何东西 都需要被替换掉，比如： <code>&lt;fileName&gt;</code> –&gt; <code>iLoveChina.txt</code>,不要在你的命令中包含 <code>=</code> </p>
+<p><code>..</code> 意味着在一个命令后面可以提供很多的文件，比如 <code>rm file.txt file2.txt file3.txt .. ..</code></p>
+<h3 id="常用终端快捷键"><a href="#常用终端快捷键" class="headerlink" title="常用终端快捷键"></a>常用终端快捷键</h3><ul>
+<li>Ctrl + L = 清空终端面板</li>
+<li>Ctrl + D = 退出登录</li>
+<li>Shift + PageUp = 回到当前终端面板的顶部</li>
+<li>Shift + PageDown = 回到当前终端面板的底部</li>
+<li>Ctrl + A = 将光标移动到当前命令行的开头(不过我一般都是Home键…)</li>
+<li>Ctrl + E = 将光标移动到当前命令行的末尾</li>
+<li>Ctrl + U = 删除光标的左边输入内容</li>
+<li>Ctrl + K = 删除光标的右边输入内容</li>
+<li>Ctrl + W = 删除光标左边的单词（注意这个和+U的区别，是删除左右的单词 遇到空格会停止，+U的时候会删除全部回到命令行最开头）</li>
+<li>Ctrl + Y = 粘贴（Ctrl + U,K,W的内容）</li>
+<li>Tab = 自动补全文件或者命令行</li>
+<li>!! = 执行最后一次命令</li>
+<li>Ctrl + C/Z = 终止正在执行的命令</li>
+</ul>
+<h3 id="常用终端导航"><a href="#常用终端导航" class="headerlink" title="常用终端导航"></a>常用终端导航</h3><ul>
+<li>ls -a = 列出所有的文件和文件夹</li>
+<li>ls &lt;文件夹名&gt; = 列出该文件夹下的所有文件</li>
+<li>ls -lh = 用更适合阅读的方式列出文件详情和大小</li>
+<li>ls -l <code>*.jpg</code> = 仅仅列出此后缀的文件</li>
+<li>ls -lh &lt;文件名&gt; = 仅仅列出该文件的详情</li>
+<li>cd <code>&lt;folderName&gt;</code> = 切换目录</li>
+<li>cd / = 前往root</li>
+<li>cd ../ = 返回上一层目录，提示：../../../</li>
+<li>cd ~ = 返回当前登录用户的家目录</li>
+<li>du -h = 用更适合阅读的方式显示 当前文件夹总共占用的硬盘空间</li>
+<li>du -ah = 用更适合阅读的方式显示 当前文件夹内所有文件各自占用的硬盘空间</li>
+<li>pwd = 显示当前的工作路径</li>
+<li>man <code>&lt;command&gt;</code> = 显示指定命令的帮助文档（<strong>十级推荐多看这个</strong>）</li>
+</ul>
+<h3 id="常用的文件操作"><a href="#常用的文件操作" class="headerlink" title="常用的文件操作"></a>常用的文件操作</h3><ul>
+<li>cat <code>&lt;filename&gt;</code> = 显示文件内容</li>
+<li>head = 显示文件的前几行(可以加 <strong>-n</strong> 参数来控制具体行数)</li>
+<li>tail = 显示文件的后几行(可以加 <strong>-n</strong> 参数来控制具体行数)</li>
+<li>mkdir = 创建新的文件目录</li>
+<li>mkdir floderName floderName2 .. = 创建多个文件夹</li>
+<li>mkdir one/two/three .. = 创建多层级文件夹</li>
+<li>cp image.jpg newimage.jpg = 复制并重命名一个文件</li>
+<li>cp image.jpg <code>&lt;folderName&gt;/</code> = 把文件复制到指定文件夹下</li>
+<li>cp -R stuff otherStuff = 复制并重命名一个文件夹</li>
+<li><code>cp *.txt stuff/ = 复制所有.txt后缀的文件到 stuff目录下</code></li>
+<li>mv file.txt Documents/ = 把file.txt文件移动到 Documents文件夹下</li>
+<li><code>mv &lt;folderName&gt; &lt;folderName2&gt;</code> = 把前一个文件夹移动到后一个文件夹里面</li>
+<li>mv file.txt file2.txt = 把file.txt文件重命名为file2.txt</li>
+<li><code>rm &lt;fileName&gt; ..</code> = 删除一个或多个文件</li>
+<li>rm -i fileName = 询问用户是否确认删除文件</li>
+<li>rm -f fileName = 强制删除文件</li>
+<li>rm -r folderName/ = 删除文件夹</li>
+<li>touch fileName = 创建或修改文件(主要看文件是否存在)</li>
+<li>ln file1 file2 = 硬链接，对其中一个修改其结果都会同步反应到另一个文件中</li>
+<li>ln -s file1 file2 = 软连接 相当于windows下创建了个快捷方式 删除的话会同步删除关联文件</li>
+</ul>
+<h3 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h3><ul>
+<li><code>locate &lt;fileName&gt; = 搜索一个文件</code></li>
+<li><code>locate &lt;content&gt; = 在所有的文件中搜索内容</code></li>
+<li><code>find -name &lt;fileName&gt; = 查找该名称的文件</code></li>
+<li><code>find -name &lt;fileName*&gt; = 查找包含该名称的文件</code></li>
+<li><code>find &lt;path&gt; -name &lt;fileName&gt; = 在指定path路径下查找文件</code></li>
+<li><code>find -size +10k = 按文件大小大于10kb的来搜索 （常用单位有：b,k,M,G 注意大小写）</code></li>
+<li><code>find -type &lt;d/f&gt; = 按文件类型来搜索 d是目录 f是文件</code></li>
+<li>更多用法可以使用 <code>man find</code> 来获取</li>
+</ul>
+<h3 id="提取排序和过滤数据"><a href="#提取排序和过滤数据" class="headerlink" title="提取排序和过滤数据"></a>提取排序和过滤数据</h3><ul>
+<li><code>grep &lt;content&gt; &lt;fileName&gt; = 在文件中查询指定内容</code></li>
+<li><code>grep -i &lt;content&gt; &lt;fileName&gt; = 使用忽略大小写的方式在文件中查找内容</code></li>
+<li><code>grep -r &lt;content&gt; &lt;folderName&gt;/ = 在指定目录下的所有文件中搜索内容</code></li>
+<li><code>grep -E &lt;正则表达式&gt; &lt;fileName&gt; = 使用正则来匹配文件内容</code></li>
+<li><code>grep -E ^aaa file.txt = 在file.txt中查询以aaa开头的行</code></li>
+<li><code>grep -E [0-9] file.txt = 在file.txt中查询包含了数字0-9的行</code></li>
+<li><code>grep -E [a-zA-Z] file.txt</code></li>
+<li><code>sort &lt;fileName&gt; = 对文件内容进行排序</code></li>
+<li><code>sort -o &lt;file&gt; &lt;sortFile&gt; = 把对sortFile文件的排序结果输入到前面的file文件中</code></li>
+<li><code>sort -r &lt;fileName&gt; = 倒着输出文件内容</code></li>
+<li><code>sort -R &lt;fileName&gt; = 随机排序</code></li>
+<li><code>sort -n &lt;fileName&gt; = 把内容按数据排序</code></li>
+<li><code>wc &lt;fileName&gt; = 文字统计，结果为 行数 - 字数 - 占用空间；-l 是行数， -w 是字数， -c 是大小， -m 是字符统计</code></li>
+<li><code>cut = 截断文件的一部分</code></li>
+<li><code>cut -c 2-4 &lt;fileName&gt; = 截取文件中每一行的 第2-4个字符</code></li>
+<li>更多详细使用 <code>man cut</code> 查询</li>
+</ul>
+<h3 id="时间设置"><a href="#时间设置" class="headerlink" title="时间设置"></a>时间设置</h3><ul>
+<li>date = 查看或者修改你的时间</li>
+<li>date +%H = 如果当前是上午9点就会显示 09</li>
+<li>date +%H:%M:%S = 查看当前时间的时分秒</li>
+<li>date +%Y-%m-%d = 查看当前的年月日</li>
+<li>date 031423421997 = 修改当前时间为 1997年3月14日23点42分，他的格式是 Month | Day | Hours | Minutes | Year =&gt; MMDDhhmmYYYY</li>
+</ul>
+<hr>
+<ul>
+<li>crontab = 计划任务</li>
+<li>crontab -l = 查看当前已有的计划任务设置</li>
+<li>crontab -e = 编辑计划任务</li>
+<li>crontab -r = 删除你的计划任务</li>
+</ul>
+<p><strong>crontab 的语法是：</strong></p>
+<p><code>minute   hour   day   month   week(0-6来表示，0是周日)   command     顺序：分 时 日 月 周 命令</code></p>
+<p>其中：</p>
+<ul>
+<li>minute： 表示分钟，可以是从0到59之间的任何整数。</li>
+<li>hour：表示小时，可以是从0到23之间的任何整数。</li>
+<li>day：表示日期，可以是从1到31之间的任何整数。</li>
+<li>month：表示月份，可以是从1到12之间的任何整数。</li>
+<li>week：表示星期几，可以是从0到7之间的任何整数，这里的0或7代表星期日。</li>
+<li>command：要执行的命令，可以是系统命令，也可以是自己编写的脚本文件。</li>
+</ul>
+<p>示例：</p>
+<ul>
+<li><code>47 15 * * * touch /home/bob/movies.txt = 在每天的15:47分创建文件movies.txt</code></li>
+<li><code>* * * * * = 每分钟</code></li>
+<li><code>30 5 1-15 * * = 在每月的1-15号每天早上的5：30分</code></li>
+<li><code>0 0 * * 1,3,4 = 在每周的周一，周三周四午夜0点0份执行</code></li>
+<li><code>0 */2 * * * = 每2小时执行</code></li>
+<li><code>*/10 * * * 1-5 = 周一到周五每10分钟执行</code></li>
+</ul>
+<hr>
+<h3 id="后台执行命令"><a href="#后台执行命令" class="headerlink" title="后台执行命令"></a>后台执行命令</h3><ul>
+<li>cp bigFile.mp4 &amp; = 后台执行命令（在每个命令的最后面加 <strong>&amp;</strong> 符号就可以了）</li>
+<li>nohup cp bigFile.mp4 = 即使关掉了终端面板命令也在执行</li>
+<li>jobs = 查看后台又那些任务在执行</li>
+<li>fg process1 process2 process3 .. = 把后台任务放到前台来</li>
+</ul>
+<h3 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h3><ul>
+<li>w = 查看谁登录了和正在做什么</li>
+<li>tload = 查看系统负载的平均值 使用 Ctrl+C 可以结束掉命令</li>
+<li>top = 查看动态进程列表</li>
+<li>在top命令下 可以通过输入 q来关闭命令 h来获取帮助 k来杀掉进程</li>
+<li>kill = 杀掉进程，不过你需要知道进程的 <strong>PID</strong> 可以通过 ps -u <code>&lt;AccountName&gt; | grep &lt;Application&gt;</code> 来获取</li>
+<li>kill -9 PID = 强制杀掉进程</li>
+<li>killall = 杀掉相关的所有进程 比如 killall locate</li>
+<li>halt = 关闭电脑</li>
+<li>reboot = 重启电脑</li>
+<li>ps = 显示进程列表</li>
+<li>ps -aux | grep process = 查看相关进程</li>
+</ul>
+<h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><ul>
+<li><code>sudo useradd bob = 使用root创建新用户</code></li>
+<li><code>sudo passwd &lt;cccountName&gt; = 修改指定用户的密码</code></li>
+<li><code>sudo userdel &lt;accountName&gt; = 删除用户</code></li>
+<li><code>groupadd &lt;groupName&gt; = 新建一个用户组</code></li>
+<li><code>groupdel &lt;groupName&gt;= 删除用户组</code></li>
+<li><code>groupmod -n &lt;newGroupName&gt; &lt;groupName&gt; = 修改用户组名</code></li>
+<li><code>usermod -g &lt;groupName&gt; &lt;Account&gt; = 把account用户添加的指定组</code></li>
+<li><code>usermod -l &lt;newAccountName&gt; &lt;accoutName&gt; = 变更账户名称</code></li>
+</ul>
+<h3 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h3><ul>
+<li>chown bob hello.txt = 更改hello.txt文件的所有者为bob</li>
+<li>chown user:group hello.txt = 把hello.txt文件的所有者变为user,所属组变为group</li>
+<li>chown -R bob:bob /home/deil = 把目录下的所有目录权限都变掉</li>
+<li>chmod = 更改文件或者目录的访问权限</li>
+<li>chmod &lt;权限范围&gt;+&lt;权限设置&gt; = 使<strong>权限范围</strong>内的目录或文件具有指定权限</li>
+<li>chmod &lt;权限范围&gt;-&lt;权限设置&gt; = 删除<strong>权限范围</strong>内的目录或文件具有指定权限</li>
+<li>chmod &lt;权限范围&gt;=&lt;权限设置&gt; = 设置<strong>权限范围</strong>内的目录或者文件的权限为指定的值</li>
+<li>chmod 常用快捷参数 <code>u = user; g = group; o = other; d = 目录; l = 连接; r = read(读取); w = write(写入); x = excute(执行)</code></li>
+<li>chmod g+w someFile.txt = 给someFile.txt的所属组添加写入的权限</li>
+</ul>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><ul>
+<li>在命令行的末尾加上 <code>&gt;</code> 符号可以把命令的结果写入到一个文件</li>
+<li>cat file.txt &gt; file2.txt = 把file.txt的结果写入到file2.txt</li>
+</ul>
+<h3 id="连接命令"><a href="#连接命令" class="headerlink" title="连接命令"></a>连接命令</h3><ul>
+<li>在命令行的末尾加上 <code>|</code> 符号就可以连接另一个命令</li>
+<li>ps -aux | grep docker = 在前面的结果中检索 docker相关进程（具体要看前面的命令是做什么的）</li>
+</ul>
+<h3 id="存档和压缩文件"><a href="#存档和压缩文件" class="headerlink" title="存档和压缩文件"></a>存档和压缩文件</h3><ul>
+<li>压缩</li>
+</ul>
+<p>1.把所有你想压缩的文件都放到同一个目录 <code>mv *.txt &lt;folderName&gt;/</code><br>2.压缩tar文件<code>tar -cvf mytar.tar &lt;folderName&gt;/</code><br>3.解压tar文件 <code>tar -xvf mytar.tar &lt;folderName&gt;/</code><br>3.<code>参数解释：-c = 创建一个.tar的文件；-v = 输出执行过程；-f = 将存档都压缩到一个文件中</code><br>4.创建 gzip 压缩文件：<code>gzip mygzip.tar</code>; 解压 <code>gunzip mygzip.tar.gz</code><br>5.创建bzip2压缩文件：<code>bzip2 mybip2.tar</code>; 解压 <code>bunzip2 mybip2.tar</code></p>
+<ul>
+<li>在不解压的情况下显示压缩文件的内容</li>
+</ul>
+<p>1.<code>gzip -ztf archive.tar.gz</code><br>2.<code>bzip2 -jtf archive.tar.bz2</code><br>3.<code>tar -tf archive.tar</code></p>
+<h3 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h3><p>当软件包的仓库是可访问的时候：<code>sudo apt-get/yum install &lt;name&gt;</code></p>
+<p>如果你是从网络上下载了软件的安装包（后缀是 <code>.g</code> 或者 <code>.biz2</code>）你可以这样安装<br>第一步：创建一个目录来存放它 <code>mkdir /xx/xx/src</code>, 然后进入这个目录 <code>cd /xx/xx/src</code><br>第二步：把软件包移动进去 <code>mv ../xx.tar.gz /xx/xx/src</code><br>第三步：解压软件包，然后你会看到一个新的目录 同名上面的软件包名字，然后进入这个新目录中<br>第四步：找到安装文件 一般会有个 <code>configure</code> 文件<br>第五步：执行安装文件 <code>./configure</code>,查看日志信息 是否有报错<br>第六步：如果一切正常 <code>make &amp;&amp; make install</code> 等待安装完成</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i>Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190425/index.html" rel="next" title="【翻译】简单七步使你的Linux服务器更加安全">
+                <i class="fa fa-chevron-left"></i> 【翻译】简单七步使你的Linux服务器更加安全
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">66</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用终端快捷键"><span class="nav-number">2.</span> <span class="nav-text">常用终端快捷键</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用终端导航"><span class="nav-number">3.</span> <span class="nav-text">常用终端导航</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用的文件操作"><span class="nav-number">4.</span> <span class="nav-text">常用的文件操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#搜索文件"><span class="nav-number">5.</span> <span class="nav-text">搜索文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提取排序和过滤数据"><span class="nav-number">6.</span> <span class="nav-text">提取排序和过滤数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#时间设置"><span class="nav-number">7.</span> <span class="nav-text">时间设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后台执行命令"><span class="nav-number">8.</span> <span class="nav-text">后台执行命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程管理"><span class="nav-number">9.</span> <span class="nav-text">进程管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户管理"><span class="nav-number">10.</span> <span class="nav-text">用户管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件管理"><span class="nav-number">11.</span> <span class="nav-text">文件管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重定向"><span class="nav-number">12.</span> <span class="nav-text">重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#连接命令"><span class="nav-number">13.</span> <span class="nav-text">连接命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存档和压缩文件"><span class="nav-number">14.</span> <span class="nav-text">存档和压缩文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装软件"><span class="nav-number">15.</span> <span class="nav-text">安装软件</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+</body>
+</html>

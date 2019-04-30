@@ -139,7 +139,7 @@
             
             归档
             
-                <span class="badge">64</span>
+                <span class="badge">66</span>
             
             
             
@@ -238,6 +238,248 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/20190127/index.html" itemprop="url">
+                  关于 Vagrant Up 启动空间不足问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-01-27T07:30:22+08:00" content="2019-01-27">
+              2019-01-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Vagrant/" itemprop="url" rel="index">
+                    <span itemprop="name">Vagrant</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>一早上公司就在找我，说公司公众号登录不了，整天搞事情！爬起来 一开机执行 <code>vagrant up</code>启动虚拟机就挂了，一直在报错 无法给 <code>C:\Users\username\.VirtualBox VMs\xxxx</code> 写入，写入失败 看的我一脸懵逼 然后瞄了眼发现C盘爆红了… 空间不足了这是啊 只有3个G可用了 好了问题原因找到了 空间不足写入失败，生成不了box启动个鬼 就想着把他的这个路径给迁移出去<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/20190127/index.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/20190124/index.html" itemprop="url">
+                  记一次Laravel中with()方法事故
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-01-24T18:25:53+08:00" content="2019-01-24">
+              2019-01-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>之前有一段代码使用了Laravel模型关联的预加载<code>with()</code>方法，代码类似如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$masters = Master::with([<span class="string">'servant'</span> =&gt; <span class="function"><span class="keyword">function</span><span class="params">($query)</span> </span>&#123;</div><div class="line">    $query-&gt;select(<span class="string">'id'</span>, <span class="string">'master_id'</span>, <span class="string">'name'</span>, <span class="string">'level'</span>)-&gt;orderBy(<span class="string">'level'</span>, <span class="string">'DESC'</span>)-&gt;first();</div><div class="line">&#125;])-&gt;get();</div></pre></td></tr></table></figure>
+<p>结果类似如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">array</span>:<span class="number">2</span> [▼</div><div class="line">  <span class="number">0</span> =&gt; <span class="keyword">array</span>:<span class="number">8</span> [▼</div><div class="line">    <span class="string">"id"</span> =&gt; <span class="number">1</span></div><div class="line">    ...</div><div class="line">    <span class="string">"servant"</span> =&gt; <span class="keyword">array</span>:<span class="number">1</span> [▼</div><div class="line">      <span class="number">0</span> =&gt; <span class="keyword">array</span>:<span class="number">4</span> [▼]</div><div class="line">    ]</div><div class="line">  ]</div><div class="line">  <span class="number">1</span> =&gt; <span class="keyword">array</span>:<span class="number">8</span> [▼</div><div class="line">    <span class="string">"id"</span> =&gt; <span class="number">2</span></div><div class="line">    ...</div><div class="line">    <span class="string">"servant"</span> =&gt; []</div><div class="line">  ]</div><div class="line">]</div></pre></td></tr></table></figure>
+<p>造成了某些结果的servant属性对应的是空，但事实上他们在数据库中是有对应关联数据的，然后造成了一个bug. 今天重新看了下 <code>with()</code> 的源码感觉终于知道了原因<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/20190124/index.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -1192,248 +1434,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/20181226/index.html" itemprop="url">
-                  关于SSH登录中 公钥指纹 科普
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-              
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-12-26T11:15:15+08:00" content="2018-12-26">
-              2018-12-26
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>昨天公司 <code>Git</code> 服务器进行了升级 导致密钥全部都没了 需要重新上传 有个别几个项目顺便换了个地址<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/20181226/index.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2018/20181213/index.html" itemprop="url">
-                  英文 `spend`, `pay`, `take`, `cost` 的区别
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-              
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2018-12-13T13:45:33+08:00" content="2018-12-13">
-              2018-12-13
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/英文/" itemprop="url" rel="index">
-                    <span itemprop="name">英文</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>昨天上完课班班留了个作业 说 翻译 下面的句子 分别使用 <code>cost</code>, <code>pay</code>, <code>spend</code>, <code>take</code></p>
-<blockquote>
-<p>买这本书花了我30块</p>
-</blockquote>
-<p>本来是挺简单的一个翻译 但是关键点是上面几个 <strong>花费</strong> 的区别 后面发现了一个很好的讲解分享下<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2018/20181213/index.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1479,7 +1479,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">66</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
