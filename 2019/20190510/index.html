@@ -28,32 +28,23 @@
 <link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Mysql," />
+  <meta name="keywords" content="PHP," />
 
 
 
 
 
 
-<meta name="description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
+<meta name="description" content="我们公司是一家做人力资源SaaS系统的公司，针对公司项目用到的一些名词做下科普。其实我自己以前也是迷迷糊糊，整理了一点资料。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="优化Mysql随机取出N条记录">
-<meta property="og:url" content="https://www.tokme.cn/2019/20190220/index.html">
+<meta property="og:title" content="SaaS、微服务、Oauth是什么">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190510/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain11.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain12.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain13.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain14.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain15.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain16.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain17.png">
-<meta property="og:updated_time" content="2019-03-19T09:55:40.238Z">
+<meta property="og:description" content="我们公司是一家做人力资源SaaS系统的公司，针对公司项目用到的一些名词做下科普。其实我自己以前也是迷迷糊糊，整理了一点资料。">
+<meta property="og:updated_time" content="2019-05-10T09:37:47.570Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="优化Mysql随机取出N条记录">
-<meta name="twitter:description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png">
+<meta name="twitter:title" content="SaaS、微服务、Oauth是什么">
+<meta name="twitter:description" content="我们公司是一家做人力资源SaaS系统的公司，针对公司项目用到的一些名词做下科普。其实我自己以前也是迷迷糊糊，整理了一点资料。">
 
 
 
@@ -74,7 +65,7 @@
 
 
 
-  <title> 优化Mysql随机取出N条记录 | 指尖的彩虹 </title>
+  <title> SaaS、微服务、Oauth是什么 | 指尖的彩虹 </title>
 </head>
 
 <body itemscope  lang="zh-Hans">
@@ -267,7 +258,7 @@
             
             
               
-                优化Mysql随机取出N条记录
+                SaaS、微服务、Oauth是什么
               
             
           </h1>
@@ -280,8 +271,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-02-20T12:22:07+08:00" content="2019-02-20">
-              2019-02-20
+            <time itemprop="dateCreated" datetime="2019-05-10T17:20:33+08:00" content="2019-05-10">
+              2019-05-10
             </time>
           </span>
 
@@ -294,8 +285,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Mysql/" itemprop="url" rel="index">
-                    <span itemprop="name">Mysql</span>
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
                   </a>
                 </span>
 
@@ -326,50 +317,63 @@
       
 
       
-        <p>今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 <strong>不重复</strong> 记录的需求，然后我以前都是上去就是这样 <code>SELECT * FROM table ORDER BY RAND() LIMIT 1</code> 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化<br><a id="more"></a></p>
+        <p>我们公司是一家做人力资源SaaS系统的公司，针对公司项目用到的一些名词做下科普。其实我自己以前也是迷迷糊糊，整理了一点资料。</p>
+<a id="more"></a>
 <hr>
-<p>先来分析下需求 一般这种需求有两种实现方式</p>
-<h3 id="使用程序处理"><a href="#使用程序处理" class="headerlink" title="使用程序处理"></a>使用程序处理</h3><p>当数据量很大的时候 其实可以通过随机数在程序中随机生成N个ID 然后一条SQL <code>select * from uuid_test where id in (100000,232323,23232322,23232366);</code> 直接获取到结果</p>
-<p>看下他的性能 使用 <code>explain extended sql</code>, <strong>extended</strong> 参数可以显示更详细的信息 不加也可以，如果后面还有 <code>show warnings</code> 的话还可以显示Mysql优化的SQL过程 虽然不一定是最终执行的优化SQL</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png" alt="explain"></p>
-<p>使用了 <code>using where</code> 但是 预计遍历的 <code>row=4</code> 很少 性能还凑合 不算太差</p>
-<h3 id="使用Mysql处理"><a href="#使用Mysql处理" class="headerlink" title="使用Mysql处理"></a>使用Mysql处理</h3><p>如果使用Mysql处理的话 又会有几种情况需要区分。不过在此之前先来看下我经常写的那个SQL的性能</p>
-<p><code>explain select * from uuid_test order by RAND() limit 1;</code> 你不要尝试直接查询 我试了下 查询近2分钟 直接用 explain 来分析</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain11.png" alt="explain"></p>
-<p>可以看到这条SQL 使用了索引 使用了临时表 使用了文件排序 并且是全表扫描 3000多W行。 下面讲下优化</p>
-<h4 id="如果ID是连续分布的"><a href="#如果ID是连续分布的" class="headerlink" title="如果ID是连续分布的"></a>如果ID是连续分布的</h4><p>如果ID属性在数据库中是连续分布的 可以使用 <code>Max()</code> + <code>RAND()</code> 来获取随机ID</p>
-<p><code>explain select CEIL(RAND() * MAX(id)) from uuid_test;</code></p>
-<p>上面因为 <code>RAND() * MAX(id)</code> 的结果是一个小数 可以通过 <code>CEIL</code> 或者 <code>FLOOR</code> 来取整</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain12.png" alt="explain"></p>
-<p>因为是主键 使用了一个索引 虽然这样会加速查询 但它同时还是全表扫描 我测了下基本要 <strong>6S</strong> 左右 还有很大的优化空间</p>
-<p><code>explain select CEIL(RAND() * (select MAX(id) from uuid_test));</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain13.png" alt="explain"></p>
-<p>使用了子查询后 性能回到了等同于 单查询 <code>max</code> 的程度 看上面分析 分别是没有使用表 和 最优化查询 然后测试了下 执行时间 <strong>0.005S</strong> 比上面差距了 <strong>1000</strong> 倍… （不知道有没有算错…）</p>
-<p>经过上面已经拿到了 ID 下一步就是获取对应的记录了 用了个常规查询 直接 <code>id = x</code> 然后又死了</p>
-<p><code>explain select * from uuid_test where id = (select CEIL(RAND() * (select MAX(id) from uuid_test)));</code></p>
-<p>性能如下</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain14.png" alt="explain"></p>
-<p>虽然子查询中已经很快了 但是外面的 where 导致了使用where使用索引 并且全表扫描。经过测试 查询时间为 <strong>10S</strong> 左右</p>
-<p>可以通过 <code>show warnings;</code> 来获取警告信息 顺便说下 <code>show warnings;</code> 是什么 根据官方文档说明</p>
+<h3 id="SaaS是什么"><a href="#SaaS是什么" class="headerlink" title="SaaS是什么"></a>SaaS是什么</h3><p>SaaS：software as a service 软件即服务。通过互联网方便的提供自己的在线服务给用户使用，使用户不需要购买产品安装 维护等，方便快捷的服务用户 这就是SaaS。</p>
+<p>举个例子，有一个老板需要管理10家公司，以前他可能需要购买一个管理软件，自己部署 自己维护，现在不用了，只需要找一家提供类似相关在线服务的公司，在线使用他们的服务即可。</p>
+<h3 id="微服务是什么"><a href="#微服务是什么" class="headerlink" title="微服务是什么"></a>微服务是什么</h3><p><strong>单个应用的问题：</strong></p>
+<ul>
+<li>系统间通常以API的形式互相访问，耦合紧密导致难以维护；</li>
+<li>各业务领域需要采用相同的技术栈，难以快速应用新技术；</li>
+<li>对系统的任何修改都必须整个系统一起重新部署/升级，运维成本高；</li>
+<li>在系统负载增加时，难以进行水平扩展；</li>
+<li>当系统中一处出现问题，会影响整个系统；</li>
+</ul>
+<p>微服务：是一种架构思想。它需要结合自身实际的业务，公司组织架构来讲。把自身的单一应用根据核心功能 独立出来，使其中每块功能可以单独部署 单独管理，互不影响。同时公司的组织架构人员同步结合分离出来的业务分配 这一整套就是微服务架构。</p>
 <blockquote>
-<p>是一个诊断语句，显示有关在当前会话中执行语句所产生的条件（错误，警告和注释）的信息<br>在EXPLAIN之后也使用SHOW WARNINGS来显示EXPLAIN生成的扩展信息</p>
+<p>开发单个应用作为一系列小型服务的套件，其中每个服务都运行在自己的进程中，并且通过轻量级的机制实现彼此间的通信，这通常是 HTTP 资源 API。这些服务是围绕着业务功能构建的，并且可以通过完全自动化的部署机制进行独立部署。这些服务的集中式管理做到了最小化，每一种服务都可以通过不同的编程语言进行编写，并且可以使用不同的数据存储技术</p>
 </blockquote>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain15.png" alt="explain"></p>
-<p>必须换一种方法确保随机ID只被生成一次</p>
-<p><code>explain SELECT * FROM uuid_test JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM uuid_test)) AS id ) AS r2 USING (id);</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain16.png" alt="explain"></p>
-<p>SQL换成这样后只选择了一行 没有排序没有应用 查询被大部分优化</p>
-<h4 id="如果ID是不连续的"><a href="#如果ID是不连续的" class="headerlink" title="如果ID是不连续的"></a>如果ID是不连续的</h4><p>考虑数据库ID是不连贯的情况，可以根据随机的ID 然后取出比它或者小的数据 然后 <code>Limit</code> 限制返回的条数</p>
-<p><code>explain SELECT * FROM uuid_test as r1 JOIN (SELECT (RAND() * (SELECT MAX(id) FROM uuid_test)) AS id ) AS r2 where r1.id &gt;= r2.id limit 10;</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain17.png" alt="explain"></p>
-<p>这条SQL的性能和上面基本差不多 关键在于外面的where查询上 有可能会遍历半个表 因为我又3000多W数据 它预计的差不多1500W的样子 即使这样 他的速度也是很快</p>
-<p>不过他取出来的结果是在那个ID上或下 连续的10条记录…好像没啥办法优化成完全不规则随机</p>
-<h4 id="完全随机N条"><a href="#完全随机N条" class="headerlink" title="完全随机N条"></a>完全随机N条</h4><p>如果想完全随机N条记录的话 数据量很大的时候还是建议在程序里随机记录ID吧</p>
-<p>或者建立一个映射表把不连贯的ID都存进去变成连贯</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 创建映射表</span></div><div class="line">create table uuid_holes_map ( row_id bigint not <span class="keyword">NULL</span> primary key, random_id int not <span class="keyword">null</span>);</div><div class="line">SET @id = <span class="number">0</span>;</div><div class="line">INSERT INTO uuid_holes_map SELECT @id := @id + <span class="number">1</span>, id FROM uuid_test;</div><div class="line">select * from uuid_holes_map;</div><div class="line"></div><div class="line"><span class="comment"># 最后执行SQL如下 limit 部分是限制返回的条数</span></div><div class="line">SELECT * FROM uuid_test</div><div class="line">  JOIN (SELECT r1.random_id</div><div class="line">         FROM uuid_holes_map <span class="keyword">AS</span> r1</div><div class="line">         JOIN (SELECT (RAND() *</div><div class="line">                      (SELECT MAX(row_id)</div><div class="line">                         FROM uuid_holes_map)) <span class="keyword">AS</span> row_id)</div><div class="line">               <span class="keyword">AS</span> r2</div><div class="line">        WHERE r1.row_id &gt;= r2.row_id</div><div class="line">        ORDER BY r1.row_id ASC</div><div class="line">        LIMIT <span class="number">10</span>) <span class="keyword">as</span> rows ON (id = random_id);</div></pre></td></tr></table></figure>
-<p>差不多就这样了</p>
-<h3 id="原文地址"><a href="#原文地址" class="headerlink" title="原文地址"></a>原文地址</h3><p><a href="http://jan.kneschke.de/projects/mysql/order-by-rand/" target="_blank" rel="external">http://jan.kneschke.de/projects/mysql/order-by-rand/</a> 英文</p>
-<p><a href="http://shiningray.cn/order-by-rand.html" target="_blank" rel="external">http://shiningray.cn/order-by-rand.html</a> 中文</p>
+<p><strong>微服务的优点：</strong></p>
+<ul>
+<li>每个服务都很简单，只关注于一个业务功能。</li>
+<li>每个微服务可以由不同的团队独立开发。</li>
+<li>微服务是松散耦合的。</li>
+<li>微服务可以通过不同的编程语言与工具进行开发。</li>
+</ul>
+<p><strong>微服务的缺点：</strong></p>
+<ul>
+<li>运维成本过高：服务多了，每个需要单独维护 还需要自动化</li>
+<li>接口维护成本高：服务以来彼此之间的接口通信，改变一个接口可能影响其他服务</li>
+<li>增加了分布式的复杂性：比如网络延迟 容错性 消息序列化</li>
+<li>异步问题：如果某个操作需要同步切具有事务性会非常麻烦</li>
+<li>增加了测试的难度：很难用一致的方式来重现环境</li>
+</ul>
+<h3 id="Oauth是什么"><a href="#Oauth是什么" class="headerlink" title="Oauth是什么"></a>Oauth是什么</h3><p>Oauth:是一个关于授权的开放网络标准。主要用来授权第三方应用，获取用户数据。</p>
+<p>简单来讲：Oauth是一种授权机制。数据所有者(比如用户)来告诉系统(微信)，同意授权第三方应用(需要微信登录的第三方系统等)进入系统，获取数据。然后系统(微信)生成一个短期的token，用来代替密码，供第三方使用。</p>
+<h4 id="Oauth授权的四种模式"><a href="#Oauth授权的四种模式" class="headerlink" title="Oauth授权的四种模式"></a>Oauth授权的四种模式</h4><p><strong>注意：不论使用什么模式 第三方应用都需要到系统来备案，说明自己的身份，然后可以拿到 一个 clientid 和 一个 clientsecret。主要用来防止令牌滥用，和非法第三应用请求</strong></p>
+<p>用第三方应用来集成微信登录为例</p>
+<p><strong>授权码模式：这种是第三方应用需要先申请一个授权码，然后使用该授权码获取令牌，这是最安全的一种方式。这种方式适用有后端的应用</strong></p>
+<p>1.用户来到第三方应用 选择使用微信登录<br>2.第三方应用跳转到微信的一个地址，然后带上参数指明要获取<strong>授权码</strong>，并附带上回调地址(第三方用来接手授权码code的地址) 和 客户端ID<br>3.微信显示给用户一个页面是否确认授权给第三方应用 和 授权的权限范围<br>4.用户同意后，微信会跳转到上面的回调地址并附带上授权码code<br>5.第三方应用的服务器收到授权code后，会在后端使用code来获取令牌(access_token),然后就可以获取用户授权的信息<br>6.第三方应用就可以使用用户信息做自己的逻辑处理</p>
+<p><strong>隐藏式：这种形式没有中间步骤，直接给第三方应用颁发令牌，适用于那些纯前端的应用 没有后端支持</strong></p>
+<p>1.用户来到第三方应用 选择使用微信登录<br>2.第三方应用跳转到微信的一个地址，然后带上参数指明要获取<strong>令牌</strong>，附带上客户端ID和回调地址<br>3.用户在微信登录后 选择授权权限范围，然后微信就会跳回上面的回调地址并附带上生成的令牌token<br>4.注意一般是使用锚点的形式返回前端的，因为在跳转的过程中锚点的数据是不会发送到服务器的减少了被中间人攻击的风险<br>5.前端拿到令牌后就可以进行业务逻辑了，该获取用户信息的获取信息 该干嘛就干嘛</p>
+<p><strong>密码式：用户把账户密码直接告诉给第三方应用，然后第三方应用直接使用用户账户密码来登录系统（主要用在用户高度信任第三方的情况）</strong></p>
+<p>1.第三方应用直接要求用户提供账户密码<br>2.然后第三方应用直接用户账户信息登录微信获取信息</p>
+<p><strong>凭证式：也就是客户端授权，适用于没有前端的应用。这种授权主要是针对第三方应用而不是用户的了</strong></p>
+<p>1.第三方应用直接请求微信 附带上自己的客户端ID和客户端密码，请求生产令牌<br>2.微信验证客户端ID和客户端密码正确后返回令牌<br>3.第三方拿到令牌后该干嘛就干嘛</p>
+<h3 id="从输入网址到显示中间发生了什么-越详细越好"><a href="#从输入网址到显示中间发生了什么-越详细越好" class="headerlink" title="从输入网址到显示中间发生了什么(越详细越好)"></a>从输入网址到显示中间发生了什么(越详细越好)</h3><p>这个问题有坑 每一项都有好多细节，可以问的你懵逼。大概概括性内容有下面这些，不过不能深答，细节问题了解的不多。</p>
+<ul>
+<li>URL输入</li>
+<li>DNS解析</li>
+<li>TCP连接</li>
+<li>发送HTTP请求</li>
+<li>服务器处理请求</li>
+<li>服务器响应请求</li>
+<li>浏览器解析渲染页面</li>
+<li>连接结束</li>
+</ul>
+<p>这里有一篇<a href="http://fex.baidu.com/blog/2014/05/what-happen/" target="_blank" rel="external">细节文章</a>，看完怀疑人生了！！！</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://dbaplus.cn/news-72-1965-1.html" target="_blank" rel="external">dbaplus</a><br><a href="https://www.ibm.com/developerworks/community/blogs/3302cc3b-074e-44da-90b1-5055f1dc0d9c/entry/%E8%A7%A3%E6%9E%90%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84_%E4%B8%80_%E4%BB%80%E4%B9%88%E6%98%AF%E5%BE%AE%E6%9C%8D%E5%8A%A1?lang=en" target="_blank" rel="external">IBM</a><br><a href="https://www.infoq.cn/article/2014/06/microservices" target="_blank" rel="external">InfoQ</a><br><a href="http://www.ruanyifeng.com/blog/2019/04/oauth_design.html" target="_blank" rel="external">阮一峰</a></p>
 <hr>
 
       
@@ -402,7 +406,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i>Mysql</a>
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
           
         </div>
       
@@ -411,17 +415,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/20190206/index.html" rel="next" title="使用Docker搭建PHP环境">
-                <i class="fa fa-chevron-left"></i> 使用Docker搭建PHP环境
+              <a href="/2019/20190429/index.html" rel="next" title="Bash Shell常用命令备忘录">
+                <i class="fa fa-chevron-left"></i> Bash Shell常用命令备忘录
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/20190310/index.html" rel="prev" title="算法复杂度科普">
-                算法复杂度科普 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -535,7 +535,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用程序处理"><span class="nav-number">1.</span> <span class="nav-text">使用程序处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用Mysql处理"><span class="nav-number">2.</span> <span class="nav-text">使用Mysql处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如果ID是连续分布的"><span class="nav-number">2.1.</span> <span class="nav-text">如果ID是连续分布的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果ID是不连续的"><span class="nav-number">2.2.</span> <span class="nav-text">如果ID是不连续的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#完全随机N条"><span class="nav-number">2.3.</span> <span class="nav-text">完全随机N条</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原文地址"><span class="nav-number">3.</span> <span class="nav-text">原文地址</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#SaaS是什么"><span class="nav-number">1.</span> <span class="nav-text">SaaS是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#微服务是什么"><span class="nav-number">2.</span> <span class="nav-text">微服务是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Oauth是什么"><span class="nav-number">3.</span> <span class="nav-text">Oauth是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Oauth授权的四种模式"><span class="nav-number">3.1.</span> <span class="nav-text">Oauth授权的四种模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从输入网址到显示中间发生了什么-越详细越好"><span class="nav-number">4.</span> <span class="nav-text">从输入网址到显示中间发生了什么(越详细越好)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
             
           </div>
         </section>
