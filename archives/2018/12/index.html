@@ -746,6 +746,9 @@ var t1;
               var isMatch = true;
               var content_index = [];
               var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
               var index_title = -1;
               var index_content = -1;
               var data_title=data[i]['title'].trim().toLowerCase();
@@ -767,6 +770,7 @@ var t1;
                 var midd=keywords.toString();
                 var len=midd.length;
                 var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
                 str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
                 str += "</li>";
               }
