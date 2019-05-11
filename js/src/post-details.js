@@ -1,7 +1,17 @@
 /* global NexT: true */
 
 $(document).ready(function () {
+var path = window.location.pathname;
+    var arr = path.split("/");
 
+    if (arr.length >=4 && arr[2].length == 2) {
+        // 老的路径跳转下
+        var host = window.location.host;
+        var prot = document.location.protocol;
+        data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+        console.log(data_url);
+        window.location.href = data_url;
+    }
   initScrollSpy();
   NexT.utils.needAffix() && initAffix();
   initTOCDimension();
