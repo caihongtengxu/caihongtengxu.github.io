@@ -307,7 +307,7 @@
       <section class="site-overview sidebar-panel  sidebar-panel-active ">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/images/che2.png"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
                alt="teng xu" />
           <p class="site-author-name" itemprop="name">teng xu</p>
           <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
@@ -606,11 +606,15 @@ var t1;
     <script>
         var path = window.location.pathname;
         var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
 
         if (arr.length >=4 && arr[2].length == 2) {
             // 老的路径跳转下
-            var host = window.location.host;
-            var prot = document.location.protocol;
             data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
             console.log(data_url);
             window.location.href = data_url;
