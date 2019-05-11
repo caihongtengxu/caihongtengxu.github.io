@@ -1,7 +1,8 @@
 /* global NexT: true */
 
 $(document).ready(function () {
-var path = window.location.pathname;
+
+    var path = window.location.pathname;
     var arr = path.split("/");
 
     if (arr.length >=4 && arr[2].length == 2) {
@@ -12,6 +13,7 @@ var path = window.location.pathname;
         console.log(data_url);
         window.location.href = data_url;
     }
+
   initScrollSpy();
   NexT.utils.needAffix() && initAffix();
   initTOCDimension();
