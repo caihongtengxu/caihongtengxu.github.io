@@ -1,0 +1,888 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="说来惭愧，公司的服务器环境用了那么久连PHP的慢日志都没，然后一通设置，最后发现慢日志文件是生成了，但是却没有内容写入。难道性能这么高的么？这肯定不可能的啊，然后给代码加入 sleep(second) 还是不生效。就知道肯定要折腾了！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP-FPM可以创建慢日志文件，但是却不能给慢日志文件写入内容">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190516/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="说来惭愧，公司的服务器环境用了那么久连PHP的慢日志都没，然后一通设置，最后发现慢日志文件是生成了，但是却没有内容写入。难道性能这么高的么？这肯定不可能的啊，然后给代码加入 sleep(second) 还是不生效。就知道肯定要折腾了！">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/php-fpm-child_process.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/php-fpm-worker.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/docker-privilege.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/docker-not-privilege.png">
+<meta property="og:updated_time" content="2019-05-17T09:42:32.449Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP-FPM可以创建慢日志文件，但是却不能给慢日志文件写入内容">
+<meta name="twitter:description" content="说来惭愧，公司的服务器环境用了那么久连PHP的慢日志都没，然后一通设置，最后发现慢日志文件是生成了，但是却没有内容写入。难道性能这么高的么？这肯定不可能的啊，然后给代码加入 sleep(second) 还是不生效。就知道肯定要折腾了！">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/php-fpm-child_process.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP-FPM可以创建慢日志文件，但是却不能给慢日志文件写入内容 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">68</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP-FPM可以创建慢日志文件，但是却不能给慢日志文件写入内容
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-05-16T22:12:27+08:00" content="2019-05-16">
+              2019-05-16
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>说来惭愧，公司的服务器环境用了那么久连PHP的慢日志都没，然后一通设置，最后发现慢日志文件是生成了，但是却没有内容写入。难道性能这么高的么？这肯定不可能的啊，然后给代码加入 <code>sleep(second)</code> 还是不生效。就知道肯定要折腾了！</p>
+<a id="more"></a>
+<hr>
+<h3 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h3><p>首先公司所有的项目都是部署在 <strong>Docker</strong> 中的(自己做的镜像),然后都是使用 <strong>Nginx</strong> 和 <strong>PHP-FPM</strong> 通信来执行 <strong>PHP</strong> 内容，大概环境就这样。</p>
+<h3 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h3><p>这里会有几个名词 可以看我这篇博客 <a href="https://caihongtengxu.github.io/2018/20181012/index.html" target="_blank" rel="external">相关名词解释</a>。</p>
+<p>没空看就算了 在简单说下：</p>
+<blockquote>
+<p>CGI: 是一个协议，规定了Web服务器和后端语言的交互。但是性能差点，每个请求都会fork一个新的进程。<br>FastCGI: 也是一个协议，是CGI的升级版，可以在一个进程内处理多个请求<br>FPM：FastCGI进程管理器，是一个实现了FastCGI协议的工具<br>PHP-FPM: 是一个PHP的进程管理器，专门给PHP使用的FPM工具</p>
+</blockquote>
+<h3 id="Nginx与PHP的通信"><a href="#Nginx与PHP的通信" class="headerlink" title="Nginx与PHP的通信"></a>Nginx与PHP的通信</h3><p>首先Nginx并不是直接和PHP进行通信的，而是通过PHP-FPM。Nginx不仅仅是一个强大的Web服务器，也是一个强大的代理服务器，提供了很多请求协议的代理。比如Http协议还有FastCgi协议等。</p>
+<p>当请求进入到Nginx中，Nginx提供了一个 <strong>FastCgi模块</strong> 来把Http请求映射为对应的 Fastcgi 请求。该模块提供了 <code>fastcgi_param</code> 指定来完成映射关系。它的主要作用就是把Nginx中的变量翻译成PHP中能够理解的变量。 一般该文件是在Nginx的安装目录下，我的内容如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">/etc/nginx # cat /etc/nginx/fastcgi_params </div><div class="line"></div><div class="line">fastcgi_param  QUERY_STRING       $query_string;</div><div class="line">fastcgi_param  REQUEST_METHOD     $request_method;</div><div class="line">fastcgi_param  CONTENT_TYPE       $content_type;</div><div class="line">fastcgi_param  CONTENT_LENGTH     $content_length;</div><div class="line"></div><div class="line">fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;</div><div class="line">fastcgi_param  REQUEST_URI        $request_uri;</div><div class="line">fastcgi_param  DOCUMENT_URI       $document_uri;</div><div class="line">fastcgi_param  DOCUMENT_ROOT      $document_root;</div><div class="line">fastcgi_param  SERVER_PROTOCOL    $server_protocol;</div><div class="line">fastcgi_param  REQUEST_SCHEME     $scheme;</div><div class="line">fastcgi_param  HTTPS              $https if_not_empty;</div><div class="line"></div><div class="line">fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;</div><div class="line">fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;</div><div class="line"></div><div class="line">fastcgi_param  REMOTE_ADDR        $remote_addr;</div><div class="line">fastcgi_param  REMOTE_PORT        $remote_port;</div><div class="line">fastcgi_param  SERVER_ADDR        $server_addr;</div><div class="line">fastcgi_param  SERVER_PORT        $server_port;</div><div class="line">fastcgi_param  SERVER_NAME        $server_name;</div><div class="line"></div><div class="line"># PHP only, required if PHP was built with --enable-force-cgi-redirect</div><div class="line">fastcgi_param  REDIRECT_STATUS    200;</div></pre></td></tr></table></figure>
+<p>还有一个重要的指令 <code>fastcgi_pass</code>,用来指定FPM进程监听的地址，Nginx会把所有的PHP请求映射成fastcgi请求，然后发送到这个地址上。 我的配置文件 <code>nginx.conf</code> 中配置如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">location ~ \.php$ &#123;</div><div class="line">    fastcgi_split_path_info ^(.+\.php)(/.+)$;</div><div class="line">    fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;</div><div class="line">    fastcgi_index index.php;</div><div class="line">    include fastcgi_params;</div><div class="line">    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</div><div class="line"></div><div class="line"></div><div class="line">    fastcgi_intercept_errors off;</div><div class="line">    fastcgi_buffer_size 16k;</div><div class="line">    fastcgi_buffers 4 16k;</div><div class="line">    fastcgi_connect_timeout 300;</div><div class="line">    fastcgi_send_timeout 300;</div><div class="line">    fastcgi_read_timeout 300;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个的意思是把所有的 <code>.php</code> 结尾的请求都交给fastcgi模块处理，然后把处理后的请求发送给PHP-FPM，然后PHP-FPM把请求交给worker进程，worker进程加载PHP解析器运行PHP处理结果。 其中 <code>fastcgi_pass unix:/var/run/php/php7.1-fpm.sock;</code> 这一行用来指定fpm的地址。</p>
+<p>其中Nginx和FPM的通信有两种方式：</p>
+<blockquote>
+<p>1.使用unix socket:unix socket是一种终端，可以使同一台操作系统上的两个或多个进程进行数据通信。这种方式需要再nginx配置文件中填写php-fpm的pid文件位置，效率要比tcp socket高。</p>
+<p>2.使用tcp socket:优点是可以跨服务器，当nginx和php-fpm不在同一台机器上时，只能使用这种方式</p>
+</blockquote>
+<p>我的服务器上因为 Nginx和PHP都是安装在同一个容器中的所以使用的 unix sockert 通信模式</p>
+<p>总结：Nginx和PHP的通信流程大概如下。</p>
+<ul>
+<li>客户端发送请求到Nginx</li>
+<li>加载 <code>nginx.conf</code> 文件，把所有 <code>.php</code> 结尾的请求特殊处理</li>
+<li>加载FastCGI模块，完成请求参数的解析映射，生成FastCGI请求</li>
+<li>然后通过 <code>fastcgi_pass</code> 参数把 FastCGI 请求发送给 PHP-FPM处理</li>
+<li>PHP-FPM收到请求，分配给空闲worker子进程</li>
+<li>worker子进程加载PHP解析器等 完成PHP执行获取结果</li>
+</ul>
+<h3 id="PHP-FPM的运行原理"><a href="#PHP-FPM的运行原理" class="headerlink" title="PHP-FPM的运行原理"></a>PHP-FPM的运行原理</h3><p>PHP-FPM是一种 <code>master/worker</code> 进程架构。首先会启动一个master主进程，主要功能用来完成PHP环境的初始化，事件监听，子进程状态管理等等。然后会启动若干worker子进程来处理PHP请求。</p>
+<p>根据 PHP-FPM的配置文件可以看到它有3种管理子进程的方式。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/php-fpm-child_process.png" alt="php-fpm-child-process"></p>
+<p>简单介绍下3种模式：</p>
+<blockquote>
+<p><strong>static</strong>: 启动时创建固定数量的子进程 可以通过 <code>pm.max_children</code> 来指定数量<br><strong>dynamic</strong>: 子进程的数量会根据下面的几个参数设置来确定，不过最少会保证一个子进程。</p>
+<ul>
+<li><code>pm.max_children</code>: 可以同时存在的最大子进程数量</li>
+<li><code>pm.start_servers</code>: 启动时创建的子进程数</li>
+<li><code>pm.min_spare_servers</code>: 等待执行的最小数量，如果等待执行的进程数小于该值，这时就会创建一些子进程出来。（建议设置1，这样就不会有多余的空闲子进程）</li>
+<li><code>pm.max_spare_servers</code>: 等待执行的最大数量，如果等待执行的进程数大于该值，这时就会杀掉一些子进程。免得浪费资源</li>
+</ul>
+<p><strong>ondemand</strong>: 当启动的时候不会创建子进程。当新的请求连接进来的时候才会创建子进程。可以使用下面的参数来设置</p>
+<ul>
+<li><code>pm.max_children</code>: 可以同时存在的最大子进程数量</li>
+<li><code>pm.process_idle_timeout</code>: 当一个等待执行的进程操作设置的这个秒数后将会被杀掉</li>
+</ul>
+</blockquote>
+<h4 id="master进程的工作流程"><a href="#master进程的工作流程" class="headerlink" title="master进程的工作流程"></a>master进程的工作流程</h4><p>1.初始化CGI，注册进程信号初始化全局变量。<br>2.完成PHP环境初始化。加载 <code>php.ini</code>解析配置文件，加载PHP模块记录函数符号表，加载zend扩展，设置禁用函数和类库设置，注册回收内存方法。<br>3.完成PHP-FPM初始化。加载并解析 <code>php-fpm.conf</code> 文件，获取进程相关参数，初始化进程池以及事件模型等。<br>4.处理子进程相关操作。fork子进程，进行事件监听等。</p>
+<h4 id="worker进程工作流程"><a href="#worker进程工作流程" class="headerlink" title="worker进程工作流程"></a>worker进程工作流程</h4><p>1.接收请求。这里是不需要初始化PHP运行环境的。<br>2.处理请求。获取请求内容注册全局变量($_GET,$_POST,$_SERVER 等)，然后根据请求信息访问对应的PHP文件，然后将PHP脚本文件交给Zend引擎处理。<br>3.处理结果。在Zend引擎处理完毕后将会进行回调，发送响应内容，释放内存等</p>
+<h3 id="PHP-FPM管理操作"><a href="#PHP-FPM管理操作" class="headerlink" title="PHP-FPM管理操作"></a>PHP-FPM管理操作</h3><p>首先找到你的php-fpm所在的目录：<code>find / -name php-fpm</code> 注意名字，比如我的php-fpm其实名字是 <code>php-fpm7</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/etc/nginx # find / -name php-fpm7</div><div class="line">/etc/init.d/php-fpm7</div><div class="line">/etc/logrotate.d/php-fpm7</div><div class="line">/usr/sbin/php-fpm7</div></pre></td></tr></table></figure>
+<p>1.测试php-fpm配置内容是否正确 使用 <code>-t</code> 参数， 还可以通过加 <code>-c</code> 指定 <code>php.ini</code> 文件，通过 <code>-y</code> 指定 <code>php-fpm.conf</code> 文件【注意：文件路径】</p>
+<ul>
+<li><code>/usr/sbin/php-fpm7 -t</code></li>
+<li><code>/usr/sbin/php-fpm7 -c /usr/local/php/etc/php.ini -y /usr/local/php/etc/php-fpm.conf -t</code></li>
+</ul>
+<p>2.启动php-fpm</p>
+<ul>
+<li><code>/usr/sbin/php-fpm7</code></li>
+</ul>
+<p>3.关闭php-fpm [fpm-master-pid] 是master主进程的id 或者你有php-fpm.pid文件也行 <code>cat /usr/local/php/var/run/php-fpm.pid</code> </p>
+<ul>
+<li><code>kill -INT fpm-master-pid</code></li>
+</ul>
+<p>4.重启php-fpm</p>
+<ul>
+<li><code>kill -USR2 fpm-master-pid</code></li>
+</ul>
+<p>5.使用 <strong>root</strong> 权限启动子进程 通过增加 <code>-R</code> 参数</p>
+<ul>
+<li><code>/usr/sbin/php-fpm7 -c xxx/xxx/xxx/php.ini -y /xxx/xxx/xxx/php-fpm.conf -R</code></li>
+</ul>
+<p>更多参数见 <code>/usr/sbin/php-fpm7  -h</code></p>
+<h3 id="PHP-FPM慢日志配置"><a href="#PHP-FPM慢日志配置" class="headerlink" title="PHP-FPM慢日志配置"></a>PHP-FPM慢日志配置</h3><p>关于PHP-FPM配置慢日志的说明网上一大堆。反正搜什么都是给你显示怎么配置的搜索结果，真是够了！</p>
+<p>常规配置如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">; 这里是你的子进程的名字 这里我写的是 www123 你可以换成别的什么 注意使用 [] 包起来</div><div class="line">[www123]</div><div class="line"></div><div class="line">; 进程的Unix用户/组 设置</div><div class="line">user = app</div><div class="line">group = app</div><div class="line"></div><div class="line">; 接收FastCGI请求的地址，这里是可以是一个IPv4, IPv6 或者unix socket</div><div class="line">listen = /run/php/php7.1-fpm.sock</div><div class="line"></div><div class="line">; 设置 Unix Socket的 用户/组/权限</div><div class="line">listen.owner = app</div><div class="line">listen.group = app</div><div class="line">listen.mode = 0666</div><div class="line"></div><div class="line">; 设置子进程的管理方式 参考上面的科普</div><div class="line">pm = dynamic</div><div class="line">pm.max_children = 5</div><div class="line">pm.start_servers = 2</div><div class="line">pm.min_spare_servers = 1</div><div class="line">pm.max_spare_servers = 3</div><div class="line"></div><div class="line">; 这里是重点 慢日志slowlog的保存位置和请求时间，超过这个时间的请求就会被记录到慢日志中</div><div class="line">; 注意这里的文件目录是需要先创建好的，具体的日志文件不需要提前创建好</div><div class="line">; 这里可以设置的时间可以是 秒(s), 分钟(m), 小时(h) 和 天(d)</div><div class="line">slowlog = /app/logs/my_slow_log/$pool.log.slow</div><div class="line">request_slowlog_timeout = 1s</div></pre></td></tr></table></figure>
+<p>你可以不用把上面这些配置写到 <code>php-fpm.conf</code> 文件中，比如你可以建个 <code>pool.d</code> 文件夹，然后在 <code>php-fpm.conf</code> 中 通过 <code>include=/etc/php/7.1/fpm/pool.d/*.conf</code> 引入这些文件(注意路径不要直接copy我的)。如果你做了反向代理配置了很多个站点也可以写多份这个文件配置，改下子进程的名字 也就是一开头的 <code>www123</code> 这样你可以把不同的站点分开记录。</p>
+<p>这里有一份详细的配置文件 可以参考下 <a href="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/www.conf" target="_blank" rel="external">www.conf</a></p>
+<h3 id="处理问题"><a href="#处理问题" class="headerlink" title="处理问题"></a>处理问题</h3><p>上面是一些简单的总结，具体的还有很多细节，有兴趣的可以自己再去恶补下。下面回到开头的问题上，在经过了一番准备工作后，本以为可以正常使用了，但是事实并非如此，发生了文章开头的问题。慢日志的slow-log文件被创建了出来，但是却没有内容写进去，十分诡异！(我给测试连接中加入了 <code>sleep(5);</code> 因为配置写的是超过1秒就会记录慢日志了，5秒是足够的了)</p>
+<h4 id="是否权限问题"><a href="#是否权限问题" class="headerlink" title="是否权限问题"></a>是否权限问题</h4><p>一开始我是怀疑权限问题,因为我发现创建的日志权限是600而且还是root用户root组。而主进程master是root权限，子进程worker是app用户权限。如下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/php-fpm-worker.png" alt="php-fpm-worker"></p>
+<p><strong>尝试解决方案1：</strong></p>
+<p>把慢日志文件权限改为app用户权限并更改读写权限。暴力操作：<code>chmod 777 www123.log.slow</code> 和 <code>chown app:app www123.log.slow</code>。 然后重新访问测试连接 发现还是没有日志写入。</p>
+<p><strong>尝试解决方案2：</strong></p>
+<p>既然更改文件权限没有效果，尝试把子进程改为root用户启动 这样总不会还有权限问题了把。 于是乎把上面的配置文件中的 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">user = root</div><div class="line">group = root</div><div class="line">listen.owner = root</div><div class="line">listen.group = root</div></pre></td></tr></table></figure>
+<p>然后重启PHP-FPM， 通过 <code>docker logs --tail 100 project</code> 报错</p>
+<p><code>[16-May-2019 19:04:04] ERROR: [pool www123] please specify user and group other than root</code><br><code>[16-May-2019 19:04:04] ERROR: FPM initialization failed</code></p>
+<p>也就是不能使用root权限来启动子进程。到这里其实陷入了一个死循环，老是觉得文件是master进程创建的 又是root权限，而worker进程是app用户权限不够，但是又不能使用root权限启动子进程，陷入了怪圈。其后还尝试了更改app用户的组赋予root权限等操作都没有解决问题。</p>
+<p><strong>尝试解决方案3：</strong></p>
+<p>这里也就是上面的 PHP-FPM 的 <code>-R</code> 参数了，来指定使用root权限启动子进程，最后虽然php-fpm不报错了，但是慢日志文件还是写入不了内容。</p>
+<p><strong>尝试解决方案4：</strong></p>
+<p>几经尝试无果，最后去 <strong>Stackoverflow</strong> 提了个问题 寻求帮助，最后一位老哥 给了一些提示。他告诉我：你确定真的收到FPM的响应了吗？</p>
+<p>这时我才想起来去看 <strong>PHP-FPM的错误日志</strong>。在 <code>php-fpm.conf</code> 中增加 <code>error_log = /xx/xx/php-fpm.error.log</code>,然后重启PHP-FPM，在访问测试连接请求，发现果然有报错，错误内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[17-May-2019 10:04:50] NOTICE: fpm is running, pid 12</div><div class="line">[17-May-2019 10:04:50] NOTICE: ready to handle connections</div><div class="line">[17-May-2019 10:05:04] ERROR: failed to ptrace(ATTACH) child 22: Operation not permitted (1)</div><div class="line">[17-May-2019 10:05:04] WARNING: [pool www123] child 22, script &apos;/app/www/public/index.php&apos; (request: &quot;GET /index.php&quot;) executing too slow (2.317563 sec), logging</div></pre></td></tr></table></figure>
+<p>显示子进程权限不够，<strong>ptrace</strong> 调用失败！</p>
+<h4 id="Ptrace是什么"><a href="#Ptrace是什么" class="headerlink" title="Ptrace是什么"></a>Ptrace是什么</h4><p>为了解决这个报错去找了下 Ptrace 的资料</p>
+<blockquote>
+<p>ptrace 提供了一种机制使得父进程可以观察和控制子进程的执行过程，ptrace 还可以检查和修改该子进程的可执行文件在内存中的镜像及该子进程所使用的寄存器中的值。这种用法通常来说，主要用于实现对进程插断点和跟踪子进程的系统调用。</p>
+</blockquote>
+<p>Ptrace是系统级的实现，更多资料可以看下面2个链接 <a href="https://stackoverflow.com/questions/23928530/how-does-ptrace-work-in-linux" target="_blank" rel="external">ptrace在linux下是如何工作的</a> 和 <a href="http://man7.org/linux/man-pages/man2/ptrace.2.html" target="_blank" rel="external">trace详解</a></p>
+<p>为什么我只是给PHP-FPM开启慢日志而已，怎么又扯到了这个东西？</p>
+<p>这个要看PHP-FPM的工作原理了。在FPM进行fork子进程的时候，master进程会做健康检查，其中有对 <code>request_slowlog_timeout</code> 的判断。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (child-&gt;slow_logged.tv_sec == <span class="number">0</span> &amp;&amp; slowlog_timeout &amp;&amp;</div><div class="line">    proc.request_stage == FPM_REQUEST_EXECUTING &amp;&amp; tv.tv_sec &gt;= slowlog_timeout) &#123;</div><div class="line"> </div><div class="line">     str_purify_filename(purified_script_filename, proc.script_filename, sizeof(proc.script_filename));</div><div class="line">     child-&gt;slow_logged = proc.accepted;</div><div class="line">     child-&gt;tracer = fpm_php_trace;<span class="comment">//记录执行慢的php栈调用的回调函数</span></div><div class="line">     fpm_trace_signal(child-&gt;pid);<span class="comment">//调用ptrace函数，追踪进程</span></div><div class="line">     ....................</div><div class="line"> &#125;</div><div class="line"> </div><div class="line">.................</div><div class="line"></div><div class="line"><span class="comment">//开始追踪进程</span></div><div class="line"> int fpm_trace_signal(pid_t pid)&#123;</div><div class="line">     <span class="keyword">if</span> (<span class="number">0</span> &gt; ptrace(PTRACE_ATTACH, pid, <span class="number">0</span>, <span class="number">0</span>)) &#123;</div><div class="line">         zlog(ZLOG_SYSERROR, <span class="string">"failed to ptrace(ATTACH) child %d"</span>, pid);</div><div class="line">         <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">     &#125;</div><div class="line">     <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"> &#125;</div><div class="line"> <span class="comment">//关闭追踪</span></div><div class="line"> int fpm_trace_close(pid_t pid)&#123;</div><div class="line">     <span class="keyword">if</span> (<span class="number">0</span> &gt; ptrace(PTRACE_DETACH, pid, (void *) <span class="number">1</span>, <span class="number">0</span>)) &#123;</div><div class="line">         zlog(ZLOG_SYSERROR, <span class="string">"failed to ptrace(DETACH) child %d"</span>, pid);</div><div class="line">         <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">     &#125;</div><div class="line">     traced_pid = <span class="number">0</span>;</div><div class="line">     <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"> &#125;</div><div class="line"> <span class="comment">//获取栈调用信息</span></div><div class="line"> int fpm_trace_get_long(long addr, long *data)&#123;</div><div class="line">     errno = <span class="number">0</span>;</div><div class="line">     *data = ptrace(PTRACE_PEEKDATA, traced_pid, (void *) addr, <span class="number">0</span>);</div><div class="line">     <span class="keyword">if</span> (errno) &#123;</div><div class="line">         zlog(ZLOG_SYSERROR, <span class="string">"failed to ptrace(PEEKDATA) pid %d"</span>, traced_pid);</div><div class="line">         <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">     &#125;</div><div class="line">     <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>所以master进程为了监控子进程需要调用 <code>ptrace</code> 来实现对子进程监控和追踪，但是调用ptrace却失败了。</p>
+<p>那会不会是当前的 Docker 容器中并不具备 <strong>Ptrace</strong> 功能？经过一番查找还真是这个原因</p>
+<h3 id="最终解决"><a href="#最终解决" class="headerlink" title="最终解决"></a>最终解决</h3><p>在 <a href="https://docs.docker.com/engine/reference/run/" target="_blank" rel="external">Docker官方文档</a> 关于 <code>docker run</code> 命令介绍一栏中有 一个子单元介绍 <code>Runtime privilege and Linux capabilities</code> 就是这里</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/docker-privilege.png" alt="docker-privilege"></p>
+<p>默认情况下，创建的Docker容器具备很多Linux功能，但是也有很多在默认创建时候不提供的功能，其中就包括了 <strong>Ptrace</strong> 功能，用来跟踪任意进程的能力。</p>
+<p>下面是一个创建容器时候默认不提供的功能列表</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/docker-not-privilege.png" alt="docker-not-privilege"></p>
+<p><strong>解决办法：</strong></p>
+<p>重新创建容器 并添加 <code>--cap-add=SYS_PTRACE</code> 给容器追加Ptrace功能</p>
+<p><code>docker run --name website_name -p 11280:80 --cap-add=SYS_PTRACE -v /data/website/website_name:/app -d showtime/php-javabridge:v1</code> <strong>(PS：不要直接copy,重点在那个cap-add参数上)</strong></p>
+<p>然后重新配置PHP-FPM慢日志配置，在访问测试连接，终于写入了慢日志内容，一天的折腾终于有了结果。</p>
+<p>查看日志内容如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="number">17</span>-May<span class="number">-2019</span> <span class="number">10</span>:<span class="number">34</span>:<span class="number">58</span>]  [pool www123] pid <span class="number">23</span></div><div class="line">script_filename = /home/vagrant/code/admin/<span class="keyword">public</span>/index.php</div><div class="line">[<span class="number">0x00007f95c62120e0</span>] sleep() /home/vagrant/code/admin/<span class="keyword">public</span>/index.php:<span class="number">20</span></div></pre></td></tr></table></figure>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p>感谢所有提供帮助的人！</p>
+<p><a href="https://stackoverflow.com/questions/56168060/php-fpm-can-create-slow-log-but-cant-write-content-into-the-slow-log" target="_blank" rel="external">php-fpm doesn’t work</a></p>
+<p><a href="https://github.com/docker-library/php/issues/295" target="_blank" rel="external">how to enable php-fpm slowlog</a></p>
+<p><a href="https://serverfault.com/questions/704007/php-slowlog-causing-ptrace-error-in-docker-container/706982?newreg=ca95a47bed684f78bdfa9576f0657290" target="_blank" rel="external">php slowlog causing ptrace error in docker container</a></p>
+<p><a href="https://docs.docker.com/engine/reference/run/" target="_blank" rel="external">docker run</a></p>
+<p><a href="https://robertbasic.com/blog/php-fpm-slow-log/" target="_blank" rel="external">php-fpm-slow-log</a></p>
+<p><a href="https://blog.csdn.net/Mijar2016/article/details/53311986" target="_blank" rel="external">csdn</a></p>
+<p><a href="https://www.bbsmax.com/A/kPzOrO4odx/" target="_blank" rel="external">docker-php-fpm</a></p>
+<p><a href="https://stackoverflow.com/questions/23928530/how-does-ptrace-work-in-linux" target="_blank" rel="external">how-does-ptrace-work</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190510/index.html" rel="next" title="SaaS、微服务、Oauth是什么">
+                <i class="fa fa-chevron-left"></i> SaaS、微服务、Oauth是什么
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">68</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境介绍"><span class="nav-number">1.</span> <span class="nav-text">环境介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#名词解释"><span class="nav-number">2.</span> <span class="nav-text">名词解释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Nginx与PHP的通信"><span class="nav-number">3.</span> <span class="nav-text">Nginx与PHP的通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-FPM的运行原理"><span class="nav-number">4.</span> <span class="nav-text">PHP-FPM的运行原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#master进程的工作流程"><span class="nav-number">4.1.</span> <span class="nav-text">master进程的工作流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#worker进程工作流程"><span class="nav-number">4.2.</span> <span class="nav-text">worker进程工作流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-FPM管理操作"><span class="nav-number">5.</span> <span class="nav-text">PHP-FPM管理操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-FPM慢日志配置"><span class="nav-number">6.</span> <span class="nav-text">PHP-FPM慢日志配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理问题"><span class="nav-number">7.</span> <span class="nav-text">处理问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#是否权限问题"><span class="nav-number">7.1.</span> <span class="nav-text">是否权限问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ptrace是什么"><span class="nav-number">7.2.</span> <span class="nav-text">Ptrace是什么</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最终解决"><span class="nav-number">8.</span> <span class="nav-text">最终解决</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">9.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
