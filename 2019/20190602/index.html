@@ -1,0 +1,816 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="最近想着给公司优化下接口，发现好多连幂等性都没有做处理，特别是下单、支付、退款这些接口，瑟瑟发抖。准备改造一波！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在API中实现幂等性">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190602/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近想着给公司优化下接口，发现好多连幂等性都没有做处理，特别是下单、支付、退款这些接口，瑟瑟发抖。准备改造一波！">
+<meta property="og:updated_time" content="2019-06-02T05:14:08.093Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在API中实现幂等性">
+<meta name="twitter:description" content="最近想着给公司优化下接口，发现好多连幂等性都没有做处理，特别是下单、支付、退款这些接口，瑟瑟发抖。准备改造一波！">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 在API中实现幂等性 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">71</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                在API中实现幂等性
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-06-02T13:05:20+08:00" content="2019-06-02">
+              2019-06-02
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近想着给公司优化下接口，发现好多连幂等性都没有做处理，特别是下单、支付、退款这些接口，瑟瑟发抖。准备改造一波！<br><a id="more"></a></p>
+<hr>
+<h3 id="什么是幂等性"><a href="#什么是幂等性" class="headerlink" title="什么是幂等性"></a>什么是幂等性</h3><p>幂等性：(Idempotence)。首先幂等性是数学和计算机科学中某些操作的特性，什么特性呢？就是如果使用相同的输入参数多次调用它，则不会产生额外的影响。</p>
+<blockquote>
+<p>A request method is considered “idempotent” if the intended effect on the server of multiple identical requests with that method is the same as the effect for a single such request. (<a href="https://tools.ietf.org/html/rfc7231#section-4.2.2" target="_blank" rel="external">RFC 7231</a>)</p>
+</blockquote>
+<p>举个例子：</p>
+<p>对于转账，因为种种原因对同一个请求进行了多次发送多次执行，其结果只会成功转账一次，其他都不会生效。</p>
+<h3 id="幂等性带来优劣"><a href="#幂等性带来优劣" class="headerlink" title="幂等性带来优劣"></a>幂等性带来优劣</h3><p><strong>实现幂等性带来的好处</strong>： 可以解决因为某些原因请求多次提交，产生多次影响结果的情况。比如 下单、请求支付、转账、消息发送等等场景</p>
+<p><strong>实现幂等性带来的坏处</strong>： 增加了实现的复杂度，复杂了原来的业务逻辑同时还增加了运维的成本</p>
+<h3 id="如何实现"><a href="#如何实现" class="headerlink" title="如何实现"></a>如何实现</h3><p>以我们公司的退款（退积分）实现为例来讲下怎么实现幂等性操作。</p>
+<p>网上提供了好多种方式，大概总结了下，分别说下每种实现存在的一些问题</p>
+<h4 id="使用悲观锁"><a href="#使用悲观锁" class="headerlink" title="使用悲观锁"></a>使用悲观锁</h4><p>实现：请求进入的时候开启事务，然后查询订单并加锁，然后判断订单是否符合条件等等，符合进行账户余额累加这里也要加锁，在全部执行完提交或回滚</p>
+<p>缺点：中间环节可能会执行时间很长，容易产生锁住整表服务挂掉等</p>
+<h4 id="使用乐观锁"><a href="#使用乐观锁" class="headerlink" title="使用乐观锁"></a>使用乐观锁</h4><p>实现：乐观锁在大部分时间是不会锁表的，只有在更新的时候才会锁表。一般是通过版本号来实现的。</p>
+<p>比如在账户表中增加 <code>version</code> 字段当作版本号。在进行退款的时候传递 version 字段给服务器。然后退款操作中判断订单状态，符合进行退款，在更新账户余额的时候 使用 <code>update table set amout=amout+xxx,version=version+1 where uuid = xxx and version = xxx</code>。 </p>
+<p>即使多个重复请求进来，因为进来的version是一样的，而此时数据库中对应数据的version已经变了，已经被上一个成功执行的结果给+1了，所以那个修改条件是不成立的。也就不会更新数据进行多次增加金额</p>
+<p>缺点：要记得使用主键或唯一索引来更新，这时是行锁不然容易变成表锁。</p>
+<h4 id="防重表"><a href="#防重表" class="headerlink" title="防重表"></a>防重表</h4><p>实现：建立一张防重表，比如可以使用订单号为唯一索引。在请求退款的时候根据订单号向防重表中添加一条订单退款记录。因为是唯一索引，所以当重发的请求进来的时候添加订单记录的话就会失败，这个时候就可以返回操作失败给前端。而第一个进入的可以完成退款操作，在退款完成后删除防重表中的记录。</p>
+<p>缺点：多维护一个表，业务逻辑变的复杂许多。</p>
+<h4 id="使用token"><a href="#使用token" class="headerlink" title="使用token"></a>使用token</h4><p>实现：在每次退款之前需要去申请一个token，然后把token缓存起来，在发起退款的时候携带token回来，服务器校验token是否存在，存在的话就删除token，然后进行退款，流程结束。而多进入的请求因为token失效而不会执行退款操作。</p>
+<p>缺点：流程比上面防重表更复杂</p>
+<h3 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h3><p>本着不折腾不快乐的精神，我决定使用 Token+Redis 的是实现方式来改进代码.下面是一些伪代码实现</p>
+<p>1.实现生成Token方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getToken</span><span class="params">($userUuid, $orderNumber)</span></span></div><div class="line">&#123;</div><div class="line">    $token = md5($userUuid.$orderNumber);</div><div class="line"></div><div class="line">    Redis::setex($userUuid.$orderNumber, <span class="number">300</span>, $token);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($setResult) &#123;</div><div class="line">        <span class="keyword">return</span> [<span class="string">'status'</span> =&gt; <span class="keyword">true</span>, <span class="string">'data'</span> =&gt; $token];</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> [<span class="string">'status'</span> =&gt; <span class="keyword">true</span>, <span class="string">'data'</span> =&gt; <span class="string">''</span>, <span class="string">'message'</span> =&gt; <span class="string">'设置token失败'</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.修改退款逻辑</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">refund</span><span class="params">($params)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// ...省略数据校验</span></div><div class="line">        $token = $params[<span class="string">'token'</span>];</div><div class="line">        $userUuid = $params[<span class="string">'user_uuid'</span>];</div><div class="line">        $orderNumber = $params[<span class="string">'order_number'</span>];</div><div class="line">        $tokenKey = $userUuid.$orderNumber;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> ($token != Redis::get($tokenKey)) &#123;</div><div class="line">            <span class="keyword">return</span> [<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'message'</span> =&gt; <span class="string">'网络繁忙请稍后重试'</span>];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (Redis::delete($tokenKey)) &#123;</div><div class="line">            <span class="comment">// ...省略退款逻辑</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> [<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'message'</span> =&gt; <span class="string">'请勿重复提交'</span>];</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span> (\<span class="keyword">Exception</span> $exception) &#123;</div><div class="line">        <span class="keyword">return</span> [<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'message'</span> =&gt; <span class="string">'have some exception:'</span>.$exception-&gt;getMessage()];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<font color="red">注意：需要使用<strong>删除redis-key</strong>的方式来判断token是否存在，如果你要使用先查询token,判断token存在，然后操作退款，在退款成功后在删除token这种流程的话，仔细想想在并发的时候还是会有多个请求进来，比如同时查询到都token存在。</font>
+
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://stackoverflow.com/questions/2954783/restful-idempotence" target="_blank" rel="external">stackoverflow</a></p>
+<p><a href="https://docs.microsoft.com/en-us/azure/architecture/microservices/design/api-design#idempotent-operations" target="_blank" rel="external">microsoft-api</a></p>
+<p><a href="https://restfulapi.net/idempotent-rest-apis/" target="_blank" rel="external">restfulapi</a></p>
+<p><a href="https://stackoverflow.com/questions/1077412/what-is-an-idempotent-operation" target="_blank" rel="external">What is an idempotent operation?
+</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190601/index.html" rel="next" title="其实，你早就知道答案">
+                <i class="fa fa-chevron-left"></i> 其实，你早就知道答案
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">71</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是幂等性"><span class="nav-number">1.</span> <span class="nav-text">什么是幂等性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#幂等性带来优劣"><span class="nav-number">2.</span> <span class="nav-text">幂等性带来优劣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何实现"><span class="nav-number">3.</span> <span class="nav-text">如何实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用悲观锁"><span class="nav-number">3.1.</span> <span class="nav-text">使用悲观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用乐观锁"><span class="nav-number">3.2.</span> <span class="nav-text">使用乐观锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#防重表"><span class="nav-number">3.3.</span> <span class="nav-text">防重表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用token"><span class="nav-number">3.4.</span> <span class="nav-text">使用token</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现过程"><span class="nav-number">4.</span> <span class="nav-text">实现过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
