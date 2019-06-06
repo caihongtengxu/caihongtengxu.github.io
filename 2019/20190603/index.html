@@ -1,0 +1,965 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="最近准备把近期学到的一些东西应用到公司里，先来改进下缓存系统吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于公司缓存使用的改进">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190603/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近准备把近期学到的一些东西应用到公司里，先来改进下缓存系统吧。">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through-help.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/filter.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_cacheData.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getInsuranceData.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/redis_getset.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getlock.png">
+<meta property="og:updated_time" content="2019-06-06T02:56:58.022Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于公司缓存使用的改进">
+<meta name="twitter:description" content="最近准备把近期学到的一些东西应用到公司里，先来改进下缓存系统吧。">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 关于公司缓存使用的改进 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">72</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                关于公司缓存使用的改进
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-06-03T21:59:43+08:00" content="2019-06-03">
+              2019-06-03
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近准备把近期学到的一些东西应用到公司里，先来改进下缓存系统吧。<br><a id="more"></a></p>
+<hr>
+<h3 id="为什么使用缓存"><a href="#为什么使用缓存" class="headerlink" title="为什么使用缓存"></a>为什么使用缓存</h3><p>缓存主要用来解决两种类型的场景</p>
+<blockquote>
+<p>CPU占用过高的场景<br>数据库IO过高的场景</p>
+</blockquote>
+<p>如果访问量很小，根本没必要折腾这个。在技术带来好处的同时一定会增加其原本的复杂度。</p>
+<h3 id="如何选择缓存"><a href="#如何选择缓存" class="headerlink" title="如何选择缓存"></a>如何选择缓存</h3><p>对于缓存系统的选择，对PHP而言好像也没几个可以选的，一般也就 <strong>Memcached</strong> 和 <strong>Redis</strong>了（我找了一圈就发现这2个…不像Java可以有很多种选择方案）</p>
+<p>有下面几个维度的选择参考</p>
+<table>
+<thead>
+<tr>
+<th>比较项</th>
+<th>Memcached</th>
+<th>Redis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读写性能</td>
+<td>很高</td>
+<td>高</td>
+</tr>
+<tr>
+<td>淘汰算法</td>
+<td>LRU</td>
+<td>LRU</td>
+</tr>
+<tr>
+<td>是否持久化</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>是否支持多线程</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>是否支持集群</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>支持广泛的编程语言</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>支持广泛的数据结构</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>支持发布/订阅</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>支持事务</td>
+<td>否</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>好吧我选择redis，其实对于我们这种小公司选择啥都一样，根本没有瓶颈啊。选择redis是因为折腾多吧，坑也多，就喜欢干这种事。</p>
+<h3 id="缓存清空策略"><a href="#缓存清空策略" class="headerlink" title="缓存清空策略"></a>缓存清空策略</h3><p>缓存命中率：等于缓存请求成功数 / 请求缓存总数。这是一个衡量缓存有效性的重要指标，命中率越高 说明缓存使用率越高。</p>
+<p>缓存可以使用的存储空间是有限的，当缓存空间占用满了以后，就需要清除掉一些缓存 以便给新的缓存数据使用。要删除哪些缓存，是由缓存的清空策略来决定的。常见的缓存清空策略有下面几种。</p>
+<blockquote>
+<p>FIFO(first in first out)</p>
+<ul>
+<li>先进先出策略。最先进入缓存的数据在缓存空间不足的时候，会优先被清楚掉。该策略主要通过比较元素的创建时间，以保证最新的数据可用。</li>
+</ul>
+<p>LFU(less frequently used)</p>
+<ul>
+<li>最少使用策略。根据缓存的使用次数，无论缓存是否过期，清除使用次数较少的元素来释放空间。该策略主要通过比较元素的命中次数，以保证高频数据可用。</li>
+</ul>
+<p>LRU(least recently used)</p>
+<ul>
+<li>最近最少使用策略。无论缓存是否过期，都根据缓存最后一次被使用的时间戳，然后清楚最远使用的时间戳来清楚缓存释放空间。该策略主要通过比较元素最近一次被查询使用的时间，以保证热点数据可用。</li>
+</ul>
+</blockquote>
+<h3 id="Memcached-和-Redis清空策略有何不同"><a href="#Memcached-和-Redis清空策略有何不同" class="headerlink" title="Memcached 和 Redis清空策略有何不同"></a>Memcached 和 Redis清空策略有何不同</h3><p>Memcached在删除失效缓存的时候采用的消极的方法，内部并不会监视缓存是否失效，而是在Get缓存的时候判断是否失效，然后做上标记并回收失效的缓存所占用的空间。当有新的缓存数据进入的时候，Memcached会优先使用这些空间。当失效的缓存空间用完了后，所有缓存可用空间占完后，Memcached采用LRU的策略来释放空间。</p>
+<p>Redis采用的是监视内存，通过周期性行为来删除失效缓存。删除方式有好几种可选模式，不过大多也是使用的LRU策略来释放空间。</p>
+<h3 id="缓存分类"><a href="#缓存分类" class="headerlink" title="缓存分类"></a>缓存分类</h3><p>在应用服务框架中，根据和应用的耦合度划分为：</p>
+<blockquote>
+<p><strong>本地缓存</strong>：指的是在应用中的缓存组件，其最大的优点是应用和cache是在同一个进程内部，请求缓存非常快速，没有过多的网络开销等，在单应用不需要集群支持或者集群情况下各节点无需互相通知的场景下使用本地缓存较合适。同时，它的缺点是缓存跟应用程序耦合在一起，多个应用程序无法直接的共享缓存，各应用或集群的各节点都需要维护自己的单独缓存，对内存是一种浪费。 比如 <code>cookie</code>,<code>session</code></p>
+<p><strong>分布式缓存</strong>：指的是与应用分离的缓存组件或服务，其最大的优点是自身就是一个独立的应用，与本地应用隔离，多个应用可直接的共享缓存。</p>
+</blockquote>
+<h3 id="缓存常见问题"><a href="#缓存常见问题" class="headerlink" title="缓存常见问题"></a>缓存常见问题</h3><p>使用缓存中常见的挖坑有3个，也就是这次要改善的代码</p>
+<h4 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h4><p>缓存穿透：假如查询数据，发现缓存中不存在，然后去查询数据库也不存在。这个时候就相当于缓存是一种摆设一样，等于所有的请求都是直接打到数据库上，这样访问量一大，数据库有挂掉的风险。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through.png" alt="cache_through"></p>
+<p>解决方案：</p>
+<p>① 对于为空的查询结果 设置默认 <code>Null</code> 进行缓存（异常的操作不要进行缓存）。</p>
+<blockquote>
+<ul>
+<li>这种方法会缓存太多空值，占用太多空间，解决办法 给空值设置一个较短的过期时间。</li>
+<li>复杂了业务逻辑，需要在插入缓存的时候删除这个空缓存</li>
+</ul>
+</blockquote>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through-help.png" alt="cache_through_help"></p>
+<p>② 使用过滤器</p>
+<blockquote>
+<p>需要事先定义一些过滤规则，对于无效的请求直接过滤掉返回，连缓存都不用去查询了。</p>
+</blockquote>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/filter.png" alt="filter"></p>
+<p>针对以上改进 最终的执行流程如下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache.png" alt="cache"></p>
+<p><strong>Laravel</strong> 下改进伪代码如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_cacheData.png" alt="function_cacheData"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getInsuranceData.png" alt="function_getInsuranceData"></p>
+<p>过滤器的话，可以使用中间件来实现。新建一个中间件，在其中指定过滤规则，然后在执行的方法中增加中间件过滤即可。</p>
+<h4 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h4><p>缓存击穿：假如某些Key设置了过期时间，在过期后有大量请求进来（比如热点数据），导致直接查询数据库，访问量剧增，数据库有挂掉的风险。</p>
+<p>解决方案：</p>
+<p>① 使用分布式锁：</p>
+<blockquote>
+<p>加载数据的时候可以利用分布式锁锁住这个数据的Key,在Redis中直接使用 <code>setnx</code> 操作即可，对于获取到这个锁的线程，查询数据库更新缓存，其他线程采取重试策略，这样数据库不会同时受到很多线程访问同一条数据</p>
+</blockquote>
+<p>② 缓存到期自动刷新</p>
+<blockquote>
+<p>对于过期的数据可以采取到期后自动刷新数据的方式。比如redis中数据过期后的广播+laravel command的形式，实现在过期后重新加载数据</p>
+</blockquote>
+<h4 id="Redis-分布式锁的实现"><a href="#Redis-分布式锁的实现" class="headerlink" title="Redis 分布式锁的实现"></a>Redis 分布式锁的实现</h4><p>要实现redis的分布式锁，需要用到redis的 <code>setnx</code> 方法。</p>
+<p><code>setnx</code>方法根据 <a href="https://redis.io/commands/setnx" target="_blank" rel="external">官方文档</a> 介绍:</p>
+<blockquote>
+<p>如果Key不存在，可以设置一个String类型的值，他的功能等于 <code>set</code> 方法。当一个key拥有一个值的后，<code>setnx</code> 什么都不会操作。setnx 是 【set if not exists】 的简写 也就是不存在才会设置的意思</p>
+<p>返回值</p>
+<ul>
+<li>1 当Key的值被设置的时候</li>
+<li>0 当Key的值没有被设置的时候</li>
+</ul>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">127.0.0.1:6379&gt; get myname</div><div class="line">(nil)</div><div class="line">127.0.0.1:6379&gt; setnx myname reggie</div><div class="line">(integer) 1</div><div class="line">127.0.0.1:6379&gt; setnx myname test</div><div class="line">(integer) 0</div><div class="line">127.0.0.1:6379&gt; get myname</div><div class="line">&quot;reggie&quot;</div></pre></td></tr></table></figure>
+<p>因为同时只能有一个设置成功，所以用他来实现类似<strong>锁</strong>的功能。</p>
+<p>大概实现：</p>
+<blockquote>
+<p>1.如果进程执行 <code>setnx</code> 结果为1，说明该进程获取到了锁，同时<code>setnx</code>可以设置值，可以给key设置一个值代表过期时间（不能锁住太久 可以使用当前时间+锁的有效时间）<br>2.后面的进程进来执行<code>setnx</code> 结果都会为0，说明别的进程已经获取到了锁。没有获得所的进程可以不断尝试<code>setnx</code>操作，以获得锁在进行相应操作</p>
+</blockquote>
+<p>但是这个实现过程中有2个问题需要解决</p>
+<p><strong>1.死锁的问题</strong></p>
+<p>如果一个进程获取到了锁，但是进程挂掉了，导致他一直持有锁，别的进程又获取不到。所以要确定有效的释放锁规则和合理的过期时间，一般考虑当前业务需要执行的时间然后设置就差不多了</p>
+<p><strong>2.锁失效的问题</strong></p>
+<p>锁失效其实就是多个进程获取到锁的问题。举个例子：假设锁的 <code>Key=lockDelay</code></p>
+<ul>
+<li>A第一个获取到了lockDelay的锁，然后它挂掉了</li>
+<li>B和C正在不断的检测锁是否已经被释放或者过期</li>
+<li>B和C同时发现lockDelay的锁已经超时了</li>
+<li>B 执行 <code>del lockDelay</code> 删除 key</li>
+<li>B 执行 <code>setnx lockDelay</code> 然后返回1，成功获取锁</li>
+<li>C 执行 <code>del lockDelay</code> 删除 key，注意这个时候C删除的key其实是B设置的,为什么C会执行这个操作？因为B和C同时都判断初始的key超时了</li>
+<li>然后C执行 <code>setnx lockDelay</code> 也会返回1，成功获取锁（因为上一步C把B设置的key给删除了）。</li>
+<li>这个时候B和C同时都获取到了锁，和锁失效是一样的</li>
+</ul>
+<p>关于上面的问题解决办法：</p>
+<ul>
+<li>假设A第一个获取到了lockDelay的锁，然后它挂掉了</li>
+<li>B执行 <code>setnx lockDelay</code> 来尝试获取锁，由于A已经获取到了锁，所以此时B执行的结果返回是0，也就是获取锁失败</li>
+<li>然后B 执行 <code>get lockDelay</code> 来检测锁是否超时，如果没有超时则等一段时间后再次执行检测</li>
+<li>如果B发现lockDelay已经超时了，也就是当前时间大于lockDelay存储的过期时间，然后B执行 <code>getset lockDelay &lt;当前时间戳 + 锁定时间 + 1&gt;</code></li>
+<li>这里是利用 <code>getset</code> 命令的特性，他会给key设置新值并返回旧的值，比如这里执行后，就相当于给lockDelay设置了一个新的过期时间，然后返回了上一次的过期时间</li>
+<li>然后B比较上一次的过期时间，发现比当前时间小，他就获得了锁</li>
+<li>再假设C和B同时发现lockDelay超时了，并在B操作 <code>getset</code> 之前先执行了 <code>getset</code> 命令，这也没有关系。此时C获得了锁，而B执行的 <code>getset</code>设置了一个新的过期时间（注意这里：C获得锁设置的新过期时间肯定是大于当前的），而B执行后又增大了过期时间，但是B返回的过期时间其实是C设置的也就是大于当前的时间，而B通过比较会发现他并没有获得锁也就不会执行业务逻辑了，会继续选择等待以尝试获得锁。</li>
+</ul>
+<p>画图流程如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/redis_getset.png" alt="redis_getset"></p>
+<p>改进伪代码示例如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getlock.png" alt="function_getlock"></p>
+<h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><p>缓存雪崩：是指大量的缓存在同一个时刻失效，从而导致请求大量打到数据库上，数据库压力巨大引起系统雪崩。</p>
+<p>解决办法：</p>
+<blockquote>
+<p>1.随机值：给缓存设置不同的过期时间，比如在原本的过期时间上在随机加上一些时间，尽量让不同的key过期时间不同<br>2.采用多级缓存：不同级别缓存设置的超时时间不同，及时某个级别缓存都过期，也有其他级别缓存兜底。<br>3.增加缓存系统监控，根据业务适当扩容缓存</p>
+</blockquote>
+<h4 id="缓存污染"><a href="#缓存污染" class="headerlink" title="缓存污染"></a>缓存污染</h4><p>缓存污染：是指在本地缓存中获取了某些结果，然后接下来你修改了缓存，但是却没有更新数据库，这个时候就造成了数据库和缓存不一致的情况，也就是缓存污染</p>
+<p>解决办法：一般是在开发人员代码层面解决，代码要严格的review。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190602/index.html" rel="next" title="在API中实现幂等性">
+                <i class="fa fa-chevron-left"></i> 在API中实现幂等性
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">72</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么使用缓存"><span class="nav-number">1.</span> <span class="nav-text">为什么使用缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何选择缓存"><span class="nav-number">2.</span> <span class="nav-text">如何选择缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存清空策略"><span class="nav-number">3.</span> <span class="nav-text">缓存清空策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Memcached-和-Redis清空策略有何不同"><span class="nav-number">4.</span> <span class="nav-text">Memcached 和 Redis清空策略有何不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存分类"><span class="nav-number">5.</span> <span class="nav-text">缓存分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存常见问题"><span class="nav-number">6.</span> <span class="nav-text">缓存常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存穿透"><span class="nav-number">6.1.</span> <span class="nav-text">缓存穿透</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存击穿"><span class="nav-number">6.2.</span> <span class="nav-text">缓存击穿</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Redis-分布式锁的实现"><span class="nav-number">6.3.</span> <span class="nav-text">Redis 分布式锁的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">6.4.</span> <span class="nav-text">缓存雪崩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存污染"><span class="nav-number">6.5.</span> <span class="nav-text">缓存污染</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
