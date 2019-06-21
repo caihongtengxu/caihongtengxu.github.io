@@ -1,0 +1,897 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Mysql," />
+
+
+
+
+
+
+<meta name="description" content="最近碰到个小需求，需要同步维护2个表信息一致。
+想了下有大概2种实现思路：
+
+使用Laravel里的事件模型来同步处理数据，但是改动的地方太多，有可能遗漏，好处就是可控，业务逻辑留在代码层
+
+使用Mysql触发器，只需要给表建立 Insert, Update, Delete 的触发器就可以完成表的同步，但是这样会导致业务逻辑分布在代码层和Mysql里，以后出了问题不好定位,而且触发器会 很消耗资源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql触发器的简单使用">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190620/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近碰到个小需求，需要同步维护2个表信息一致。
+想了下有大概2种实现思路：
+
+使用Laravel里的事件模型来同步处理数据，但是改动的地方太多，有可能遗漏，好处就是可控，业务逻辑留在代码层
+
+使用Mysql触发器，只需要给表建立 Insert, Update, Delete 的触发器就可以完成表的同步，但是这样会导致业务逻辑分布在代码层和Mysql里，以后出了问题不好定位,而且触发器会 很消耗资源">
+<meta property="og:updated_time" content="2019-06-21T06:16:19.088Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql触发器的简单使用">
+<meta name="twitter:description" content="最近碰到个小需求，需要同步维护2个表信息一致。
+想了下有大概2种实现思路：
+
+使用Laravel里的事件模型来同步处理数据，但是改动的地方太多，有可能遗漏，好处就是可控，业务逻辑留在代码层
+
+使用Mysql触发器，只需要给表建立 Insert, Update, Delete 的触发器就可以完成表的同步，但是这样会导致业务逻辑分布在代码层和Mysql里，以后出了问题不好定位,而且触发器会 很消耗资源">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Mysql触发器的简单使用 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">73</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Mysql触发器的简单使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-06-20T22:59:11+08:00" content="2019-06-20">
+              2019-06-20
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">Mysql</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近碰到个小需求，需要同步维护2个表信息一致。</p>
+<p>想了下有大概2种实现思路：</p>
+<ul>
+<li><p>使用Laravel里的事件模型来同步处理数据，但是改动的地方太多，有可能遗漏，好处就是可控，业务逻辑留在代码层</p>
+</li>
+<li><p>使用Mysql触发器，只需要给表建立 <code>Insert, Update, Delete</code> 的触发器就可以完成表的同步，但是这样会导致业务逻辑分布在代码层和Mysql里，以后出了问题不好定位,而且触发器会 <strong>很消耗资源</strong>，一般都是建议能不用就不用吧，对增删改非常频繁的表上最好还是不要使用触发器的好</p>
+</li>
+</ul>
+<p>最后想了下还是决定使用Mysql的触发器吧，毕竟我这次动的表，它的改动频率不是很高，以前也没接触过触发器，顺便学习下（这才是主要目的）<br><a id="more"></a></p>
+<hr>
+<h3 id="触发器是什么"><a href="#触发器是什么" class="headerlink" title="触发器是什么"></a>触发器是什么</h3><p>根据Mysql官方文档 <a href="https://dev.mysql.com/doc/refman/8.0/en/triggers.html" target="_blank" rel="external">Trigger</a></p>
+<blockquote>
+<p>触发器是一个和表所关联的数据库对象，当表触发了特定的事件，这些触发器将会被触发。触发器的一些简单用途示例：比如对数据插入前进行检验，或者对更新中的数据进行计算等等。</p>
+<p>触发器被定义为，在SQL语句对每一行执行 <code>insert</code>, <code>update</code>, <code>delete</code> 时被激活，这些针对每一行的操作就是 <strong>触发器事件</strong>。例如，一行数据可以通过执行 <code>insert</code> 或者 <code>load data</code> 语句来插入，这时每一行的插入都会触发一个 <strong>insert触发器</strong>。另外触发器还可以被设置为在这些触发事件<strong>之前执行</strong>还是<strong>之后执行</strong>。</p>
+<p>重点提示：Mysql触发器只作用于对关联的表进行 <code>SQL语句</code> 操作的时候才会被触发。当通过API来操作数据库表的时候，是不会发送转换的SQL语句到Mysql服务器的，也就不会触发触发器。比如使用 <a href="https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster.html" target="_blank" rel="external">NDB</a> API。</p>
+<p>另外触发器必须要关联到表上，作用不到临时表和视图上。<br>触发器中也不能 <strong>显式的使用事务</strong> 相关操作</p>
+</blockquote>
+<h3 id="触发器的使用"><a href="#触发器的使用" class="headerlink" title="触发器的使用"></a>触发器的使用</h3><h4 id="创建触发器"><a href="#创建触发器" class="headerlink" title="创建触发器"></a>创建触发器</h4><p>官方地址 <a href="https://dev.mysql.com/doc/refman/8.0/en/create-trigger.html" target="_blank" rel="external">Create Trigger</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">CREATE</div><div class="line">    [DEFINER = user]</div><div class="line">    TRIGGER trigger_name</div><div class="line">    trigger_time trigger_event</div><div class="line">    ON tbl_name FOR EACH ROW</div><div class="line">    [trigger_order]</div><div class="line">    trigger_body</div><div class="line"></div><div class="line">trigger_time: &#123; BEFORE | AFTER &#125;</div><div class="line"></div><div class="line">trigger_event: &#123; INSERT | UPDATE | DELETE &#125;</div><div class="line"></div><div class="line">trigger_order: &#123; FOLLOWS | PRECEDES &#125; other_trigger_name</div></pre></td></tr></table></figure>
+<p>看下必要参数</p>
+<ol>
+<li>trigger_name: 触发器的名字</li>
+<li>trigger_time: 触发执行的时机，有2个可选值 <code>before</code> 和 <code>after</code></li>
+<li>trigger_event: 触发事件，有3个可选值<ul>
+<li>insert: 当插入一行数据的时候触发，比如使用 <code>insert</code>, <code>load data</code>, <code>replace</code> 等一系列插入操作</li>
+<li>update: 当更改某一行数据的时候触发</li>
+<li>delete: 当删除某一行数据的时候触发</li>
+</ul>
+</li>
+<li>table_name: 触发器作用关联的表名，可以通过 <code>数据库名.表名</code> 这样来明确指定， 比如 <code>Myinit.user</code></li>
+<li>FOR EACH ROW: 表示作用关联表上的每一行都会触发触发器</li>
+<li>trigger_order： 这个是Mysql5.7以后的一个功能，用于定义多个触发器的执行顺序，可选值有2个  <code>follows</code> (随后) 和 <code>precedes</code>(在…之前)</li>
+<li>trigger_body： 这个就是触发器的主要内容了，这里是触发器具体要做的事情，比如增删改操作数据之类。</li>
+</ol>
+<p>一个简单示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">create trigger ins_sum before insert on account for each row set @sum = @sum + NEW.amount;</div></pre></td></tr></table></figure>
+<p>如果你有多条执行语句可以这样定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"># 定界符</div><div class="line">delimiter $$</div><div class="line"></div><div class="line"># 删除触发器</div><div class="line">drop trigger if exists sync_master_insert$$</div><div class="line"># 创建触发器</div><div class="line">create trigger sync_master_insert after insert on master for each row</div><div class="line"></div><div class="line">begin</div><div class="line"># 插入插入master的数据插入到备份表</div><div class="line">insert into `master_duplication`(`id`, `name`) </div><div class="line">select `id`, `name`, from `master` where id = new.id;</div><div class="line"># ... 操作 ...</div><div class="line">end; $$</div><div class="line"></div><div class="line">delimiter ;</div></pre></td></tr></table></figure>
+<p><font color="red"><strong>补充说明下 触发器Body中的 <code>OLD</code> 和 <code>NEW</code> 关键字</strong></font> 详情在这里 <a href="https://dev.mysql.com/doc/refman/8.0/en/trigger-syntax.html" target="_blank" rel="external">Trigger Syntax</a></p>
+<blockquote>
+<p><code>OLD</code> 和 <code>NEW</code> Mysql对触发器的扩展，这2个关键字<strong>不区分大小写</strong>。</p>
+<p>在 <strong>insert</strong> 触发器中，只有 <code>new</code> 关键字可以被使用(比如你想要获取指定字段的值就用 <code>new.col_name</code>)，没有 <code>old</code> 的行数据。<code>new</code> 用来表示将要（before）或者已经（after）被插入的数据（PS：这个时候不论before还是after，使用old获取的数据都是一样的）</p>
+<p>在 <strong>delete</strong> 触发器中，只有 <code>old</code> 关键字可以被使用（比如你想要获取指定字段的值就用 <code>old.col_name</code>），没有 <code>new</code> 的行数据。<code>old</code> 用来表示将要（before）或者已经（after）被删除的数据。（PS：这个时候不论before还是after，使用old获取的数据都是一样的）</p>
+<p>在 <strong>update</strong> 触发器中，你可以使用 <code>old.col_name</code> 来作为该行数据更新之前的副本，使用 <code>new.col_name</code> 来作为该行数据更新之后的副本。</p>
+</blockquote>
+<h4 id="查看触发器"><a href="#查看触发器" class="headerlink" title="查看触发器"></a>查看触发器</h4><p>如果你想查看当前库下的所有触发器可以使用 <code>show triggers;</code> 来查看。</p>
+<p>另外所有的触发器都是存储在 <code>information_schema</code> 数据库下的 <code>triggers</code> 表中，如果想要查看所有触发器的详细信息可以使用SQL</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># 可以增加 trigger_name 作为过滤条件</div><div class="line">select * from information_schema.triggers;</div></pre></td></tr></table></figure>
+<h4 id="删除触发器"><a href="#删除触发器" class="headerlink" title="删除触发器"></a>删除触发器</h4><p>语法如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">DROP TRIGGER [IF EXISTS] [schema_name.]trigger_name</div></pre></td></tr></table></figure>
+<p>示例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">drop trigger if exists sync_order;</div></pre></td></tr></table></figure>
+<p>需要注意一点，删除触发器需要有关联触发器的表的 <strong>Trigger</strong> 特权。</p>
+<h3 id="log-bin-trust-function-creators-问题"><a href="#log-bin-trust-function-creators-问题" class="headerlink" title="log_bin_trust_function_creators 问题"></a><code>log_bin_trust_function_creators</code> 问题</h3><p>在创建触发器的时候碰到一个报错 <code>Error Code: 1419. You do not have the SUPER privilege and binary logging is enabled (you *might* want to use the less safe log_bin_trust_function_creators variable)</code></p>
+<p>后面找了下问题原因，在Mysql启用二进制日志的情况下，<code>log_bin_trust_function_creators</code> 这个变量就会启用。</p>
+<p><strong>说明：以下函数可以是  <code>存储过程</code>，<code>函数</code>，<code>触发器</code> 等</strong></p>
+<p>它表示是否可以信用函数的创建者，主要是为了避免这些函数写入二进制日志引发不安全的操作。其默认值是0，也就是用户不允许创建或修改这些函数。除非用户具有 <strong>超级</strong> 特权。</p>
+<p>所以上面的报错就很好理解了，因为我当前操作的用户不具有这些特权，为了避免不安全操作所以禁止我创建触发器。</p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>首先说下二进制日志，这个最重要的功能是实现<strong>主从复制</strong>，而上面这些函数有可能导致主从数据不一致情况，所有Mysql才做了这个限制。</p>
+<p>Mysql服务器会把 <strong>create event</strong>, <strong>create procedure</strong>, <strong>create function</strong>, <strong>alter event</strong>, <strong>alter procedure</strong>, <strong>alter function</strong>, <strong>drop event</strong>, <strong>drop procedure</strong>, <strong>drop function</strong> 这些语句都写入二进制日志。而trigger和function类似，因此对于function的限制也同样作用于触发器。</p>
+<p>解决方案1：切换root用户来操作，或者提升当前用户权限</p>
+<p>解决方案2：如果数据库没有开启主从复制 或者 你的操作确实不会影响数据一致问题 或者 就算影响了数据也没什么影响，那么将该参数设置为1，也就是打开状态</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">set global log_bin_trust_function_creators = 1;</div></pre></td></tr></table></figure>
+<p>这个只是临时设置，重启后就会失效。如果想永久生效，可以更改 <code>my.cnf</code> 中增加 <code>log_bin_trust_function_creators=1</code> 这样可以永久生效。</p>
+<p>如果你是创建的 <code>create function ...</code> 还可以通过指定该function的类型，来明确告诉Mysql你的function不会改变数据，这个时候也是可以创建function的，这种只适用于创建function，对于trigger不适应（反正没找到解决办法…）</p>
+<p>添加参数：</p>
+<blockquote>
+<p>DETERMINISTIC: 不确定是否会修改数据<br>NO SQL： 没有SQL 也就无从修改数据<br>READS SQL DATA： 只是读取数据</p>
+</blockquote>
+<p>加了这3个其中之一的function将被允许创建和修改等操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">create function f1(i int)</div><div class="line">returns int</div><div class="line"># here</div><div class="line">DETERMINISTIC</div><div class="line">reads sql data</div><div class="line">begin</div><div class="line">  return i;</div><div class="line">end;</div></pre></td></tr></table></figure>
+<h3 id="Mysql二进制日志"><a href="#Mysql二进制日志" class="headerlink" title="Mysql二进制日志"></a>Mysql二进制日志</h3><p>创建完update触发器后，测试了下，可以正确执行，但是老是会报一个警告 <code>Unsafe statement written to the binary log using statement format since BINLOG_FORMAT = STATEMENT...</code> 看的很不爽。这主要是Mysql的二进制日志采用的是 <code>STATEMENT</code> 也就是基于语句执行的，它会对函数中有修改操作的进行警告，告诉你有可能导致主从数据不一致的情况出现。上面的报错后半部分是警告的原因，我给忘记了，大概是说我往一个自增主键的备份表中添加数据，有可能导致不一致，然后我就把备份表的主键设置不自增，警告消失了…</p>
+<p>Mysql有3种二进制日志格式</p>
+<blockquote>
+<p>STATEMENT: 基于语句的日志记录。</p>
+<ul>
+<li>优点：不需要记录每一行的变化，减少了binlog日志量，节约了IO，提高性能</li>
+<li>缺点: 为了这些语句能在slave上正确运行，因此还必须记录每条语句在执行的时候的一些相关信息，以保证所有语句能在slave得到和在master端执行时候相同 的结果    </li>
+</ul>
+<p>ROW: 基于每一行的日志记录 这是默认值。</p>
+<ul>
+<li>优点：不记录上下文信息，清楚的记录下每一行数据修改的细节。</li>
+<li>缺点：因为是基于行的，日志会非常大。比如执行了一个update修改了100W数据，就会有100W条记录</li>
+</ul>
+<p>MIXED: 混合日志记录，这种会在根据场景在 STATEMENT 和 ROW之间自动切换。</p>
+<ul>
+<li>优点：前2者优点的结合。自动切换</li>
+<li>缺点：个人想法有2点。 1.自动切换的效率问题，比如在不该使用row格式的时候切换到了row格式记录。2.在切换到对应格式的时候，对应格式本身的缺点也就是上面的内容。当然比起单独使用row或者statement,还是能接受的</li>
+</ul>
+</blockquote>
+<p>对于MIXED格式来说，在如下情况的时候，binlog会自动转为ROW格式记录</p>
+<p>1.NDB引擎<br>2.SQL语句里包含了UUID()函数<br>3.自增长字段被更新了<br>4.包含了insert delayed语句<br>5.使用了用户定义函数（UDF）<br>6.使用了临时表<br>7.附带limit语法的</p>
+<h4 id="查看当前的binlog格式"><a href="#查看当前的binlog格式" class="headerlink" title="查看当前的binlog格式"></a>查看当前的binlog格式</h4><p>可以使用语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show global variables like &apos;binlog_format&apos;;</div></pre></td></tr></table></figure>
+<h4 id="设置全局binlog格式"><a href="#设置全局binlog格式" class="headerlink" title="设置全局binlog格式"></a>设置全局binlog格式</h4><p>设置全局的binlog格式需要相应的权限，可以使用语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;STATEMENT&apos;;</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;ROW&apos;;</div><div class="line">mysql&gt; SET GLOBAL binlog_format = &apos;MIXED&apos;;</div></pre></td></tr></table></figure>
+<h4 id="设置当前客户端binlog格式"><a href="#设置当前客户端binlog格式" class="headerlink" title="设置当前客户端binlog格式"></a>设置当前客户端binlog格式</h4><p>设置当前客户端的binlog格式可以基于当前的会话session来实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysql&gt; SET SESSION binlog_format = &apos;STATEMENT&apos;;</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;ROW&apos;;</div><div class="line">mysql&gt; SET SESSION binlog_format = &apos;MIXED&apos;;</div></pre></td></tr></table></figure>
+<h3 id="触发器示例"><a href="#触发器示例" class="headerlink" title="触发器示例"></a>触发器示例</h3><p>直接贴代码吧</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"># 创建 insert 触发器</div><div class="line">delimiter $$</div><div class="line"># 删除触发器 如果存在的话</div><div class="line">drop trigger if exists sync_master_insert$$</div><div class="line"># 创建触发器</div><div class="line">create trigger sync_master_insert after insert on master for each row</div><div class="line">begin</div><div class="line"># 比较懒的插入 - 查询插入</div><div class="line">#insert into `master_duplication`(`id`, `name`, `age`, `school`, `score`, `birth_date`) </div><div class="line">#select `id`, `name`, `age`, `school`, `score`, `birth_date` from `master` where id = new.id;</div><div class="line"></div><div class="line"># 常规插入</div><div class="line"># 注意使用new关键字来获取数据</div><div class="line">insert into `master_duplication`(`id`, `name`, `age`, `school`, `score`) </div><div class="line">values (new.id, new.name, new.age, new.school, new.score);</div><div class="line">end; $$</div><div class="line">delimiter ;</div><div class="line"></div><div class="line">#=============================================</div><div class="line"></div><div class="line"># 创建 delete 触发器</div><div class="line">delimiter $$</div><div class="line"># 删除触发器 如果存在的话</div><div class="line">drop trigger if exists sync_master_delete$$</div><div class="line"># 创建触发器</div><div class="line">create trigger sync_master_delete after delete on master for each row</div><div class="line">begin</div><div class="line"></div><div class="line"># 注意使用old关键字来获取数据</div><div class="line">delete from master_duplication where id = old.id;</div><div class="line"></div><div class="line">end; $$</div><div class="line">delimiter ;</div><div class="line"></div><div class="line"></div><div class="line">#=============================================</div><div class="line"></div><div class="line"># 创建 update 触发器</div><div class="line">delimiter $$</div><div class="line"># 删除触发器 如果存在的话</div><div class="line">drop trigger if exists sync_master_update$$</div><div class="line"># 创建触发器</div><div class="line">create trigger sync_master_update after update on master for each row</div><div class="line">begin</div><div class="line"></div><div class="line"># 注意new和old关键字来获取数据</div><div class="line">update master_duplication set</div><div class="line">`id` = new.id, `name` = new.name, `age` = new.age, `school` = new.school, `score` = new.score</div><div class="line">where id = old.id;</div><div class="line"></div><div class="line">end; $$</div><div class="line">delimiter ;</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"><i class="fa fa-tag"></i>Mysql</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190603/index.html" rel="next" title="关于公司缓存使用的改进">
+                <i class="fa fa-chevron-left"></i> 关于公司缓存使用的改进
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">73</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#触发器是什么"><span class="nav-number">1.</span> <span class="nav-text">触发器是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#触发器的使用"><span class="nav-number">2.</span> <span class="nav-text">触发器的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建触发器"><span class="nav-number">2.1.</span> <span class="nav-text">创建触发器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看触发器"><span class="nav-number">2.2.</span> <span class="nav-text">查看触发器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除触发器"><span class="nav-number">2.3.</span> <span class="nav-text">删除触发器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#log-bin-trust-function-creators-问题"><span class="nav-number">3.</span> <span class="nav-text">log_bin_trust_function_creators 问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法"><span class="nav-number">3.1.</span> <span class="nav-text">解决办法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql二进制日志"><span class="nav-number">4.</span> <span class="nav-text">Mysql二进制日志</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看当前的binlog格式"><span class="nav-number">4.1.</span> <span class="nav-text">查看当前的binlog格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置全局binlog格式"><span class="nav-number">4.2.</span> <span class="nav-text">设置全局binlog格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置当前客户端binlog格式"><span class="nav-number">4.3.</span> <span class="nav-text">设置当前客户端binlog格式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#触发器示例"><span class="nav-number">5.</span> <span class="nav-text">触发器示例</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
