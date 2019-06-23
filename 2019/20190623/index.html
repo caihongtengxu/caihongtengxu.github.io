@@ -28,34 +28,35 @@
 <link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Laravel," />
+  <meta name="keywords" content="算法," />
 
 
 
 
 
 
-<meta name="description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
+<meta name="description" content="昨天搞了一天汉诺塔算法都没搞懂，感觉自己智商被碾压了，还不如《猩球崛起》中的那一只猩猩…
+今天回过神又折腾了一上午，感觉稍微有点开窍了，但是每一步具体要怎么走还是有点晕，绕不过来…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Laravel集成Swagger使用总结">
-<meta property="og:url" content="https://www.tokme.cn/2016/20160630/index.html">
+<meta property="og:title" content="PHP实现汉诺塔算法">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190623/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publish.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publicvendor.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/route.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/testlumen.png">
-<meta property="og:updated_time" content="2019-03-14T06:37:54.547Z">
+<meta property="og:description" content="昨天搞了一天汉诺塔算法都没搞懂，感觉自己智商被碾压了，还不如《猩球崛起》中的那一只猩猩…
+今天回过神又折腾了一上午，感觉稍微有点开窍了，但是每一步具体要怎么走还是有点晕，绕不过来…">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/2-64.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/init_hanoi.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/final_hanoi.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/findN_hanoi.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/moveN_hanoi.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/find4_hanoi.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/move4_hanoi.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/result_five.png">
+<meta property="og:updated_time" content="2019-06-23T03:08:55.438Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Laravel集成Swagger使用总结">
-<meta name="twitter:description" content="刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧
-先放个包的网址 https://packagist.org
-之前都是直接在里面搜索swagger 然后又个laterll/swagger使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 jlapp/swaggervel 很好用哦 就用这个吧">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publish.png">
+<meta name="twitter:title" content="PHP实现汉诺塔算法">
+<meta name="twitter:description" content="昨天搞了一天汉诺塔算法都没搞懂，感觉自己智商被碾压了，还不如《猩球崛起》中的那一只猩猩…
+今天回过神又折腾了一上午，感觉稍微有点开窍了，但是每一步具体要怎么走还是有点晕，绕不过来…">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/2-64.png">
 
 
 
@@ -76,7 +77,7 @@
 
 
 
-  <title> Laravel集成Swagger使用总结 | 指尖的彩虹 </title>
+  <title> PHP实现汉诺塔算法 | 指尖的彩虹 </title>
 </head>
 
 <body itemscope  lang="zh-Hans">
@@ -269,7 +270,7 @@
             
             
               
-                Laravel集成Swagger使用总结
+                PHP实现汉诺塔算法
               
             
           </h1>
@@ -282,8 +283,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-30T20:02:25+08:00" content="2016-06-30">
-              2016-06-30
+            <time itemprop="dateCreated" datetime="2019-06-23T11:03:34+08:00" content="2019-06-23">
+              2019-06-23
             </time>
           </span>
 
@@ -296,8 +297,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
                   </a>
                 </span>
 
@@ -331,32 +332,72 @@
       
 
       
-        <blockquote>
-<p>刚接触Laravel不久 因为需求想搭建个集成Swagger的开发环境 写下操作过程吧</p>
-<p>先放个包的网址 <a href="https://packagist.org" target="_blank" rel="external">https://packagist.org</a></p>
-<p>之前都是直接在里面搜索<code>swagger</code> 然后又个<code>laterll/swagger</code>使用的人下载次数最多久下载了这个 出了些问题 [可能自己某些步骤错了吧 已经忘记了]。 后来发现了一个包 <code>jlapp/swaggervel</code> 很好用哦 就用这个吧<br><a id="more"></a></p>
-</blockquote>
+        <p>昨天搞了一天<a href="https://zh.wikipedia.org/wiki/%E6%B1%89%E8%AF%BA%E5%A1%94" target="_blank" rel="external">汉诺塔</a>算法都没搞懂，感觉自己智商被碾压了，还不如《猩球崛起》中的那一只猩猩…</p>
+<p>今天回过神又折腾了一上午，感觉稍微有点开窍了，但是每一步具体要怎么走还是有点晕，绕不过来…<br><a id="more"></a></p>
 <hr>
-<h3 id="创建一个Laravel项目"><a href="#创建一个Laravel项目" class="headerlink" title="创建一个Laravel项目"></a>创建一个Laravel项目</h3><p>进入自己的本地环境目录<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer create-project laravel/laravel swaggertest <span class="number">5.1</span>.*</div></pre></td></tr></table></figure></p>
-<h6 id="对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><a href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限" class="headerlink" title="对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限"></a>对了有时候在linux测试环境下搭建项目的话 要记得查看下 <code>storage</code>目录的读写权限</h6><h6 id="复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><a href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了" class="headerlink" title="复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了"></a>复制项目下的<code>.env.example</code>文件 重命名为<code>.env</code> 一般创建的时候都会帮你复制过了</h6><p>上面swaggertest是我的项目名 这个随意 另外Laravel的版本用的是 <strong>5.1</strong> 的 不知道为什么 每次用5.2的都非常慢，慢到爆炸 用5.1就好很多 难道错觉</p>
-<p>进入项目目录 编辑文件<code>composer.json</code>  在最下面加上下面这段代码 增加镜像 以后下载安装什么的可以跑的快点 这一步可以无视不操作 没啥影响</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">"repositories"</span>: &#123;</div><div class="line">   <span class="string">"packagist"</span>: &#123;</div><div class="line">      <span class="string">"type"</span>: <span class="string">"composer"</span>,</div><div class="line">      <span class="string">"url"</span>: <span class="string">"https://packagist.phpcomposer.com"</span></div><div class="line">   &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="集成Swagger"><a href="#集成Swagger" class="headerlink" title="集成Swagger"></a>集成Swagger</h3><h4 id="安装包"><a href="#安装包" class="headerlink" title="安装包"></a>安装包</h4><p>运行</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> jlapp/swaggervel:dev-master</div></pre></td></tr></table></figure>
-<p>上面这个swaggervel包有3个版本的 分别是<code>dev-master</code>    <code>2.0.x-dev</code>（这个是给laravel5用的）     <code>1.0.x-dev</code>（这个是给laravel4用的）<br>会自动帮你安装一些依赖 如果安装成功了在会在 项目根目录下的 <code>vendor</code>下多一个<code>jlapp/swaggervel</code>的文件夹 这里就是swagger的东东了</p>
-<h4 id="编辑配置"><a href="#编辑配置" class="headerlink" title="编辑配置"></a>编辑配置</h4><p>编辑 <code>config/app.php</code>文件 找到 <code>providers</code>数组在其中添加 如下代码<code>Jlapp\Swaggervel\SwaggervelServiceProvider::class,</code><br>网上也有些说要在app/config/app.php文件中添加 但我的项目app文件夹下并没有config文件夹 so就没按照app/config/app.php增加目录创建来编辑</p>
-<p>执行<code>php artisan vendor:publish</code> 命令</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publish.png" alt="publish List" title="publish list"></p>
-<p>这句话就是把刚安装的swaggervel-ui一些东西帮你弄到根目录public目录下<br>成功的话目录是这样的</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/publicvendor.png" alt="vendor List" title="vendor list"></p>
-<p>运行下<code>php artisan route:list</code> 刷新下路由<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/route.png" alt="route List" title="route list"></p>
-<p>其实就是把他默认的<code>api/docs</code> 这个路由帮你加进来了<br>到这里基本已经完成 但是这个时候你去访问你的项目 他可能会报错缺少swg的注释info信息啥的 也并没有生成他运行需要的 <strong>json文件</strong><br><a href="http://localhost/api/docs" target="_blank" rel="external">http://localhost/api/docs</a> &nbsp;&nbsp;&nbsp;&nbsp;[这个是我的项目地址 具体的自己配置吧]</p>
-<p>默认情况下他会在 <code>storage/docs</code>这个文件夹下生成所需要的json文件的 因为我们还没有写controller注释 他没有生成json文件 但是把目录已经创建好了</p>
-<p>需要注意下<code>vendor/jlapp/swaggervel/src/config/swaggervel.php</code> 这个文件 其中有一个 参数 <code>generateAlways</code> 这个变量 他是控制是否每次都刷新生成json 文件， 推荐在<code>.env</code>中配置一个变量参数设置到这里 这样就不用每次来改这里了 毕竟这个路径找起来挺麻烦的</p>
-<p>好了 整个<code>Controller</code> 国际惯例 <code>hello world</code></p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * <span class="doctag">@SWG</span>\Swagger(</div><div class="line"> *   <span class="doctag">@SWG</span>\Info(</div><div class="line"> *      title="测试类",</div><div class="line"> *      version="1.0.0",</div><div class="line"> *      description="测试测试"</div><div class="line"> *   )</div><div class="line"> * )</div><div class="line"> */</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestController</span> <span class="keyword">extends</span> <span class="title">Controller</span></span>&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * <span class="doctag">@SWG</span>\Get(</div><div class="line">     *      path="/testindex",</div><div class="line">     *      tags=&#123;"测试相关模块"&#125;,</div><div class="line">     *      summary="测试输出hello world",</div><div class="line">     *      <span class="doctag">@SWG</span>\Response(</div><div class="line">     *          response=200,</div><div class="line">     *          description="success",</div><div class="line">     *      )</div><div class="line">     * )</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">index</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">echo</span> <span class="string">"hello world"</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>访问自己配置的域名 看到下面就成功了<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/testlumen.png" alt="swagger success" title="swagger success"></p>
-<h2 id="最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><a href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多" class="headerlink" title="最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多"></a>最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</h2>
+<h3 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h3><p>传说最早发明这个问题的人是法国数学家爱德华·卢卡斯。</p>
+<blockquote>
+<p>在世界中心贝拿勒斯（在印度北部）的圣庙里，一块黄铜板上插着三根宝石针。印度教的主神梵天在创造世界的时候，在其中一根针上从下到上地穿好了由大到小的64片金片，这就是所谓的汉诺塔。不论白天黑夜，总有一个僧侣在按照下面的法则移动这些金片：一次只移动一片，不管在哪根针上，小片必须在大片上面。僧侣们预言，当所有的金片都从梵天穿好的那根针上移到另外一根针上时，世界就将在一声霹雳中消灭，而梵塔、庙宇和众生也都将同归于尽。</p>
+<p>这个传说有很多的变本具体是谁就不得而知了，但是留下的数学问题却是很经典的。</p>
+<p>其留下的数学知识：金片的个数和移动步数的关系为 <code>2^n - 1</code></p>
+<ul>
+<li>1个金片的移动次数 2的1次方减1</li>
+<li>2个金片的移动次数 2的2次方减1</li>
+<li>3个金片的移动次数 2的3次方减1</li>
+<li>…</li>
+<li>n个金片的移动次数 2的n次方减1</li>
+</ul>
+<p>若传说属实，僧侣们需要 <code>2^64 - 1</code> 步才能完成这个任务；假设他们每秒移动一个金片，就需要 5849 亿年才能完成。整个宇宙现在也不过 137 亿年，所以宇宙毁灭还早…（闲的无聊，我还真计算了一下…如下图）<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/2-64.png" alt="2^64"></p>
+</blockquote>
+<h3 id="基本规则"><a href="#基本规则" class="headerlink" title="基本规则"></a>基本规则</h3><p>汉诺塔算法有2个基本条件，假设移动的是盘子</p>
+<p>1.每次只能移动一个盘子<br>2.小盘子必须要在大盘子的上面</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>假设本次游戏有3根柱子，分别是 A， B， C。其中一根上已经有排序好的盘子N个，最大的在最下面，依次向上盘子越来越小，另外2根空柱子。</p>
+<p>初始状态如下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/init_hanoi.png" alt="init_hanoi"></p>
+<p>需要实现的最终目标是把柱子上所有的盘子都移动到另外一根柱子上。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/final_hanoi.png" alt="final_hanoi"></p>
+<p>实现的大概思路：</p>
+<ul>
+<li>抛开脑子里想着的每一步要怎么走，这个很复杂，脑容量估计不够，先想最简单粗暴的解决逻辑。</li>
+<li>要满足大盘子在下的基本条件，肯定需要先把A上最大的盘子空出来，然后把最大的盘子放到C柱子上。假设最大的盘子编号是N</li>
+<li>因为要移动到C，要实现第一步，肯定需要把 <code>N-1</code> 个盘子都搬移到B柱子上，只有这样第N个盘子（也就是最大的盘子）才能移动到C柱子上。</li>
+<li>把 <code>N-1</code> 个盘子移动到B柱子上，因为要满足条件大的在下，小的在上，所以这 <code>N-1</code> 个盘子在B柱子上也是顺序的</li>
+<li>最后把这 <code>N-1</code> 个盘子从B柱子上移动到C柱子上完成最终目标</li>
+</ul>
+<p>概括下：</p>
+<p><strong>第一步把A上 <code>N-1</code> 个盘子移动到B上</strong>。为什么要先把 <code>N-1</code> 个先移动到B上？你看，因为你最终实现的是把A上全部的盘子都移动到C上，顺序又不能变，只能是大的在下，小的在上。那你肯定需要先把最大号的移动到C，不然的话就不满足条件了。要从A上移动最大号盘子到C上，肯定需要把A上最大号盘子空出来，也就是最大号盘子上面的所有盘子都要搬移走。而你只有3根柱子，C上肯定是不能有别的盘子把，不然你就又不满足条件了，所有这 <code>N-1</code> 个盘子只能放到B上，而且还是有序的。 也就变成了下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/findN_hanoi.png" alt="findN_hanoi"></p>
+<p><strong>第二步把A上第 N 个盘子（也就是最大号盘子）移动到C上</strong>。 这个就很简单了把，只要一步，把最大号盘子从A移动到C就可以了。如下图</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/moveN_hanoi.png" alt="moveN_hanoi"></p>
+<p><strong>第三步把B上 <code>N-1</code> 个盘子移动到C上。</strong> <font color="red">（注意：要实现把 <code>N-1</code> 个盘子移动到C，是不是又变成了找出其中最大盘子，然后先移动最大盘子。所以这里的话其实就变成了重复第 1，2步骤，从这 <code>N-1</code> 个中找出最大的先移动到C，循环往复）</font></p>
+<p>那第三步其实就等于变更了需求 假设 K = N - 1<br>B柱子上有K个盘子，A柱子是空的，C柱子有最大的盘子所以对于K个盘子的B柱子而言等同于空<br>第一步把B上 K-1 个盘子移动到A上<br>第二步把B上第 K 个盘子移动到C上<br>第三步把A上 K-1 个盘子移动到C上<br>…</p>
+<p>就变为了下图</p>
+<p>先找到剩余的盘子中最大的</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/find4_hanoi.png" alt="find4_hanoi"></p>
+<p>然后移动最大号盘子</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/move4_hanoi.png" alt="move4_hanoi"></p>
+<p>然后循环下去直到只剩一个盘子，直接移动到C，游戏结束。</p>
+<h3 id="辅助柱子"><a href="#辅助柱子" class="headerlink" title="辅助柱子"></a>辅助柱子</h3><p>什么是辅助柱子？假设你现在所有待移动的盘子都在A上，目标是移动到C上，那么B就是 <code>N-1</code> 个盘子的辅助柱子。因为他们只能暂存在这里，不然就不满足游戏规则了。</p>
+<p>这里需要先找出辅助柱子，不要想怎么实现，先理清逻辑。</p>
+<ul>
+<li>要实现从A移动到B，那么C就是辅助柱子</li>
+<li>要实现从A移动到C，那么B就是辅助柱子</li>
+<li>要实现从B移动到C，那么A就是辅助柱子</li>
+</ul>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><p>通过上面的分析可以看到这其实就是一个循环往复的重复操作，很类似递归，所有这里可以使用递归来实现。</p>
+<p>要使用递归需要有2个必要条件</p>
+<p>1.求出递推公式<br>2.找到退出条件</p>
+<p>退出条件很好写，肯定是只有一个盘子的时候，直接移动到C柱子上。</p>
+<p>那么递推公式是什么呢？还是根据上面的逻辑分析，可以分解为3步。</p>
+<p>==<strong>第一步把 【N-1个】 盘子先从A移动到B</strong>==</p>
+<p>==<strong>第二步把 【第N个】 盘子从A移动到C</strong>==</p>
+<p>==<strong>第三步把 【剩下的N-1个】 盘子从B移动到C</strong>==</p>
+<p>下面是PHP实现的伪代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">HanoiTower</span></span></div><div class="line">&#123;</div><div class="line">	<span class="comment">// 计数器</span></div><div class="line">    <span class="keyword">public</span> $count = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 汉诺塔实现</div><div class="line">     * </div><div class="line">     * <span class="doctag">@param</span> $n 盘子号</div><div class="line">     * <span class="doctag">@param</span> $A 初始柱子</div><div class="line">     * <span class="doctag">@param</span> $B 中转站</div><div class="line">     * <span class="doctag">@param</span> $C 目标柱子</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">hanoi</span><span class="params">($n, $A, $B, $C)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">if</span> ($n == <span class="number">1</span>) &#123;</div><div class="line">            <span class="comment">// 退出条件 只剩一个盘子的时候直接从A移动到C</span></div><div class="line">            <span class="keyword">$this</span>-&gt;biggestOne($n, $A, $B, $C);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">// 第一步把 【n-1】 个盘子从A移动到B 此时C为中转站</span></div><div class="line">            <span class="keyword">$this</span>-&gt;hanoi($n - <span class="number">1</span>, $A, $C, $B);</div><div class="line">            <span class="comment">// 第二步把 【第n】 个盘子从A移动到C</span></div><div class="line">            <span class="keyword">$this</span>-&gt;biggestOne($n, $A, $B, $C);</div><div class="line">            <span class="comment">// 第三步把B上 【剩余的n-1个】 盘子从B移动到C 此时A为中转站</span></div><div class="line">            <span class="keyword">$this</span>-&gt;hanoi($n - <span class="number">1</span>, $B, $A, $C);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 移动最大的盘子</div><div class="line">     * 直接从A移动到C</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">biggestOne</span><span class="params">($n, $A, $B, $C)</span></span></div><div class="line">    &#123;</div><div class="line">        ++<span class="keyword">$this</span>-&gt;count;</div><div class="line">        <span class="keyword">echo</span> <span class="string">'第'</span>, <span class="keyword">$this</span>-&gt;count, <span class="string">'步 '</span>, <span class="string">'把 '</span>, $n, <span class="string">'从 '</span>, $A, <span class="string">'移动到'</span>, $C, <span class="string">'&lt;br /&gt;'</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$n = <span class="number">5</span>;</div><div class="line">$hanoiTower = <span class="keyword">new</span> HanoiTower();</div><div class="line"><span class="keyword">echo</span> <span class="string">'这是一个有 【'</span>, $n, <span class="string">'】 个盘子的汉诺塔：'</span>, <span class="string">'&lt;br /&gt;'</span>;</div><div class="line"><span class="comment">// 调用执行</span></div><div class="line">$hanoiTower-&gt;hanoi($n, <span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>);</div><div class="line"></div><div class="line"><span class="keyword">echo</span> <span class="string">'总共需要走：【'</span>, $hanoiTower-&gt;count, <span class="string">'】 步'</span>;</div></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/hanoi/result_five.png" alt="result_five"></p>
+<hr>
+
       
     </div>
 
@@ -387,7 +428,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Laravel/" rel="tag"><i class="fa fa-tag"></i>Laravel</a>
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i>算法</a>
           
         </div>
       
@@ -396,17 +437,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/20160421/index.html" rel="next" title="Ubuntu 16.04下添加和删除用户">
-                <i class="fa fa-chevron-left"></i> Ubuntu 16.04下添加和删除用户
+              <a href="/2019/20190620/index.html" rel="next" title="Mysql触发器的简单使用">
+                <i class="fa fa-chevron-left"></i> Mysql触发器的简单使用
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/20160703/index.html" rel="prev" title="Lumen集成Swagger使用总结">
-                Lumen集成Swagger使用总结 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -520,7 +557,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个Laravel项目"><span class="nav-number">1.</span> <span class="nav-text">创建一个Laravel项目</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#对了有时候在linux测试环境下搭建项目的话-要记得查看下-storage目录的读写权限"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">对了有时候在linux测试环境下搭建项目的话 要记得查看下 storage目录的读写权限</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#复制项目下的-env-example文件-重命名为-env-一般创建的时候都会帮你复制过了"><span class="nav-number">1.0.0.2.</span> <span class="nav-text">复制项目下的.env.example文件 重命名为.env 一般创建的时候都会帮你复制过了</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成Swagger"><span class="nav-number">2.</span> <span class="nav-text">集成Swagger</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装包"><span class="nav-number">2.1.</span> <span class="nav-text">安装包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑配置"><span class="nav-number">2.2.</span> <span class="nav-text">编辑配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后说下-如果只是想搭建微服务架构的话-推荐Lumen哦-速度更快-Laravel默认集成的包还是太多"><span class="nav-number"></span> <span class="nav-text">最后说下 如果只是想搭建微服务架构的话 推荐Lumen哦 速度更快 Laravel默认集成的包还是太多</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#起源"><span class="nav-number">1.</span> <span class="nav-text">起源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本规则"><span class="nav-number">2.</span> <span class="nav-text">基本规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">3.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#辅助柱子"><span class="nav-number">4.</span> <span class="nav-text">辅助柱子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">5.</span> <span class="nav-text">实现</span></a></li></ol></div>
             
           </div>
         </section>
