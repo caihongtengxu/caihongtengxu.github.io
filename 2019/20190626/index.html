@@ -1,0 +1,934 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+<meta name="description" content="最近又学了一章算法课，经典的几个 『O(n²)』 复杂度的算法比较。主要是 冒泡排序、插入排序、希尔排序、选择排序的比较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法-经典排序算法(Ⅰ)">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190626/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近又学了一章算法课，经典的几个 『O(n²)』 复杂度的算法比较。主要是 冒泡排序、插入排序、希尔排序、选择排序的比较">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Insertion-sort-example-300px.gif">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/shell_sort.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Selection-Sort-Animation.gif">
+<meta property="og:updated_time" content="2019-06-28T08:32:52.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法-经典排序算法(Ⅰ)">
+<meta name="twitter:description" content="最近又学了一章算法课，经典的几个 『O(n²)』 复杂度的算法比较。主要是 冒泡排序、插入排序、希尔排序、选择排序的比较">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Insertion-sort-example-300px.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 算法-经典排序算法(Ⅰ) | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">75</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                算法-经典排序算法(Ⅰ)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-06-26T22:01:45+08:00" content="2019-06-26">
+              2019-06-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近又学了一章算法课，经典的几个 『O(n²)』 复杂度的算法比较。主要是 冒泡排序、插入排序、希尔排序、选择排序的比较<br><a id="more"></a></p>
+<hr>
+<h3 id="指数是什么"><a href="#指数是什么" class="headerlink" title="指数是什么"></a>指数是什么</h3><p>指数其实就是幂运算中的一个参数 <code>aⁿ(a≠0)</code> 其中 <code>a</code> 为「底数」， <code>n</code> 为「指数」。指数位于底数的右上角，这个表达式表示 「n」个「a」相乘</p>
+<h3 id="对数是什么"><a href="#对数是什么" class="headerlink" title="对数是什么"></a>对数是什么</h3><p>对数其实来源于指数，但是却是在指数之前先发明的，这群神人…</p>
+<p>对数是幂运算的逆运算。 如果 <code>N = aⁿ(a &gt; 0, a ≠ 1)</code> 也就是「a」的「x」次方等于「N」，那么X就是N的（以a为底数）的对数，记为： <code>x = ㏒αN</code></p>
+<p>还有个『常用对数』 是10为底的对数。</p>
+<h3 id="『排序算法』衡量维度"><a href="#『排序算法』衡量维度" class="headerlink" title="『排序算法』衡量维度"></a>『排序算法』衡量维度</h3><blockquote>
+<p>执行效率：</p>
+<ul>
+<li>对于执行效率衡量一般是进行复杂度分析：『最好情况复杂度』、『最坏情况复杂度』、『平均情况复杂度』</li>
+<li>一般排序算法会有一些数据的交换或者移动，这些变动次数也可以是衡量标准之一</li>
+</ul>
+<p>内存消耗：</p>
+<ul>
+<li>对于内存的消耗可以通过『空间复杂度分析』来衡量。</li>
+<li>也可以通过原地算法来衡量。维基上的解释是：<strong>原地算法（in-place algorithm）基本上不需要额外辅助的数据结构,然而,允许少量额外的辅助变量来转换数据的算法。</strong> 在这里就是是指空间复杂度为 『O(1)』的排序算法。</li>
+</ul>
+<p>稳定性：</p>
+<ul>
+<li>排序算法的稳定性是指在碰到相同值的情况，算法不会改变他们的先后顺序。举个例子：<code>1,2,3,2</code>;排序后2个2的顺序不会改变，谁在前就是在前。</li>
+<li>为什么需要稳定性？举个例子：假如当前班级需要分座位了。规则①首先按得分排，得分高的坐第一排，②得分相同的按照身高来排序，身高矮的坐第一排。再假设现在有4个人<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">score      length</div><div class="line">90         170cm</div><div class="line">80         160cm</div><div class="line">90         150cm</div><div class="line">90         180cm</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>那么我们可以先按照身高来排序，得到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">150cm      90</div><div class="line">160cm      80</div><div class="line">170cm      90</div><div class="line">180cm      90</div></pre></td></tr></table></figure></p>
+<p>然后再借助稳定的排序算法对得分进行排序就可以了，因为是稳定的 所以他们不会发生前后的移位。试想如果是不稳定的算法，在值相同的时候发生移位，有可能会导致最后的170 和 180交换也就不满足条件了。</p>
+</blockquote>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p>冒泡排序：Bubble Sort</p>
+<p>根据 <a href="https://zh.wikipedia.org/wiki/%E5%86%92%E6%B3%A1%E6%8E%92%E5%BA%8F" target="_blank" rel="external">维基百科-冒泡排序</a></p>
+<blockquote>
+<p>冒泡排序是一种简单的排序算法。它重复地走访过要排序的数列，一次比较两个元素，如果他们的顺序错误就把他们交换过来。</p>
+<p>走访数列的工作是重复地进行直到没有再需要交换，也就是说该数列已经排序完成。这个算法的名字由来是因为越小的元素会经由交换慢慢“浮”到数列的顶端。</p>
+<p>尽管这个算法是最简单了解和实现的排序算法之一，但它对于包含大量的元素的数列排序是很没有效率的。</p>
+</blockquote>
+<p>排序过程：</p>
+<p>冒泡其实就是类似气泡上浮的过程。每轮循环找到想要的值上浮到数据中它应该在的位置。</p>
+<p>1.从第一个开始，每次取相邻的2个数比较，满足条件就交换他们的位置，然后继续取相邻比较。一轮循环结束就会确定一个值的位置。<br>2.然后从头在开始上一步操作，直到没有一组数据需要比较</p>
+<p>PHP实现伪代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">$num = [</div><div class="line">    <span class="number">6</span>, <span class="number">5</span>, <span class="number">4</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span></div><div class="line">];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="comment">// 外层分割已排序和未排序的数据</span></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $count; $i++) &#123;</div><div class="line">        <span class="comment">// 内层用来在未排序的数据中查找指定值</span></div><div class="line">        <span class="comment">// -1 是为了防止越界 比较的时候会和 j + 1比较</span></div><div class="line">        <span class="keyword">for</span> ($j = <span class="number">0</span>; $j &lt; $count - $i - <span class="number">1</span>; $j++) &#123;</div><div class="line">            <span class="keyword">if</span> ($arr[$j] &gt; $arr[$j + <span class="number">1</span>]) &#123;</div><div class="line">                $tmp = $arr[$j];</div><div class="line">                $arr[$j] = $arr[$j + <span class="number">1</span>];</div><div class="line">                $arr[$j + <span class="number">1</span>] = $tmp;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div><div class="line"></div><div class="line">bubbleSort($num);</div></pre></td></tr></table></figure>
+<p>还有一种写法不知道该不该叫冒泡</p>
+<p>就是每次从左边取一个数据定住，然后依次和剩余的数据比较，符合条件就交换，这样一轮下来这个『定住的位置』就是某个数据该待的位置…(好吧我也不知道怎么讲 上代码吧)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort2</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $count; $i++) &#123;</div><div class="line">    	<span class="comment">// 这样就不需要考虑数组越界的问题</span></div><div class="line">        <span class="keyword">for</span> ($j = $i + <span class="number">1</span>; $j &lt; $count; $j++) &#123;</div><div class="line">            <span class="keyword">if</span> ($arr[$i] &gt; $arr[$j]) &#123;</div><div class="line">                $tmp = $arr[$j];</div><div class="line">                $arr[$j] = $arr[$i];</div><div class="line">                $arr[$i] = $tmp;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于上面的代码会有个问题，当数据本来就是有有序 如 <code>[1, 2, 3, 4, 5, 6]</code>,也是需要执行完2层嵌套循环。很浪费，所以可以改进下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">bubbleSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="comment">// 外层分割已排序和未排序的数据</span></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $count; $i++) &#123;</div><div class="line">        <span class="comment">// 声明一个是否有数据交换的标识，当没有数据交换的时候其实就等于全部都是有序的了</span></div><div class="line">        $flag = <span class="keyword">false</span>;</div><div class="line">        <span class="comment">// 内层用来在未排序的数据中查找指定值</span></div><div class="line">        <span class="comment">// -1 是为了防止越界 比较的时候会和 j + 1比较</span></div><div class="line">        <span class="keyword">for</span> ($j = <span class="number">0</span>; $j &lt; $count - $i - <span class="number">1</span>; $j++) &#123;</div><div class="line">            <span class="keyword">if</span> ($arr[$j] &gt; $arr[$j + <span class="number">1</span>]) &#123;</div><div class="line">                $tmp = $arr[$j];</div><div class="line">                $arr[$j] = $arr[$j + <span class="number">1</span>];</div><div class="line">                $arr[$j + <span class="number">1</span>] = $tmp;</div><div class="line"></div><div class="line">                $flag = <span class="keyword">true</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 如果没有数据交换=有序 就可以退出循环了</span></div><div class="line">        <span class="keyword">if</span> (! $flag) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>冒泡排序总结：</strong></p>
+<p>1.执行效率：根据上面的改进最好情况复杂度为 <strong>O(n)</strong> 也就是在数据是有序的状态下。 最坏时间复杂度为<strong>O(n²)</strong>,也就是在数据从头到尾完全无序的情况下。平均时间复杂度为<strong>O(n²)</strong></p>
+<p>2.内存消耗:因为他的数据交换只涉及常量级别的临时空间，所以冒泡的空间复杂度是<strong>O(1)</strong></p>
+<p>3.稳定性：在冒泡中需要满足大于或者小于的条件才交换，不存在等于的条件，所以2个相等的值是不会交换的，也就不会改变他们的前后顺序。是稳定的排序算法。</p>
+<h3 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h3><p>插入排序：Insertion Sort</p>
+<blockquote>
+<p>插入排序是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。插入排序在实现上，通常采用in-place排序（即只需用到 O(1) 的额外空间的排序），因而在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。</p>
+</blockquote>
+<p>动态图如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Insertion-sort-example-300px.gif" alt="insertion_sort"></p>
+<p>排序过程：</p>
+<p>1.首先把数据分为2个区间，『已排序区间』和『未排序区间』。<br>2.从未排序区间中取出一个值，然后遍历已排序区间。<br>3.对已排序区间进行从后往前顺序遍历，然后通过移动已经排序区间元素的位置，把新值插入到已排序区间中合适位置</p>
+<p>PHP实现伪代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">insertionSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="comment">// 从1开始，假设下标0的元素已经放进已排序区间</span></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">1</span>; $i &lt; $count; $i++) &#123;</div><div class="line">        $value = $arr[$i];</div><div class="line">        <span class="keyword">for</span> ($j = $i - <span class="number">1</span>; $j &gt;=<span class="number">0</span>; $j--) &#123;</div><div class="line">            <span class="keyword">if</span> ($arr[$j] &gt; $value) &#123;</div><div class="line">                <span class="comment">// 这里其实只是通过赋值操作来代替移动一位</span></div><div class="line">                <span class="comment">// 所以打印出来会出现 $arr[$j] == $arr[$j + 1] 不过这个不要紧</span></div><div class="line">                <span class="comment">// $arr[$j + 1] 其实就是$arr[i] 的值，而$arr[$i]的值已经提前赋值给了$value</span></div><div class="line">                <span class="comment">// 通过这一步操作其实就实现了把元素后移的效果。</span></div><div class="line">                $arr[$j + <span class="number">1</span>] = $arr[$j];</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// 因为上面每次移动都会把当前的j位置空出来</span></div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 这里注意要 j + 1因为上面的循环j=0的时候是满足条件的会进入循环体</span></div><div class="line">        <span class="comment">// 在循环结束后j--变为了-1，所以这里要+1才能回到0下标</span></div><div class="line">        $arr[$j + <span class="number">1</span>] = $value;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>插入排序总结：</strong></p>
+<p>1.执行效率：最好情况复杂度为 <strong>O(n)</strong> 也就是在数据是有序的状态下。 最坏时间复杂度为<strong>O(n²)</strong>,也就是在数据从头到尾完全无序的情况下。平均时间复杂度为<strong>O(n²)</strong>，因为对于类似数组的实现，每次插入一个数的平均时间复杂度是O(n),移动重复了N次插入，所以插入排序的平均时间复杂度为<strong>O(n²)</strong></p>
+<p>2.内存消耗:因为他的数据交换只涉及常量级别的临时空间，并不需要额外的内存空间，所以插入排序的空间复杂度是<strong>O(1)</strong></p>
+<p>3.稳定性：是稳定的，遇到相同的值并不会改变他们的前后顺序。</p>
+<h3 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h3><p>希尔排序：(Shell Sort) 是插入排序的一种更高效的改进版本。</p>
+<p>他是在插入排序的基础上进行了改进，通过提高步长来减少插入排序的比较移位操作来提供效率。在某些情况下可以把性能提高到 <strong>O(n㏒²n)</strong>,比较插入排序的 <strong>O(n²)</strong>有了很大的提高。</p>
+<p>排序过程：</p>
+<p>1.选择较大步长，一般使用待排序的元素个数除2来获得当前的步长 <strong>gap</strong><br>2.然后从头开始，单位步长内的数据算一个小组 最终会有 <strong>gap</strong> 个小分组<br>3.然后依次对这些小分组进行 <strong>插入排序</strong> 操作。<br>4.然后重复上面3步操作，使用上一步的步长继续除2来得出新的步长。一直到步长为1<br>5.此时希尔排序恢复到普通的插入排序，不过大部分的数据经过上面已经很有序了。最后进行一次全部的插入排序就完成了。</p>
+<p>大概图如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/shell_sort.png" alt="shell_sort"></p>
+<p>PHP实现伪代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">shellSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="comment">// 最外层循环控制增量步长</span></div><div class="line">    <span class="comment">// 向上取整的话当是小数的时候 会得出1，</span></div><div class="line">    <span class="comment">// 然后1就死循环了 1 / 2 向上取整还是1...</span></div><div class="line">    <span class="keyword">for</span> ($gap = floor($count / <span class="number">2</span>); $gap &gt;= <span class="number">1</span>; $gap = floor($gap / <span class="number">2</span>)) &#123;</div><div class="line">        <span class="comment">// 这里的2层循环就是插入排序了和插入排序代码是一样的</span></div><div class="line">        <span class="comment">// 只不过普通的插入排序步长是1，这里换成计算出来的步长gap即可</span></div><div class="line">        <span class="keyword">for</span> ($i = $gap; $i &lt; $count; $i++) &#123;</div><div class="line">            $value = $arr[$i];</div><div class="line"></div><div class="line">            <span class="keyword">for</span> ($j = $i - $gap; $j &gt;= <span class="number">0</span>; $j = $j - $gap) &#123;</div><div class="line">                <span class="keyword">if</span> ($arr[$j] &gt; $value) &#123;</div><div class="line">                    $arr[$j + $gap] = $arr[$j];</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            $arr[$j + $gap] = $value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>希尔排序总结：</strong></p>
+<p>1.执行效率：</p>
+<ul>
+<li>最好情况复杂度为 <strong>O(n)</strong> 选择合理的步长也就是Hibbard增量（1, 3, 5, 7）。 </li>
+<li>最坏时间复杂度也受步长影响。在最坏情况下的最坏复杂度是<strong>O(n²)</strong>,也就是在数据增量为1的时候，退化成普通的插入排序。而插入排序最坏时间复杂度是 <strong>O(n²)</strong>，所以希尔排序最坏时间复杂度是<strong>O(n²)</strong>。 在最坏情况下的最好复杂度是使用合理步长Hibbard增量（1, 3, 5, 7）可以把效率提高到<strong>O(n㏒²n)</strong>。(我自己也快晕了…就是最坏情况没法定和步长有关系)</li>
+<li>平均时间复杂度也受步长的影响。总体平均复杂度为 <strong>O(n㏒²n)</strong>。不过也是各种争论。</li>
+</ul>
+<p>2.内存消耗:它和插入排序一样，数据交换只涉及常量级别的临时空间，并不需要额外的内存空间，所以希尔排序的空间复杂度是<strong>O(1)</strong></p>
+<p>3.稳定性：是<strong>不稳定</strong>的，因为每次的步长取小分组，有可能在中间操作因为步长区间的问题，导致某些相同的值已经换了位，所以是不稳定的。</p>
+<h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><p>选择排序：Selection Sort</p>
+<blockquote>
+<p>选择排序是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。</p>
+<p>选择排序的主要优点与数据移动有关。如果某个元素位于正确的最终位置上，则它不会被移动。选择排序每次交换一对元素，它们当中至少有一个将被移到其最终位置上，因此对 <strong>n</strong> 个元素的表进行排序总共进行至多 <strong>n - 1</strong> 次交换。在所有的完全依靠交换去移动元素的排序方法中，选择排序属于非常好的一种。</p>
+</blockquote>
+<p>动态图如下：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Selection-Sort-Animation.gif" alt="selectionSort"></p>
+<p>排序过程：</p>
+<p>1.把待排序数据分为2个区间，已排序区间和未排序区间<br>2.每次从未排序区间中找到最小值（或最大值）放入已排序区间末尾<br>3.重复直到没有数据</p>
+<p>PHP实现伪代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">selectionSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="comment">// 这里使用count - 1 因为当剩最后2个的时候，倒数第二个排好了，剩下的那个就是末尾的元素</span></div><div class="line">    <span class="comment">// 无序在遍历了，所有才有 n 个元素的选择排序 最多进行 n - 1次遍历的结论</span></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $count - <span class="number">1</span>; $i++) &#123;</div><div class="line">        $min = $i;</div><div class="line">        <span class="keyword">for</span> ($j = $i + <span class="number">1</span>; $j &lt; $count; $j++) &#123;</div><div class="line">            <span class="keyword">if</span> ($arr[$min] &gt; $arr[$j]) &#123;</div><div class="line">                $min = $j;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> ($j != $min) &#123;</div><div class="line">            $tmp = $arr[$i];</div><div class="line">            $arr[$i] = $arr[$min];</div><div class="line">            $arr[$min] = $tmp;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>选择排序总结：</strong></p>
+<p>1.执行效率：根据上面的改进最好情况复杂度为 <strong>O(n²)</strong>，因为即使数据是有序的，它每次都要遍历完内层循环才能确定谁是最小值，所以他的复杂度是<strong>O(n²)</strong>。 最坏时间复杂度为<strong>O(n²)</strong>也一样，不论数据是否有序都要遍历完内层循环。平均时间复杂度为<strong>O(n²)</strong>，这个就不用说了。</p>
+<p>2.内存消耗:因为他的数据交换只涉及常量级别的临时空间和固定的赋值，所以选择排序的空间复杂度是<strong>O(1)</strong></p>
+<p>3.稳定性：是不稳定的。举个例子假如有数据 <strong>[1, <font color="blue">2</font>, <font color="red">2</font>, 1]</strong>.因为他每次都是找到最小的值然后交换，这样当第二次循环找到最小值还是1，然后1就和第一个蓝色的2交换了位置，可以发现，蓝色的2和红色的2位置发生了改变。 所以选择排序是不稳定的算法。</p>
+<h3 id="冒泡排序-VS-插入排序"><a href="#冒泡排序-VS-插入排序" class="headerlink" title="冒泡排序 VS 插入排序"></a>冒泡排序 VS 插入排序</h3><p>冒泡排序和插入排序虽然都是<strong>O(n²)</strong>的算法，但是在平时使用中，确实插入排序使用的比冒泡多。</p>
+<p>因为在冒泡中，当找到满足条件的时候会进行数据交换，也就是下面这段代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ($arr[$j] &gt; $arr[$j + <span class="number">1</span>]) &#123;</div><div class="line">    $tmp = $arr[$j];</div><div class="line">    $arr[$j] = $arr[$j + <span class="number">1</span>];</div><div class="line">    $arr[$j + <span class="number">1</span>] = $tmp;</div><div class="line"></div><div class="line">    $flag = <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>而插入排序在满足条件的时候只是做数据的后移 如下代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> ($arr[$j] &gt; $value) &#123;</div><div class="line">    $arr[$j + <span class="number">1</span>] = $arr[$j];</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>所以从理论上来说交换数据需要3步操作，而后移需要一步操作。再假设每一步都是1个单位执行时间，那么冒泡需要3个单位执行时间，插入需要1个执行时间。所以我们更倾向于使用插入排序。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>最好复杂度</th>
+<th>最坏复杂度</th>
+<th>平均复杂度</th>
+<th>空间复杂度</th>
+<th>算法稳定性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冒泡排序</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>插入排序</td>
+<td>O(n)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>选择排序</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(n²)</td>
+<td>O(1)</td>
+<td>NO</td>
+</tr>
+<tr>
+<td>希尔排序</td>
+<td>O(n)</td>
+<td>O(n²) / O(n㏒²n)</td>
+<td>?</td>
+<td>O(1)</td>
+<td>NO</td>
+</tr>
+</tbody>
+</table>
+<p>在实际中冒泡和选择排序确实很少用到，他们更多是拿来开拓思维。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i>算法</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190623/index.html" rel="next" title="PHP实现汉诺塔算法">
+                <i class="fa fa-chevron-left"></i> PHP实现汉诺塔算法
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">75</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#指数是什么"><span class="nav-number">1.</span> <span class="nav-text">指数是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对数是什么"><span class="nav-number">2.</span> <span class="nav-text">对数是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#『排序算法』衡量维度"><span class="nav-number">3.</span> <span class="nav-text">『排序算法』衡量维度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冒泡排序"><span class="nav-number">4.</span> <span class="nav-text">冒泡排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入排序"><span class="nav-number">5.</span> <span class="nav-text">插入排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#希尔排序"><span class="nav-number">6.</span> <span class="nav-text">希尔排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择排序"><span class="nav-number">7.</span> <span class="nav-text">选择排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#冒泡排序-VS-插入排序"><span class="nav-number">8.</span> <span class="nav-text">冒泡排序 VS 插入排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
