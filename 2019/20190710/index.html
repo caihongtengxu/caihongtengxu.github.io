@@ -1,0 +1,821 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="最近这一周一直在折腾一个导出的需求。需求很简单就是一个导出Excel表格，最多也就几万行数据吧，但是导出的字段有点多67个,真的是什么都想要导出。
+碰到的问题是导出速度巨慢，需要几分钟…最后总结了下找到几个原因：
+1.数据库表里有压缩字段，导致表很臃肿，根据当前条件搜索已经没得多少优化2.使用的Laravel插件包 maatwebsite/excel 有性能问题(虽然写起来感觉很优雅…)3.使用的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用PHP原生导出Excel和CSV文件">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190710/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近这一周一直在折腾一个导出的需求。需求很简单就是一个导出Excel表格，最多也就几万行数据吧，但是导出的字段有点多67个,真的是什么都想要导出。
+碰到的问题是导出速度巨慢，需要几分钟…最后总结了下找到几个原因：
+1.数据库表里有压缩字段，导致表很臃肿，根据当前条件搜索已经没得多少优化2.使用的Laravel插件包 maatwebsite/excel 有性能问题(虽然写起来感觉很优雅…)3.使用的">
+<meta property="og:updated_time" content="2019-07-10T08:03:34.004Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用PHP原生导出Excel和CSV文件">
+<meta name="twitter:description" content="最近这一周一直在折腾一个导出的需求。需求很简单就是一个导出Excel表格，最多也就几万行数据吧，但是导出的字段有点多67个,真的是什么都想要导出。
+碰到的问题是导出速度巨慢，需要几分钟…最后总结了下找到几个原因：
+1.数据库表里有压缩字段，导致表很臃肿，根据当前条件搜索已经没得多少优化2.使用的Laravel插件包 maatwebsite/excel 有性能问题(虽然写起来感觉很优雅…)3.使用的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 使用PHP原生导出Excel和CSV文件 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">76</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                使用PHP原生导出Excel和CSV文件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-07-10T12:57:18+08:00" content="2019-07-10">
+              2019-07-10
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近这一周一直在折腾一个导出的需求。需求很简单就是一个导出Excel表格，最多也就几万行数据吧，但是导出的字段有点多67个,真的是什么都想要导出。</p>
+<p>碰到的问题是导出速度巨慢，需要几分钟…最后总结了下找到几个原因：</p>
+<p>1.数据库表里有压缩字段，导致表很臃肿，根据当前条件搜索已经没得多少优化<br>2.使用的Laravel插件包 <a href="https://github.com/Maatwebsite/Laravel-Excel" target="_blank" rel="external">maatwebsite/excel</a> 有性能问题(虽然写起来感觉很优雅…)<br>3.使用的<strong>Laravel Collection</strong>遍历也有性能问题<br><a id="more"></a></p>
+<hr>
+<p><strong>尝试优化 Collection</strong></p>
+<p>关于 <strong>Laravel Collection</strong> 平时用起来挺舒服的，做做分页啥的也就那么几十条用起来没啥感觉，但是当你遍历个一万条+的时候就感觉有些慢了。后面仔细看了下 Collection 里每个都是一个模型对象里面包括各种属性和动态获取之类的东西，毕竟为了方便使用，包含了太多的东西在模型里，其实我只是想要那么几个字段，所以遍历起来感觉速度有些慢。</p>
+<p>尝试把 collection 通过 <code>toArray()</code> 方法转换成数组，但是内存消耗有些严重。转成数组后然后遍历数组 在内存中操作速度确实快了不少。但是最后还是否定了这种方式</p>
+<p><strong>尝试优化 插件</strong></p>
+<p>后面仔细看了下这个插件的代码 发现写的好优雅，才疏学浅优化不了啊(自己写的太烂 不敢动人家的代码哈哈哈哈)。不过优雅的背后牺牲的都是性能… 还是放弃优化它！！！</p>
+<p>一番折腾最后决定使用：</p>
+<p>1.原生SQL查询生成 『laravel builder』</p>
+<p>2.然后通过laravel 的 <code>chunk</code> 分段</p>
+<p>3.然后把原生SQL查询出来的 <code>stdClass</code> 组装数据</p>
+<p>4.使用PHP设置Header头信息原生导出Excel文件</p>
+<p>最后效果还不错，如果抛开组装数据，只看导出数据生成excel的话，速度达到了毫秒级。</p>
+<p>补充：PHP的闭包中要想改变外面的值，需要通过 <code>use</code> 关键字把外面的变量传递进去，同时设置 <code>引用传递</code> 才能更改外面的变量</p>
+<h3 id="PHP原生导出Excel"><a href="#PHP原生导出Excel" class="headerlink" title="PHP原生导出Excel"></a>PHP原生导出Excel</h3><p>导出的原理其实就是通过设置Header头告诉浏览器用excel的格式来解析读取，然后通过生成HTML表格来输出内容。对于单元格的合并其实就和操作HTML表格的合并是一样的了，支持样式的属性和字段，同时还可以操作 <code>td</code> 的样式来控制单元格。</p>
+<p>导出伪代码如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 导出excel文件</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> string $excelFileName 导出的文件名</div><div class="line"> * <span class="doctag">@param</span> array $title excel的标题列</div><div class="line"> * <span class="doctag">@param</span> array $data 导出的数据</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">exportExcel</span><span class="params">($excelFileName, $title, $data)</span></span></div><div class="line">&#123;</div><div class="line">    $str = <span class="string">"&lt;html xmlns:o=\"urn:schemas-microsoft-com:office:office\"\r\nxmlns:x=\"urn:schemas-microsoft-com:office:excel\"\r\nxmlns=\"http://www.w3.org/TR/REC-html40\"&gt;\r\n&lt;head&gt;\r\n&lt;meta http-equiv=Content-Type content=\"text/html; charset=utf-8\"&gt;\r\n&lt;/head&gt;\r\n&lt;body&gt;"</span>;</div><div class="line">    $str .=<span class="string">"&lt;table border=1 align=center cellpadding=0 cellspacing=0&gt;"</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 拼接标题行</span></div><div class="line">    $str .= <span class="string">'&lt;tr style="height:25px;font-size:13px;font-weight: bold;"&gt;'</span>;</div><div class="line"></div><div class="line">    <span class="keyword">foreach</span> ($title <span class="keyword">as</span> $key =&gt; $val) &#123;</div><div class="line">        $str .= <span class="string">'&lt;td&gt;'</span>.$val.<span class="string">'&lt;/td&gt;'</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $str .= <span class="string">'&lt;/tr&gt;'</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 拼接数据</span></div><div class="line">    <span class="keyword">foreach</span> ($data <span class="keyword">as</span> $key =&gt; $val) &#123;</div><div class="line">        $str .= <span class="string">'&lt;tr style="text-align: left;height:25px;font-size:13px;"&gt;'</span>;</div><div class="line"></div><div class="line">        <span class="keyword">foreach</span> ($val <span class="keyword">as</span> $v) &#123;</div><div class="line">            <span class="keyword">if</span> (is_numeric($v) &amp;&amp; $v &gt; <span class="number">100000000</span>) &#123;</div><div class="line">                $str .= <span class="string">"&lt;td style='vnd.ms-excel.numberformat:@'&gt;"</span>.$v.<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">            &#125; <span class="keyword">elseif</span> (is_numeric($v) &amp;&amp; preg_match(<span class="string">'/^[0-9]+(\.[0-9]&#123;2&#125;)+$/'</span>, $v)) &#123;</div><div class="line">                <span class="comment">// 是两位小数的保留2位显示</span></div><div class="line">                $str .= <span class="string">"&lt;td style='vnd.ms-excel.numberformat:0.00'&gt;"</span>.$v.<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">            &#125; <span class="keyword">elseif</span> (preg_match(<span class="string">'/^[0-9]&#123;4&#125;-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[0-9]|1[0-9]|2[0-4]):(0[0-9]|[1-5][0-9]):(0[0-9]|[1-5][0-9])$/'</span>, $v)) &#123;</div><div class="line">                <span class="comment">// 是日期</span></div><div class="line">                $str .= <span class="string">"&lt;td style='vnd.ms-excel.numberformat:yyyy-mm-dd\ hh\:mm\:ss'&gt;"</span>.$v.<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                $str .= <span class="string">"&lt;td&gt;"</span>.$v.<span class="string">"&lt;/td&gt;"</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        $str .= <span class="string">"&lt;/tr&gt;\n"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $str .= <span class="string">"&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;"</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 实现文件下载</span></div><div class="line">    header(<span class="string">"Content-Type: application/vnd.ms-excel; name='excel'"</span>);</div><div class="line">    header(<span class="string">"Content-type: application/octet-stream"</span>);</div><div class="line">    header(<span class="string">"Content-Disposition: attachment; filename="</span> . $excelFileName);</div><div class="line">    header(<span class="string">"Cache-Control: must-revalidate, post-check=0, pre-check=0"</span>);</div><div class="line">    header(<span class="string">"Pragma: no-cache"</span>);</div><div class="line">    header(<span class="string">"Expires: 0"</span>);</div><div class="line">    <span class="keyword">exit</span>($str);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中我简单写了些样式和一些正则校验，不用可以删除。</p>
+<p>主要说一下一些单元格的格式化说明。</p>
+<p>以上的导出会有几个常见的问题：</p>
+<p>1.对于身份证号，手机号等过大的数字 显示的时候会用科学计数法显示。如果不介意字符串显示的话可以通过设置 <code>td</code> 的样式来控制 <code>style=&#39;vnd.ms-excel.numberformat:@&#39;</code> 这样表示用文本的方式来显示</p>
+<p>2.对于数字如果需要保留小数位可以设置 <code>style=&#39;vnd.ms-excel.numberformat:0.00&#39;</code> 需要保留几位小数就写几个0，需要注意一点如果你传入的值比保留的小数位多，那么值会被四舍五入。比如传入的是 <code>87.98</code> 而设置的保留小数位是 <code>vnd.ms-excel.numberformat:0.0</code> 那么会显示成 <code>88.0</code></p>
+<p>3.对于日期格式设置 <code>style=&#39;vnd.ms-excel.numberformat:yyyy-mm-dd\ hh\:mm\:ss&#39;</code> 其中空格、冒号等都需要转义。如果使用的是HTML里的空格字符表辅助出来会有些不一样，上面是常用的格式组合，可以自己做转换。还有一些别的转换 <code>style=&#39;vnd.ms-excel.numberformat:\&quot;Short Date\&quot;&#39;</code> 这个会显示成 <code>2019/7/1</code>; <code>style=&#39;vnd.ms-excel.numberformat:\&quot;Medium Date\&quot;&#39;</code> 会显示成 <code>1-Jul-19</code></p>
+<p>4.百分比显示。 要显示百分比的话 可以使用格式 <code>style=&#39;vnd.ms-excel.numberformat:0%&#39;</code> 有一点需要注意显示的时候会把你的值放大100倍。也就是说假如你想显示成 <code>2%</code> 你传递进来的值需要是 <code>0.02</code></p>
+<p>5.千位分隔符。如果需要数字显示带千位分隔符可以设置 <code>style=&#39;vnd.ms-excel.numberformat:#,###&#39;</code> 比如 <code>123456</code> 就会显示成 <code>123,456</code></p>
+<p>常用的也就上面这些了 这里还有个 <a href="http://cosicimiento.blogspot.com/2008/11/styling-excel-cells-with-mso-number.html" target="_blank" rel="external">常用列表</a> 不过他使用的关键字是 <code>mso-number-format</code> 我尝试了下 <code>style</code> 中使用 <code>mso-number-format</code> 和 <code>vnd.ms-excel.numberformat</code> 都可以。</p>
+<h3 id="PHP导出CSV"><a href="#PHP导出CSV" class="headerlink" title="PHP导出CSV"></a>PHP导出CSV</h3><p>CSV文件其实是一种通用的文件，有时也被叫做文本文件。因此导出的CSV数据报文件不能设置单元格的样式，而xls属于二进制的文件需要使用Excel之类的工具才能打开。如果没有硬性要求导出这种速度更快，我看阿里云上的一些导出都是CSV格式,但是我们这边的需要非要excel文件.</p>
+<p>伪代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 导出CSV标准文件</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> string $fileName 导出的文件名</div><div class="line"> * <span class="doctag">@param</span> array $title 标题列</div><div class="line"> * <span class="doctag">@param</span> array $data 导出的数据</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">exportCsv</span><span class="params">($fileName, $title, $data)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 清空输出流，防止有别的信息</span></div><div class="line">    ob_end_clean();</div><div class="line">    <span class="comment">// 打开一个输出流</span></div><div class="line">    ob_start();</div><div class="line">    <span class="comment">// 设置header信息</span></div><div class="line">    header(<span class="string">"Content-Type: text/csv"</span>);</div><div class="line">    header(<span class="string">"Content-Disposition:filename="</span>. $fileName);</div><div class="line">    <span class="comment">// 打开文件流</span></div><div class="line">    $fileHandle = fopen(<span class="string">'php://output'</span>, <span class="string">'w'</span>);</div><div class="line">    <span class="comment">//转码 防止乱码</span></div><div class="line">    fwrite($fileHandle, chr(<span class="number">0xEF</span>).chr(<span class="number">0xBB</span>).chr(<span class="number">0xBF</span>));</div><div class="line">    <span class="comment">// 先把标题写进去</span></div><div class="line">    fputcsv($fileHandle, $title);</div><div class="line">    $index = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">foreach</span> ($data <span class="keyword">as</span> $item) &#123;</div><div class="line">        <span class="comment">// 每2000条释放一次资源</span></div><div class="line">        <span class="keyword">if</span> ($index == <span class="number">2000</span>) &#123;</div><div class="line">            $index = <span class="number">0</span>;</div><div class="line">            ob_flush();</div><div class="line">            flush();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        $index++;</div><div class="line">        fputcsv($fileHandle, $item);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 释放资源</span></div><div class="line">    ob_flush();</div><div class="line">    flush();</div><div class="line">    ob_end_clean();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190626/index.html" rel="next" title="算法-经典排序算法(Ⅰ)">
+                <i class="fa fa-chevron-left"></i> 算法-经典排序算法(Ⅰ)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">76</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP原生导出Excel"><span class="nav-number">1.</span> <span class="nav-text">PHP原生导出Excel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP导出CSV"><span class="nav-number">2.</span> <span class="nav-text">PHP导出CSV</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
