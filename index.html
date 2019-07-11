@@ -139,7 +139,7 @@
             
             归档
             
-                <span class="badge">76</span>
+                <span class="badge">77</span>
             
             
             
@@ -456,6 +456,130 @@
 <p>1.数据库表里有压缩字段，导致表很臃肿，根据当前条件搜索已经没得多少优化<br>2.使用的Laravel插件包 <a href="https://github.com/Maatwebsite/Laravel-Excel">maatwebsite/excel</a> 有性能问题(虽然写起来感觉很优雅…)<br>3.使用的<strong>Laravel Collection</strong>遍历也有性能问题<br>
           <div class="post-more-link text-center">
             <a class="btn" href="/2019/20190710/index.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2019/20190705/index.html" itemprop="url">
+                  PHP中 mkdir: Permission denied 问题
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-07-05T19:42:11+08:00" content="2019-07-05">
+              2019-07-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>今天某老油条告诉我说微信扫码支付用不了了，让我去看看咋回事。后面看了下日志发现有报错 信息如下 <code>mkdir(): Permission denied...</code></p>
+<p>因为扫码支付需要生产二维码，在生成二维码的时候创建了指定目录存放，这一看就是权限问题，没有足够的权限去创建目录。肯定以前有人暴力 <code>777</code> 加超级用户组更改了所有目录。 这也要丢给我…</p>
+<p>然后发现这个问题还挺常见的好多人遇见，写下记录吧！<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2019/20190705/index.html#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1352,128 +1476,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2019/20190510/index.html" itemprop="url">
-                  SaaS、微服务、Oauth是什么
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-              
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-05-10T17:20:33+08:00" content="2019-05-10">
-              2019-05-10
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-
-           
-            
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>我们公司是一家做人力资源SaaS系统的公司，针对公司项目用到的一些名词做下科普。其实我自己以前也是迷迷糊糊，整理了一点资料。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2019/20190510/index.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1519,7 +1521,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">76</span>
+              <span class="site-state-item-count">77</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
