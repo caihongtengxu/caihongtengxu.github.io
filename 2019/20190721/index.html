@@ -1,0 +1,843 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="最近以Laravel5.5版本为例仔细研究了下Laravel的生命周期，其实还蛮有意思的，以前都是看别人的，看完就忘…">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel生命周期">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190721/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近以Laravel5.5版本为例仔细研究了下Laravel的生命周期，其实还蛮有意思的，以前都是看别人的，看完就忘…">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel-life.png">
+<meta property="og:updated_time" content="2019-07-24T08:46:35.212Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Laravel生命周期">
+<meta name="twitter:description" content="最近以Laravel5.5版本为例仔细研究了下Laravel的生命周期，其实还蛮有意思的，以前都是看别人的，看完就忘…">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel-life.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Laravel生命周期 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">79</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Laravel生命周期
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-07-21T09:06:57+08:00" content="2019-07-21">
+              2019-07-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近以Laravel5.5版本为例仔细研究了下Laravel的生命周期，其实还蛮有意思的，以前都是看别人的，看完就忘…<br><a id="more"></a></p>
+<hr>
+<p>Laravel的整个生命周期总结如下图：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel-life.png" alt="laravel生命周期"></p>
+<h3 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h3><p>首先从<code>public/index.php</code> 入口开始，可以看到里面就做了4件事。</p>
+<p>一、定义框架的启动时间，单位毫秒 对应代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">define(<span class="string">'LARAVEL_START'</span>, microtime(<span class="keyword">true</span>));</div></pre></td></tr></table></figure>
+<p>二、注册并加载composer自动加载器，对应代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">require</span> <span class="keyword">__DIR__</span>.<span class="string">'/../vendor/autoload.php'</span>;</div></pre></td></tr></table></figure>
+<p>三、获取Application应用实例，对应代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$app = <span class="keyword">require_once</span> <span class="keyword">__DIR__</span>.<span class="string">'/../bootstrap/app.php'</span>;</div></pre></td></tr></table></figure>
+<p>四、运行容器，对应代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 从容器中解析出http内核实例</span></div><div class="line"><span class="comment">// make方法根据绑定的http内核接口，返回的是实现接口的 App\Http\Kernel 实例</span></div><div class="line">$kernel = $app-&gt;make(Illuminate\Contracts\Http\Kernel::class);</div><div class="line"></div><div class="line"><span class="comment">// 因为继承 调用 Illuminate\Foundation\Http\Kernel 的handle处理请求</span></div><div class="line">$response = $kernel-&gt;handle(</div><div class="line">    <span class="comment">// 从服务器变量中创建的新的 Illuminate Http请求</span></div><div class="line">    $request = Illuminate\Http\Request::capture()</div><div class="line">);</div><div class="line"></div><div class="line"><span class="comment">// 返回的response是 Illuminate\Http\Response 实例</span></div><div class="line"><span class="comment">// 然后调用send方法 设置http头，输出content也就输出了内容</span></div><div class="line">$response-&gt;send();</div><div class="line"></div><div class="line"><span class="comment">//App\Http\Kernel 继承 Illuminate\Foundation\Http\Kernel</span></div><div class="line"><span class="comment">// 在任何可终止的中间件上调用terminate方法</span></div><div class="line">$kernel-&gt;terminate($request, $response);</div></pre></td></tr></table></figure>
+<h3 id="如何获取应用实例"><a href="#如何获取应用实例" class="headerlink" title="如何获取应用实例"></a>如何获取应用实例</h3><p>做的最多事情的其实就是上面的第三和第四部分。先来看下如何获取应用实例的。根据代码首先是加载的 <code>bootstrap/app.php</code> 文件。代码也很简单主要做了下面几个事情。</p>
+<h4 id="实例化"><a href="#实例化" class="headerlink" title="实例化"></a>实例化</h4><p>可以看到进来就是创建应用也就是Application实例对象也是容器对象。根据官方的注释可以看到：</p>
+<blockquote>
+<p>我们要做的第一件事就是创建一个新的laravel应用实例，它连接着laravel的各个部分，同时它还是系统绑定各个部分的一个IOC容器。</p>
+</blockquote>
+<p>这里做了最多的事情，对应代码如下，他传递进去的参数是一个基础路径</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$app = <span class="keyword">new</span> Illuminate\Foundation\Application(</div><div class="line">    realpath(<span class="keyword">__DIR__</span>.<span class="string">'/../'</span>)</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>然后来看下实例化做了什么，对应文件 <code>vendor/laravel/framework/src/Illuminate/Foundation/Application.php</code> 的构造函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Create a new Illuminate application instance.</div><div class="line"> * 创建一个新的 Illuminate 应用实例</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  string|null  $basePath</div><div class="line"> * <span class="doctag">@return</span> void</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($basePath = null)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 如果传递了基础路径</span></div><div class="line">    <span class="keyword">if</span> ($basePath) &#123;</div><div class="line">        <span class="comment">// 给实例设置基础路径</span></div><div class="line">        <span class="keyword">$this</span>-&gt;setBasePath($basePath);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 给容器注册基础绑定</span></div><div class="line">    <span class="keyword">$this</span>-&gt;registerBaseBindings();</div><div class="line"></div><div class="line">    <span class="comment">// 注册所有的基础服务提供者</span></div><div class="line">    <span class="keyword">$this</span>-&gt;registerBaseServiceProviders();</div><div class="line"></div><div class="line">    <span class="comment">// 给容器（也是application实例）注册核心类别名</span></div><div class="line">    <span class="keyword">$this</span>-&gt;registerCoreContainerAliases();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个构造函数主要是做了4个工作。</p>
+<h5 id="设置框架运行的基础路径"><a href="#设置框架运行的基础路径" class="headerlink" title="设置框架运行的基础路径"></a>设置框架运行的基础路径</h5><p>具体函数如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Set the base path for the application.</div><div class="line"> * 给应用设置基础路径</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  string  $basePath</div><div class="line"> * <span class="doctag">@return</span> $this</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">setBasePath</span><span class="params">($basePath)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 设置laravel安装的基础路径 去掉路径末尾的 '/'</span></div><div class="line">    <span class="keyword">$this</span>-&gt;basePath = rtrim($basePath, <span class="string">'\/'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 绑定laravel的各种主要部分的路径</span></div><div class="line">    <span class="comment">// 具体有laravel根目录下的 app,lang,config,public,storage,database,resources,bootstraps等</span></div><div class="line">    <span class="keyword">$this</span>-&gt;bindPathsInContainer();</div><div class="line"></div><div class="line">    <span class="comment">// 当前类的引用</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">$this</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="给容器注册基础绑定"><a href="#给容器注册基础绑定" class="headerlink" title="给容器注册基础绑定"></a>给容器注册基础绑定</h5><p>具体代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Register the basic bindings into the container.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> void</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">protected</span> function <span class="title">registerBaseBindings</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 把当前的application引用设置为当前全局可用容器实例</span></div><div class="line">    <span class="keyword">static</span>::setInstance($<span class="keyword">this</span>);</div><div class="line"></div><div class="line">    <span class="comment">// 将现有实例注册为容器中的共享实例。</span></div><div class="line">    $<span class="keyword">this</span>-&gt;instance(<span class="string">'app'</span>, $<span class="keyword">this</span>);</div><div class="line">    <span class="comment">// 把container也注册为共享实例</span></div><div class="line">    $<span class="keyword">this</span>-&gt;instance(Container::<span class="class"><span class="keyword">class</span>, $<span class="title">this</span>)</span>;</div><div class="line">    <span class="comment">// 创建一个新的包清单实例 同时注册为共享实例，也就是vendor目录下加载了多少的包</span></div><div class="line">    $<span class="keyword">this</span>-&gt;instance(PackageManifest::<span class="class"><span class="keyword">class</span>, <span class="title">new</span> <span class="title">PackageManifest</span>(</span></div><div class="line">        <span class="title">new</span> <span class="title">Filesystem</span>, $<span class="title">this</span>-&gt;<span class="title">basePath</span>(), $<span class="title">this</span>-&gt;<span class="title">getCachedPackagesPath</span>()</div><div class="line">    ));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="注册所有的基础服务提供者"><a href="#注册所有的基础服务提供者" class="headerlink" title="注册所有的基础服务提供者"></a>注册所有的基础服务提供者</h5><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Register all of the base service providers.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> void</div><div class="line"> */</div><div class="line"><span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">registerBaseServiceProviders</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 给当前实例注册事件服务提供者 - 里面是一个事件调度实例</span></div><div class="line">    <span class="keyword">$this</span>-&gt;register(<span class="keyword">new</span> EventServiceProvider(<span class="keyword">$this</span>));</div><div class="line">    <span class="comment">// 给当前application实例注册日志服务提供者 - 里面是一个Monolog实例</span></div><div class="line">    <span class="keyword">$this</span>-&gt;register(<span class="keyword">new</span> LogServiceProvider(<span class="keyword">$this</span>));</div><div class="line">    <span class="comment">// 给当前实例注册路由服务 - 里面是一个vendor/laravel/framework/src/Illuminate/Routing/Router.php实例</span></div><div class="line">    <span class="keyword">$this</span>-&gt;register(<span class="keyword">new</span> RoutingServiceProvider(<span class="keyword">$this</span>));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="给容器（也是application实例）注册核心类别名"><a href="#给容器（也是application实例）注册核心类别名" class="headerlink" title="给容器（也是application实例）注册核心类别名"></a>给容器（也是application实例）注册核心类别名</h5><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Register the core class aliases in the container.</div><div class="line"> *</div><div class="line"> * @return void</div><div class="line"> */</div><div class="line">public function registerCoreContainerAliases()</div><div class="line">&#123;</div><div class="line">    foreach ([</div><div class="line">        'app'                  =&gt; [\Illuminate\Foundation\Application::class, \Illuminate\Contracts\Container\Container::class, \Illuminate\Contracts\Foundation\Application::class,  \Psr\Container\ContainerInterface::class],</div><div class="line">        'auth'                 =&gt; [\Illuminate\Auth\AuthManager::class, \Illuminate\Contracts\Auth\Factory::class],</div><div class="line">        'auth.driver'          =&gt; [\Illuminate\Contracts\Auth\Guard::class],</div><div class="line">        'blade.compiler'       =&gt; [\Illuminate\View\Compilers\BladeCompiler::class],</div><div class="line">        'cache'                =&gt; [\Illuminate\Cache\CacheManager::class, \Illuminate\Contracts\Cache\Factory::class],</div><div class="line">        'cache.store'          =&gt; [\Illuminate\Cache\Repository::class, \Illuminate\Contracts\Cache\Repository::class],</div><div class="line">        'config'               =&gt; [\Illuminate\Config\Repository::class, \Illuminate\Contracts\Config\Repository::class],</div><div class="line">        'cookie'               =&gt; [\Illuminate\Cookie\CookieJar::class, \Illuminate\Contracts\Cookie\Factory::class, \Illuminate\Contracts\Cookie\QueueingFactory::class],</div><div class="line">        'encrypter'            =&gt; [\Illuminate\Encryption\Encrypter::class, \Illuminate\Contracts\Encryption\Encrypter::class],</div><div class="line">        'db'                   =&gt; [\Illuminate\Database\DatabaseManager::class],</div><div class="line">        'db.connection'        =&gt; [\Illuminate\Database\Connection::class, \Illuminate\Database\ConnectionInterface::class],</div><div class="line">        'events'               =&gt; [\Illuminate\Events\Dispatcher::class, \Illuminate\Contracts\Events\Dispatcher::class],</div><div class="line">        'files'                =&gt; [\Illuminate\Filesystem\Filesystem::class],</div><div class="line">        'filesystem'           =&gt; [\Illuminate\Filesystem\FilesystemManager::class, \Illuminate\Contracts\Filesystem\Factory::class],</div><div class="line">        'filesystem.disk'      =&gt; [\Illuminate\Contracts\Filesystem\Filesystem::class],</div><div class="line">        'filesystem.cloud'     =&gt; [\Illuminate\Contracts\Filesystem\Cloud::class],</div><div class="line">        'hash'                 =&gt; [\Illuminate\Contracts\Hashing\Hasher::class],</div><div class="line">        'translator'           =&gt; [\Illuminate\Translation\Translator::class, \Illuminate\Contracts\Translation\Translator::class],</div><div class="line">        'log'                  =&gt; [\Illuminate\Log\Writer::class, \Illuminate\Contracts\Logging\Log::class, \Psr\Log\LoggerInterface::class],</div><div class="line">        'mailer'               =&gt; [\Illuminate\Mail\Mailer::class, \Illuminate\Contracts\Mail\Mailer::class, \Illuminate\Contracts\Mail\MailQueue::class],</div><div class="line">        'auth.password'        =&gt; [\Illuminate\Auth\Passwords\PasswordBrokerManager::class, \Illuminate\Contracts\Auth\PasswordBrokerFactory::class],</div><div class="line">        'auth.password.broker' =&gt; [\Illuminate\Auth\Passwords\PasswordBroker::class, \Illuminate\Contracts\Auth\PasswordBroker::class],</div><div class="line">        'queue'                =&gt; [\Illuminate\Queue\QueueManager::class, \Illuminate\Contracts\Queue\Factory::class, \Illuminate\Contracts\Queue\Monitor::class],</div><div class="line">        'queue.connection'     =&gt; [\Illuminate\Contracts\Queue\Queue::class],</div><div class="line">        'queue.failer'         =&gt; [\Illuminate\Queue\Failed\FailedJobProviderInterface::class],</div><div class="line">        'redirect'             =&gt; [\Illuminate\Routing\Redirector::class],</div><div class="line">        'redis'                =&gt; [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],</div><div class="line">        'request'              =&gt; [\Illuminate\Http\Request::class, \Symfony\Component\HttpFoundation\Request::class],</div><div class="line">        'router'               =&gt; [\Illuminate\Routing\Router::class, \Illuminate\Contracts\Routing\Registrar::class, \Illuminate\Contracts\Routing\BindingRegistrar::class],</div><div class="line">        'session'              =&gt; [\Illuminate\Session\SessionManager::class],</div><div class="line">        'session.store'        =&gt; [\Illuminate\Session\Store::class, \Illuminate\Contracts\Session\Session::class],</div><div class="line">        'url'                  =&gt; [\Illuminate\Routing\UrlGenerator::class, \Illuminate\Contracts\Routing\UrlGenerator::class],</div><div class="line">        'validator'            =&gt; [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],</div><div class="line">        'view'                 =&gt; [\Illuminate\View\Factory::class, \Illuminate\Contracts\View\Factory::class],</div><div class="line">    ] as $key =&gt; $aliases) &#123;</div><div class="line">        foreach ($aliases as $alias) &#123;</div><div class="line">            $this-&gt;alias($key, $alias);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>至此完成了实例的初始化，添加了一些基础属性等。</p>
+<h4 id="绑定核心接口"><a href="#绑定核心接口" class="headerlink" title="绑定核心接口"></a>绑定核心接口</h4><p>根据官方注释第二步需要进行核心接口的绑定。 需要注意 app是 application的实例，然后继承了Illuminate\Container\Container; 所以这里的singleton方法其实是Container里的给容器注册绑定。对应代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 给容器注册共享绑定-http内核</span></div><div class="line">$app-&gt;singleton(</div><div class="line">    Illuminate\Contracts\Http\Kernel::class,</div><div class="line">    App\Http\Kernel::class</div><div class="line">);</div><div class="line"></div><div class="line"><span class="comment">// 给容器注册共享绑定-控制台 （artisan 命令？）</span></div><div class="line">$app-&gt;singleton(</div><div class="line">    Illuminate\Contracts\Console\Kernel::class,</div><div class="line">    App\Console\Kernel::class</div><div class="line">);</div><div class="line"></div><div class="line"><span class="comment">// 给容器注册共享绑定-异常类</span></div><div class="line">$app-&gt;singleton(</div><div class="line">    Illuminate\Contracts\Debug\ExceptionHandler::class,</div><div class="line">    App\Exceptions\Handler::class</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>这个绑定核心接口部分做了3件事，主要是通过 <code>singleton</code> 方法，参数是一个抽象类，一个具体实现类。完成了HTTP内核注册，控制台注册和异常处理注册。</p>
+<p>主要看下 <code>vendor/laravel/framework/src/Illuminate/Container/Container.php</code> 文件中的 <code>bind</code> 方法，因为在 <code>singleton</code> 方法中调用了 <code>bind</code>.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Register a binding with the container.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span>  string  $abstract</div><div class="line"> * <span class="doctag">@param</span>  \Closure|string|null  $concrete</div><div class="line"> * <span class="doctag">@param</span>  bool  $shared</div><div class="line"> * <span class="doctag">@return</span> void</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">bind</span><span class="params">($abstract, $concrete = null, $shared = false)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// If no concrete type was given, we will simply set the concrete type to the</span></div><div class="line">    <span class="comment">// abstract type. After that, the concrete type to be registered as shared</span></div><div class="line">    <span class="comment">// without being forced to state their classes in both of the parameters.</span></div><div class="line">    <span class="comment">// 第一步删除所有陈旧的实例和别名</span></div><div class="line">    <span class="keyword">$this</span>-&gt;dropStaleInstances($abstract);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (is_null($concrete)) &#123;</div><div class="line">        $concrete = $abstract;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// If the factory is not a Closure, it means it is just a class name which is</span></div><div class="line">    <span class="comment">// bound into this container to the abstract type and we will just wrap it</span></div><div class="line">    <span class="comment">// up inside its own Closure to give us more convenience when extending.</span></div><div class="line">    <span class="comment">// 如果工厂不是Closure，这意味着它只是一个类名，它被绑定到这个容器中的抽象类型，</span></div><div class="line">    <span class="comment">// 我们将它包装在它自己的Closure中，以便在扩展时给我们更多的便利。</span></div><div class="line">    <span class="keyword">if</span> (! $concrete <span class="keyword">instanceof</span> Closure) &#123;</div><div class="line">        $concrete = <span class="keyword">$this</span>-&gt;getClosure($abstract, $concrete);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">$this</span>-&gt;bindings[$abstract] = compact(<span class="string">'concrete'</span>, <span class="string">'shared'</span>);</div><div class="line"></div><div class="line">    <span class="comment">// If the abstract type was already resolved in this container we'll fire the</span></div><div class="line">    <span class="comment">// rebound listener so that any objects which have already gotten resolved</span></div><div class="line">    <span class="comment">// can have their copy of the object updated via the listener callbacks.</span></div><div class="line">    <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;resolved($abstract)) &#123;</div><div class="line">        <span class="keyword">$this</span>-&gt;rebound($abstract);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以看到最终这些绑定关系都放在了 <strong>Container</strong> 实例的 <code>bindings</code> 属性中，key是抽象类名，值是具体实现类名。</p>
+<p>然后返回实例，对应代码： <code>return $app;</code> 至此完成了应用的实例化。</p>
+<h3 id="如何运行容器"><a href="#如何运行容器" class="headerlink" title="如何运行容器"></a>如何运行容器</h3><p>在完成了容器的初始化后需要运行容器，在这里又需要做4件事。</p>
+<h4 id="从应用实例中解析出HTTP内核实例对象"><a href="#从应用实例中解析出HTTP内核实例对象" class="headerlink" title="从应用实例中解析出HTTP内核实例对象"></a>从应用实例中解析出HTTP内核实例对象</h4><p>主要代码是 <code>publuc/index.php</code> 文件中的 <code>$kernel = $app-&gt;make(Illuminate\Contracts\Http\Kernel::class);</code> 这一行。主要看下 <code>make</code> 方法。在文件 <code>vendor/laravel/framework/src/Illuminate/Foundation/Application.php</code> 中，不过最后它又调用了父类的 <code>make</code> 方法，在 <code>vendor/laravel/framework/src/Illuminate/Container/Container.php</code> 中。最终可以看到调用的是父类的 <code>resolve</code> 方法。</p>
+<p>简单说明下吧，该方法主要是从容器的实例对象中根据传入的参数抽象类名，获取到了当初绑定的对应实现类，不过是一个闭包，然后根据闭包实例化了实现类并返回。在上面的分析中 <strong>Container</strong> 实例的 <code>bindings</code> 属性中绑定过HTTP内核了，对应的实现类是 <code>app/Http/Kernel.php</code> 所以返回的 <code>$kernel</code> 就是这个类的实例。</p>
+<h4 id="调用http内核的-handle-方法处理请求"><a href="#调用http内核的-handle-方法处理请求" class="headerlink" title="调用http内核的 handle 方法处理请求"></a>调用http内核的 <code>handle</code> 方法处理请求</h4><p>上一步已经获取了HTTP内核的实例，然后开始处理请求，对应代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$response = $kernel-&gt;handle(</div><div class="line">    <span class="comment">// 从服务器变量中创建的新的 Illuminate Http请求</span></div><div class="line">    $request = Illuminate\Http\Request::capture()</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>主要这里调用的 <code>handle</code> 方法，因为返回的kernel是 <code>App\Http\Kernel.php</code> 的实例，而它又继承自 <code>vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php</code> 所以 <code>handle</code> 方法其实是在父类中的。</p>
+<p>不过处理这个前需要看下那个参数，他需要的参数是一个 <strong>request</strong>，具体应该是 <strong>Illuminate Http请求</strong></p>
+<h5 id="构建Request请求"><a href="#构建Request请求" class="headerlink" title="构建Request请求"></a>构建Request请求</h5><p>在代码 <code>$request = Illuminate\Http\Request::capture()</code> 中</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Create a new Illuminate HTTP request from server variables.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> static</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">capture</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 开启http请求参数重写</span></div><div class="line">    <span class="keyword">static</span>::enableHttpMethodParameterOverride();</div><div class="line"></div><div class="line">    <span class="comment">// 使用PHP的全局变量创建一个新的请求</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">static</span>::createFromBase(SymfonyRequest::createFromGlobals());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>然后来看下 <code>SymfonyRequest::createFromGlobals()</code> 方法干了什么</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">createFromGlobals</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    .........</div><div class="line">    <span class="comment">// 初始化了http请求的各种参数和信息</span></div><div class="line">    $request = <span class="keyword">self</span>::createRequestFromFactory($_GET, $_POST, [], $_COOKIE, $_FILES, $server);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (<span class="number">0</span> === strpos($request-&gt;headers-&gt;get(<span class="string">'CONTENT_TYPE'</span>), <span class="string">'application/x-www-form-urlencoded'</span>)</div><div class="line">        &amp;&amp; \in_array(strtoupper($request-&gt;server-&gt;get(<span class="string">'REQUEST_METHOD'</span>, <span class="string">'GET'</span>)), [<span class="string">'PUT'</span>, <span class="string">'DELETE'</span>, <span class="string">'PATCH'</span>])</div><div class="line">    ) &#123;</div><div class="line">        parse_str($request-&gt;getContent(), $data);</div><div class="line">        $request-&gt;request = <span class="keyword">new</span> ParameterBag($data);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $request;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>他主要就是用PHP里的超全局变量设置到了一个 <code>vendor/symfony/http-foundation/Request.php</code> 的实例对象中，然后返回了实例。</p>
+<h5 id="从Symfony实例创建Illuminate请求"><a href="#从Symfony实例创建Illuminate请求" class="headerlink" title="从Symfony实例创建Illuminate请求"></a>从Symfony实例创建Illuminate请求</h5><p>回到 <code>vendor/laravel/framework/src/Illuminate/Http/Request.php</code> 的 <code>createFromBase</code> 方法。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">createFromBase</span><span class="params">(SymfonyRequest $request)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> ($request <span class="keyword">instanceof</span> <span class="keyword">static</span>) &#123;</div><div class="line">        <span class="keyword">return</span> $request;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $content = $request-&gt;content;</div><div class="line"></div><div class="line">    $request = (<span class="keyword">new</span> <span class="keyword">static</span>)-&gt;duplicate(</div><div class="line">        $request-&gt;query-&gt;all(),</div><div class="line">        $request-&gt;request-&gt;all(),</div><div class="line">        $request-&gt;attributes-&gt;all(),</div><div class="line">        $request-&gt;cookies-&gt;all(),</div><div class="line">        $request-&gt;files-&gt;all(),</div><div class="line">        $request-&gt;server-&gt;all()</div><div class="line">    );</div><div class="line"></div><div class="line">    $request-&gt;content = $content;</div><div class="line"></div><div class="line">    $request-&gt;request = $request-&gt;getInputSource();</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $request;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意看其中的 <code>duplicate</code> 方法，因为 当前类继承了Symfony下的http-foundation\Request 而传递进来的request刚好是http-foundation\Request的实例 所以duplicate方法也就是 http-foundation\Request 中的 <code>duplicate</code> 方法。其中对request实例进行了 <code>clone</code> 操作，并把下面的参数赋值到了一些变量属性上，重新返回了Request实例。只不过当前返回的实例已经变成 <code>vendor/laravel/framework/src/Illuminate/Http/Request.php</code> 的实例了。</p>
+<h5 id="回到handle函数"><a href="#回到handle函数" class="headerlink" title="回到handle函数"></a>回到handle函数</h5><p>获取到request实例后，回来看下 <code>handle</code> 函数,其中又调用了 <code>sendRequestThroughRouter</code> 方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> (<span class="keyword">new</span> Pipeline(<span class="keyword">$this</span>-&gt;app))</div><div class="line">            -&gt;send($request)</div><div class="line">            -&gt;through(<span class="keyword">$this</span>-&gt;app-&gt;shouldSkipMiddleware() ? [] : <span class="keyword">$this</span>-&gt;middleware)</div><div class="line">            -&gt;then(<span class="keyword">$this</span>-&gt;dispatchToRouter());</div></pre></td></tr></table></figure>
+<p>然后就返回了一个 <code>Illuminate\Http\Response</code> 的 <code>response</code> 实例。</p>
+<h3 id="返回请求结果"><a href="#返回请求结果" class="headerlink" title="返回请求结果"></a>返回请求结果</h3><p>在获取到Request的请求结果后通过 <code>$response-&gt;send();</code> 来输出结果。send方法在 <code>vendor/symfony/http-foundation/Response.php</code> 中，然后通过调用父类 <code>vendor/symfony/http-foundation/Response.php</code> 的 <code>sendContent</code> 方法，直接 <code>echo</code> 出了内容就算返回了。</p>
+<h3 id="终止应用"><a href="#终止应用" class="headerlink" title="终止应用"></a>终止应用</h3><p>在返回处理结果后 通过调用 <code>$kernel-&gt;terminate($request, $response);</code> 来终止应用，到此结束。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190714/index.html" rel="next" title="算法-经典排序算法(Ⅱ)">
+                <i class="fa fa-chevron-left"></i> 算法-经典排序算法(Ⅱ)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">79</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#开始"><span class="nav-number">1.</span> <span class="nav-text">开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何获取应用实例"><span class="nav-number">2.</span> <span class="nav-text">如何获取应用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#实例化"><span class="nav-number">2.1.</span> <span class="nav-text">实例化</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#设置框架运行的基础路径"><span class="nav-number">2.1.1.</span> <span class="nav-text">设置框架运行的基础路径</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#给容器注册基础绑定"><span class="nav-number">2.1.2.</span> <span class="nav-text">给容器注册基础绑定</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#注册所有的基础服务提供者"><span class="nav-number">2.1.3.</span> <span class="nav-text">注册所有的基础服务提供者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#给容器（也是application实例）注册核心类别名"><span class="nav-number">2.1.4.</span> <span class="nav-text">给容器（也是application实例）注册核心类别名</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定核心接口"><span class="nav-number">2.2.</span> <span class="nav-text">绑定核心接口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何运行容器"><span class="nav-number">3.</span> <span class="nav-text">如何运行容器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#从应用实例中解析出HTTP内核实例对象"><span class="nav-number">3.1.</span> <span class="nav-text">从应用实例中解析出HTTP内核实例对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用http内核的-handle-方法处理请求"><span class="nav-number">3.2.</span> <span class="nav-text">调用http内核的 handle 方法处理请求</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构建Request请求"><span class="nav-number">3.2.1.</span> <span class="nav-text">构建Request请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#从Symfony实例创建Illuminate请求"><span class="nav-number">3.2.2.</span> <span class="nav-text">从Symfony实例创建Illuminate请求</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#回到handle函数"><span class="nav-number">3.2.3.</span> <span class="nav-text">回到handle函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回请求结果"><span class="nav-number">4.</span> <span class="nav-text">返回请求结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终止应用"><span class="nav-number">5.</span> <span class="nav-text">终止应用</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
