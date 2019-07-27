@@ -1,0 +1,831 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="在一个分布式的高可用系统中，限流是必备的操作。这个流可以是：网络流量，带宽，每秒处理的事务数，每秒请求数，并发请求数，或者业务上的指标等。
+找了很多资料,写的最详细的是王争老师的一篇文章 微服务接口限流的设计与思考 。所以决定给公司的API优化下，加入接口的限流！因为公司的项目都是Laravel写的，所以把限流的操作都放到了中间件中，这样可以统一配置。
+下面的实现都是通过使用Redis来写的Lar">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP+Redis实现限流">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190611/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="在一个分布式的高可用系统中，限流是必备的操作。这个流可以是：网络流量，带宽，每秒处理的事务数，每秒请求数，并发请求数，或者业务上的指标等。
+找了很多资料,写的最详细的是王争老师的一篇文章 微服务接口限流的设计与思考 。所以决定给公司的API优化下，加入接口的限流！因为公司的项目都是Laravel写的，所以把限流的操作都放到了中间件中，这样可以统一配置。
+下面的实现都是通过使用Redis来写的Lar">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/%E6%BB%91%E5%8A%A8%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3.png">
+<meta property="og:updated_time" content="2019-07-27T09:19:32.408Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP+Redis实现限流">
+<meta name="twitter:description" content="在一个分布式的高可用系统中，限流是必备的操作。这个流可以是：网络流量，带宽，每秒处理的事务数，每秒请求数，并发请求数，或者业务上的指标等。
+找了很多资料,写的最详细的是王争老师的一篇文章 微服务接口限流的设计与思考 。所以决定给公司的API优化下，加入接口的限流！因为公司的项目都是Laravel写的，所以把限流的操作都放到了中间件中，这样可以统一配置。
+下面的实现都是通过使用Redis来写的Lar">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/%E6%BB%91%E5%8A%A8%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP+Redis实现限流 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">80</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP+Redis实现限流
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-06-11T22:59:43+08:00" content="2019-06-11">
+              2019-06-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在一个分布式的高可用系统中，限流是必备的操作。这个流可以是：网络流量，带宽，每秒处理的事务数，每秒请求数，并发请求数，或者业务上的指标等。</p>
+<p>找了很多资料,写的最详细的是王争老师的一篇文章 <a href="https://www.infoq.cn/article/microservice-interface-rate-limit" target="_blank" rel="external">微服务接口限流的设计与思考</a> 。所以决定给公司的API优化下，加入接口的限流！因为公司的项目都是Laravel写的，所以把限流的操作都放到了<strong>中间件</strong>中，这样可以统一配置。</p>
+<p>下面的实现都是通过使用Redis来写的Laravel中间件。<br><a id="more"></a></p>
+<hr>
+<p>创建一个中间件的话可以自己手动创建，也可以通过命令 <code>php artisan make:middleware xxx</code>。如果想要全部路由都可以使用 加入到 <code>app/Http/Kernel.php</code> 的 <code>$middleware</code> 数组中即可。 如果想要自己指定部分路由使用中间件就加入到 <code>$routeMiddleware</code> 数组中，然后显示指定路由调用。</p>
+<p>另外我还简单写了个模拟的配置文件如下 <code>config/grant.php</code>：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> [</div><div class="line">    <span class="string">'limit'</span> =&gt; <span class="number">3</span>, <span class="comment">// 请求限制量</span></div><div class="line">    <span class="string">'interval'</span> =&gt; <span class="number">10000</span>, <span class="comment">// 请求单位时间 毫秒</span></div><div class="line">];</div></pre></td></tr></table></figure>
+<h3 id="固定时间窗口限流"><a href="#固定时间窗口限流" class="headerlink" title="固定时间窗口限流"></a>固定时间窗口限流</h3><p>这种也叫计数器法限流，是限流算法里最简单也是最容易实现的一种算法。主要通过来一个记一个，然后判断在有限时间窗口内的数量是否超过限制即可。</p>
+<p>比如限制每秒100次请求，多余的请求就拒绝或者阻塞排队。</p>
+<p>但是这会出现一个问题，比如第一秒的最后10ms,和第二秒的前10ms内有大量的请求同时到来，根据计算他们是合法的其结果是 <code>&gt;100</code> 所以有可能压垮系统。</p>
+<p>php实现伪代码： <code>GrantMiddleware.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Middleware</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Log</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Predis</span>\<span class="title">Client</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">GrantMiddleware</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * redis版计数器限流</div><div class="line">     * 这个是直接给每个接口限流，还可以改进成根据token来对人实现限流</div><div class="line">     * 比如从token中解析出用户id，然后改成对每个用户请求接口进行限流</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</div><div class="line">     * <span class="doctag">@param</span>  \Closure  $next</div><div class="line">     * <span class="doctag">@return</span> mixed</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 获取路由</span></div><div class="line">        $url = $request-&gt;getRequestUri();</div><div class="line">        $questionLocation = strpos($url, <span class="string">'?'</span>);</div><div class="line">        $url = substr($url, <span class="number">0</span>, $questionLocation);</div><div class="line"></div><div class="line">        $result = <span class="keyword">$this</span>-&gt;grant($url);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (! $result) &#123;</div><div class="line">            <span class="keyword">return</span> response()-&gt;json([<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'message'</span> =&gt; <span class="string">'network busy, please try again'</span>, <span class="string">'code'</span> =&gt; <span class="number">429</span>, <span class="string">'data'</span> =&gt; []]);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $next($request);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 限流鉴权-基于redis的hash</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@return</span> bool</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">grant</span><span class="params">($url)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            $redis = <span class="keyword">new</span> Client();</div><div class="line">            $limit = config(<span class="string">'grant.limit'</span>);</div><div class="line">            $interval = (int)config(<span class="string">'grant.interval'</span>);</div><div class="line"></div><div class="line">            $check = $redis-&gt;hLen($url);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (! $check) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;initGrant($redis, $url);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            $now = <span class="keyword">$this</span>-&gt;getMicroSecond();</div><div class="line">            $requestCount = $redis-&gt;hGet($url, <span class="string">'requestCount'</span>);</div><div class="line">            $timestamp = (int)$redis-&gt;hGet($url, <span class="string">'timestamp'</span>);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> ($now &lt; $timestamp + $interval) &#123;</div><div class="line">                $requestCount++;</div><div class="line">                <span class="keyword">return</span> $requestCount &lt;= $limit;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;initGrant($redis, $url);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (\<span class="keyword">Exception</span> $exception) &#123;</div><div class="line">            Log::info(<span class="string">'GrantMiddleware|'</span>.date(<span class="string">'Y-m-d H:i:s'</span>, time()).<span class="string">'|grant()方法捕获异常'</span>.<span class="string">'|'</span>.</div><div class="line">                $exception-&gt;getFile().<span class="string">'|'</span>.$exception-&gt;getCode().<span class="string">'|'</span>.$exception-&gt;getMessage());</div><div class="line"></div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化指定路由的限流</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@return</span> bool</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">initGrant</span><span class="params">($redis, $url)</span></span></div><div class="line">    &#123;</div><div class="line">        $redis-&gt;hSet($url, <span class="string">'timestamp'</span>, <span class="keyword">$this</span>-&gt;getMicroSecond());</div><div class="line">        $redis-&gt;hSet($url, <span class="string">'requestCount'</span>, <span class="number">1</span>);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 重新计算时间戳 毫秒</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> float</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getMicroSecond</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">list</span>($microsecond, $second) = explode(<span class="string">' '</span>, microtime());</div><div class="line"></div><div class="line">        $microsecond = (float)sprintf(<span class="string">'%.0f'</span>, (floatval($microsecond) + floatval($second)) * <span class="number">1000</span>);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $microsecond;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="滑动时间窗口限流"><a href="#滑动时间窗口限流" class="headerlink" title="滑动时间窗口限流"></a>滑动时间窗口限流</h3><p>滑动时间窗口限流是固定时间窗口的优化版，可以解决它的2个时间交汇点并发过高问题。</p>
+<p>对比固定时间窗口限流算法，滑动时间窗口限流算法的时间窗口是持续滑动的，并且除了需要一个计数器来记录时间窗口内接口请求次数之外，还需要记录在时间窗口内每个接口请求到达的时间点，对内存的占用会比较多。</p>
+<p>实现步骤：</p>
+<p>滑动窗口记录的时间点 list = (t_1, t_2, …t_k)，时间窗口大小为 1 秒，起点是 list 中最小的时间点。当 t_m 时刻新的请求到来时，我们通过以下步骤来更新滑动时间窗口并判断是否限流熔断：</p>
+<p>Step1: 检查接口请求的时间 t_m 是否在当前的时间窗口 [t_start, t_start+1 秒) 内。如果是，则跳转到 STEP 3，否则跳转到 STEP 2.</p>
+<p>Step2: 向后滑动时间窗口，将时间窗口的起点 t_start 更新为 list 中的第二小时间点，并将最小的时间点从 list 中删除。然后，跳转到 STEP 1。</p>
+<p>Step3: 判断当前时间窗口内的接口请求数是否小于最大允许的接口请求限流值，即判断: list.size &lt; max_hits_limit，如果小于，则说明没有超过限流值，允许接口请求，并将此接口请求的访问时间放入到时间窗口内，否则直接执行限流熔断。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/%E6%BB%91%E5%8A%A8%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3.png" alt="滑动时间窗口"></p>
+<p>即便滑动时间窗口限流算法可以保证任意时间窗口内接口请求次数都不会超过最大限流值，但是仍然不能防止在细时间粒度上面访问过于集中的问题，基于时间窗口的限流算法，不管是固定时间窗口还是滑动时间窗口，只能在选定的时间粒度上限流，对选定时间粒度内的更加细粒度的访问频率不做限制。比如最后1ns内200次请求系统还是要挂！</p>
+<p>php实现伪代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Middleware</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Predis</span>\<span class="title">Client</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Log</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SlidingWindowGrantMiddleware</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 基于redis的滑动窗口限流</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</div><div class="line">     * <span class="doctag">@param</span>  \Closure  $next</div><div class="line">     * <span class="doctag">@return</span> mixed</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 获取路由</span></div><div class="line">        $url = $request-&gt;getRequestUri();</div><div class="line">        $questionLocation = strpos($url, <span class="string">'?'</span>);</div><div class="line">        $url = <span class="string">'window:'</span>.substr($url, <span class="number">0</span>, $questionLocation);</div><div class="line"></div><div class="line">        $result = <span class="keyword">$this</span>-&gt;slidingWindowGrant($url);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (! $result) &#123;</div><div class="line">            <span class="keyword">return</span> response()-&gt;json([<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'message'</span> =&gt; <span class="string">'network busy, please try again'</span>, <span class="string">'code'</span> =&gt; <span class="number">429</span>, <span class="string">'data'</span> =&gt; []]);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $next($request);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 限流鉴权-基于redis的list</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@return</span> boolean</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">slidingWindowGrant</span><span class="params">($url)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            $redis = <span class="keyword">new</span> Client();</div><div class="line">            $limit = config(<span class="string">'grant.limit'</span>);</div><div class="line">            $interval = (int)config(<span class="string">'grant.interval'</span>);</div><div class="line"></div><div class="line">            $size = (int)$redis-&gt;lLen($url);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (! $size) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;insertSlidingWindow($redis, $url, <span class="keyword">$this</span>-&gt;getMicroSecond());</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            $now = <span class="keyword">$this</span>-&gt;getMicroSecond();</div><div class="line">            $startTime = (float)$redis-&gt;lindex($url, <span class="number">0</span>);</div><div class="line">            $check = $size;</div><div class="line"></div><div class="line">            <span class="keyword">while</span> ($check &gt; <span class="number">0</span>) &#123;</div><div class="line">                <span class="keyword">if</span> ($now &gt;= $startTime + $interval) &#123;</div><div class="line">                    $startTime = (int)$redis-&gt;lpop($url);</div><div class="line">                    $check--;</div><div class="line">                    <span class="keyword">continue</span>;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">if</span> ($now &lt;= $startTime + $interval) &#123;</div><div class="line">                <span class="keyword">if</span> ($size &lt; $limit) &#123;</div><div class="line">                    <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;insertSlidingWindow($redis, $url, $now);</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;insertSlidingWindow($redis, $url, $now);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (\<span class="keyword">Exception</span> $exception) &#123;</div><div class="line">            Log::info(<span class="string">'SlidingWindowGrantMiddleware|'</span>.date(<span class="string">'Y-m-d H:i:s'</span>, time()).<span class="string">'|slidingWindowGrant()方法捕获异常'</span>.<span class="string">'|'</span>.</div><div class="line">                $exception-&gt;getFile().<span class="string">'|'</span>.$exception-&gt;getCode().<span class="string">'|'</span>.$exception-&gt;getMessage());</div><div class="line"></div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化滑动窗口</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@param</span> $timestamp</div><div class="line">     * <span class="doctag">@return</span> boolean</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">insertSlidingWindow</span><span class="params">($redis, $url, $timestamp)</span></span></div><div class="line">    &#123;</div><div class="line">        $redis-&gt;rPush($url, $timestamp);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 重新计算时间戳 毫秒</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> float</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getMicroSecond</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">list</span>($microsecond, $second) = explode(<span class="string">' '</span>, microtime());</div><div class="line"></div><div class="line">        $microsecond = (float)sprintf(<span class="string">'%.0f'</span>, (floatval($microsecond) + floatval($second)) * <span class="number">1000</span>);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $microsecond;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="令牌桶限流"><a href="#令牌桶限流" class="headerlink" title="令牌桶限流"></a>令牌桶限流</h3><p>令牌桶：</p>
+<ul>
+<li>接口限制 t 秒内最大访问次数为 n，则每隔 t/n 秒会放一个 token 到桶中；</li>
+<li>桶中最多可以存放 b 个 token，如果 token 到达时令牌桶已经满了，那么这个 token 会被丢弃；</li>
+<li>接口请求会先从令牌桶中取 token，拿到 token 则处理接口请求，拿不到 token 则执行限流。</li>
+</ul>
+<p>令牌桶算法看似比较复杂，每间隔固定时间都要放 token 到桶中，但并不需要专门起一个线程来做这件事情。每次在取 token 之前，根据上次放入 token 的时间戳和现在的时间戳，计算出这段时间需要放多少 token 进去，一次性放进去，所以在实现上面也并没有太大难度。这种的话是王争老师说的，不过我稍微改了下，改成了使用计数器的记录时间然后配合redis的队列。</p>
+<p>php实现伪代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line"></div><div class="line"><span class="keyword">namespace</span> <span class="title">App</span>\<span class="title">Http</span>\<span class="title">Middleware</span>;</div><div class="line"></div><div class="line"><span class="keyword">use</span> <span class="title">Closure</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Predis</span>\<span class="title">Client</span>;</div><div class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Log</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">TokenBucketMiddleware</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 基于redis的令牌桶限流- 使用计数器的记录时间然后配合redis的队列</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span>  \Illuminate\Http\Request  $request</div><div class="line">     * <span class="doctag">@param</span>  \Closure  $next</div><div class="line">     * <span class="doctag">@return</span> mixed</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 获取路由</span></div><div class="line">        $url = $request-&gt;getRequestUri();</div><div class="line">        $questionLocation = strpos($url, <span class="string">'?'</span>);</div><div class="line">        $url = <span class="string">'bucket:'</span>.substr($url, <span class="number">0</span>, $questionLocation);</div><div class="line"></div><div class="line">        $result = <span class="keyword">$this</span>-&gt;grant($url);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (! $result) &#123;</div><div class="line">            <span class="keyword">return</span> response()-&gt;json([<span class="string">'status'</span> =&gt; <span class="keyword">false</span>, <span class="string">'message'</span> =&gt; <span class="string">'network busy, please try again'</span>, <span class="string">'code'</span> =&gt; <span class="number">429</span>, <span class="string">'data'</span> =&gt; []]);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $next($request);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 限流鉴权</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@return</span> bool</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">grant</span><span class="params">($url)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            $redis = <span class="keyword">new</span> Client();</div><div class="line">            $limit = config(<span class="string">'grant.limit'</span>);</div><div class="line">            $interval = (int)config(<span class="string">'grant.interval'</span>);</div><div class="line">            $timeKey = $url.<span class="string">':time'</span>;</div><div class="line"></div><div class="line">            $check = $redis-&gt;hLen($timeKey);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (! $check) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;init($redis, $timeKey, $url, $limit - <span class="number">1</span>);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            $now = <span class="keyword">$this</span>-&gt;getMicroSecond();</div><div class="line">            $timestamp = (int)$redis-&gt;hGet($timeKey, <span class="string">'timestamp'</span>);</div><div class="line"></div><div class="line">            <span class="keyword">if</span> ($now &lt; $timestamp + $interval) &#123;</div><div class="line">                <span class="comment">// 在时间内</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;getToken($redis, $url);</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">// 不在时间内</span></div><div class="line">                <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;init($redis, $timeKey, $url, $limit);</div><div class="line">            &#125;</div><div class="line">        &#125; <span class="keyword">catch</span> (\<span class="keyword">Exception</span> $exception) &#123;</div><div class="line">            Log::info(<span class="string">'TokenBucketMiddleware|'</span>.date(<span class="string">'Y-m-d H:i:s'</span>, time()).<span class="string">'|grant()方法捕获异常'</span>.<span class="string">'|'</span>.</div><div class="line">                $exception-&gt;getFile().<span class="string">'|'</span>.$exception-&gt;getCode().<span class="string">'|'</span>.$exception-&gt;getMessage());</div><div class="line"></div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $timeKey</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@param</span> $limit</div><div class="line">     * <span class="doctag">@return</span> bool</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">init</span><span class="params">($redis, $timeKey, $url, $limit)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">// 初始化时间</span></div><div class="line">        <span class="keyword">$this</span>-&gt;initGrant($redis, $timeKey);</div><div class="line">        <span class="comment">// 初始化令牌桶</span></div><div class="line">        <span class="keyword">$this</span>-&gt;initTokenBucket($redis, $url, $limit);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化指定路由的限流</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@return</span> bool</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">initGrant</span><span class="params">($redis, $url)</span></span></div><div class="line">    &#123;</div><div class="line">        $redis-&gt;hSet($url, <span class="string">'timestamp'</span>, <span class="keyword">$this</span>-&gt;getMicroSecond());</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 初始化令牌桶 一次性放入足够的令牌</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@param</span> $limit</div><div class="line">     * <span class="doctag">@return</span> void</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">initTokenBucket</span><span class="params">($redis, $url, $limit)</span></span></div><div class="line">    &#123;</div><div class="line">        $redis-&gt;del($url);</div><div class="line">        <span class="keyword">$this</span>-&gt;addToken($redis, $url, $limit);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 获取令牌</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@return</span> bool</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getToken</span><span class="params">($redis, $url)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> $redis-&gt;rpop($url) ? <span class="keyword">true</span> : <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 根据一定时间来发放令牌，本来是想实现毫秒级的定时发送指定数量令牌</div><div class="line">     * 想想太复杂，遂改成指定秒数发放足额令牌形式</div><div class="line">     * 比如限定是1秒100请求，超过1秒了就补全缺的令牌使可用数达到100即可</div><div class="line">     *</div><div class="line">     * <span class="doctag">@param</span> $redis</div><div class="line">     * <span class="doctag">@param</span> $url</div><div class="line">     * <span class="doctag">@param</span> $limit</div><div class="line">     * <span class="doctag">@return</span> boolean</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">addToken</span><span class="params">($redis, $url, $limit)</span></span></div><div class="line">    &#123;</div><div class="line">        $size = (int)$redis-&gt;lLen($url);</div><div class="line">        $fillNum = $limit - $size;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> ($fillNum &gt; <span class="number">0</span>) &#123;</div><div class="line">            $token = array_fill(<span class="number">0</span>, $fillNum, <span class="number">1</span>);</div><div class="line">            $redis-&gt;lpush($url, $token);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 重新计算时间戳 毫秒</div><div class="line">     *</div><div class="line">     * <span class="doctag">@return</span> float</div><div class="line">     */</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">getMicroSecond</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">list</span>($microsecond, $second) = explode(<span class="string">' '</span>, microtime());</div><div class="line"></div><div class="line">        $microsecond = (float)sprintf(<span class="string">'%.0f'</span>, (floatval($microsecond) + floatval($second)) * <span class="number">1000</span>);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> $microsecond;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="漏桶限流"><a href="#漏桶限流" class="headerlink" title="漏桶限流"></a>漏桶限流</h3><p>漏桶算法大致如下：</p>
+<p>漏桶算法稍微不同与令牌桶算法的一点是：对于取令牌的频率也有限制，要按照 t/n 固定的速度来取令牌，所以可以看出漏桶算法对流量的整形效果更加好，流量更加平滑，任何突发流量都会被限流。因为令牌桶大小为 b，所以是可以应对突发流量的。这个我就没有去实现了！有时间在补</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对于令牌桶的算法虽然可以很好的限制流量，但是它是否决式的，会导致误杀很多正常的请求。所以令牌桶和漏桶算法比较适合阻塞式限流，比如一些后台 job 类的限流，超过了最大访问频率之后，请求并不会被拒绝，而是会被阻塞到有令牌后再继续执行。对于像微服务接口这种对响应时间比较敏感的限流场景，会比较适合选择基于时间窗口的否决式限流算法，其中滑动时间窗口限流算法空间复杂度较高，内存占用会比较多，所以对比来看，尽管固定时间窗口算法处理临界突发流量的能力较差，但实现简单，而简单带来了好的性能和不容易出错，所以固定时间窗口算法也不失是一个好的微服务接口限流算法。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190603/index.html" rel="next" title="关于公司缓存使用的改进">
+                <i class="fa fa-chevron-left"></i> 关于公司缓存使用的改进
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20190620/index.html" rel="prev" title="Mysql触发器的简单使用">
+                Mysql触发器的简单使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">80</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#固定时间窗口限流"><span class="nav-number">1.</span> <span class="nav-text">固定时间窗口限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#滑动时间窗口限流"><span class="nav-number">2.</span> <span class="nav-text">滑动时间窗口限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#令牌桶限流"><span class="nav-number">3.</span> <span class="nav-text">令牌桶限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏桶限流"><span class="nav-number">4.</span> <span class="nav-text">漏桶限流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
