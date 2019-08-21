@@ -1,0 +1,823 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="最近在做一个小需求，每笔订单会根据金额决定用户可以使用的红包最大值，如果用户选择使用红包，需要帮助用户从拥有的红包列表里选取最优的红包组合，要求组合出的红包值最接近或等于可以使用的红包最大值。后面思考了一圈，这不就是 『0-1背包问题』么，终于可以把以前学过的 动态规划 算法拿来实战一下了！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP使用动态规划实现最优红包组合">
+<meta property="og:url" content="https://www.tokme.cn/2019/20190817/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="最近在做一个小需求，每笔订单会根据金额决定用户可以使用的红包最大值，如果用户选择使用红包，需要帮助用户从拥有的红包列表里选取最优的红包组合，要求组合出的红包值最接近或等于可以使用的红包最大值。后面思考了一圈，这不就是 『0-1背包问题』么，终于可以把以前学过的 动态规划 算法拿来实战一下了！">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge1.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge2.png">
+<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge3.png">
+<meta property="og:updated_time" content="2019-08-21T06:29:02.787Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP使用动态规划实现最优红包组合">
+<meta name="twitter:description" content="最近在做一个小需求，每笔订单会根据金额决定用户可以使用的红包最大值，如果用户选择使用红包，需要帮助用户从拥有的红包列表里选取最优的红包组合，要求组合出的红包值最接近或等于可以使用的红包最大值。后面思考了一圈，这不就是 『0-1背包问题』么，终于可以把以前学过的 动态规划 算法拿来实战一下了！">
+<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP使用动态规划实现最优红包组合 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">81</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">12</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">32</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP使用动态规划实现最优红包组合
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-08-17T15:52:35+08:00" content="2019-08-17">
+              2019-08-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近在做一个小需求，每笔订单会根据金额决定用户可以使用的红包最大值，如果用户选择使用红包，需要帮助用户从拥有的红包列表里选取最优的红包组合，要求组合出的红包值最接近或等于可以使用的红包最大值。后面思考了一圈，这不就是 『0-1背包问题』么，终于可以把以前学过的 <strong>动态规划</strong> 算法拿来实战一下了！<br><a id="more"></a></p>
+<hr>
+<h3 id="动态规划是什么"><a href="#动态规划是什么" class="headerlink" title="动态规划是什么"></a>动态规划是什么</h3><blockquote>
+<p>动态规划 (Dynamic programming 简写：DP)是一种在数学、管理科学、计算机科学、经济学和生物信息学中使用的，通过把原问题分解为相对简单的子问题的方式求解复杂问题的方法。</p>
+<p>动态规划常常适用于有重叠子问题和最优子结构性质的问题，动态规划方法所耗时间往往远少于朴素解法。</p>
+</blockquote>
+<h3 id="动态规划适用场景"><a href="#动态规划适用场景" class="headerlink" title="动态规划适用场景"></a>动态规划适用场景</h3><p>一般使用动态规划来解决求最优解的问题。在解决问题的过程中需要多次决策，而每次决策都有产生一组状态，然后从最优的决策中继续下一次的决策，最终找到最优的结果。</p>
+<p>另外动态规划还具有3个特征，如下：</p>
+<h4 id="最优子结构性质"><a href="#最优子结构性质" class="headerlink" title="最优子结构性质"></a>最优子结构性质</h4><p>如果问题的最优解所包含的子问题的解也是最优的，我们就称该问题具有最优子结构性质（即满足最优化原理）。从而我们可以通过子问题的最优解，推导出问题的最优解，也可以理解为后面阶段的状态可以通过前面阶段的状态推导出来。</p>
+<h4 id="无后效性"><a href="#无后效性" class="headerlink" title="无后效性"></a>无后效性</h4><p>即子问题的解一旦确定，就不再改变，不受在这之后、包含它的更大的问题的求解决策影响。</p>
+<p>可以简单理解为 在推导后面阶段状态的时候，我们只需要关心它前一阶段的状态状态，不用去关心这个状态是怎么一步步推导出来的。第二个含义就是某个阶段的状态一旦确定下来，就不会受之后阶段的决策影响。</p>
+<h4 id="子问题重叠性质"><a href="#子问题重叠性质" class="headerlink" title="子问题重叠性质"></a>子问题重叠性质</h4><p>子问题重叠性质是指在用递归算法自顶向下对问题进行求解时，每次产生的子问题并不总是新问题，有些子问题会被重复计算多次</p>
+<h3 id="0-1背包问题"><a href="#0-1背包问题" class="headerlink" title="0-1背包问题"></a>0-1背包问题</h3><p>上面的理论比较抽象，和扯犊子一样的，来看下经典的背包问题。</p>
+<p>假设现在有5个物品他们的重量分别是 <code>2, 2, 5, 11, 4</code>, 现在有一个背包，能承受的最大重量是 <code>10</code>，请选择合适的物品放入背包，那么能组合出的物品最大重量是多少?</p>
+<p>不同的物品组合会有多种不同的状态，我们可以使用 <code>f(i, w)</code> 来表示一种状态，其中 <code>i = index</code> 表示第几个物品， <code>w = weight</code> 表示当前的总重量。</p>
+<p>整个问题的求解需要经过 『n』 个阶段，每个阶段都需要决策一个物品是否放入背包，决策的结果只有2种 『放入』 或者 『不放入』。在决策完一个物品后，背包中的物品重量会有很多种不同的状态，我们需要把每一层的 <strong>重复状态</strong> 合并，然后只留下不同的状态。然后基于上一层的状态结果来推导出下一层的状态结果。最终全部物品决策完就可以找到最优的组合解。</p>
+<p>第0（其实也就是第一个物品，按照习惯从0开始下标吧）个物品的重量是2，然后开始决策是否放入背包，结果只有2种。如果放入背包那么此时背包的重量就是2，如果不放入背包那么背包的重量就是0.记作 <code>$status[0][0] = true;</code> 和 <code>$status[0][2] = true;</code> 和上面的 <code>f(i, w)</code> 一样，前一位表示物品，后一位表示重量。</p>
+<p>第1个物品的重量还是2，然后开始对他决策，决策只有2种选择 放入背包 或者 不放入背包，但是它的状态组合却多了，因为它要基于之前的背包状态来判断当前的状态。对第1个物品完成决策后会有3个状态(其实是4个状态，不过有1个重复的就不算了 还是算3个不同的状态)。</p>
+<p>如果决策当前物品放入背包,第0个物品不放入背包，此时的状态是 <code>$status[1][2 + 0] = true; =&gt; $status[1][2] = true;</code><br>如果决策当前物品放入背包,第0个物品也放入背包，此时的状态是 <code>$status[1][2 + 2] = true; =&gt; $status[1][4] = true;</code></p>
+<p>如果决策当前物品不放入背包,第0个物品不放入背包，此时的状态是 <code>$status[1][0 + 0] = true; =&gt; $status[1][0] = true;</code><br>如果决策当前物品不放入背包,而第0个物品放入背包，此时的状态是 <code>$status[1][0 + 2] = true; =&gt; $status[1][2] = true;</code></p>
+<p>其中 <code>$status[1][2]</code> 是重复的，所有会产生3种结果。</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp.png" alt="动态规划1"></p>
+<p>后面的物品也是以此类推，直到对所有的物品都决策完，整个状态的数组就都找出来了，然后只需要在最后一层找到一个值为true的最接近最大值(上面的例子中是10)的值就是背包能承受的最大值。然后可以从最后依次往前推就可以找出对应的物品下标，也就是哪些物品的组合是这个最优解组合了(也可以从前推)。</p>
+<p>推导过程如下图：</p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge1.png" alt="dp_1"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge2.png" alt="dp_1"></p>
+<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge3.png" alt="dp_1"></p>
+<p>实际上在上面的推导过程中就是动态规划的解题思路。把问题分解为多个阶段，每个阶段对应一种策略。然后记录下每个阶段的状态（注意要去掉重复项），然后通过当前状态的可能推导出下一个阶段的所有状态可能，动态的推导下去。</p>
+<p>PHP实现伪代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dynamicKnapsack</span><span class="params">($arr, $n, $max)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 初始化二维数组</span></div><div class="line">    $status = [];</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; $n; $i++) &#123;</div><div class="line">        <span class="comment">// max + 1 才能有max的值 因为下标从0开始的</span></div><div class="line">        <span class="keyword">for</span> ($j = <span class="number">0</span>; $j &lt; $max + <span class="number">1</span>; $j++) &#123;</div><div class="line">            $status[$i][$j] = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 第一个物品特殊处理</span></div><div class="line">    <span class="comment">// 对第一个物品决策不放入</span></div><div class="line">    $status[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 对第一个物品决策放入</span></div><div class="line">    <span class="keyword">if</span> ($arr[<span class="number">0</span>] &lt;= $max) &#123;</div><div class="line">        $status[<span class="number">0</span>][$arr[<span class="number">0</span>]] = <span class="number">1</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// 开始动态规划进行决策 -- 外层是物品</span></div><div class="line">    <span class="keyword">for</span> ($i = <span class="number">1</span>; $i &lt; $n; $i++) &#123;</div><div class="line">        <span class="comment">// 决策放入背包</span></div><div class="line">        <span class="keyword">for</span> ($j = <span class="number">0</span>; $j &lt; $max + <span class="number">1</span>; $j++) &#123;</div><div class="line">            <span class="comment">// 找到他上一层的组合，在上一层的基础上变更当前层的结果</span></div><div class="line">            <span class="keyword">if</span> ($status[$i - <span class="number">1</span>][$j] == <span class="number">1</span>) &#123;</div><div class="line">                $status[$i][$j + $arr[$i]] = <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// 决策不放入背包</span></div><div class="line">        <span class="keyword">for</span> ($j = <span class="number">0</span>; $j &lt; $max + <span class="number">1</span>; $j++) &#123;</div><div class="line">            <span class="comment">// 找到上一层的组合直接取上一层的值</span></div><div class="line">            <span class="keyword">if</span> ($status[$i - <span class="number">1</span>][$j] == <span class="number">1</span>) &#123;</div><div class="line">                <span class="comment">// $status[$i][$j] = 1; 等价于下面</span></div><div class="line">                $status[$i][$j] = $status[$i - <span class="number">1</span>][$j];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 寻找最优组合</span></div><div class="line">    $best = [];</div><div class="line"></div><div class="line">    $j = <span class="number">0</span>;</div><div class="line">    <span class="comment">// 为了找到寻找最优解的开始位置</span></div><div class="line">    <span class="comment">// 也就是当前能组合出的最大值是多少</span></div><div class="line">    <span class="comment">// 最后一行是最大的组合，它包含了所有都放入的结果</span></div><div class="line">    <span class="comment">// 最终确定了j开始的位置</span></div><div class="line">    <span class="keyword">for</span> ($j = $max; $j &gt;= <span class="number">0</span>; $j--) &#123;</div><div class="line">        <span class="keyword">if</span> ($status[$n - <span class="number">1</span>][$j] == <span class="keyword">true</span>) &#123;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ($i = $n - <span class="number">1</span>; $i &gt;= <span class="number">1</span>; $i--) &#123; <span class="comment">// 外层遍历行</span></div><div class="line">        <span class="keyword">if</span> ($j - $arr[$i] &gt;= <span class="number">0</span> &amp;&amp; $status[$i - <span class="number">1</span>][$j - $arr[$i]] == <span class="number">1</span>) &#123;</div><div class="line">            var_dump(<span class="string">'buy this product: '</span>.$arr[$i]);</div><div class="line">            $best[] = $i;</div><div class="line">            $j = $j - $arr[$i];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($j != <span class="number">0</span>) &#123;</div><div class="line">        var_dump(<span class="string">'buy first product:'</span>.$arr[<span class="number">0</span>]);</div><div class="line">        $best[] = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $best;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 测试数据</span></div><div class="line">$arr = [</div><div class="line">    <span class="number">2</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">11</span>, <span class="number">4</span>,</div><div class="line">];</div><div class="line"></div><div class="line">$n = <span class="number">5</span>;</div><div class="line">$max = <span class="number">10</span>;</div><div class="line"></div><div class="line">$best = dynamicKnapsack($arr, $n, $max);</div><div class="line">var_dump($best);</div></pre></td></tr></table></figure>
+<p>如果求的结果是 <strong>11</strong>，得出的结果是 <code>4, 5, 2</code> 的组合，你可能会有疑问不是还有11这个结果么，刚好它一个就满足了不是么。我觉得这个应该是看实际的需求。比如我这次的需求是把红包按过期时间排序，快过期的优先使用，然后我在组装数据的时候按过期时间顺序强行把快过期的红包放到数组最后面拼成数组，那最后的4就是最接近快过期的红包了，我要优先消耗掉这个红包，如果使用了4那11就不能使用了，只能继续去前面找，就是这么回事！</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这段代码的时间复杂度是多少? 耗时最多的部分是中间的嵌套2层循环，所有时间复杂度是 <code>O(n*max)</code>，其中 n 表示物品的个数，max表示最大的承重。</p>
+<p>空间复杂度是一开始申请的数组空间 <code>O(n*max+1)</code> 加上计算结果的累加有可能出现 <code>O(n*2*max)</code>的情况，空间消耗还是很高的。</p>
+<p>总体来说这是一种空间换时间的思路。另外在中间决策的嵌套循环里如果使用j从小到大遍历的话会出现for循环重复计算的问题。</p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20190721/index.html" rel="next" title="Laravel生命周期">
+                <i class="fa fa-chevron-left"></i> Laravel生命周期
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">81</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#动态规划是什么"><span class="nav-number">1.</span> <span class="nav-text">动态规划是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态规划适用场景"><span class="nav-number">2.</span> <span class="nav-text">动态规划适用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#最优子结构性质"><span class="nav-number">2.1.</span> <span class="nav-text">最优子结构性质</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无后效性"><span class="nav-number">2.2.</span> <span class="nav-text">无后效性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#子问题重叠性质"><span class="nav-number">2.3.</span> <span class="nav-text">子问题重叠性质</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0-1背包问题"><span class="nav-number">3.</span> <span class="nav-text">0-1背包问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.miitbeian.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+  <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        verify: false,
+        notify: false,
+        appId: 'PeGIxRuXGd8hbq2nsLRDWXMv-gzGzoHsz',
+        appKey: 'K1DzgvdvBdjF2NOBLQcC5wgu',
+        placeholder: '欢迎交流讨论...',
+        avatar:'mm',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
