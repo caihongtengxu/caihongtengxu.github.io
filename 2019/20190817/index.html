@@ -45,7 +45,7 @@
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge1.png">
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge2.png">
 <meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge3.png">
-<meta property="og:updated_time" content="2019-08-21T06:29:02.787Z">
+<meta property="og:updated_time" content="2019-08-22T01:36:37.160Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PHP使用动态规划实现最优红包组合">
 <meta name="twitter:description" content="最近在做一个小需求，每笔订单会根据金额决定用户可以使用的红包最大值，如果用户选择使用红包，需要帮助用户从拥有的红包列表里选取最优的红包组合，要求组合出的红包值最接近或等于可以使用的红包最大值。后面思考了一圈，这不就是 『0-1背包问题』么，终于可以把以前学过的 动态规划 算法拿来实战一下了！">
@@ -347,7 +347,7 @@
 <p>如果决策当前物品不放入背包,第0个物品不放入背包，此时的状态是 <code>$status[1][0 + 0] = true; =&gt; $status[1][0] = true;</code><br>如果决策当前物品不放入背包,而第0个物品放入背包，此时的状态是 <code>$status[1][0 + 2] = true; =&gt; $status[1][2] = true;</code></p>
 <p>其中 <code>$status[1][2]</code> 是重复的，所有会产生3种结果。</p>
 <p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp.png" alt="动态规划1"></p>
-<p>后面的物品也是以此类推，直到对所有的物品都决策完，整个状态的数组就都找出来了，然后只需要在最后一层找到一个值为true的最接近最大值(上面的例子中是10)的值就是背包能承受的最大值。然后可以从最后依次往前推就可以找出对应的物品下标，也就是哪些物品的组合是这个最优解组合了(也可以从前推)。</p>
+<p>后面的物品也是以此类推，直到对所有的物品都决策完，整个状态的数组就都找出来了，然后只需要在最后一层找到一个值为true的最接近最大值(上面的例子中是10)的值就是背包能承受的最大值。然后可以从最后依次往前推就可以找出对应的物品下标，也就是哪些物品的组合是这个最优解组合了。</p>
 <p>推导过程如下图：</p>
 <p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge1.png" alt="dp_1"></p>
 <p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/dp_merge2.png" alt="dp_1"></p>
