@@ -1,0 +1,850 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="小程序," />
+
+
+
+
+
+
+<meta name="description" content="当功能多了后，自然而然就会有需求要求实现功能的复用，这个时候就需要把功能模块抽象成自定义组件，以便在不同的页面中复用。但是微信官方的文档写的有点简单，看的有点懵，折腾了好久终于算是会用了，写个记录吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序自定义组件的使用">
+<meta property="og:url" content="https://www.tokme.cn/2019/20191015/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="当功能多了后，自然而然就会有需求要求实现功能的复用，这个时候就需要把功能模块抽象成自定义组件，以便在不同的页面中复用。但是微信官方的文档写的有点简单，看的有点懵，折腾了好久终于算是会用了，写个记录吧。">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/compoent1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/customer_component.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/component_connet.png">
+<meta property="og:updated_time" content="2019-12-24T09:12:17.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信小程序自定义组件的使用">
+<meta name="twitter:description" content="当功能多了后，自然而然就会有需求要求实现功能的复用，这个时候就需要把功能模块抽象成自定义组件，以便在不同的页面中复用。但是微信官方的文档写的有点简单，看的有点懵，折腾了好久终于算是会用了，写个记录吧。">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/compoent1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 微信小程序自定义组件的使用 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">87</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">13</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">33</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                微信小程序自定义组件的使用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-10-15T09:25:11+08:00" content="2019-10-15">
+              2019-10-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">小程序</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/20191015/index.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/20191015/index.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>当功能多了后，自然而然就会有需求要求实现功能的复用，这个时候就需要把功能模块抽象成自定义组件，以便在不同的页面中复用。但是微信官方的文档写的有点简单，看的有点懵，折腾了好久终于算是会用了，写个记录吧。<br><a id="more"></a></p>
+<hr>
+<h2 id="自定义组件介绍"><a href="#自定义组件介绍" class="headerlink" title="自定义组件介绍"></a>自定义组件介绍</h2><p><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/" target="_blank" rel="external">官方地址</a></p>
+<blockquote>
+<p>简单介绍：<br>开发者可以将页面内的功能模块抽象成自定义组件，以便在不同的页面中重复使用.</p>
+<p>也可以将复杂的页面拆分成多个低耦合的模块，有助于代码维护.</p>
+</blockquote>
+<h2 id="创建自定义组件"><a href="#创建自定义组件" class="headerlink" title="创建自定义组件"></a>创建自定义组件</h2><p>先说下我要实现的组件的样子，大概就是一个面板，有左右两半，可以传入不同的值来显示并复用。大概效果如下很简单的一个东西(这里只是举例用)：</p>
+<p><img src="https://www.tokme.cn/images/blogimg/compoent1.png" alt="component1"></p>
+<p>1.首先在最外层的 <code>components</code> 文件夹中新建一个文件名命名为你要创建的组件的名字 比如我要做个通用的list面板<br>我就建了个文件夹 <code>listPanel</code> 当然这个名字随意的。</p>
+<p>然后在这个文件夹下选择 <code>新建Component</code> 输入名字即可。如果你不是用的微信开发工具，自己手动建立相关的文件即可。</p>
+<p>自定义组件需要4个文件 如下：</p>
+<p><img src="https://www.tokme.cn/images/blogimg/customer_component.png" alt="component"></p>
+<p>2.修改 <code>listPanel.json</code> 文件, 指定其中的 <strong>component</strong> 属性 为 <code>true</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;component&quot;: true,</div><div class="line">  &quot;usingComponents&quot;: &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.编辑 <code>listPanel.js</code> 文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">Component(&#123;</div><div class="line">  <span class="comment">/**</span></div><div class="line">   * 组件的属性列表</div><div class="line">   */</div><div class="line">  properties: &#123;</div><div class="line">    left_data: &#123;</div><div class="line">      type: String,</div><div class="line">      value: <span class="string">''</span>,</div><div class="line">    &#125;,</div><div class="line">    right_data: &#123;</div><div class="line">      type: String,</div><div class="line">      value: <span class="string">''</span>,</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * 组件的初始数据</div><div class="line">   */</div><div class="line">  data: &#123;</div><div class="line">    </div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * 组件的方法列表</div><div class="line">   */</div><div class="line">  methods: &#123;</div><div class="line">    handleLeft: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">      wx.showToast(&#123;</div><div class="line">        title: <span class="string">'click left'</span>,</div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>上面的属性是我大概组件需要的，你可以根据需要写自己的。因为我的组件需要两部分动态显示，所以我设置了2个属性值。</p>
+<p>3.编辑 <code>listPanel.wxml</code> 增加一点很简单的代码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;view class="list_container"&gt;</div><div class="line">  &lt;view class="list_left"&gt;</div><div class="line">    &lt;text bindtap="handleLeft"&gt;&#123;&#123; left_data &#125;&#125;&lt;/text&gt;</div><div class="line">  &lt;/view&gt;</div><div class="line">  &lt;view class="list_right"&gt;</div><div class="line">    &lt;text&gt;&#123;&#123; right_data &#125;&#125;&lt;/text&gt;</div><div class="line">  &lt;/view&gt;</div><div class="line">&lt;/view&gt;</div></pre></td></tr></table></figure>
+<p>4.编辑 <code>listPanel.wxss</code> 稍微增加一点样式</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">.list_container &#123;</div><div class="line">  width: <span class="number">100</span>vw;</div><div class="line">  height: <span class="number">50</span>vh;</div><div class="line">  line-height: <span class="number">50</span>vh;</div><div class="line">  display: flex;</div><div class="line">  text-align: center;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.list_left &#123;</div><div class="line">  width: <span class="number">50</span>vw;</div><div class="line">  background-color: orange;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.list_right &#123;</div><div class="line">  width: <span class="number">50</span>vw;</div><div class="line">  background-color: pink;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>5.然后找到最外面的 <code>app.json</code> 文件 找到其中的 <code>usingComponents</code> 属性，在其中注册刚写好的组件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"usingComponents"</span>: &#123;</div><div class="line">    <span class="string">"listPanel"</span>: <span class="string">"/components/listPanel/listPanel"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>前面的Key是组件的名字，等会在别的wxml中使用.</p>
+<p>6.然后来测试下，在index页面中，修改 <code>index.wxml</code> 增加组件的使用</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;listPanel left_data=<span class="string">"Hello"</span> right_data=<span class="string">"World"</span>&gt;&lt;/listPanel&gt;</div></pre></td></tr></table></figure>
+<p>当然你也可以设置更多的属性和更多的控制，以达到组件可以更灵活的复用。</p>
+<h2 id="组件间通信"><a href="#组件间通信" class="headerlink" title="组件间通信"></a>组件间通信</h2><p>父组件可以直接设置子组件中的数据绑定，如果子组件要向父组件来传递数据的话就有点麻烦了，需要使用事件。</p>
+<p>1.在父组件中创建监听 在本次的例子中 <code>pages/index/index.wxml</code> 就相当于父组件了</p>
+<p>修改 <code>&lt;listPanel left_data=&quot;Hello&quot; right_data=&quot;World&quot;&gt;&lt;/listPanel&gt;</code> 这一行，在其中添加事件监听</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;listPanel left_data=<span class="string">"Hello"</span> right_data=<span class="string">"World"</span> bind:handleFatherRightEvent=<span class="string">"handleFatherRightEvent"</span>&gt;&lt;/listPanel&gt;</div></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;listPanel left_data=<span class="string">"Hello"</span> right_data=<span class="string">"World"</span> bindhandleFatherRightEvent=<span class="string">"handleFatherRightEvent"</span>&gt;&lt;/listPanel&gt;</div></pre></td></tr></table></figure>
+<p>这两种写法都可以。</p>
+<p>然后在 <code>pages/index/index.js</code> 中写好对应的js方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">handleFatherRightEvent: <span class="function"><span class="keyword">function</span> <span class="params">(e)</span> </span>&#123;</div><div class="line">    console.log(<span class="string">'father'</span>, e.detail);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>2.触发事件</p>
+<p>修改 <code>listPanel.wxml</code> 文件 增加一个点击事件(也可以用别的事件，点击事件测试比较简单)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;text bindtap=<span class="string">"handleRightEvent"</span>&gt;&#123;&#123; right_data &#125;&#125;&lt;/text&gt;</div></pre></td></tr></table></figure>
+<p>然后编辑 <code>listPanel.js</code> 文件，增加对应的处理方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">handleRightEvent: <span class="function"><span class="keyword">function</span> <span class="params">(e)</span> </span>&#123;</div><div class="line">    <span class="comment">// detail对象，提供给事件监听函数</span></div><div class="line">    let myEventDetail = &#123;</div><div class="line">    name: <span class="string">'reggie'</span></div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="comment">// 触发事件的选项</span></div><div class="line">    <span class="keyword">var</span> myEventOption = &#123;</div><div class="line">    age: <span class="number">18</span></div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">    this.triggerEvent(<span class="string">'handleFatherRightEvent'</span>, myEventDetail, myEventOption);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.然后来点击测试下</p>
+<p>如果出现下面的结果就成功了</p>
+<p><img src="https://www.tokme.cn/images/blogimg/component_connet.png" alt="component_connect"></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/小程序/" rel="tag"><i class="fa fa-tag"></i>小程序</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20191001 /index.html" rel="next" title="微信小程序中集成有赞UI自定义Tabbar组件">
+                <i class="fa fa-chevron-left"></i> 微信小程序中集成有赞UI自定义Tabbar组件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20191021/index.html" rel="prev" title="微信小程序-滑动到指定位置实现">
+                微信小程序-滑动到指定位置实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">87</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义组件介绍"><span class="nav-number">1.</span> <span class="nav-text">自定义组件介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建自定义组件"><span class="nav-number">2.</span> <span class="nav-text">创建自定义组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件间通信"><span class="nav-number">3.</span> <span class="nav-text">组件间通信</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.beian.miit.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'reggie-3';
+      var disqus_identifier = '2019/20191015/index.html';
+      var disqus_title = '微信小程序自定义组件的使用';
+      var disqus_url = 'https://www.tokme.cn/2019/20191015/index.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>

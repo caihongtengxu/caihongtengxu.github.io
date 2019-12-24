@@ -1,0 +1,860 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="小程序," />
+
+
+
+
+
+
+<meta name="description" content="上次在使用了自定义的Tabbar组件后遇到2个小问题。
+第一个问题是点击组件Tab切换的时候有延迟，在真机上测试的时候延迟了好几秒。比如从第一个页面切换到第二个页面的时候，页面内容都已经切过去了，底部的Icon需要过2~3秒才会选中。快的时候1秒内吧，但是还是能感觉到延迟。
+第二个问题是在点击切换的时候会看到Icon闪烁一下，但不是经常复现。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序-滑动到指定位置实现">
+<meta property="og:url" content="https://www.tokme.cn/2019/20191021/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="上次在使用了自定义的Tabbar组件后遇到2个小问题。
+第一个问题是点击组件Tab切换的时候有延迟，在真机上测试的时候延迟了好几秒。比如从第一个页面切换到第二个页面的时候，页面内容都已经切过去了，底部的Icon需要过2~3秒才会选中。快的时候1秒内吧，但是还是能感觉到延迟。
+第二个问题是在点击切换的时候会看到Icon闪烁一下，但不是经常复现。">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/scrool_view.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/scroll_go.gif">
+<meta property="og:updated_time" content="2019-12-24T09:22:53.305Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="微信小程序-滑动到指定位置实现">
+<meta name="twitter:description" content="上次在使用了自定义的Tabbar组件后遇到2个小问题。
+第一个问题是点击组件Tab切换的时候有延迟，在真机上测试的时候延迟了好几秒。比如从第一个页面切换到第二个页面的时候，页面内容都已经切过去了，底部的Icon需要过2~3秒才会选中。快的时候1秒内吧，但是还是能感觉到延迟。
+第二个问题是在点击切换的时候会看到Icon闪烁一下，但不是经常复现。">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/scrool_view.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> 微信小程序-滑动到指定位置实现 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">87</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">13</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">33</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                微信小程序-滑动到指定位置实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-10-21T19:43:54+08:00" content="2019-10-21">
+              2019-10-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/小程序/" itemprop="url" rel="index">
+                    <span itemprop="name">小程序</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/20191021/index.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/20191021/index.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上次在使用了自定义的Tabbar组件后遇到2个小问题。</p>
+<p>第一个问题是点击组件Tab切换的时候有延迟，在真机上测试的时候延迟了好几秒。比如从第一个页面切换到第二个页面的时候，页面内容都已经切过去了，底部的Icon需要过2~3秒才会选中。快的时候1秒内吧，但是还是能感觉到延迟。</p>
+<p>第二个问题是在点击切换的时候会看到Icon闪烁一下，但不是经常复现。<br><a id="more"></a></p>
+<hr>
+<p>上面2个问题在找了好多资料后都没解决，最后放弃了自定义tabbar组件，然后选择了一种曲线救国的方式。</p>
+<p>把有赞UI的Tabbar又封装了一层做成自定义组件(其实不封装直接使用也可以，本身就是一个组件了)，因为需要增加一些自定义的东西，然后在需要使用的页面引入这个组件，来模拟达到底部Tabbar的效果。icon的点击切换时通过  <code>wx.navigateTo()</code> 方法实现的页面之间跳转。</p>
+<h2 id="小程序中的路由选择"><a href="#小程序中的路由选择" class="headerlink" title="小程序中的路由选择"></a>小程序中的路由选择</h2><p>对小程序中的路由而言页面分为 『tabBar页面』 和 『非tabBar』 页面。而路由使用主要有下面几个方法：</p>
+<h3 id="wx-switchTab-Object-object"><a href="#wx-switchTab-Object-object" class="headerlink" title="wx.switchTab(Object object)"></a><code>wx.switchTab(Object object)</code></h3><p>跳转到 <strong>tabBar</strong> 页面，并关闭其他所有非 tabBar 页面。(这个就只能跳转tabBar之间的页面了，也就是定义在根目录 <code>app.json</code> 文件中 <code>tabBar</code>属性下的页面)</p>
+<h3 id="wx-reLaunch-Object-object"><a href="#wx-reLaunch-Object-object" class="headerlink" title="wx.reLaunch(Object object)"></a><code>wx.reLaunch(Object object)</code></h3><p>关闭所有页面，打开到应用内的某个页面（就是跳转到某个页面，这个页面可以是当前项目中的任何页面，包括了tabBar页面，同时会关闭要跳转到的页面之外的所有页面。）</p>
+<h3 id="wx-redirectTo-Object-object"><a href="#wx-redirectTo-Object-object" class="headerlink" title="wx.redirectTo(Object object)"></a><code>wx.redirectTo(Object object)</code></h3><p>关闭当前页面，跳转到应用内的某个页面。但是不允许跳转到 tabbar 页面</p>
+<h3 id="wx-navigateTo-Object-object"><a href="#wx-navigateTo-Object-object" class="headerlink" title="wx.navigateTo(Object object)"></a><code>wx.navigateTo(Object object)</code></h3><p>保留当前页面，跳转到应用内的某个页面。但是不能跳到 tabbar 页面。使用 wx.navigateBack 可以返回到原页面。小程序中页面栈最多十层。</p>
+<h3 id="wx-navigateBack-Object-object"><a href="#wx-navigateBack-Object-object" class="headerlink" title="wx.navigateBack(Object object)"></a><code>wx.navigateBack(Object object)</code></h3><p>关闭当前页面，返回上一页面或多级页面。可通过 getCurrentPages 获取当前的页面栈，决定需要返回几层</p>
+<p>具体使用见 <a href="https://developers.weixin.qq.com/miniprogram/dev/api/route/wx.switchTab.html" target="_blank" rel="external">文档</a></p>
+<h2 id="小程序中的scroll滚动"><a href="#小程序中的scroll滚动" class="headerlink" title="小程序中的scroll滚动"></a>小程序中的scroll滚动</h2><p>在做好了上面的组件后，又发现了新的问题(其实也不算问题吧，主要是自己不满意…), 比如我在第一个页面浏览了很多内容，下拉了1000px的位置，然后点击了第二个页面，等我在回来第一个页面的时候还想保留在上次的浏览位置。这个小需求就复杂了，每次回来都是回来到页面的顶部。为了实现这个小需求，想到了使用scroll方案来模拟这种效果。</p>
+<p>在第一个页面浏览的时候记录下当前的滑动距离，下次回来在页面要显示的时候滚动到上次的位置就达到了这种效果。</p>
+<p>要在小程序里滑动有两种方法，第一种使用官方的 <code>scroll-view</code> 标签，另外一种是使用 <code>wx.pageScrollTo</code> API.</p>
+<h3 id="scroll-view-的使用"><a href="#scroll-view-的使用" class="headerlink" title="scroll-view 的使用"></a><code>scroll-view</code> 的使用</h3><blockquote>
+<p>可滚动视图区域。使用竖向滚动时，需要给scroll-view一个固定高度，通过 WXSS 设置 height。组件属性的长度单位默认为px，2.4.0起支持传入单位(rpx/px)。</p>
+<p>scroll-into-view 的优先级高于 scroll-top<br>在滚动 scroll-view 时会阻止页面回弹，所以在 scroll-view 中滚动，是无法触发 onPullDownRefresh<br>若要使用下拉刷新，请使用页面的滚动，而不是 scroll-view ，这样也能通过点击顶部状态栏回到页面顶部</p>
+</blockquote>
+<p>上面是一些官方的说明。其实这个就是使用官方的标签，来看下效果</p>
+<p>1.编辑 <code>index.wxml</code> 增加</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;scroll-view</div><div class="line">   class="sv_test" </div><div class="line">   scroll-y="true" </div><div class="line">   scroll-top="200" </div><div class="line">   scroll-into-view="sv_c"</div><div class="line">  &gt;</div><div class="line">    &lt;view id="sv_a" class="sv_a"&gt;A&lt;/view&gt;</div><div class="line">    &lt;view id="sv_b" class="sv_b"&gt;B&lt;/view&gt;</div><div class="line">    &lt;view id="sv_c" class="sv_c"&gt;C&lt;/view&gt;</div><div class="line">&lt;/scroll-view&gt;</div></pre></td></tr></table></figure>
+<p>2.编辑 <code>index.wxss</code> 稍微增加一点样式</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">.sv_test &#123;</div><div class="line">  text-align: center;</div><div class="line">  background-color: orange;</div><div class="line">  color: white;</div><div class="line">  font-size: <span class="number">20</span>px;</div><div class="line">  height: <span class="number">220</span>px;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.sv_a,.sv_b,.sv_c &#123;</div><div class="line">  height: <span class="number">200</span>px;</div><div class="line">  line-height: <span class="number">200</span>px;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.sv_a &#123;</div><div class="line">  background-color: green;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.sv_b &#123;</div><div class="line">  background-color: blue;</div><div class="line">&#125;</div><div class="line"></div><div class="line">.sv_c &#123;</div><div class="line">  background-color: red;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.看下效果</p>
+<p><img src="https://www.tokme.cn/images/blogimg/scrool_view.png" alt="scrool_view"></p>
+<p>使用scroll_view标签的话，要滑动只能通过标签的属性 <code>scroll-top</code> 和 <code>scroll-into-view</code>. 其中 <code>scroll-top</code> 是纵向滚动的距离，<code>scroll-into-view</code> 是滚动到view中包含的某个子元素id的位置上。</p>
+<p>所以一般是把这2个属性设置动态值，通过 <code>this.setData()</code> 方法来设置并改变。</p>
+<p>注意：使用scroll_view的话一定要设置一个高度 目前之前的单位有 <code>rpx</code> 和 <code>px</code>, 不支持百分比。如果想实现自适应屏幕高度怎么办？提供一个思路，可以通过 <code>wx.getSystemInfo()</code> 方法来获取当前的信息，里面会包含屏幕高度宽度之类，然后自己做处理。</p>
+<h3 id="wx-pageScrollTo-Object-object-方法的使用"><a href="#wx-pageScrollTo-Object-object-方法的使用" class="headerlink" title="wx.pageScrollTo(Object object) 方法的使用"></a><code>wx.pageScrollTo(Object object)</code> 方法的使用</h3><blockquote>
+<p>基础库 1.4.0 开始支持，低版本需做兼容处理<br>用来将页面滚动到目标位置，支持选择器和滚动距离两种方式定位</p>
+</blockquote>
+<p>主要参数有 </p>
+<ol>
+<li><code>scrollTop</code> 滚动的页面目标位置，数字类型，单位是 <code>px</code></li>
+<li><code>duration</code> 滚动动画的时长，数字类型，单位 <code>ms</code></li>
+<li><code>selector</code> 选择器名称</li>
+</ol>
+<p>更多说明在 <a href="https://developers.weixin.qq.com/miniprogram/dev/api/ui/scroll/wx.pageScrollTo.html" target="_blank" rel="external">这里</a></p>
+<p>来做个测试</p>
+<p>1.编辑index.wxml 增加一个按钮</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;button bindtap=<span class="string">"click_go"</span>&gt;go&lt;/button&gt;</div></pre></td></tr></table></figure>
+<p>2.编辑 <code>index.wxss</code> 增加一个高度</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">.container &#123;</div><div class="line">  height: <span class="number">2000</span>px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.编辑 <code>index.js</code> 增加点击事件方法</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">click_go: <span class="function"><span class="keyword">function</span> <span class="params">()</span> </span>&#123;</div><div class="line">    wx.pageScrollTo(&#123;</div><div class="line">      scrollTop: <span class="number">1000</span>,</div><div class="line">    &#125;);</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<p>效果如下：</p>
+<p><img src="https://www.tokme.cn/images/blogimg/scroll_go.gif" alt="scroll_git"></p>
+<p><strong>特别说明：这个方法一定要用事件去触发，我本来是想实现在页面一开始加载的时候就滚到到指定位置，结果发现不生效。在下面几个方法中都不生效 <code>onLoad</code> 、 <code>onReady</code> 、 <code>onShow</code>.找了好久没找到问题，也没找到解决办法…</strong></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/小程序/" rel="tag"><i class="fa fa-tag"></i>小程序</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20191015/index.html" rel="next" title="微信小程序自定义组件的使用">
+                <i class="fa fa-chevron-left"></i> 微信小程序自定义组件的使用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/20191103/index.html" rel="prev" title="Docker exec 命令的详细使用">
+                Docker exec 命令的详细使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">87</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#小程序中的路由选择"><span class="nav-number">1.</span> <span class="nav-text">小程序中的路由选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#wx-switchTab-Object-object"><span class="nav-number">1.1.</span> <span class="nav-text">wx.switchTab(Object object)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wx-reLaunch-Object-object"><span class="nav-number">1.2.</span> <span class="nav-text">wx.reLaunch(Object object)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wx-redirectTo-Object-object"><span class="nav-number">1.3.</span> <span class="nav-text">wx.redirectTo(Object object)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wx-navigateTo-Object-object"><span class="nav-number">1.4.</span> <span class="nav-text">wx.navigateTo(Object object)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wx-navigateBack-Object-object"><span class="nav-number">1.5.</span> <span class="nav-text">wx.navigateBack(Object object)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小程序中的scroll滚动"><span class="nav-number">2.</span> <span class="nav-text">小程序中的scroll滚动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#scroll-view-的使用"><span class="nav-number">2.1.</span> <span class="nav-text">scroll-view 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wx-pageScrollTo-Object-object-方法的使用"><span class="nav-number">2.2.</span> <span class="nav-text">wx.pageScrollTo(Object object) 方法的使用</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.beian.miit.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'reggie-3';
+      var disqus_identifier = '2019/20191021/index.html';
+      var disqus_title = '微信小程序-滑动到指定位置实现';
+      var disqus_url = 'https://www.tokme.cn/2019/20191021/index.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>

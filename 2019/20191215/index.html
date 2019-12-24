@@ -1,0 +1,830 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="PHP," />
+
+
+
+
+
+
+<meta name="description" content="CURL是一个功能强大的开源类库.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP CURL详解">
+<meta property="og:url" content="https://www.tokme.cn/2019/20191215/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="CURL是一个功能强大的开源类库.">
+<meta property="og:updated_time" content="2019-12-24T09:26:19.320Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP CURL详解">
+<meta name="twitter:description" content="CURL是一个功能强大的开源类库.">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> PHP CURL详解 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">87</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">13</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">33</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                PHP CURL详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2019-12-15T21:33:42+08:00" content="2019-12-15">
+              2019-12-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/PHP/" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/20191215/index.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/20191215/index.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>CURL是一个功能强大的开源类库.<br><a id="more"></a></p>
+<hr>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
+<p>PHP 支持 Daniel Stenberg 创建的 libcurl 库，能够连接通讯各种服务器、使用各种协议。libcurl 目前支持的协议有 http、https、ftp、gopher、telnet、dict、file、ldap。 libcurl 同时支持 HTTPS 证书、HTTP POST、HTTP PUT、 FTP 上传(也能通过 PHP 的 FTP 扩展完成)、HTTP 基于表单的上传、代理、cookies、用户名+密码的认证。<a href="https://www.php.net/manual/zh/intro.curl.php" target="_blank" rel="external">官方链接</a></p>
+</blockquote>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>我们在使用CURL完成一个请求的时候一般需要下面几个步骤。</p>
+<h3 id="设置连接句柄"><a href="#设置连接句柄" class="headerlink" title="设置连接句柄"></a>设置连接句柄</h3><p>这里主要使用 <code>curl_init()</code> 函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">curl_init ([ string $url = <span class="keyword">NULL</span> ] ) : resource</div></pre></td></tr></table></figure>
+<p>参数url不是必填项，用来初始化新的会话，返回cURL句柄，失败了返回false。</p>
+<h3 id="设置相关属性选项"><a href="#设置相关属性选项" class="headerlink" title="设置相关属性选项"></a>设置相关属性选项</h3><p>主要使用 <code>curl_setopt()</code> 函数和 <code>curl_setopt_array()</code> 函数</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * 设置cURL传输选项</div><div class="line"> * </div><div class="line"> * @param resource $ch 初始化的cURL句柄</div><div class="line"> * @param int $option 设置的参数选项名称</div><div class="line"> * @param mixed $value 要设置的值</div><div class="line"> * @return bool 成功返回true 失败返回false</div><div class="line"> */</div><div class="line">function curl_setopt( resource $ch , int $option , mixed $value )</div><div class="line"></div><div class="line">/**</div><div class="line"> * 批量设置cURL传输选项</div><div class="line"> * </div><div class="line"> * @param resource $ch 初始化的cURL句柄</div><div class="line"> * @param array $option 设置的选项数组，包含选项名和值</div><div class="line"> * @return bool 成功返回true 失败返回false</div><div class="line"> */</div><div class="line">function curl_setopt_array( resource $ch , array $option )</div></pre></td></tr></table></figure>
+<p>其中可以设置的选项很多，具体的可以看<a href="https://www.php.net/manual/zh/function.curl-setopt.php" target="_blank" rel="external">官方这里</a></p>
+<p><a href="https://doc.bccnsoft.com/docs/php-docs-7-cn/function.curl-setopt.html" target="_blank" rel="external">中文这里</a></p>
+<p>常用的如下：</p>
+<p><code>CURLOPT_URL</code>: 设置请求的地址<br><code>CURLOPT_HEADER</code>：设置请求header头信息，比如授权token啦，编码啦，格式啦之类.<br><code>CURLOPT_CUSTOMREQUEST</code>: 设置请求方式 比如 get post head options之类<br><code>CURLOPT_TIMEOUT</code>：设置执行的最大时间<br><code>CURLOPT_CONNECTTIMEOUT</code>：设置发起连接前等待的时间<br><code>CURLOPT_USERAGENT</code>：设置useragent信息<br><code>CURLOPT_PORT</code>：设置端口信息<br><code>CURLOPT_COOKIE</code>：设置http请求中的cookie信息(parameA=aaa;parameB=bbb)<br><code>CURLOPT_POSTFIELDS</code>：如果是post请求设置的请求参数</p>
+<h3 id="执行获取结果"><a href="#执行获取结果" class="headerlink" title="执行获取结果"></a>执行获取结果</h3><p>主要使用 <code>curl_exec()</code> 函数.这个函数应该在初始化一个 cURL 会话并且全部的选项都被设置后被调用。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 执行 cURL 会话</div><div class="line"> * </div><div class="line"> * <span class="doctag">@param</span> resource $ch 初始化的cURL句柄</div><div class="line"> * <span class="doctag">@return</span> mixed 成功时返回 TRUE， 或者在失败时返回 FALSE。 然而，如果 设置了 CURLOPT_RETURNTRANSFER 选项，函数执行成功时会返回执行的结果，失败时返回 FALSE 。 </div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curl_exec</span><span class="params">( resource $ch )</span></span></div></pre></td></tr></table></figure>
+<h3 id="关闭连接句柄"><a href="#关闭连接句柄" class="headerlink" title="关闭连接句柄"></a>关闭连接句柄</h3><p>主要使用 <code>curl_close()</code> 函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 执行 cURL 会话</div><div class="line"> * </div><div class="line"> * <span class="doctag">@param</span> resource $ch 初始化的cURL句柄</div><div class="line"> * <span class="doctag">@return</span> void 没有返回值</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curl_close</span><span class="params">( resource $ch )</span></span></div></pre></td></tr></table></figure>
+<h3 id="错误码"><a href="#错误码" class="headerlink" title="错误码"></a>错误码</h3><p>在获取执行结果的时候有时候会失败，这个获取错误码就很重要了。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 执返回最后一次的错误代码</div><div class="line"> * </div><div class="line"> * <span class="doctag">@param</span> resource $ch 初始化的cURL句柄</div><div class="line"> * <span class="doctag">@return</span> int 操作的错误代码。 </div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curl_errno</span><span class="params">(resource $ch)</span></span></div></pre></td></tr></table></figure>
+<p>之前常遇到过的错误码有</p>
+<p><code>5:CURLE_COULDNT_RESOLVE_PROXY</code> = 指定的代理服务器主机无法解析</p>
+<p><code>6:CURLE_COULDNT_RESOLVE_HOST</code> = 指定的远程主机无法解析</p>
+<p><code>28:CURLE_OPERATION_TIMEDOUT</code> = 已达到根据相应情况指定的超时时间</p>
+<p><code>33:CURLE_RANGE_ERROR</code> = 服务器不支持或不接受范围请求</p>
+<p><code>56:CURLE_RECV_ERROR</code> = 接收网络数据失败</p>
+<p>更多错误码 <a href="https://blog.csdn.net/qq_22253823/article/details/53574280" target="_blank" rel="external">中文这里</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="string">'1'</span>=&gt;<span class="string">'CURLE_UNSUPPORTED_PROTOCOL (1) – 您传送给 libcurl 的网址使用了此 libcurl 不支持的协议。 可能是您没有使用的编译时选项造成了这种情况（可能是协议字符串拼写有误，或没有指定协议 libcurl 代码）。'</span>,</div><div class="line"><span class="string">'2'</span>=&gt;<span class="string">'CURLE_FAILED_INIT (2) – 非常早期的初始化代码失败。 可能是内部错误或问题。'</span>,</div><div class="line"><span class="string">'3'</span>=&gt;<span class="string">'CURLE_URL_MALFORMAT (3) – 网址格式不正确。'</span>,</div><div class="line"><span class="string">'5'</span>=&gt;<span class="string">'CURLE_COULDNT_RESOLVE_PROXY (5) – 无法解析代理服务器。 指定的代理服务器主机无法解析。'</span>,</div><div class="line"><span class="string">'6'</span>=&gt;<span class="string">'CURLE_COULDNT_RESOLVE_HOST (6) – 无法解析主机。 指定的远程主机无法解析。'</span>,</div><div class="line"><span class="string">'7'</span>=&gt;<span class="string">'CURLE_COULDNT_CONNECT (7) – 无法通过 connect() 连接至主机或代理服务器。'</span>,</div><div class="line"><span class="string">'8'</span>=&gt;<span class="string">'CURLE_FTP_WEIRD_SERVER_REPLY (8) – 在连接到 FTP 服务器后，libcurl 需要收到特定的回复。 此错误代码表示收到了不正常或不正确的回复。 指定的远程服务器可能不是正确的 FTP 服务器。'</span>,</div><div class="line"><span class="string">'9'</span>=&gt;<span class="string">'CURLE_REMOTE_ACCESS_DENIED (9) – 我们无法访问网址中指定的资源。 对于 FTP，如果尝试更改为远程目录，就会发生这种情况。'</span>,</div><div class="line"><span class="string">'11'</span>=&gt;<span class="string">'CURLE_FTP_WEIRD_PASS_REPLY (11) – 在将 FTP 密码发送到服务器后，libcurl 需要收到正确的回复。 此错误代码表示返回的是意外的代码。'</span>,</div><div class="line"><span class="string">'13'</span>=&gt;<span class="string">'CURLE_FTP_WEIRD_PASV_REPLY (13) – libcurl 无法从服务器端收到有用的结果，作为对 PASV 或 EPSV 命令的响应。 服务器有问题。'</span>,</div><div class="line"><span class="string">'14'</span>=&gt;<span class="string">'CURLE_FTP_WEIRD_227_FORMAT (14) – FTP 服务器返回 227 行作为对 PASV 命令的响应。如果 libcurl 无法解析此行，就会返回此代码。'</span>,</div><div class="line"><span class="string">'15'</span>=&gt;<span class="string">'CURLE_FTP_CANT_GET_HOST (15) – 在查找用于新连接的主机时出现内部错误。'</span>,</div><div class="line"><span class="string">'17'</span>=&gt;<span class="string">'CURLE_FTP_COULDNT_SET_TYPE (17) – 在尝试将传输模式设置为二进制或 ascii 时发生错误。'</span>,</div><div class="line"><span class="string">'18'</span>=&gt;<span class="string">'CURLE_PARTIAL_FILE (18) – 文件传输尺寸小于或大于预期。当服务器先报告了一个预期的传输尺寸，然后所传送的数据与先前指定尺寸不相符时，就会发生此错误。'</span>,</div><div class="line"><span class="string">'19'</span>=&gt;<span class="string">'CURLE_FTP_COULDNT_RETR_FILE (19) – ‘RETR’ 命令收到了不正常的回复，或完成的传输尺寸为零字节。'</span>,</div><div class="line"><span class="string">'21'</span>=&gt;<span class="string">'CURLE_QUOTE_ERROR (21) – 在向远程服务器发送自定义 “QUOTE” 命令时，其中一个命令返回的错误代码为 400 或更大的数字（对于 FTP），或以其他方式表明命令无法成功完成。'</span>,</div><div class="line"><span class="string">'22'</span>=&gt;<span class="string">'CURLE_HTTP_RETURNED_ERROR (22) – 如果 CURLOPT_FAILONERROR 设置为 TRUE，且 HTTP 服务器返回 &gt;= 400 的错误代码，就会返回此代码。 （此错误代码以前又称为 CURLE_HTTP_NOT_FOUND。）'</span>,</div><div class="line"><span class="string">'23'</span>=&gt;<span class="string">'CURLE_WRITE_ERROR (23) – 在向本地文件写入所收到的数据时发生错误，或由写入回调 (write callback) 向 libcurl 返回了一个错误。'</span>,</div><div class="line"><span class="string">'25'</span>=&gt;<span class="string">'CURLE_UPLOAD_FAILED (25) – 无法开始上传。 对于 FTP，服务器通常会拒绝执行 STOR 命令。错误缓冲区通常会提供服务器对此问题的说明。 （此错误代码以前又称为 CURLE_FTP_COULDNT_STOR_FILE。）'</span>,</div><div class="line"><span class="string">'26'</span>=&gt;<span class="string">'CURLE_READ_ERROR (26) – 读取本地文件时遇到问题，或由读取回调 (read callback) 返回了一个错误。'</span>,</div><div class="line"><span class="string">'27'</span>=&gt;<span class="string">'CURLE_OUT_OF_MEMORY (27) – 内存分配请求失败。此错误比较严重，若发生此错误，则表明出现了非常严重的问题。'</span>,</div><div class="line"><span class="string">'28'</span>=&gt;<span class="string">'CURLE_OPERATION_TIMEDOUT (28) – 操作超时。 已达到根据相应情况指定的超时时间。'</span>,</div><div class="line"><span class="string">'30'</span>=&gt;<span class="string">'CURLE_FTP_PORT_FAILED (30) – FTP PORT 命令返回错误。 在没有为 libcurl 指定适当的地址使用时，最有可能发生此问题。 请参阅 CURLOPT_FTPPORT。'</span>,</div><div class="line"><span class="string">'31'</span>=&gt;<span class="string">'CURLE_FTP_COULDNT_USE_REST (31) – FTP REST 命令返回错误。如果服务器正常，则应当不会发生这种情况。'</span>,</div><div class="line"><span class="string">'33'</span>=&gt;<span class="string">'CURLE_RANGE_ERROR (33) – 服务器不支持或不接受范围请求。'</span>,</div><div class="line"><span class="string">'34'</span>=&gt;<span class="string">'CURLE_HTTP_POST_ERROR (34) – 此问题比较少见，主要由内部混乱引发。'</span>,</div><div class="line"><span class="string">'35'</span>=&gt;<span class="string">'CURLE_SSL_CONNECT_ERROR (35) – 同时使用 SSL/TLS 时可能会发生此错误。您可以访问错误缓冲区查看相应信息，其中会对此问题进行更详细的介绍。可能是证书（文件格式、路径、许可）、密码及其他因素导致了此问题。'</span>,</div><div class="line"><span class="string">'36'</span>=&gt;<span class="string">'CURLE_FTP_BAD_DOWNLOAD_RESUME (36) – 尝试恢复超过文件大小限制的 FTP 连接。'</span>,</div><div class="line"><span class="string">'37'</span>=&gt;<span class="string">'CURLE_FILE_COULDNT_READ_FILE (37) – 无法打开 FILE:// 路径下的文件。原因很可能是文件路径无法识别现有文件。 建议您检查文件的访问权限。'</span>,</div><div class="line"><span class="string">'38'</span>=&gt;<span class="string">'CURLE_LDAP_CANNOT_BIND (38) – LDAP 无法绑定。LDAP 绑定操作失败。'</span>,</div><div class="line"><span class="string">'39'</span>=&gt;<span class="string">'CURLE_LDAP_SEARCH_FAILED (39) – LDAP 搜索无法进行。'</span>,</div><div class="line"><span class="string">'41'</span>=&gt;<span class="string">'CURLE_FUNCTION_NOT_FOUND (41) – 找不到函数。 找不到必要的 zlib 函数。'</span>,</div><div class="line"><span class="string">'42'</span>=&gt;<span class="string">'CURLE_ABORTED_BY_CALLBACK (42) – 由回调中止。 回调向 libcurl 返回了 “abort”。'</span>,</div><div class="line"><span class="string">'43'</span>=&gt;<span class="string">'CURLE_BAD_FUNCTION_ARGUMENT (43) – 内部错误。 使用了不正确的参数调用函数。'</span>,</div><div class="line"><span class="string">'45'</span>=&gt;<span class="string">'CURLE_INTERFACE_FAILED (45) – 界面错误。 指定的外部界面无法使用。 请通过 CURLOPT_INTERFACE 设置要使用哪个界面来处理外部连接的来源 IP 地址。 （此错误代码以前又称为 CURLE_HTTP_PORT_FAILED。）'</span>,</div><div class="line"><span class="string">'47'</span>=&gt;<span class="string">'CURLE_TOO_MANY_REDIRECTS (47) – 重定向过多。 进行重定向时，libcurl 达到了网页点击上限。请使用 CURLOPT_MAXREDIRS 设置上限。'</span>,</div><div class="line"><span class="string">'48'</span>=&gt;<span class="string">'CURLE_UNKNOWN_TELNET_OPTION (48) – 无法识别以 CURLOPT_TELNETOPTIONS 设置的选项。 请参阅相关文档。'</span>,</div><div class="line"><span class="string">'49'</span>=&gt;<span class="string">'CURLE_TELNET_OPTION_SYNTAX (49) – telnet 选项字符串的格式不正确。'</span>,</div><div class="line"><span class="string">'51'</span>=&gt;<span class="string">'CURLE_PEER_FAILED_VERIFICATION (51) – 远程服务器的 SSL 证书或 SSH md5 指纹不正确。'</span>,</div><div class="line"><span class="string">'52'</span>=&gt;<span class="string">'CURLE_GOT_NOTHING (52) – 服务器未返回任何数据，在相应情况下，未返回任何数据就属于出现错误。'</span>,</div><div class="line"><span class="string">'53'</span>=&gt;<span class="string">'CURLE_SSL_ENGINE_NOTFOUND (53) – 找不到指定的加密引擎。'</span>,</div><div class="line"><span class="string">'54'</span>=&gt;<span class="string">'CURLE_SSL_ENGINE_SETFAILED (54) – 无法将选定的 SSL 加密引擎设为默认选项。'</span>,</div><div class="line"><span class="string">'55'</span>=&gt;<span class="string">'CURLE_SEND_ERROR (55) – 无法发送网络数据。'</span>,</div><div class="line"><span class="string">'56'</span>=&gt;<span class="string">'CURLE_RECV_ERROR (56) – 接收网络数据失败。'</span>,</div><div class="line"><span class="string">'58'</span>=&gt;<span class="string">'CURLE_SSL_CERTPROBLEM (58) – 本地客户端证书有问题'</span>,</div><div class="line"><span class="string">'59'</span>=&gt;<span class="string">'CURLE_SSL_CIPHER (59) – 无法使用指定的密钥'</span>,</div><div class="line"><span class="string">'60'</span>=&gt;<span class="string">'CURLE_SSL_CACERT (60) – 无法使用已知的 CA 证书验证对等证书'</span>,</div><div class="line"><span class="string">'61'</span>=&gt;<span class="string">'CURLE_BAD_CONTENT_ENCODING (61) – 无法识别传输编码'</span>,</div><div class="line"><span class="string">'62'</span>=&gt;<span class="string">'CURLE_LDAP_INVALID_URL (62) – LDAP 网址无效'</span>,</div><div class="line"><span class="string">'63'</span>=&gt;<span class="string">'CURLE_FILESIZE_EXCEEDED (63) – 超过了文件大小上限'</span>,</div><div class="line"><span class="string">'64'</span>=&gt;<span class="string">'CURLE_USE_SSL_FAILED (64) – 请求的 FTP SSL 级别失败'</span>,</div><div class="line"><span class="string">'65'</span>=&gt;<span class="string">'CURLE_SEND_FAIL_REWIND (65) – 进行发送操作时，curl 必须回转数据以便重新传输，但回转操作未能成功'</span>,</div><div class="line"><span class="string">'66'</span>=&gt;<span class="string">'CURLE_SSL_ENGINE_INITFAILED (66) – SSL 引擎初始化失败'</span>,</div><div class="line"><span class="string">'67'</span>=&gt;<span class="string">'CURLE_LOGIN_DENIED (67) – 远程服务器拒绝 curl 登录（7.13.1 新增功能）'</span>,</div><div class="line"><span class="string">'68'</span>=&gt;<span class="string">'CURLE_TFTP_NOTFOUND (68) – 在 TFTP 服务器上找不到文件'</span>,</div><div class="line"><span class="string">'69'</span>=&gt;<span class="string">'CURLE_TFTP_PERM (69) – 在 TFTP 服务器上遇到权限问题'</span>,</div><div class="line"><span class="string">'70'</span>=&gt;<span class="string">'CURLE_REMOTE_DISK_FULL (70) – 服务器磁盘空间不足'</span>,</div><div class="line"><span class="string">'71'</span>=&gt;<span class="string">'CURLE_TFTP_ILLEGAL (71) – TFTP 操作非法'</span>,</div><div class="line"><span class="string">'72'</span>=&gt;<span class="string">'CURLE_TFTP_UNKNOWNID (72) – TFTP 传输 ID 未知'</span>,</div><div class="line"><span class="string">'73'</span>=&gt;<span class="string">'CURLE_REMOTE_FILE_EXISTS (73) – 文件已存在，无法覆盖'</span>,</div><div class="line"><span class="string">'74'</span>=&gt;<span class="string">'CURLE_TFTP_NOSUCHUSER (74) – 运行正常的 TFTP 服务器不会返回此错误'</span>,</div><div class="line"><span class="string">'75'</span>=&gt;<span class="string">'CURLE_CONV_FAILED (75) – 字符转换失败'</span>,</div><div class="line"><span class="string">'76'</span>=&gt;<span class="string">'CURLE_CONV_REQD (76) – 调用方必须注册转换回调'</span>,</div><div class="line"><span class="string">'77'</span>=&gt;<span class="string">'CURLE_SSL_CACERT_BADFILE (77) – 读取 SSL CA 证书时遇到问题（可能是路径错误或访问权限问题）'</span>,</div><div class="line"><span class="string">'78'</span>=&gt;<span class="string">'CURLE_REMOTE_FILE_NOT_FOUND (78) – 网址中引用的资源不存在'</span>,</div><div class="line"><span class="string">'79'</span>=&gt;<span class="string">'CURLE_SSH (79) – SSH 会话中发生无法识别的错误'</span>,</div><div class="line"><span class="string">'80'</span>=&gt;<span class="string">'CURLE_SSL_SHUTDOWN_FAILED (80) – 无法终止 SSL 连接'</span></div></pre></td></tr></table></figure>
+<p>英文原版错误码见 <a href="https://curl.haxx.se/libcurl/c/libcurl-errors.html" target="_blank" rel="external">这里</a>;</p>
+<h2 id="设置代理"><a href="#设置代理" class="headerlink" title="设置代理"></a>设置代理</h2><p>对于一些墙外的请求需要设置一下代理，本地有 <strong>Shadowsocks</strong> 之类工具的可以这样设置</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, <span class="number">0</span>); <span class="comment">// 跳过证书检查</span></div><div class="line">curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, <span class="number">0</span>);  <span class="comment">// 从证书中检查SSL加密算法是否存在</span></div><div class="line"></div><div class="line"><span class="comment">// 设置本地代理</span></div><div class="line">curl_setopt($curl, CURLOPT_RETURNTRANSFER, <span class="number">1</span>); <span class="comment">// 设置不直接输出结果，而是保存到exec的结果中</span></div><div class="line">curl_setopt($curl,CURLOPT_PROXY, <span class="string">'127.0.0.1'</span>);</div><div class="line">curl_setopt($curl,CURLOPT_PROXYPORT, <span class="string">'1080'</span>); <span class="comment">// 这个是代理的端口</span></div><div class="line">curl_setopt ($curl, CURLOPT_TIMEOUT, <span class="number">30</span>);</div></pre></td></tr></table></figure>
+<p>SS原理见 <a href="https://segmentfault.com/p/1210000010368656/read" target="_blank" rel="external">这里</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/20191210/index.html" rel="next" title="Laravel多路由文件配置">
+                <i class="fa fa-chevron-left"></i> Laravel多路由文件配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">87</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置连接句柄"><span class="nav-number">2.1.</span> <span class="nav-text">设置连接句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置相关属性选项"><span class="nav-number">2.2.</span> <span class="nav-text">设置相关属性选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行获取结果"><span class="nav-number">2.3.</span> <span class="nav-text">执行获取结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭连接句柄"><span class="nav-number">2.4.</span> <span class="nav-text">关闭连接句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#错误码"><span class="nav-number">2.5.</span> <span class="nav-text">错误码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置代理"><span class="nav-number">3.</span> <span class="nav-text">设置代理</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.beian.miit.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'reggie-3';
+      var disqus_identifier = '2019/20191215/index.html';
+      var disqus_title = 'PHP CURL详解';
+      var disqus_url = 'https://www.tokme.cn/2019/20191215/index.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
