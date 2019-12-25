@@ -28,23 +28,32 @@
 <link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="PHP," />
+  <meta name="keywords" content="网络编程," />
 
 
 
 
 
 
-<meta name="description" content="最近遇到个小问题，需要遍历出某文件夹下所有文件内容并最终生成一个 JSON 数据格式 然后使用了 glob() 函数来遍历文件 然后使用 json_encode() 函数来处理json数据格式,主要记录下这2个函数的参数 以前都怎么认真看过，其实他们有很多小功能">
+<meta name="description" content="最近刷阮一峰的博客发现一篇很好的基础文章，来翻译下，锻炼下英文阅读也不错。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="PHP中glob()和json_encode()函数">
-<meta property="og:url" content="https://www.tokme.cn/2019/20190110/index.html">
+<meta property="og:title" content="[翻译]理解 HTTP 基础">
+<meta property="og:url" content="https://www.tokme.cn/2019/20191221/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
-<meta property="og:description" content="最近遇到个小问题，需要遍历出某文件夹下所有文件内容并最终生成一个 JSON 数据格式 然后使用了 glob() 函数来遍历文件 然后使用 json_encode() 函数来处理json数据格式,主要记录下这2个函数的参数 以前都怎么认真看过，其实他们有很多小功能">
-<meta property="og:updated_time" content="2019-01-28T01:51:32.590Z">
+<meta property="og:description" content="最近刷阮一峰的博客发现一篇很好的基础文章，来翻译下，锻炼下英文阅读也不错。">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/http-icon.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/HTTP-Protocol-Basics.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/http-request-response-structure.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/url-example-1.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/url-example-with-port.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/browser-request.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/browser-response.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/HTTP-Request-Response-example.jpg">
+<meta property="og:updated_time" content="2019-12-25T08:29:06.786Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PHP中glob()和json_encode()函数">
-<meta name="twitter:description" content="最近遇到个小问题，需要遍历出某文件夹下所有文件内容并最终生成一个 JSON 数据格式 然后使用了 glob() 函数来遍历文件 然后使用 json_encode() 函数来处理json数据格式,主要记录下这2个函数的参数 以前都怎么认真看过，其实他们有很多小功能">
+<meta name="twitter:title" content="[翻译]理解 HTTP 基础">
+<meta name="twitter:description" content="最近刷阮一峰的博客发现一篇很好的基础文章，来翻译下，锻炼下英文阅读也不错。">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/http-icon.jpg">
 
 
 
@@ -65,7 +74,7 @@
 
 
 
-  <title> PHP中glob()和json_encode()函数 | 指尖的彩虹 </title>
+  <title> [翻译]理解 HTTP 基础 | 指尖的彩虹 </title>
 </head>
 
 <body itemscope  lang="zh-Hans">
@@ -258,7 +267,7 @@
             
             
               
-                PHP中glob()和json_encode()函数
+                [翻译]理解 HTTP 基础
               
             
           </h1>
@@ -271,8 +280,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2019-01-10T08:20:11+08:00" content="2019-01-10">
-              2019-01-10
+            <time itemprop="dateCreated" datetime="2019-12-21T22:01:08+08:00" content="2019-12-21">
+              2019-12-21
             </time>
           </span>
 
@@ -285,8 +294,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/PHP/" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
+                  <a href="/categories/网络编程/" itemprop="url" rel="index">
+                    <span itemprop="name">网络编程</span>
                   </a>
                 </span>
 
@@ -301,8 +310,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2019/20190110/index.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/20190110/index.html" itemprop="commentsCount"></span>
+                <a href="/2019/20191221/index.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2019/20191221/index.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -327,29 +336,104 @@
       
 
       
-        <p>最近遇到个小问题，需要遍历出某文件夹下所有文件内容并最终生成一个 <strong>JSON</strong> 数据格式 然后使用了 glob() 函数来遍历文件 然后使用 json_encode() 函数来处理json数据格式,主要记录下这2个函数的参数 以前都怎么认真看过，其实他们有很多小功能<br><a id="more"></a></p>
+        <p>最近刷阮一峰的博客发现一篇很好的基础文章，来翻译下，锻炼下英文阅读也不错。<br><a id="more"></a></p>
 <hr>
-<h3 id="glob-函数"><a href="#glob-函数" class="headerlink" title="glob()函数"></a>glob()函数</h3><blockquote>
-<p>glob ( string $pattern [, int $flags = 0 ] ) : array<br>glob() 函数依照 libc glob() 函数使用的规则寻找所有与 pattern 匹配的文件路径，类似于一般 shells 所用的规则一样。不进行缩写扩展或参数替代。<br>返回一个包含有匹配文件／目录的数组。如果出错返回 FALSE。<br>flags<br>有效标记有：</p>
-<p>GLOB_MARK - 在每个返回的项目中加一个斜线<br>GLOB_NOSORT - 按照文件在目录中出现的原始顺序返回（不排序）<br>GLOB_NOCHECK - 如果没有文件匹配则返回用于搜索的模式<br>GLOB_NOESCAPE - 反斜线不转义元字符<br>GLOB_BRACE - 扩充 {a,b,c} 来匹配 ‘a’，’b’ 或 ‘c’<br>GLOB_ONLYDIR - 仅返回与模式匹配的目录项<br>GLOB_ERR - 停止并读取错误信息（比如说不可读的目录），默认的情况下忽略所有错误</p>
-</blockquote>
-<p>示例如下<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">foreach</span>(glob(<span class="string">'./test/*.txt'</span>) <span class="keyword">as</span> $txt)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">echo</span> $txt.<span class="string">'&lt;br /&gt;'</span>;</div><div class="line">    $file = fopen($txt, <span class="string">'r'</span>);</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># 结果如下</span></div><div class="line"><span class="comment"># ./test/one.txt</span></div><div class="line"><span class="comment"># ./test/two.txt</span></div></pre></td></tr></table></figure></p>
-<p>另外说下 如果是含有中文的路径 一定要转换成当前系统所默认的编码才可以 不然会有读取不出来的问题</p>
-<h3 id="json-encode-函数"><a href="#json-encode-函数" class="headerlink" title="json_encode() 函数"></a>json_encode() 函数</h3><blockquote>
-<p>json_encode ( mixed $value [, int $options = 0 [, int $depth = 512 ]] ) : string<br>对变量进行 JSON 编码,返回字符串，包含了 value 值 JSON 形式的表示。 编码受传入的 options 参数影响，此外浮点值的编码依赖于 serialize_precision。<br>成功则返回 JSON 编码的 string 或者在失败时返回 FALSE 。</p>
-</blockquote>
-<p>要说的是它的 <code>options</code> 参数 他有好多的值可以选择 以前真的没怎么注意过这个东西 <code>JSON_HEX_QUOT, JSON_HEX_TAG, JSON_HEX_AMP, JSON_HEX_APOS, JSON_NUMERIC_CHECK, JSON_PRETTY_PRINT, JSON_UNESCAPED_SLASHES, JSON_FORCE_OBJECT, JSON_PRESERVE_ZERO_FRACTION, JSON_UNESCAPED_UNICODE, JSON_PARTIAL_OUTPUT_ON_ERROR, JSON_UNESCAPED_LINE_TERMINATORS, JSON_THROW_ON_ERROR.</code> 这些都是可选项</p>
-<p>主要讲下其中几个比较常用的</p>
-<ol>
-<li><p><code>JSON_UNESCAPED_SLASHES</code> 选项表示不要对结果中的 <code>/</code> 进行编码 比如你的结果中含有类似 <code>xx/xx/xx</code> 这种 对他进行编码的时候 如果没有改选项参数 最终结果就会变成 <code>xx\/xx\/xx</code></p>
-</li>
-<li><p><code>JSON_UNESCAPED_UNICODE</code> 选项表示以字面编码多字节 Unicode 字符，就是说如果没有这个的时候 中文之类会变成 <code>\uXXXX</code> 这个样子 比如这样 <code>&quot;title&quot;:&quot;\u8bb0\u4e00\u6b21</code></p>
-</li>
-</ol>
-<p>真的好久都没有认真看过官方文档了，原来还有这么多小功能 惭愧！！！</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="http://php.net/manual/zh/function.glob.php" target="_blank" rel="external">http://php.net/manual/zh/function.glob.php</a></p>
-<p><a href="http://php.net/manual/en/function.json-encode.php" target="_blank" rel="external">http://php.net/manual/en/function.json-encode.php</a></p>
-<p><a href="http://php.net/manual/zh/json.constants.php" target="_blank" rel="external">http://php.net/manual/zh/json.constants.php</a></p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><img src="https://www.tokme.cn/images/blogimg/http-icon.jpg" alt="http_icon"></p>
+<p><strong>HTTP</strong> 代表超文本传输协议，用于跨网络传输数据。</p>
+<p>它是 web 开发人员需要理解的一个关键协议，因为它被广泛使用，也被用于物联网应用程序中的数据和命令传输。</p>
+<p>在协议的第一个版本只有一个方法，即 <code>GET</code>，它将从服务器请求一个页面。而来自服务器的响应总是一个HTML页面 <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol" target="_blank" rel="external">WiKi</a></p>
+<p>为了让你了解 HTTP 协议在开始时有多么简单，可以看一下只有1页的 <a href="https://www.w3.org/Protocols/HTTP/AsImplemented.html" target="_blank" rel="external">Original 规范</a>。</p>
+<p>从最初的 <strong>0.9版本</strong> 开始，至今已经有了好几个版本的HTTP协议。</p>
+<p>目前的版本是1.1，最近一次修订是在2014年。 详情请参阅 <a href="https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol" target="_blank" rel="external">Wiki</a></p>
+<h3 id="HTTP协议如何工作"><a href="#HTTP协议如何工作" class="headerlink" title="HTTP协议如何工作"></a>HTTP协议如何工作</h3><p>像大多数的协议一样，<strong>HTTP</strong>是一个使用 <code>客户端=&gt;服务器</code> 通信模型的基于 <strong>命令</strong> 和 <strong>响应文本</strong> 的协议。</p>
+<p><img src="https://www.tokme.cn/images/blogimg/HTTP-Protocol-Basics.jpg" alt="HTTP-Protocol-Basics"></p>
+<p>客户端发出请求,服务器进行响应。</p>
+<p><strong>HTTP协议</strong>也是一个<strong>无状态协议</strong>，这表示服务器不需要存储会话信息，并且每个请求对于其他请求而言都是独立的。可以参见这个 <a href="https://en.wikipedia.org/wiki/Stateless_protocol" target="_blank" rel="external">wiki</a></p>
+<p>这意味着：</p>
+<ul>
+<li>所有的请求都是客户端发起的(也就是你的浏览器发起)</li>
+<li>服务器对每个请求进行响应</li>
+<li>请求(命令)和响应都是可读的文本</li>
+<li>请求之间是相互独立的并且服务器 <strong>不需要</strong> 去跟踪请求</li>
+</ul>
+<h3 id="请求和响应的结构"><a href="#请求和响应的结构" class="headerlink" title="请求和响应的结构"></a>请求和响应的结构</h3><p>请求和响应的消息结构都是一样的，如下所示</p>
+<p><img src="https://www.tokme.cn/images/blogimg/http-request-response-structure.jpg" alt="http-request-response-structure"></p>
+<p>一个请求由 <strong>命令或者请求 + 可选的头部 + 可选的正文内容</strong> 组成</p>
+<p>一个响应由 <strong>状态码 + 可选的头部 + 可选的正文内容</strong> 组成</p>
+<p>使用简单的 <strong>CRLF</strong>(回车和换行)组合来限定每一部分，并使用空白行来表示请求头的结束。</p>
+<p>如果请求或者响应包含了<strong>消息正文</strong>，则需要在请求头明确指示出来。</p>
+<p>请求中消息正文的存在由请求头中的字段 <strong>Content-Length</strong> 或者 <strong>Transfer-Encoding</strong> 来表示。</p>
+<p>请求消息的结构是独立于方法语义的，即使该方法未限定任何消息正文的用途。参见 <a href="https://httpwg.org/specs/rfc7230.html" target="_blank" rel="external">RFC 7230</a> 第3.3节</p>
+<p><strong>注意：消息正文后没有CRLF(回车和换行)，见 <a href="https://httpwg.org/specs/rfc7230.html" target="_blank" rel="external">RFC 7230</a> 第3.5节</strong></p>
+<h3 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h3><p>我们已经看到了一般的请求响应格式，现在我们来更详细的了解他们。</p>
+<p>第一行是强制性的必须要有，而且他的格式如下：</p>
+<p><strong>请求方法 + 资源路径 + 协议版本</strong></p>
+<p>举个例子：假设我们准备在 <code>www.testsite5.com</code> 上请求 <code>testpage.htm</code> 页面</p>
+<p>请求的起始行将会是这样：</p>
+<p><strong>GET /test.htm HTTP/1.1</strong></p>
+<ul>
+<li><strong>GET</strong> 是请求方法</li>
+<li><strong>/testpage.htm</strong> 是资源的相对路径</li>
+<li><strong>HTTP/1.1</strong> 是我们使用的协议版本号</li>
+</ul>
+<p><strong>提示：</strong></p>
+<p>1.相对路径不包含域名<br>2.浏览器使用我们输入的URL来创建资源的<strong>相对URI</strong></p>
+<p>URI：统一资源标志符，用于标识互联网上的一个资源<br>URL：统一资源定位符，用来标识互联网的一个资源，同时提供定位该资源的信息。</p>
+<p>一句话说：URL是URI的子集，他们都提供了资源是什么，同时URL还提供了如何获取资源。</p>
+<p>浏览器不会显示真实的<strong>HTTP请求</strong>，只有使用诸如Firefox下的 <strong>HTTP Header Live</strong> 之类的特殊工具才可以看到。</p>
+<h3 id="HTTP-vs-URL"><a href="#HTTP-vs-URL" class="headerlink" title="HTTP vs URL"></a>HTTP vs URL</h3><p>大多数人们习惯在浏览器中输入网址。通常看起来像这样：</p>
+<p><img src="https://www.tokme.cn/images/blogimg/url-example-1.jpg" alt="url-example-1"></p>
+<p>网址还会包含一个端口，不过一般情况下都被浏览器隐藏了(默认的80端口)，不过呢你也可以手动给他加上，比如下面这样的：</p>
+<p><img src="https://www.tokme.cn/images/blogimg/url-example-with-port.jpg" alt="url-example-with-port"></p>
+<p>这将告诉Web浏览器要定位的资源的地址以及用于检索该资源（http）的协议。</p>
+<p><strong>HTTP</strong>是传输协议，用来从服务器传输资源(网页，图片，视频等等)到客户端</p>
+<h3 id="HTTP响应和响应码"><a href="#HTTP响应和响应码" class="headerlink" title="HTTP响应和响应码"></a>HTTP响应和响应码</h3><p><strong>每个请求都会有一个响应</strong>。响应由如下组成：</p>
+<ul>
+<li><strong>状态码</strong> 和 <strong>描述</strong></li>
+<li>一个或多个可选的响应头参数</li>
+<li>多行的可选消息正文，可以包括二进制数据</li>
+</ul>
+<p><strong>状态码</strong>被分成了5组，每组都有他们的意义和一个<strong>3位数</strong>的代码</p>
+<ul>
+<li>1xx - 信息响应</li>
+<li>2xx - 成功响应</li>
+<li>3xx - 多项选择(重定向)</li>
+<li>4xx - 客户端响应</li>
+<li>5xx - 服务端响应</li>
+</ul>
+<p>举个例子：一个成功的网页请求会返回响应码<strong>200</strong>，而一个不成功的请求会返回响应码<strong>400</strong></p>
+<p>完整的响应码列表和他们的意义 <a href="https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html" target="_blank" rel="external">这里</a></p>
+<p>中文参见：<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Status" target="_blank" rel="external">MDN_HTTP_STATUS</a></p>
+<h3 id="请求响应示例"><a href="#请求响应示例" class="headerlink" title="请求响应示例"></a>请求响应示例</h3><p>我们请求一个简单的网页(testpage.htm),来检查下他们的请求和响应。</p>
+<p>下面是我输入在浏览器中的地址</p>
+<p><img src="https://www.tokme.cn/images/blogimg/browser-request.jpg" alt="browser-request"></p>
+<p>下面是浏览器展示出来的响应</p>
+<p><img src="https://www.tokme.cn/images/blogimg/browser-response.jpg" alt="browser-response"></p>
+<p>这里是在输入网址后 <strong>HTTP 请求-响应</strong> 的截图</p>
+<p><img src="https://www.tokme.cn/images/blogimg/HTTP-Request-Response-example.jpg" alt="HTTP-Request-Response-example"></p>
+<p>提醒：浏览器会自动的添加上<strong>请求和响应</strong> 的 <strong>头信息</strong></p>
+<p>在上面的例子中，请求是没有正文内容的。应答中的正文内容是一个网页，已经显示在浏览器中。</p>
+<h3 id="请求类型"><a href="#请求类型" class="headerlink" title="请求类型"></a>请求类型</h3><p>目前为止我们还没有提到<strong>请求类型</strong>，但是在我们的例子中，我们已经见过了 <strong>GET</strong> 请求类型。</p>
+<p>GET请求类型或方法用于从Web服务器请求资源。</p>
+<p>GET是最常用的请求类型，并且是原始<a href="https://www.w3.org/Protocols/HTTP/AsImplemented.html" target="_blank" rel="external">HTTP规范</a>中唯一的请求类型。</p>
+<h3 id="请求类型-方法-动作"><a href="#请求类型-方法-动作" class="headerlink" title="请求类型,方法,动作"></a>请求类型,方法,动作</h3><p>HTTP协议现在支持8种请求类型，在文档中也被叫做是<strong>方法</strong> 或者 <strong>动作</strong>，他们是：</p>
+<ul>
+<li>GET - 从服务器请求资源</li>
+<li>POST - 向服务器提交资源(比如上传文件)</li>
+<li>PUT - 像POST一样，但是用来替换资源</li>
+<li>DELETE - 从服务器上删除资源</li>
+<li>HEAD - 像GET一样，但是只返回请求头，没有正文</li>
+<li>OPTIONS - 获取资源的选项(一般用来作为预检请求)</li>
+<li>PATCH - 修改资源</li>
+<li>TRACE - 执行消息回环(请求接受者原样返回他接受到的消息)</li>
+</ul>
+<p><del>关于Trace方法我自己没有理解 不知道具体啥用，感觉是用来检测中间环节是否有修改请求的地方</del></p>
+<p>在今天的互联网上，GET和POST是使用最多的方法。</p>
+<p>其他的一些方法一般用在相关的Web和IOT APIs(物联网) 上。</p>
+<p>在 <a href="https://www.w3schools.com/tags/ref_httpmethods.asp" target="_blank" rel="external">w3 schools</a> 和 <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods" target="_blank" rel="external">MDN网站</a> 上有更多关于它们的详细介绍。</p>
+<p><strong>相关教程和资源</strong></p>
+<p><a href="http://www.steves-internet-guide.com/internet-protocol-suite-explained/" target="_blank" rel="external">TCP/IP协议的初学者指南</a></p>
+<p><a href="http://www.steves-internet-guide.com/using-curl-iot-applications/" target="_blank" rel="external">使用Curl测试IOT应用</a></p>
 <hr>
 
       
@@ -382,7 +466,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i>PHP</a>
+            <a href="/tags/网络编程/" rel="tag"><i class="fa fa-tag"></i>网络编程</a>
           
         </div>
       
@@ -391,17 +475,13 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/20190109/index.html" rel="next" title="PHP连接Mysql的三种方法">
-                <i class="fa fa-chevron-left"></i> PHP连接Mysql的三种方法
+              <a href="/2019/20191215/index.html" rel="next" title="PHP CURL详解">
+                <i class="fa fa-chevron-left"></i> PHP CURL详解
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/20190116/index.html" rel="prev" title="PHP内存的一些简单理解">
-                PHP内存的一些简单理解 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -524,7 +604,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#glob-函数"><span class="nav-number">1.</span> <span class="nav-text">glob()函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json-encode-函数"><span class="nav-number">2.</span> <span class="nav-text">json_encode() 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP协议如何工作"><span class="nav-number">2.</span> <span class="nav-text">HTTP协议如何工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求和响应的结构"><span class="nav-number">3.</span> <span class="nav-text">请求和响应的结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP请求"><span class="nav-number">4.</span> <span class="nav-text">HTTP请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-vs-URL"><span class="nav-number">5.</span> <span class="nav-text">HTTP vs URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP响应和响应码"><span class="nav-number">6.</span> <span class="nav-text">HTTP响应和响应码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求响应示例"><span class="nav-number">7.</span> <span class="nav-text">请求响应示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求类型"><span class="nav-number">8.</span> <span class="nav-text">请求类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#请求类型-方法-动作"><span class="nav-number">9.</span> <span class="nav-text">请求类型,方法,动作</span></a></li></ol></div>
             
           </div>
         </section>
@@ -651,9 +731,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'reggie-3';
-      var disqus_identifier = '2019/20190110/index.html';
-      var disqus_title = 'PHP中glob()和json_encode()函数';
-      var disqus_url = 'https://www.tokme.cn/2019/20190110/index.html';
+      var disqus_identifier = '2019/20191221/index.html';
+      var disqus_title = '[翻译]理解 HTTP 基础';
+      var disqus_url = 'https://www.tokme.cn/2019/20191221/index.html';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
