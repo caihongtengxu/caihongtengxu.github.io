@@ -51,9 +51,9 @@ p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地�
 
 比如下面的代码
 p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地址。p—&amp;gt;next = p—&amp;gt;next—&amp;gt;next; 表示p节点的后继指针存储了p节点的">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx2.png">
-<meta property="og:updated_time" content="2019-03-26T03:27:25.681Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/linked-listx.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/linked-listx2.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:30.975Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法-实现链表代码">
 <meta name="twitter:description" content="理解指针或引用的含义对于指针的理解可以用一句话概括
@@ -62,7 +62,7 @@ p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地�
 
 比如下面的代码
 p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地址。p—&amp;gt;next = p—&amp;gt;next—&amp;gt;next; 表示p节点的后继指针存储了p节点的">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/linked-listx.png">
 
 
 
@@ -354,7 +354,7 @@ p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地�
 <a id="more"></a>
 <hr>
 <h3 id="警惕指针丢失和内存泄露（单链表）"><a href="#警惕指针丢失和内存泄露（单链表）" class="headerlink" title="警惕指针丢失和内存泄露（单链表）"></a>警惕指针丢失和内存泄露（单链表）</h3><h4 id="插入结点"><a href="#插入结点" class="headerlink" title="插入结点"></a>插入结点</h4><p>如下图结构</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx.png" alt="linked_listx"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/linked-listx.png" alt="linked_listx"></p>
 <p>假设在结点A和结点B之间插入一个结点X，目前A结点的下一个结点是结点B，而当前指针P指向结点A。造成指针丢失和内存泄露的代码如下</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">P-&gt;next = X;</div><div class="line">X-&gt;next = P-&gt;next;</div></pre></td></tr></table></figure>
 <p>显然这会导致结点X的后继指针指向自身。为什么？在操作的时候，链表是连续的还没有中断，而指针P指向的是结点A，此时结点A的下一个结点还是结点B，当执行了第一段代码 <code>P-&gt;next = X</code>; 相当于把A结点的下一个结点指向了节点X，这里是没有问题的，关键是下一行代码 <code>X-next = P-&gt;next;</code> 需要注意的是 <code>P-&gt;next</code> 经过第一步的操作后变为了结点X，此时在赋值给 <code>X-&gt;next</code> 相当于给结点X的下一个结点指向的还是结点X，因此整个链表就会中断掉，从结点B开始以后的节点都不能访问了。</p>
@@ -371,7 +371,7 @@ p—&amp;gt;next = q; 表示p节点的后继指针存储了q节点的内存地�
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (head—&gt;next == <span class="keyword">null</span>) &#123;</div><div class="line">	head = <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>从上面的情况可以看出，针对链表的插入、删除操作，需要对插入第一个节点和删除最后一个节点的情况进行特殊处理。这样代码就会显得很繁琐，所以引入 <strong>哨兵</strong> 节点来解决这个问题。</p>
 <p>哨兵结点不存储数据，无论链表是否为空，head指针都会指向它，作为链表的头结点始终存在。这样，插入第一个结点和插入其他结点，删除最后一个结点和删除其他结点都可以统一为相同的代码实现逻辑了。因为在逻辑上是第一个结点，而实际实现上我们其实已经有一个哨兵结点在内了，所以就不存在空的情况了，所有的结点操作都是一样的 无需额外的判断。</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/linked-listx2.png" alt="linked_listx2"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/linked-listx2.png" alt="linked_listx2"></p>
 <h4 id="哨兵应用场景"><a href="#哨兵应用场景" class="headerlink" title="哨兵应用场景"></a>哨兵应用场景</h4><p>哨兵最大的作用就是简化边界条件的处理。别的不知道了。</p>
 <h3 id="链表边界处理"><a href="#链表边界处理" class="headerlink" title="链表边界处理"></a>链表边界处理</h3><p>经常用来检查链表是否正确的边界4个边界条件：</p>
 <p>1.如果链表为空时，代码是否能正常工作？<br>2.如果链表只包含一个节点时，代码是否能正常工作？<br>3.如果链表只包含两个节点时，代码是否能正常工作？<br>4.代码逻辑在处理头尾节点时是否能正常工作？</p>

@@ -41,19 +41,19 @@
 <meta property="og:url" content="https://www.tokme.cn/2018/20181114/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近因为一些原因 另一个项目中不允许继续使用现在的支付账户 无奈只能重新申请一个微信支付账户， 申请下来后配置参数那里却懵逼了不知道去哪里找来对应的参数值 接口调用各种不通 乱七八糟的 现在整理下准备工作以及配置防止以后手忙脚乱">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/apppay_detail.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpaysuccess.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu.jpg">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu2.jpg">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu3.jpg">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu4.jpg">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu5.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpayset.png">
-<meta property="og:updated_time" content="2018-11-14T07:16:09.665Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/apppay_detail.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/wechatpaysuccess.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu2.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu3.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu4.jpg">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu5.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/wechatpayset.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信支付的准备工作">
 <meta name="twitter:description" content="最近因为一些原因 另一个项目中不允许继续使用现在的支付账户 无奈只能重新申请一个微信支付账户， 申请下来后配置参数那里却懵逼了不知道去哪里找来对应的参数值 接口调用各种不通 乱七八糟的 现在整理下准备工作以及配置防止以后手忙脚乱">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/apppay_detail.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/apppay_detail.png">
 
 
 
@@ -341,28 +341,28 @@
 <h3 id="微信APP支付准备工作"><a href="#微信APP支付准备工作" class="headerlink" title="微信APP支付准备工作"></a>微信APP支付准备工作</h3><h4 id="注册开放平台"><a href="#注册开放平台" class="headerlink" title="注册开放平台"></a>注册开放平台</h4><p>首先如果你需要申请 <code>微信APP支付</code> 需要登录 <strong>微信开放平台</strong> 链接地址：<a href="https://open.weixin.qq.com" target="_blank" rel="external">https://open.weixin.qq.com</a> 没有账户的需要先注册</p>
 <h4 id="创建移动应用"><a href="#创建移动应用" class="headerlink" title="创建移动应用"></a>创建移动应用</h4><p>在 <code>管理中心</code> 下 选择 <code>创建移动应用</code> 然后就是一套填写资料等审核通过</p>
 <p>如果应用审核通过了 在应用详情中会有如下接口内容</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/apppay_detail.png" alt="AppPay Detail"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/apppay_detail.png" alt="AppPay Detail"></p>
 <p>其中 <strong>微信支付</strong> 一栏应该是没有开通的 后面会有点击开通 点击进去后就到了 微信支付的官网那边填资料啥的 然后等待审核通过</p>
 <p>审核通过后 会受到一封邮件</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpaysuccess.png" alt="WchatPay Success"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/wechatpaysuccess.png" alt="WchatPay Success"></p>
 <p>改绑定的就绑定 然后记录下 <code>应用APPID</code> 和 <code>商户号</code> 这个其实和你在 <code>微信开放平台里</code> 申请的移动应用的 <code>APPID</code> 是一致</p>
 <h4 id="操作证书配置"><a href="#操作证书配置" class="headerlink" title="操作证书配置"></a>操作证书配置</h4><p>在 <strong>微信支付官网</strong> 链接：<a href="https://pay.weixin.qq.com" target="_blank" rel="external">https://pay.weixin.qq.com</a> 需要设置相关 支付 <code>API参数</code> 但是设置这些参数需要先安装 <code>操作证书</code> </p>
 <p>第一步</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu.jpg" alt="nozhengshu1"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu.jpg" alt="nozhengshu1"></p>
 <p>第二步</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu2.jpg" alt="nozhengshu2"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu2.jpg" alt="nozhengshu2"></p>
 <p>到这里就完成了 <strong>操作证书</strong> 的安装</p>
 <h4 id="设置API密钥"><a href="#设置API密钥" class="headerlink" title="设置API密钥"></a>设置API密钥</h4><p>要发起支付的话 还需要 <code>设置密钥</code> </p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu3.jpg" alt="nozhengshu3"></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu4.jpg" alt="nozhengshu4"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu3.jpg" alt="nozhengshu3"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu4.jpg" alt="nozhengshu4"></p>
 <h4 id="下载API安全证书"><a href="#下载API安全证书" class="headerlink" title="下载API安全证书"></a>下载API安全证书</h4><p>讲下这个 <code>API安全证书</code> 做什么用的 在 微信支付接口中，涉及资金回滚的接口会使用到API证书，包括 <strong>退款</strong>、<strong>撤销</strong> 接口 都会需要用到这个证书</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/nozhengshu5.png" alt="nozhengshu5"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/nozhengshu5.png" alt="nozhengshu5"></p>
 <p>在下面这个位置 使用管理员账户下载下来 里面包含4个文件 <code>apiclient_cert.p12</code>,<code>apiclient_cert.pem</code>,<code>apiclient_key.pem</code> 和 一个说明文件</p>
 <p>这里我们主要用到了 2个 <code>pem</code> 文件</p>
 <p>至此 <strong>微信APP支付</strong> 相关配置已经搞定</p>
 <h3 id="微信H5支付"><a href="#微信H5支付" class="headerlink" title="微信H5支付"></a>微信H5支付</h3><p>以前申请微信的H5支付审核比较严格 现在已经全面开放了 只需要申请开通即可 因为 <strong>微信H5支付</strong> 是在微信外的普通手机浏览器中调起微信然后发起支付 底层用的参数和 <strong>微信APP支付</strong> 是一样的配置所以不需要设置什么了 <strong>唯一需要设置一个调用的域名地址即可</strong> </p>
 <p>在 <strong>微信支付官网</strong> 控制台里的 <code>产品中心-&gt;APPID授权管理</code> 中 如下</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/wechatpayset.png" alt="wechatpay_set"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/wechatpayset.png" alt="wechatpay_set"></p>
 <p>在其中 <code>H5支付</code> 一项中添加你要发起支付的域名即可</p>
 <h4 id="H5支付常见错误说明"><a href="#H5支付常见错误说明" class="headerlink" title="H5支付常见错误说明"></a>H5支付常见错误说明</h4><p>关于 <strong>微信H5支付</strong> 的一些常见错误提示 在官网已经列出来了 链接：<a href="https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4" target="_blank" rel="external">https://pay.weixin.qq.com/wiki/doc/api/H5.php?chapter=15_4</a> 我在写下自己经常遇见的一些问题吧</p>
 <p>1.网络环境未能通过安全验证，请稍后再试 遇到这个错误其实是在发起支付的时候传递的 IP 地址错误问题 需要获取 <strong>发起支付端</strong> 的 <strong>公网IP地址</strong> 特别是在PHP里注意下获取到的IP地址是本地的还是公网的<br>2.商家参数格式有误，请联系商家解决 关于这个错误提示 其实是 <strong>Referer</strong> 丢失问题 就是你在请求最终的 H5支付 链接的时候没有传递 <strong>Referer</strong> 头信息导致 具体 <strong>Referer</strong> 丢失原因可以看我另一篇博客 地址： <a href="https://caihongtengxu.github.io/2018/11/01/20181101/" target="_blank" rel="external">这里</a> 或者自行 <a href="https://www.google.com" target="_blank" rel="external">Google</a><br>3.商家存在未配置的参数，请联系商家解决 关于这个错误 其实就是上一步中设置的域名地址 设置好就不会出现这个问题了</p>

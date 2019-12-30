@@ -49,11 +49,11 @@
 数组：是一种 线性表 数据结构，它用一组 连续的内存空间来存储一组具有相同类型的数据
 
 线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 数组、链表、队列、栈非线性表：数据排序不是简单的前后关系数据结构，比如 二叉树、堆、图">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array2.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/erwei_array.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/c_stack.png">
-<meta property="og:updated_time" content="2019-03-19T09:54:14.677Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/array1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/array2.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/erwei_array.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/c_stack.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:30.827Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法-数组的实现">
 <meta name="twitter:description" content="在每一种语言当中都会有数组这种 数据类型，同时它还是一种最基础的 数据结构。
@@ -61,7 +61,7 @@
 数组：是一种 线性表 数据结构，它用一组 连续的内存空间来存储一组具有相同类型的数据
 
 线性表：就是数据排列成像一条线一样的结构。每个线上的数据最多只有前和后两个方向。线性表包括 数组、链表、队列、栈非线性表：数据排序不是简单的前后关系数据结构，比如 二叉树、堆、图">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/array1.png">
 
 
 
@@ -353,7 +353,7 @@
 <hr>
 <h3 id="数组的随机访问"><a href="#数组的随机访问" class="headerlink" title="数组的随机访问"></a>数组的随机访问</h3><p>数组有个杀手级的特性：<code>随机访问</code>，因为在它 <strong>根据下标查找数据</strong> 的时候其时间复杂度为 <strong>O(1)</strong>。如果你用别的查找方法那就不是这个复杂度了，比如你用 <strong>二分查找</strong> 他的复杂度就变成了 <strong>O(logn)</strong>。</p>
 <p>假设用一个10个int类型的数组来举例 如下图</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array1.png" alt="array_data1"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/array1.png" alt="array_data1"></p>
 <p>在申请内存的时候，系统会给数组分配10块连续的内存空间地址从 <strong>1000 - 1039</strong>（都是假设值） 假设首地址为 <code>base_address = 1000</code>。其中每块内存空间都有一个地址，计算机是通过这个内存地址来访问数据的。当访问数组中的某个元素(假设第i个元素)的时候，系统会根据下面的公式直接计算出内存的地址 </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">a[i]_address = base_address + i * data_type_size</div></pre></td></tr></table></figure>
 <p>计算出了内存地址后直接读取，所以对于数组这种结构而言对它随机访问的时候，它的复杂度只有 <strong>O(1)</strong>，因为系统一次计算就得出了具体的内存地址。</p>
@@ -361,7 +361,7 @@
 <h4 id="插入操作"><a href="#插入操作" class="headerlink" title="插入操作"></a>插入操作</h4><p>先来分析下数组插入操作的时间复杂度。</p>
 <p>假设数组长度为n，现在需要将一个数插入到数组的第k的位置上。这时为了把k的位置让出来就需要把 <code>k ~ n</code> 这个范围内的数据都向后移动一位，然后在把数据插入到k的位置。这个时候时间复杂度就需要求一个平均的值也就是 <strong>平均时间复杂度</strong>，因为会出现很多种情况，如果要操作的k是最后一位就不需要移动数组元素了这时是 <strong>最好时间复杂度</strong> 为O(1)，如果要操作的是数组第一位这时就是 <strong>最坏时间复杂度</strong> 为O(n)。因为在每个位置插入元素的概率是一样的都是 1/n 所以平均情况时间复杂度为 <code>(1 + 2 + ...n)/n = O(n)</code> 因为时间复杂度需要去掉常量、系数等。</p>
 <h4 id="优化数组的插入"><a href="#优化数组的插入" class="headerlink" title="优化数组的插入"></a>优化数组的插入</h4><p>当数组中的元素都是无序的时候并且也不要求有序，只是当做一个存储数据的集合。在这种情况下是可以优化数组的，当需要在第k的位置插入数据的时候，只需要先把第k位置的元素移动到数组的末尾，然后k位置空出来插入新的数据即可。利用这种方式 在特定场景下 可以将k位置插入数据这种时间复杂度降低为 <strong>O(1)</strong></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/array2.png" alt="array_data2"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/array2.png" alt="array_data2"></p>
 <h4 id="删除操作"><a href="#删除操作" class="headerlink" title="删除操作"></a>删除操作</h4><p>和插入操作一样，对数组的删除操作为了保证数据的连续性也需要大量搬移数据，不然就会出现空洞，内存就不连续了。</p>
 <p>和插入的时间复杂度也一样，最好的情况时间复杂度为 O(1),也就是删除数组最后一个元素的时候。最坏的情况时间复杂度为O(n)也就是删除数组第一个元素的时候。平均时间复杂度为O(n)。</p>
 <h4 id="优化数组的删除"><a href="#优化数组的删除" class="headerlink" title="优化数组的删除"></a>优化数组的删除</h4><p>在某些不需要数组中数据连续的情况下，可以将多次删除操作集中在一起执行，这样就是多次删除只做一次数据连续迁移。比如可以这样，先给数组中的元素标记为已删除，并不会真正的去执行删除，当数组没有更多的存储空间的时候在去执行一次真正的删除，这样就可以大大减少删除操作导致的数据搬移问题。这只是一种思路不要抬杠 具体还会有很多的细节需要处理的。</p>
@@ -374,7 +374,7 @@
 <p>其实最主要的还是历史原因，因为从C语言的下标就是从0开始计数的，后面的语言大多是借鉴了C语言，减少学习成本，数组就都从0开始计数了</p>
 <h3 id="二维数组的内存地址计算"><a href="#二维数组的内存地址计算" class="headerlink" title="二维数组的内存地址计算"></a>二维数组的内存地址计算</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$a = [</div><div class="line">    [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</div><div class="line">    [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>],</div><div class="line">    [<span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]</div><div class="line">];</div></pre></td></tr></table></figure>
 <p>元素在内存中的地址应该是下面的样子</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/erwei_array.png" alt="erwei_array"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/erwei_array.png" alt="erwei_array"></p>
 <p>所以对于一个二维数组 (n为元素个数) 其内存地址计算公式(求 <code>$array[i][j]</code>)为</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">address = base_address + ( i * n + j) * type_size</div></pre></td></tr></table></figure>
 <h3 id="C语言中的数组越界问题"><a href="#C语言中的数组越界问题" class="headerlink" title="C语言中的数组越界问题"></a>C语言中的数组越界问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int i = 0;</div><div class="line">int arr[3] = &#123;0&#125;;</div><div class="line">arr[3] = 0;</div></pre></td></tr></table></figure>
@@ -383,7 +383,7 @@
 
 <p>先声明的i在内存地址的最高位，然后数组是一个整体，对 arr[0] 分配空间的时候是从最低位开始的 然后就是这块数组内存的最低位了 依次上来</p>
 <p>所以，i 和数组的数据从高位地址到低位地址依次是：<code>i, a[2], a[1], a[0]</code>。<code>a[3]</code>通过寻址公式，计算得到地址正好是 i 的存储地址，所以<code>a[3] = 0</code>，就相当于 <code>i = 0</code> 并不会报错.</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/c_stack.png" alt="c_stack"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/c_stack.png" alt="c_stack"></p>
 <hr>
 
       

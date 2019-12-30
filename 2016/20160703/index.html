@@ -55,12 +55,12 @@ Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合�
 Swagger:
 
 可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/artisanlist.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/lumensuccess.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/testlumen.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/swagger1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/swagger2.png">
-<meta property="og:updated_time" content="2019-03-14T06:37:54.735Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/artisanlist.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/lumensuccess.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/testlumen.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/swagger1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/swagger2.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.936Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lumen集成Swagger使用总结">
 <meta name="twitter:description" content="最近想用Lumen搭建一个微服务项目 主要给别的项目提供API接口 &amp;nbsp; 准备用swagger做显示和调试 结果试了几次因为各种原因都失败了，一波三折 最后还好成功了写个记录吧
@@ -71,7 +71,7 @@ Laravel中衍生出的框架 为速度而生，相对Laravel而言它更适合�
 Swagger:
 
 可以方便美观的呈现出接口API的各种定义，生成API文档，包括参数 路径啥的">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/artisanlist.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/artisanlist.png">
 
 
 
@@ -378,10 +378,10 @@ Swagger:
 <li>修改.env这个文件中的参数<br><code>APP_KEY=P5B4DQdsKGVjczjdnTTiJBzj90ZJBh2F</code><br>这个值需要32位的一个随机字符串 你可以不用使用我上面这个，先暂时用下<br>等程序可以跑起来可以自己写个随机生成的随机function 去生成在替换掉好了 0-9 a-z A-Z 【这个东东加密用的 安全作用吧】</li>
 </ol>
 <p>注意Lumen里好多artisan命令都用不了 不然我也想直接用<code>php artisan key:generate</code> 来生成这个key了<br>使用<code>php artisan list</code>可以看到当前的lumen框架中支持的artisan命令</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/artisanlist.png" alt="Artisan List" title="artisan list"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/artisanlist.png" alt="Artisan List" title="artisan list"></p>
 <p>下一步修改 <code>bootstap/app.php</code>文件 把下面这个注释去掉<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;?php</span></div><div class="line">	<span class="keyword">require_once</span> <span class="keyword">__DIR__</span>.<span class="string">'/../vendor/autoload.php'</span>;</div><div class="line">	<span class="comment">//（这里下面这行原本是注释掉的）打开这里告诉lumen通过 .env配置文件来设置</span></div><div class="line">	Dotenv::load(<span class="keyword">__DIR__</span>.<span class="string">'/../'</span>);</div></pre></td></tr></table></figure></p>
 <p>然后lumen就算安装完成了 你可以自己配置虚拟主机啦之类的来访问测试 或者使用<br><code>php artisan sreve --port=8888</code><br>这个命令就是启动一个server，上面的artisan列表里也有 【ps:这个端口号你随便设置 别和你已经在用的冲突好了】<br>当你看到下面的提示就说明启动成功了哦<br><code>Lumen development server started on http://localhost:8888/</code><br>这时你访问浏览器 输入 <a href="http://localhost:8888/" target="_blank" rel="external">http://localhost:8888/</a></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/lumensuccess.png" alt="lumen success" title="lumen success"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/lumensuccess.png" alt="lumen success" title="lumen success"></p>
 <p><strong>看到这个就算Lumen安装完成了</strong></p>
 <h3 id="集成-Swagger"><a href="#集成-Swagger" class="headerlink" title="集成 Swagger"></a>集成 Swagger</h3><p>可以去 <a href="https://packagist.org" target="_blank" rel="external">https://packagist.org</a> 去找下 <code>Swagger</code>相关的包 这里直接推荐 <code>darkaonline/swagger-lume</code> 这个包<br>贴个作者项目地址： <a href="https://github.com/DarkaOnLine/SwaggerLume" target="_blank" rel="external">https://github.com/DarkaOnLine/SwaggerLume</a> (感谢下)</p>
 <h4 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">composer <span class="keyword">require</span> <span class="string">"darkaonline/swagger-lume 1.*"</span></div></pre></td></tr></table></figure>
@@ -400,9 +400,9 @@ Swagger:
 </blockquote>
 <h4 id="四、修改Swagger配置文件"><a href="#四、修改Swagger配置文件" class="headerlink" title="四、修改Swagger配置文件"></a>四、修改Swagger配置文件</h4><p>swagger 的配置文件 <code>config/swagger-lume.php</code></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="string">'routes'</span> =&gt; [</div><div class="line">        <span class="comment">//这个是swagger的默认路由 输入我们自己配置的地址拼上这个就可以访问了</span></div><div class="line">        <span class="comment">//不喜欢的可以改 我比较习惯用 api-docs 随便改 如果用上面的8888server的话</span></div><div class="line">        <span class="comment">//访问地址就是 http://localhost:8888/api/documentation</span></div><div class="line">        <span class="string">'api'</span> =&gt; <span class="string">'api/documentation'</span>,</div><div class="line">        <span class="comment">//这个就是访问json文件的路由</span></div><div class="line">        <span class="string">'docs'</span> =&gt; <span class="string">'docs'</span>,</div><div class="line">    ],</div><div class="line">    ........[此处分割 N 行]</div><div class="line">    <span class="comment">//这个参数是设置swagger是否每次都检测重新生成json文件 如果为true的话访问速度会有点慢</span></div><div class="line">    <span class="comment">//可以在新加api功能的时候设为true把接口列表加载出来后设为false下次就不用重新生成了</span></div><div class="line">    <span class="comment">//另外如果不想改这里可以设置一个配置参数放到.env里（好像区别不大，总要改一个地方 ）</span></div><div class="line">    <span class="string">'generate_always'</span> =&gt; env(<span class="string">'SWAGGER_GENERATE_ALWAYS'</span>, <span class="keyword">true</span>),</div></pre></td></tr></table></figure>
-<h4 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h4><p>启动server <code>php artisan serve --port=8888</code><br>浏览器访问 <code>http://localhost:8888/api/documentation</code><br>看到下图就算完成了<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/testlumen.png" alt="test success" title="test success"></p>
-<h5 id="最后附上2张伟哥做的swagger详细用法的图示"><a href="#最后附上2张伟哥做的swagger详细用法的图示" class="headerlink" title="最后附上2张伟哥做的swagger详细用法的图示"></a>最后附上2张伟哥做的swagger详细用法的图示</h5><p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/swagger1.png" alt="swagger 1" title="swagger1"></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/caihong/blog/swagger2.png" alt="swagger2" title="swagger2"></p>
+<h4 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h4><p>启动server <code>php artisan serve --port=8888</code><br>浏览器访问 <code>http://localhost:8888/api/documentation</code><br>看到下图就算完成了<br><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/testlumen.png" alt="test success" title="test success"></p>
+<h5 id="最后附上2张伟哥做的swagger详细用法的图示"><a href="#最后附上2张伟哥做的swagger详细用法的图示" class="headerlink" title="最后附上2张伟哥做的swagger详细用法的图示"></a>最后附上2张伟哥做的swagger详细用法的图示</h5><p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/swagger1.png" alt="swagger 1" title="swagger1"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/caihong/blog/swagger2.png" alt="swagger2" title="swagger2"></p>
 <h5 id="在具体的用法去官网看吧QAQ"><a href="#在具体的用法去官网看吧QAQ" class="headerlink" title="在具体的用法去官网看吧QAQ"></a>在具体的用法去官网看吧QAQ</h5><hr>
 
       

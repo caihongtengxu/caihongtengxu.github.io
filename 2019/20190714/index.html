@@ -43,16 +43,16 @@
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近又学了经典的几个 『O(n㏒n)』 复杂度的算法比较。主要是 快速排序、归并排序、以及寻找第K大数，寻找第K小数
 在坑了几天后，终于明白了如何 利用快速排序在O(n)复杂度 内实现寻找第K大数或者第K小数。不得不说思维的转变真的很重要，一直都没绕过来…">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/pivot.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/partition.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/findk.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/MergeSort.gif">
-<meta property="og:updated_time" content="2019-07-15T06:40:42.483Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/pivot.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/partition.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/findk.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/MergeSort.gif">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.969Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法-经典排序算法(Ⅱ)">
 <meta name="twitter:description" content="最近又学了经典的几个 『O(n㏒n)』 复杂度的算法比较。主要是 快速排序、归并排序、以及寻找第K大数，寻找第K小数
 在坑了几天后，终于明白了如何 利用快速排序在O(n)复杂度 内实现寻找第K大数或者第K小数。不得不说思维的转变真的很重要，一直都没绕过来…">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/pivot.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/pivot.png">
 
 
 
@@ -343,7 +343,7 @@
 <p>排序过程：</p>
 <p>1.寻找基准值。快速排序是可以在待排序的数据中选取任意一点作为基准值的，不过一般我们都是选取头或尾的结点为基准值。</p>
 <p>2.找到基准值后开始进行分割。将待排序的数据依依和基准值比较，值小于基准的放到前面，值大于基准的放到后面（PS：这里大小值分别放前还是后都是可以的）。这样操作下来就会得到3个区间，前面一个区间的值都是小于基准值的假设我们叫它 <strong>Before区间</strong>，然后中间是基准值假设我们叫它 <strong>Pivot区间</strong>，然后后面就都是大于基准值的区间假设我们叫它 <strong>After区间</strong>。形如下图：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/pivot.png" alt="pivot"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/pivot.png" alt="pivot"></p>
 <p>3.然后分别对Before区间和After区间重复第一步和第二步操作，直到待排序的区间大小是0或者1的时候结束，此时待排序的数组显然已经是有序的了</p>
 <p>从上面可以看出这是一个重复的操作，可以通过递归来实现。要实现递归需要找到2个东西，第一找到递推公式，第二找到退出条件。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">递推公式：</div><div class="line">quickSort(<span class="keyword">array</span>) = quickSort(before_array) + pivot_array + quickSort(after_array);</div><div class="line"></div><div class="line">退出条件：</div><div class="line">count(<span class="keyword">array</span>) &lt;= <span class="number">1</span></div></pre></td></tr></table></figure>
@@ -355,7 +355,7 @@
 <p>实现过程：</p>
 <p>1.找到一个基准值，一般选择最后一个值或者第一个值，假设我们选择最后一个值作为基准<br>2.使用2个下标来控制已比较区间和待比较区间，假设2个下标分别是 <code>i</code> 和 <code>j</code> 开始的时候都指向下标0，前面放的都是小于基准的值，那此时已比较区间其实是空的，因为还没开始比较。而 <code>i</code> 其实相当于一个分隔符，隔开了已比较区间和待比较区间，它紧跟在已比较区间的后面。这里一定要想清楚。<br>3.依次移动 <code>j</code> 取值和基准比较，如果小于基准把 <code>i</code> 下标的值和 <code>j</code> 下标的值进行交换，然后把 <code>i++</code>，因为 <code>i</code> 是紧跟在已比较区间的后面的，当 <code>i</code> 位置换来了一个小于基准的值，相当于给已比较区间增加了一个元素，那么 <code>i</code> 就需要自增1才能紧跟在已比较区间的后面。<br>4.这样一直走完所有数据比较，可以确定 <code>i</code> 之前的值都是小于基准的，但是 <code>i</code> 位置上的值是不确定的，可能大于或者小于基准值，所以我们要把不确定的 <code>i</code> 下标的值和基准值换过来（对应上面的话也就是 <code>i</code> 下标的值和待排序数据的最后一位的值，因为上面基准取的是最后一位）。此时返回的 <code>i</code> 就是基准值应该出现的位置。</p>
 <p>大概如下图：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/partition.png" alt="partition"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/partition.png" alt="partition"></p>
 <p>PHP实现伪代码</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">partition</span><span class="params">(&amp;$arr, $begin, $end)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// 假设最后一个为枢纽</span></div><div class="line">    $pivot = $arr[$end];</div><div class="line">    <span class="comment">// 设置起点</span></div><div class="line">    $i = $j = $begin;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> ($j; $j &lt; $end; $j++) &#123;</div><div class="line">        <span class="keyword">if</span> ($arr[$j] &lt; $pivot) &#123;</div><div class="line">            $tmp = $arr[$i];</div><div class="line">            $arr[$i] = $arr[$j];</div><div class="line">            $arr[$j] = $tmp;</div><div class="line">            ++$i;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $tmp = $arr[$i];</div><div class="line">    $arr[$i] = $arr[$end];</div><div class="line">    $arr[$end] = $tmp;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $i;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>有了分区操作的优化后，在来优化下快速排序。</p>
@@ -368,7 +368,7 @@
 <p>要实现在 <strong>O(n)</strong> 复杂度内寻找K大数，可以借助优化快速排序的分区方法，<strong>有点不同的是把大于基准的数放到前面。</strong></p>
 <p>实现过程：</p>
 <p>1.借助O(n) 复杂度的分区，大于基准的值放前面，然后返回当前的基准元素的下标 假设是 <code>index</code>。这样的话数组就被分为了3块区域。基准下标前面的数据都是大于基准的，然后是基准值，后面是小于基准的数据。而数据是从下标0开始算的，所有当前基准值的 <strong>下标 + 1</strong> 就是 <code>第 (index + 1)</code> 大数（PS:这里有个点需要绕过来,现在数据变成了前面一个区间都是大于基准的值，然后基准的下标是index，数据的下标从0开始，从左向右数过来，那index下标对应的值不就是 第 （index+1） 大的数了吗）。如下图：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/findk.png" alt="findk"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/findk.png" alt="findk"></p>
 <p>返回的下标 <code>index = 5</code> 说明当前的基准是 <code>5 + 1 = 6</code> 也就是第六大的数。</p>
 <p>2.进行判断。如果 <code>index + 1 == K</code> 说明当前的下标 index 对应的值就是第K大数。因为下标从0开始的，+1才回到正常。如果 <code>index + 1 &lt; K</code> 说明第K大的数在 下标 <code>index + 1</code> 到 <code>end</code> 之间（为什么？index+1 &lt; k 说明当前的下标落在了前面的区间，那只能继续向基准后面的区间继续查找。）; 如果 <code>index + 1 &gt; K</code> 说明第K大数在下标 <code>begin</code> 到 <code>index - 1</code> 之间，index前一个不就是减1嘛（同上面）！</p>
 <p>PHP实现伪代码：</p>
@@ -382,7 +382,7 @@
 <p>排序过程：</p>
 <p>1.从中间把待排序的数据分成左右两半<br>2.然后分别对两部分进行第一步操作，继续分，分到只有小于等于1个元素的时候开始准备排序合并<br>3.把左右两部分排序合并，递归合并回来就完成了排序</p>
 <p>动图如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/MergeSort.gif" alt="merge_sort"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/MergeSort.gif" alt="merge_sort"></p>
 <p>PHP实现伪代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mergeSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $len = count($arr);</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($len &lt;= <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> $arr;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    $middle = floor($len / <span class="number">2</span>);</div><div class="line">    $left = array_slice($arr, <span class="number">0</span>, $middle);</div><div class="line">    $right = array_slice($arr, $middle);</div><div class="line">    $left = mergeSort($left);</div><div class="line">    $right = mergeSort($right);</div><div class="line"></div><div class="line">    $arr = myMerge2($left, $right);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> $arr;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">myMerge</span><span class="params">($left, $right)</span></span></div><div class="line">&#123;</div><div class="line">    $tmp = [];</div><div class="line">    </div><div class="line">    <span class="comment">// 循环比较 直到左右都还有元素的时候</span></div><div class="line">    <span class="comment">// 谁没有元素了就是谁被取空了</span></div><div class="line">    <span class="keyword">while</span> (count($left) &amp;&amp; count($right)) &#123;</div><div class="line">        $tmp[] = $left[<span class="number">0</span>] &gt; $right[<span class="number">0</span>] ? array_shift($right) : array_shift($left);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 当比较完后其中之一还会有剩余 而且是排序好的</span></div><div class="line">    <span class="comment">// 前面的tmp中肯定都是小的有序，所以合并进来剩余的</span></div><div class="line">    <span class="keyword">return</span> array_merge($tmp, $left, $right);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>上面的写法有些偷懒，其中的关键点在于<strong>合并的函数</strong> 也就是上面的 <code>myMerge()</code> 函数，就是把2个有序的数组合并成一个有序的数组。</p>

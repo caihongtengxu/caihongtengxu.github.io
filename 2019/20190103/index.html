@@ -41,16 +41,16 @@
 <meta property="og:url" content="https://www.tokme.cn/2019/20190103/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="在某人的怂恿下，准备升级体验下最新版的Mysql，然后就在Docker里做了个试验 直接 pull 了最新版 8.0.13 然后连接的时候一直报错 净整幺蛾子">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/cant_connect_mysql.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/workbench_debug.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/mysql_paasword_error.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/workbench_success.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/sqlyog_success.png">
-<meta property="og:updated_time" content="2019-01-03T08:17:56.602Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/cant_connect_mysql.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/workbench_debug.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/mysql_paasword_error.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/workbench_success.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/sqlyog_success.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.363Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于Mysql8的远程连接">
 <meta name="twitter:description" content="在某人的怂恿下，准备升级体验下最新版的Mysql，然后就在Docker里做了个试验 直接 pull 了最新版 8.0.13 然后连接的时候一直报错 净整幺蛾子">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/cant_connect_mysql.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/cant_connect_mysql.png">
 
 
 
@@ -346,11 +346,11 @@
 <p>最后就是镜像的名字了 没有带 tag</p>
 <font color="red"><strong>Tip:</strong> 运行容器的时候一定要指定端口号，我第一次创建的时候忘记指定端口号了，所以默认生成的容器是开放了mysql的3306端口但是那是容器啊 没有本机的端口去映射怎么访问了 所以我测试连接的时候就看到了熟悉的界面</font>
 
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/cant_connect_mysql.png" alt="can`t connect mysql server"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/cant_connect_mysql.png" alt="can`t connect mysql server"></p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># docker run --name mysql8 -d -p 3306:3306 -v /data/mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=root123456 mysql</span></div><div class="line"><span class="number">27272</span>feb56cd9f8b95b85e53f6bde525f2f5f324c329c3ec8a8450563c2d635d</div><div class="line">[root@localhost ~]<span class="comment"># docker ps</span></div><div class="line">CONTAINER ID  IMAGE  COMMAND     CREATED   STATUS         PORTS                              NAMES</div><div class="line"><span class="number">27272</span>feb56cd  mysql  <span class="string">"docker.."</span>  <span class="number">2</span>s ago    Up <span class="number">2</span> seconds   <span class="number">0.0</span><span class="number">.0</span><span class="number">.0</span>:<span class="number">3306</span>-&gt;<span class="number">3306</span>/tcp, <span class="number">33060</span>/tcp  mysql8</div></pre></td></tr></table></figure>
 <p>这样就创建好了Mysql的容器</p>
 <h3 id="设置远程连接"><a href="#设置远程连接" class="headerlink" title="设置远程连接"></a>设置远程连接</h3><p>下面要设置远程连接访问权限 需要进入容器设置 <code>docker exec -it mysql8 bash</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">root@491fc8c3bb16:/# mysql -uroot -p</div><div class="line">Enter password: </div><div class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</div><div class="line">...</div><div class="line">Server version: 8.0.13 ...</div><div class="line">...</div><div class="line">mysql&gt; use mysql;</div><div class="line">...</div><div class="line">mysql&gt; select host, user, authentication_string, plugin from user;</div><div class="line">|-----------------------------------------------------------------------------------|</div><div class="line">| host      | user             | authentication_string      | plugin                |</div><div class="line">|-----------------------------------------------------------------------------------|</div><div class="line">| %         | root             | $A$005$Zvl9/;vkZ)u...      | caching_sha2_password |</div><div class="line">| localhost | mysql.infoschema | $A$005$THISISACOMB...      | caching_sha2_password |</div><div class="line">| localhost | mysql.session    | $A$005$THISISACOMB...      | caching_sha2_password |</div><div class="line">| localhost | mysql.sys        | $A$005$THISISACOMB...      | caching_sha2_password |</div><div class="line">| localhost | root             | $A$005$W")OV8C]-@...       | caching_sha2_password |</div><div class="line">|-----------------------------------------------------------------------------------|</div><div class="line"></div><div class="line">5 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">root@<span class="number">491</span>fc8c3bb16:/<span class="comment"># mysql -uroot -p</span></div><div class="line">Enter password: </div><div class="line">Welcome to the MySQL monitor.  Commands end with ; <span class="keyword">or</span> \g.</div><div class="line">...</div><div class="line">Server version: <span class="number">8.0</span><span class="number">.13</span> ...</div><div class="line">...</div><div class="line">mysql&gt; <span class="keyword">use</span> <span class="title">mysql</span>;</div><div class="line">...</div><div class="line">mysql&gt; select host, user, authentication_string, plugin from user;</div><div class="line">|-----------------------------------------------------------------------------------|</div><div class="line">| host      | user             | authentication_string      | plugin                |</div><div class="line">|-----------------------------------------------------------------------------------|</div><div class="line">| %         | root             | $A$<span class="number">005</span>$Zvl9/;vkZ)u...      | caching_sha2_password |</div><div class="line">| localhost | mysql.infoschema | $A$<span class="number">005</span>$THISISACOMB...      | caching_sha2_password |</div><div class="line">| localhost | mysql.session    | $A$<span class="number">005</span>$THISISACOMB...      | caching_sha2_password |</div><div class="line">| localhost | mysql.sys        | $A$<span class="number">005</span>$THISISACOMB...      | caching_sha2_password |</div><div class="line">| localhost | root             | $A$<span class="number">005</span>$W<span class="string">")OV8C]-@...       | caching_sha2_password |</span></div><div class="line">|-----------------------------------------------------------------------------------|</div><div class="line"></div><div class="line">5 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
 <p>其实主要是设置那个 <strong>host=% &amp;&amp; user=root</strong> 的列 如果有这个就是开放了 <strong>root用户</strong> 的所有 <strong>host</strong> 访问权限 如果没有的话就不能使用root远程登录了 也可以干掉新建用户权限</p>
 <h4 id="创建用户"><a href="#创建用户" class="headerlink" title="创建用户"></a>创建用户</h4><p>在 <strong>Mysql8</strong> 下创建用户和之前 <strong>Mysql5.6</strong>（ps:没有试别的版本…） 有些不一样</p>
 <p>在 Mysql8 下 这样直接创建用户并指定密码会报错</p>
@@ -366,9 +366,9 @@
 <p><code>to &#39;reggie&#39;@&#39;%&#39;</code> 表示指定用户 <strong>reggie</strong> 艾特符号后面的 <strong>%</strong> 表示统配所有的host地址，这些地址可以远程访问。你也可以指定具体IP地址 限制只有它才能访问 比如 <code>to &#39;reggie&#39;@&#39;192.168.*.*&#39;</code></p>
 <h3 id="远程连接Mysql"><a href="#远程连接Mysql" class="headerlink" title="远程连接Mysql"></a>远程连接Mysql</h3><p>做好了准备工作后具备了远程连接的授权 就测试一下吧 果不其然又挂了</p>
 <p>使用 <strong>Mysql Workbench</strong> 连接直接崩溃 没见过的骚操作！</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/workbench_debug.png" alt="workbench_bug"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/workbench_debug.png" alt="workbench_bug"></p>
 <p>然后换了个客户端连接工具 <strong>SQLyog</strong> 提示如下</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/mysql_paasword_error.png" alt="mysql_password_error"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/mysql_paasword_error.png" alt="mysql_password_error"></p>
 <p>看到这个大概原因清楚了 一通搜索发现 报 2059 错误，这是因为 <strong>MySql8</strong> 和 <strong>5.*</strong> 的加密规则不一样，而现在的可视化工具只支持旧的加密方式</p>
 <p>我的 <strong>Workbench</strong> 是 6.3 版本 至于他为什么会报上图的错不得而知</p>
 <p>出现这个原因是 Mysql8 之前的版本中加密规则是 <code>mysql_native_password</code>, 而在 Mysql8 之后,加密规则是 <code>caching_sha2_password</code>.</p>
@@ -376,10 +376,10 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select host, user, authentication_string, plugin from user;</div><div class="line">+------+------+-----------------------+-----------------------+</div><div class="line">| host | user | authentication_string | plugin                |</div><div class="line">+------+------+-----------------------+-----------------------+</div><div class="line">| %    | root |                       | mysql_native_password |</div><div class="line">| %    | mila |                       | mysql_native_password |</div><div class="line">+------+------+-----------------------+-----------------------+</div><div class="line"><span class="number">2</span> rows in set (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure>
 <p>解决问题方法有两种, 一种是升级客户端工具版本, 一种是把Mysql用户登录密码加密规则还原成 <code>mysql_native_password</code>.</p>
 <p>第一种很简单啦 直接下载喜欢用的客户端工具最新版就好了 比如升级 MysqlWorkbench 最新版在来连接</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/workbench_success.png" alt="workbench_success"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/workbench_success.png" alt="workbench_success"></p>
 <p>第二种方法修改加密规则</p>
 <p>执行命令 <code>alter user &#39;reggie&#39;@&#39;%&#39; identified with mysql_native_password by &#39;reggie123456&#39;;</code> 最后的 by 后面是你要设置的密码,然后执行刷新 <code>flush privileges;</code> 再次打开客户端连接即可</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/sqlyog_success.png" alt="sqlyog_success"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/sqlyog_success.png" alt="sqlyog_success"></p>
 <hr>
 
       

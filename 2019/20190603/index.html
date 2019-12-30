@@ -41,19 +41,19 @@
 <meta property="og:url" content="https://www.tokme.cn/2019/20190603/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近准备把近期学到的一些东西应用到公司里，先来改进下缓存系统吧。">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through-help.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/filter.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_cacheData.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getInsuranceData.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/redis_getset.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getlock.png">
-<meta property="og:updated_time" content="2019-06-06T02:56:58.022Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/cache-through.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/cache-through-help.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/filter.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/cache.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/function_cacheData.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/function_getInsuranceData.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/redis_getset.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/function_getlock.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.848Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于公司缓存使用的改进">
 <meta name="twitter:description" content="最近准备把近期学到的一些东西应用到公司里，先来改进下缓存系统吧。">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/cache-through.png">
 
 
 
@@ -427,7 +427,7 @@
 </blockquote>
 <h3 id="缓存常见问题"><a href="#缓存常见问题" class="headerlink" title="缓存常见问题"></a>缓存常见问题</h3><p>使用缓存中常见的挖坑有3个，也就是这次要改善的代码</p>
 <h4 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h4><p>缓存穿透：假如查询数据，发现缓存中不存在，然后去查询数据库也不存在。这个时候就相当于缓存是一种摆设一样，等于所有的请求都是直接打到数据库上，这样访问量一大，数据库有挂掉的风险。</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through.png" alt="cache_through"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/cache-through.png" alt="cache_through"></p>
 <p>解决方案：</p>
 <p>① 对于为空的查询结果 设置默认 <code>Null</code> 进行缓存（异常的操作不要进行缓存）。</p>
 <blockquote>
@@ -436,17 +436,17 @@
 <li>复杂了业务逻辑，需要在插入缓存的时候删除这个空缓存</li>
 </ul>
 </blockquote>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache-through-help.png" alt="cache_through_help"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/cache-through-help.png" alt="cache_through_help"></p>
 <p>② 使用过滤器</p>
 <blockquote>
 <p>需要事先定义一些过滤规则，对于无效的请求直接过滤掉返回，连缓存都不用去查询了。</p>
 </blockquote>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/filter.png" alt="filter"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/filter.png" alt="filter"></p>
 <p>针对以上改进 最终的执行流程如下图</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/cache.png" alt="cache"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/cache.png" alt="cache"></p>
 <p><strong>Laravel</strong> 下改进伪代码如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_cacheData.png" alt="function_cacheData"></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getInsuranceData.png" alt="function_getInsuranceData"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/function_cacheData.png" alt="function_cacheData"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/function_getInsuranceData.png" alt="function_getInsuranceData"></p>
 <p>过滤器的话，可以使用中间件来实现。新建一个中间件，在其中指定过滤规则，然后在执行的方法中增加中间件过滤即可。</p>
 <h4 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h4><p>缓存击穿：假如某些Key设置了过期时间，在过期后有大量请求进来（比如热点数据），导致直接查询数据库，访问量剧增，数据库有挂掉的风险。</p>
 <p>解决方案：</p>
@@ -500,9 +500,9 @@
 <li>再假设C和B同时发现lockDelay超时了，并在B操作 <code>getset</code> 之前先执行了 <code>getset</code> 命令，这也没有关系。此时C获得了锁，而B执行的 <code>getset</code>设置了一个新的过期时间（注意这里：C获得锁设置的新过期时间肯定是大于当前的），而B执行后又增大了过期时间，但是B返回的过期时间其实是C设置的也就是大于当前的时间，而B通过比较会发现他并没有获得锁也就不会执行业务逻辑了，会继续选择等待以尝试获得锁。</li>
 </ul>
 <p>画图流程如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/redis_getset.png" alt="redis_getset"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/redis_getset.png" alt="redis_getset"></p>
 <p>改进伪代码示例如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/function_getlock.png" alt="function_getlock"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/function_getlock.png" alt="function_getlock"></p>
 <h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><p>缓存雪崩：是指大量的缓存在同一个时刻失效，从而导致请求大量打到数据库上，数据库压力巨大引起系统雪崩。</p>
 <p>解决办法：</p>
 <blockquote>

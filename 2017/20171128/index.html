@@ -41,17 +41,17 @@
 <meta property="og:url" content="https://www.tokme.cn/2017/20171128/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="下面的整理也是自己最近看的《计算机操作系统设计与实现 第三版》的内容后 自己理解的一些东西 记录下这里主要是自己理解的进程一些内容 可能和实际有误~~~">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process2.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_status.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_shixian.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_zhongduan.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_thread.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_thread2.png">
-<meta property="og:updated_time" content="2019-03-14T06:37:54.823Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process2.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process_status.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process_shixian.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process_zhongduan.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process_thread.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process_thread2.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机操作系统之进程扫盲">
 <meta name="twitter:description" content="下面的整理也是自己最近看的《计算机操作系统设计与实现 第三版》的内容后 自己理解的一些东西 记录下这里主要是自己理解的进程一些内容 可能和实际有误~~~">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process2.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process2.png">
 
 
 
@@ -342,7 +342,7 @@
 </blockquote>
 <h4 id="进程的概念"><a href="#进程的概念" class="headerlink" title="进程的概念"></a>进程的概念</h4><p>在计算机操作系统 进程是对正在运行的程序的抽象<br>简单点讲 一个正在运行的程序就是一个进程(processes)，其中包括了他的寄存器 程序计数器，变量的值 堆栈等等。<br>比如打开一个word 打开一个QQ 打开一个网易云音乐 这些都是一个进程</p>
 <h4 id="进程模型"><a href="#进程模型" class="headerlink" title="进程模型"></a>进程模型</h4><p>计算机中所有可运行的软件（包括操作系统）被组织成若干顺序进程 也就是进程 他使得并行更容易处理（其实是伪并行吧 因为真正的CPU会在进程之间来回切换 来运行进程 只是速度非常快 让人们感觉不到切换 以为是并行处理的）</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process2.png" alt=""></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process2.png" alt=""></p>
 <p>比如上面的例子 有4个进程 分别是 A、B、C、D 每个进程都有自己的程序计数器 和自己的处理逻辑 每个都是独立的 CPU在执行的时候会在他们之间来回的切换 当然最外面的物理计数器只有一个 当CPU执行到进程A的时候回把A的程序计数器给最外面的物理计算器然后运行 当CPU决定要切换到下一个进程的时候 （例子中就是B了）先把当前进行了的计数器重新还给进程的A的程序计数器 然后物理计算器在获取进程B的程序计数器继续执行 后面同理 每个进程的处理速度都不一样 当然也会有优先级问题 这些就是CPU的切换算法涉及的一些东西 不是很懂了这个</p>
 <h4 id="进程的创建"><a href="#进程的创建" class="headerlink" title="进程的创建"></a>进程的创建</h4><p>一般来讲会有下面4种情况会创建进程</p>
 <ol>
@@ -365,7 +365,7 @@
 <li>阻塞态（Blocked 这种时候除非某种外部事件发生，否则不能运行）</li>
 </ol>
 <p>前面2中状态下 其实都可以运行 只是后者中暂时没有CPU分配给他.<br>第三种状态下不可运行 即使把CPU资源分配给了他也不可运行.</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_status.png" alt="进程状态"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process_status.png" alt="进程状态"></p>
 <ul>
 <li>上面是一个进程状态转换图 下面来举例说明一下</li>
 <li>转换1由运行态—-&gt;阻塞态 这种情况是进程发现自己无法继续运行下去<br>比如一个进程需要从终端读取输入才可继续运行 而终端一直没有输入 进程会发生这种转换</li>
@@ -377,9 +377,9 @@
 </ul>
 <h4 id="进程的实现"><a href="#进程的实现" class="headerlink" title="进程的实现"></a>进程的实现</h4><p>为了实现进程模型 系统维护着一张表 这个表就是进程表（processes table）每个进程占用一个表项（个人理解相当于一个数据库表的一条记录吧）。这些表项包含了进程的状态，他的计数器、栈指针、内存分配状况、打开文件状态、统计和调度信息、定时器和其他信号 以及他由运行态到就绪态转换所需要保存的其他信息（个人理解这些信息就相当于数据库表的字段 或者属性一样的东西吧）。这些信息是为了让他再次运行的时候像未中断过一样。</p>
 <p>在一些系统中进程通信、内存管理、文件管理是由几个不同的模块来管理的 然后他们就把进程表给分割开了 也就是他们各自维护了进程表的一些信息（相当于上面的字段吧）</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_shixian.png" alt="进程的实现"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process_shixian.png" alt="进程的实现"></p>
 <p>下面来举例说明一台有单个CPU 多个I/O设备的计算机如果维护多个顺序进程（也就是进程）来做更多的解释。<br>假设当一个磁盘发生中断（其实就是cpu从当前进程切换到别的进程）时 用户进程（id 23）正在运行，则中断硬件将当前的程序计数器、程序状态字以及可能的一个或多个寄存器压入当前堆栈 计算机立即跳转到中断向量多指定的地址处，这些步骤都是硬件做的处理（至于硬件怎么实现的并不关心估计也是电气工程学）。后面软件就接管了后续的操作。中断服务的过程从全部寄存器压入堆栈开始，当前“进程号”（这个例子里就是23）及一个指向其表项的指针被保存在全局变量中 这是为了能够迅速找回他们，随后将中断存入的那部分信息从堆栈中删除，并将栈指针指向一个被进程处理程序（这里应该是刚刚23号处理中所占用的堆栈）所使用的临时堆栈，然后调用一个C过程来处理特定中断剩下的工作。一般进程间通信是通过消息完成的（管道也可以） 下一步构造一条发送给磁盘进程的消息 这时磁盘进程正被阻塞等待该消息的到来。这条消息说发生了一条中断，以此来区分别的用户的读磁盘消息（因为现在中断了但是还会有别的用户正发送读取的操作啊），现在磁盘状态由阻塞态转为就绪态然后中断服务器调用调度器来完成调度 决定是中断（继续执行当前进程）还是给别的用户读取（也就是别的进程） 下面是一个中断处理的大概执行过程 不同的操作系统可能会有所不同</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_zhongduan.png" alt="进程中断"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process_zhongduan.png" alt="进程中断"></p>
 <h4 id="线程的概念"><a href="#线程的概念" class="headerlink" title="线程的概念"></a>线程的概念</h4><ul>
 <li>在传统操作系统中，每个进程只存在一个地址空间和一个控制流 这个控制流就是线程（thread）。有些情况下需要在同一个地址空间中有多条控制流并行的运行 就像他们都是单独的进程一样（其实他们只是共享地址空间）这些多个控制流就是–多线程</li>
 <li>进程中有一个存放程序正文和数据以及其他资源的地址空间。这些资源包括打开的文件、子进程、未处理的定时器、信号处理器和审计信息</li>
@@ -389,9 +389,9 @@
 <li>线程有堆栈 用来存储执行的历史 其中每一栈帧保存了没有返回的过程调用</li>
 </ul>
 <p>尽管线程需要在进程中执行，但进程和线程是可以分别对待的2个不同的概念，进程是用来进程资源整合而线程是CPU调度的实体</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_thread.png" alt="线程"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process_thread.png" alt="线程"></p>
 <p>这个图展示了一个在用户空间 三个进程各有一个线程 和 一个进程包含3个线程</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process_thread2.png" alt="进程和线程的对比"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process_thread2.png" alt="进程和线程的对比"></p>
 <p>这个是每个进程和线程的一些区别</p>
 <p>另外在一些系统中 操作系统是知道每个进程有多少线程的，所以当一个线程阻塞时 系统会选择下一个线程来运行 这些线程可能来自同一个进程 也可以是不同的线程。为了进行调度内核必须有一张线程表 记录所有的线程 这个就与进程表类似了</p>
 <p>CPU在线程之间切换时是有损耗的 因为他需要保存进程的状态 寄存器之类的信息 以便下次运行该进程的时候可以无缝衔接就像未中断过一样，虽然是在进程间切换但是进程下面又细分出了线程 所以也可以说是在线程之间切换的，这就产生了两种方式 </p>

@@ -41,19 +41,19 @@
 <meta property="og:url" content="https://www.tokme.cn/2019/20190220/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain11.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain12.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain13.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain14.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain15.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain16.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain17.png">
-<meta property="og:updated_time" content="2019-03-19T09:55:40.238Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain10.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain11.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain12.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain13.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain14.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain15.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain16.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain17.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.570Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="优化Mysql随机取出N条记录">
 <meta name="twitter:description" content="今天看到一篇很好的文章 优化Mysql随机取出N条记录。 有时候会遇到 比如从一张表中随机取出N条 不重复 记录的需求，然后我以前都是上去就是这样 SELECT * FROM table ORDER BY RAND() LIMIT 1 今天发现这个有个性能漏洞 当数据量大的时候 会吓死你 下面我准备了一张3000W数据的表 就2个字段 来模拟下优化">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain10.png">
 
 
 
@@ -341,37 +341,37 @@
 <p>先来分析下需求 一般这种需求有两种实现方式</p>
 <h3 id="使用程序处理"><a href="#使用程序处理" class="headerlink" title="使用程序处理"></a>使用程序处理</h3><p>当数据量很大的时候 其实可以通过随机数在程序中随机生成N个ID 然后一条SQL <code>select * from uuid_test where id in (100000,232323,23232322,23232366);</code> 直接获取到结果</p>
 <p>看下他的性能 使用 <code>explain extended sql</code>, <strong>extended</strong> 参数可以显示更详细的信息 不加也可以，如果后面还有 <code>show warnings</code> 的话还可以显示Mysql优化的SQL过程 虽然不一定是最终执行的优化SQL</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain10.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain10.png" alt="explain"></p>
 <p>使用了 <code>using where</code> 但是 预计遍历的 <code>row=4</code> 很少 性能还凑合 不算太差</p>
 <h3 id="使用Mysql处理"><a href="#使用Mysql处理" class="headerlink" title="使用Mysql处理"></a>使用Mysql处理</h3><p>如果使用Mysql处理的话 又会有几种情况需要区分。不过在此之前先来看下我经常写的那个SQL的性能</p>
 <p><code>explain select * from uuid_test order by RAND() limit 1;</code> 你不要尝试直接查询 我试了下 查询近2分钟 直接用 explain 来分析</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain11.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain11.png" alt="explain"></p>
 <p>可以看到这条SQL 使用了索引 使用了临时表 使用了文件排序 并且是全表扫描 3000多W行。 下面讲下优化</p>
 <h4 id="如果ID是连续分布的"><a href="#如果ID是连续分布的" class="headerlink" title="如果ID是连续分布的"></a>如果ID是连续分布的</h4><p>如果ID属性在数据库中是连续分布的 可以使用 <code>Max()</code> + <code>RAND()</code> 来获取随机ID</p>
 <p><code>explain select CEIL(RAND() * MAX(id)) from uuid_test;</code></p>
 <p>上面因为 <code>RAND() * MAX(id)</code> 的结果是一个小数 可以通过 <code>CEIL</code> 或者 <code>FLOOR</code> 来取整</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain12.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain12.png" alt="explain"></p>
 <p>因为是主键 使用了一个索引 虽然这样会加速查询 但它同时还是全表扫描 我测了下基本要 <strong>6S</strong> 左右 还有很大的优化空间</p>
 <p><code>explain select CEIL(RAND() * (select MAX(id) from uuid_test));</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain13.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain13.png" alt="explain"></p>
 <p>使用了子查询后 性能回到了等同于 单查询 <code>max</code> 的程度 看上面分析 分别是没有使用表 和 最优化查询 然后测试了下 执行时间 <strong>0.005S</strong> 比上面差距了 <strong>1000</strong> 倍… （不知道有没有算错…）</p>
 <p>经过上面已经拿到了 ID 下一步就是获取对应的记录了 用了个常规查询 直接 <code>id = x</code> 然后又死了</p>
 <p><code>explain select * from uuid_test where id = (select CEIL(RAND() * (select MAX(id) from uuid_test)));</code></p>
 <p>性能如下</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain14.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain14.png" alt="explain"></p>
 <p>虽然子查询中已经很快了 但是外面的 where 导致了使用where使用索引 并且全表扫描。经过测试 查询时间为 <strong>10S</strong> 左右</p>
 <p>可以通过 <code>show warnings;</code> 来获取警告信息 顺便说下 <code>show warnings;</code> 是什么 根据官方文档说明</p>
 <blockquote>
 <p>是一个诊断语句，显示有关在当前会话中执行语句所产生的条件（错误，警告和注释）的信息<br>在EXPLAIN之后也使用SHOW WARNINGS来显示EXPLAIN生成的扩展信息</p>
 </blockquote>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain15.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain15.png" alt="explain"></p>
 <p>必须换一种方法确保随机ID只被生成一次</p>
 <p><code>explain SELECT * FROM uuid_test JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM uuid_test)) AS id ) AS r2 USING (id);</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain16.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain16.png" alt="explain"></p>
 <p>SQL换成这样后只选择了一行 没有排序没有应用 查询被大部分优化</p>
 <h4 id="如果ID是不连续的"><a href="#如果ID是不连续的" class="headerlink" title="如果ID是不连续的"></a>如果ID是不连续的</h4><p>考虑数据库ID是不连贯的情况，可以根据随机的ID 然后取出比它或者小的数据 然后 <code>Limit</code> 限制返回的条数</p>
 <p><code>explain SELECT * FROM uuid_test as r1 JOIN (SELECT (RAND() * (SELECT MAX(id) FROM uuid_test)) AS id ) AS r2 where r1.id &gt;= r2.id limit 10;</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/mysql/explain17.png" alt="explain"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/mysql/explain17.png" alt="explain"></p>
 <p>这条SQL的性能和上面基本差不多 关键在于外面的where查询上 有可能会遍历半个表 因为我又3000多W数据 它预计的差不多1500W的样子 即使这样 他的速度也是很快</p>
 <p>不过他取出来的结果是在那个ID上或下 连续的10条记录…好像没啥办法优化成完全不规则随机</p>
 <h4 id="完全随机N条"><a href="#完全随机N条" class="headerlink" title="完全随机N条"></a>完全随机N条</h4><p>如果想完全随机N条记录的话 数据量很大的时候还是建议在程序里随机记录ID吧</p>

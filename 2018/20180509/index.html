@@ -41,21 +41,21 @@
 <meta property="og:url" content="https://www.tokme.cn/2018/20180509/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近修复一个很久前的bug Laravel的项目 发现了一个 大大的惊喜发现代码里写一个 for 循环然后每次循环都开启了一个事务,由于中间有些数据校验失败的情况下 直接返回了没有做任何别的处理 就仅仅只是简单的直接返回了 然后 continue 继续执行 ,没有任何的 rollback 或者 commit 的操作(不要问我为什么这么写 估计当时脑子进 S 了吧)最后惊喜发生了 操作了2条数据">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit2.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit3.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit4.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit5.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit6.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit7.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit8.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit10.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit9.png">
-<meta property="og:updated_time" content="2019-03-14T06:37:54.441Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit2.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit3.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit4.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit5.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit6.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit7.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit8.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit10.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit9.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql && Laravel 事务总结">
 <meta name="twitter:description" content="最近修复一个很久前的bug Laravel的项目 发现了一个 大大的惊喜发现代码里写一个 for 循环然后每次循环都开启了一个事务,由于中间有些数据校验失败的情况下 直接返回了没有做任何别的处理 就仅仅只是简单的直接返回了 然后 continue 继续执行 ,没有任何的 rollback 或者 commit 的操作(不要问我为什么这么写 估计当时脑子进 S 了吧)最后惊喜发生了 操作了2条数据">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit1.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit1.png">
 
 
 
@@ -356,27 +356,27 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; set @@autocommit = <span class="number">0</span>;</div><div class="line">Query OK, <span class="number">0</span> rows affected (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure>
 <p>来关闭当前会话中的自动提交 当然也可以使用 <code>set @@autocommit = Off;</code> 都是一样的</p>
 <h3 id="事务外-没有开启事务的情况-Mysql的自动提交测试"><a href="#事务外-没有开启事务的情况-Mysql的自动提交测试" class="headerlink" title="事务外(没有开启事务的情况) Mysql的自动提交测试"></a>事务外(没有开启事务的情况) Mysql的自动提交测试</h3><p>一.测试事务外开启自动提交 <code>set @@autocommit = 1;</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit1.png" alt="自动提交1"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit1.png" alt="自动提交1"></p>
 <p>可以看到左边的会话中添加了一条记录 然后在右边的会话可以查询可以立马看到 说话数据已经写入到了数据库中</p>
 <p>二.测试事务外关闭自动提交 <code>set @@autocommit = 0;</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit2.png" alt="自动提交2"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit2.png" alt="自动提交2"></p>
 <p>这个时候我们可以看到 左边的会话中已经有记录了 但是右边的会话中确实是没有记录的 说明他还没有真正的写入到数据库中</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit3.png" alt="自动提交3"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit3.png" alt="自动提交3"></p>
 <p>然后我们在去执行一次 <code>commit</code> 然后数据就真正的提交了 写入到了数据库中</p>
 <h4 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h4><font color="red">在Mysql中 没有开启事务的情况下 <strong>autocommit</strong> 的配置只是告诉数据库，<code>autocommit = 1</code> 的时候，每个数据库操作和查询都是一个 事务, 每一个 Query 都自动带一个隐性的 <code>commit</code> 以保证数据真正的写入到了数据库<br>在 <code>autocommit = 0</code> 的时候整个会话是一个事务 在你执行 <code>commit / rollback</code> 之前 所有的操作都是在事务内 另一个会话的访问是不受当前这个会话影响的 也就是当前会话的东西没有真正写入到数据库中</font>
 
 <h3 id="事务内-Mysql-的自动提交测试"><a href="#事务内-Mysql-的自动提交测试" class="headerlink" title="事务内 Mysql 的自动提交测试"></a>事务内 Mysql 的自动提交测试</h3><p>一.测试事务内开启自动提交 <code>set @@autocommit = 1;</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit4.png" alt="自动提交4"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit4.png" alt="自动提交4"></p>
 <p>这时候我们可以看到在右边的会话中并没有看到数据 也就是他并没有真正的提交到数据库中</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit5.png" alt="自动提交5"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit5.png" alt="自动提交5"></p>
 <p>这是我们执行一下 <code>commit</code> 数据才真正添加到数据库</p>
 <p>二.测试事务内关闭自动提交 <code>set @@autocommit = 0;</code></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit6.png" alt="自动提交6"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit6.png" alt="自动提交6"></p>
 <p>可以看出和上面一样 数据更加不会提交到数据库中 右边的会话中是不会看到数据的</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit7.png" alt="自动提交7"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit7.png" alt="自动提交7"></p>
 <p>最后执行一次 <code>commit</code> 数据真正加到数据库中 右边的会话中也可以读取到数据了</p>
 <p>三.测试事务内 <font color="blue"><strong>所谓的嵌套事务</strong> </font></p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit8.png" alt="自动提交8"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit8.png" alt="自动提交8"></p>
 <p>整个流程 ①开始一个事务 ②插入一条记录 值700 ③然后开启第二个事务 这个时候其实被Mysql执行了一次 <code>commit</code> 数据已经提交到了数据库 所以右边的会话中是可以查询到的 ④第二个插入 值800 然后右边的会话中查询是没有800这条记录的 所有说明没有被提交到数据库 ⑤回滚第二条记录 事务结束 右边的会话中获取最终的数据</p>
 <h4 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a>总结：</h4><font color="red">对于Mysql而言,他是不支持 嵌套事务 的,在上一个事务未关闭的情况下,开启一个新的事务 它会隐式的对上一个事务 执行 <code>commit</code> 操作 数据会真正的写入到数据库中,在这种所谓的嵌套事务中 自动提交的参数 autocommit = 0 或者 1 对它都没有影响！</font>
 
@@ -384,7 +384,7 @@
 <p>回滚 <code>rollback to savepoint your_point_name</code> <strong>他的回滚范围就是创建的point 到rollback的这一段的范围</strong></p>
 <p>删除 <code>release savepoint your_point_name;</code></p>
 <p>如下来 先来一个测试</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit10.png" alt="自动提交10"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit10.png" alt="自动提交10"></p>
 <p>讲解下 上图例子中的 <code>savepoint</code> 用法</p>
 <p>第一步.我们开启了一个事务 首先我们插入一条记录 值 100 在右边的会话中我们并没有查询到数据库有记录</p>
 <p>第二步.然后创建了一个 <code>savepoint</code> 取名 <code>sp1</code></p>
@@ -395,7 +395,7 @@
 
 <h2 id="Laravel-中的事务总结"><a href="#Laravel-中的事务总结" class="headerlink" title="Laravel 中的事务总结"></a>Laravel 中的事务总结</h2><p>先来一个小测试 来重复一开始的那个问题 <strong>所谓的嵌套循环</strong> 来看看 <strong>Laravel</strong> 是怎么处理的</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">       * this is a test</div><div class="line">       */</div><div class="line">      <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span></span></div><div class="line">      &#123;</div><div class="line">          <span class="comment">//2个测试循环</span></div><div class="line">          <span class="keyword">for</span> ($i = <span class="number">1</span>; $i &lt;= <span class="number">2</span>; $i++)&#123;</div><div class="line">              <span class="keyword">$this</span>-&gt;add($i);</div><div class="line">          &#125;</div><div class="line">          $list = Ceshi::get();</div><div class="line">          dd($list-&gt;toArray());</div><div class="line">      &#125;</div><div class="line"></div><div class="line">      <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add</span><span class="params">($i)</span></span></div><div class="line">      &#123;</div><div class="line">          DB::beginTransaction();</div><div class="line">          <span class="comment">//return 中断第一个</span></div><div class="line">          <span class="keyword">if</span>($i == <span class="number">1</span>)&#123;</div><div class="line">              <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">          &#125;</div><div class="line">          $a = Ceshi::create([</div><div class="line">              <span class="string">'n'</span> =&gt; $i,</div><div class="line">          ]);</div><div class="line">          <span class="keyword">if</span>($a !== <span class="keyword">false</span>)&#123;</div><div class="line">              DB::commit();</div><div class="line">          &#125;<span class="keyword">else</span>&#123;</div><div class="line">              DB::rollback();</div><div class="line">          &#125;</div><div class="line">      &#125;</div></pre></td></tr></table></figure>
-<h3 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h3><p>1.首先我写了一个循环 执行了2次 为了模拟效果 第一次循环进入添加的方法直接 <strong>return</strong> 了 也就只是开启了 <strong>第一个事务</strong><br>2.继续走 <strong>return</strong> 返回 然后开始第二次循环进入 开启 <strong>第二个事务</strong> 然后正常添加数据记录 然后执行 <code>commit</code><br>3.循环结束打印 获取表数据 整个测试结束<br>4.我们来看下结果 <img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/autocommit9.png" alt="自动提交9"><br>5.在数组的打印中有一条记录 但是我们另外开一个会话去查询数据库 却是空 说明 数据并没有真正的写入到数据库中 按道理说 如果是Mysql的嵌套循环 第二次事务开启的时候 上一次的事务内容就会被提交了 但是现在事实却并没有 到底发生了什么鬼事情 于是挖了下 <strong>Laravel</strong> 底层的数据库处理 下面来分析一波</p>
+<h3 id="分析过程"><a href="#分析过程" class="headerlink" title="分析过程"></a>分析过程</h3><p>1.首先我写了一个循环 执行了2次 为了模拟效果 第一次循环进入添加的方法直接 <strong>return</strong> 了 也就只是开启了 <strong>第一个事务</strong><br>2.继续走 <strong>return</strong> 返回 然后开始第二次循环进入 开启 <strong>第二个事务</strong> 然后正常添加数据记录 然后执行 <code>commit</code><br>3.循环结束打印 获取表数据 整个测试结束<br>4.我们来看下结果 <img src="https://www.tokme.cn/images/blogimg/reggieblog/777/autocommit9.png" alt="自动提交9"><br>5.在数组的打印中有一条记录 但是我们另外开一个会话去查询数据库 却是空 说明 数据并没有真正的写入到数据库中 按道理说 如果是Mysql的嵌套循环 第二次事务开启的时候 上一次的事务内容就会被提交了 但是现在事实却并没有 到底发生了什么鬼事情 于是挖了下 <strong>Laravel</strong> 底层的数据库处理 下面来分析一波</p>
 <h3 id="Laravel中的事务处理"><a href="#Laravel中的事务处理" class="headerlink" title="Laravel中的事务处理"></a>Laravel中的事务处理</h3><blockquote>
 <p>当前测试框架Laravel5.2 最新版的 Laravel 需要PHP很高的版本 之前升级了 <strong>PHP7.2.5</strong> 搞出了一堆幺蛾子 就不说了 测试还是先用当前的这个 Laravel5.2吧</p>
 </blockquote>

@@ -41,16 +41,16 @@
 <meta property="og:url" content="https://www.tokme.cn/2017/20171127/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近看了下《计算机操作系统设计与实现 第三版》 感觉写的很棒（PS：虽然目前还没看完·尴尬脸·）同时感觉自己也收获了很多 以前都没认真学过 写一份总结给自己当做对操作系统的扫盲吧~以下内容纯粹是自己个人的理解与整理~">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/mount1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/pipe1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/system1.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.png">
-<meta property="og:updated_time" content="2019-03-14T06:37:54.871Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/mount1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/pipe1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/system1.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:30.712Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="计算机操作系统扫盲">
 <meta name="twitter:description" content="最近看了下《计算机操作系统设计与实现 第三版》 感觉写的很棒（PS：虽然目前还没看完·尴尬脸·）同时感觉自己也收获了很多 以前都没认真学过 写一份总结给自己当做对操作系统的扫盲吧~以下内容纯粹是自己个人的理解与整理~">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process1.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/777/process1.png">
 
 
 
@@ -356,7 +356,7 @@
 <li>进程表项 包含寄存器值和其他信息</li>
 </ol>
 </li>
-<li><p>一个进程可以创建一个或多个其他进程(称为子进程) 这些子进程又可以创建他们自己的子进程 这样就行程了一棵树 如下图<br>有时这些进程间需要互相通信访问数据等 这种通信称为 进程间通信 interprocess communication<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/process1.png" alt="进程树"></p>
+<li><p>一个进程可以创建一个或多个其他进程(称为子进程) 这些子进程又可以创建他们自己的子进程 这样就行程了一棵树 如下图<br>有时这些进程间需要互相通信访问数据等 这种通信称为 进程间通信 interprocess communication<br><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/process1.png" alt="进程树"></p>
 </li>
 </ul>
 <h4 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h4><ul>
@@ -371,7 +371,7 @@
 <h4 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h4><ul>
 <li>以Minix3系统为例 文件和目录的保护机制是有一个11位的二进制码来保护的。<br>保护码包含三个3位的域 分别来描述其所有者、同组用户、其他用户的访问权限。<br>这一个3位域 分别由1位标识读取权限 1位标识写的操作权限 1位标识执行的权限<br>也就是传说中的 <code>rwx</code> 其中x的可以执行权限一般来讲就是可以访问 可以搜索之类</li>
 <li>在对一个文件进程读写的时候 系统需要先打开他这个时候需要进程访问权限的判断<br>如果访问权限是允许的 这个时候将会返回一个整数 称为文件描述符 如果没有访问权限将会返回一个错误码（-1）</li>
-<li>文件系统的挂载 对于大多数个人计算机而已都配有一个CD-ROM去东区（ 类似光驱的玩意）<br>还是以Minix3系统为例 操作系统允许将光驱上的文件挂载到主文件树上。<br>在进行mount挂载系统调用之前 在硬盘上一个根文件系统 在CD-Rom上也有一个文件系统 这2个还没挂载的时候是互相对立互不干扰的。<br>在没有挂载的时候CD-ROM中的文件也是不能访问的 (因为没有路径啊)。<br>程序猿可以使用mount系统调用吧CD-ROM下的文件挂载到根文件系统的任意一个位置 如下图<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/mount1.png" alt="mount挂载"><br>这个图展示了把驱动中的 <code>x</code> 和 <code>y</code> 挂载到 <code>b</code> 目录下</li>
+<li>文件系统的挂载 对于大多数个人计算机而已都配有一个CD-ROM去东区（ 类似光驱的玩意）<br>还是以Minix3系统为例 操作系统允许将光驱上的文件挂载到主文件树上。<br>在进行mount挂载系统调用之前 在硬盘上一个根文件系统 在CD-Rom上也有一个文件系统 这2个还没挂载的时候是互相对立互不干扰的。<br>在没有挂载的时候CD-ROM中的文件也是不能访问的 (因为没有路径啊)。<br>程序猿可以使用mount系统调用吧CD-ROM下的文件挂载到根文件系统的任意一个位置 如下图<br><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/mount1.png" alt="mount挂载"><br>这个图展示了把驱动中的 <code>x</code> 和 <code>y</code> 挂载到 <code>b</code> 目录下</li>
 <li><p>设备文件（special file） 设备文件的目标是使IO设备操作起来更类似文件。<br>这样对设备的读写就可以和文件读写调用相同的系统调用。<br>设备文件分为2类 </p>
 <ol>
 <li>一是块设备文件（block special files） </li>
@@ -379,7 +379,7 @@
 </ol>
 <p>设备文件描述的是以随机访问数据块为单元的设备 比如硬盘。<br>字符设备文件是以字符流方式进行操作的文件 比如打印机等 一般设备文件都存在/dev目录下 比如/dev/lp 就可能是一个打印机</p>
 </li>
-<li>管道（pipe） 管道是一种用来连接2个进程的虚拟文件<br>比如下图如果进程A想要和进程B通信<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/pipe1.png" alt="管道"><br>首先要创建一个管道 然后进程A把数据输出到管道中 进程B在从管道中把数据读取出来 这样就完成了通信。<br>一个进程想要判断他输出的是普通文件还是管道需要一个特殊的系统调用</li>
+<li>管道（pipe） 管道是一种用来连接2个进程的虚拟文件<br>比如下图如果进程A想要和进程B通信<br><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/pipe1.png" alt="管道"><br>首先要创建一个管道 然后进程A把数据输出到管道中 进程B在从管道中把数据读取出来 这样就完成了通信。<br>一个进程想要判断他输出的是普通文件还是管道需要一个特殊的系统调用</li>
 <li><p>命令解释器 shell 他是终端用户和操作系统之间的 主要接口 shell分为2种<br>第一种是图形界面shell 如CDE GNOME KDE XFCE等<br>第二种是命令行shell 如果bash sh ksh csh等</p>
 <blockquote>
 <p>他们都来源最初的 <code>sh</code> 当用户登录系统(服务器)的时候 同时将启动一个shell<br>他以终端作为标准的输入输出 然后显示一个系统提示符 比如熟悉的美元 $ 符号 标识等待接受一条用户的命令<br>这时 比如用户输入了date 那么shell将会创建一个子进程来运行date程序 并等待子进程的运行结束。<br>当子进程运行结束后会再次显示系统提示符 等待用户输入。</p>
@@ -402,10 +402,10 @@
 <li>有一个主程序 用来调用被请求的服务例程</li>
 <li>一组服务例程 用来实现相应的系统调用</li>
 <li>一组工具函数 用来帮助服务例程的实现</li>
-<li><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/system1.png" alt="操作系统结构"></li>
+<li><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/system1.png" alt="操作系统结构"></li>
 </ul>
 </li>
-<li>分层结构 在上面整体结构上做了更加具体的分层 每一层都是在上一层的基础上扩展出来 不用管他上一层的实现<br><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/777/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.png" alt=""></li>
+<li>分层结构 在上面整体结构上做了更加具体的分层 每一层都是在上一层的基础上扩展出来 不用管他上一层的实现<br><img src="https://www.tokme.cn/images/blogimg/reggieblog/777/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.png" alt=""></li>
 <li>虚拟机</li>
 <li>外核（ps:这个看的不是很懂 了解下好了）</li>
 <li>客户端-服务器 这种就类似我们先的结构了<br>对于用户而言他不会关心请求发送到哪里的服务器 是在本地处理还是在某个地方服务器处理 他只要得到回复就可以了</li>

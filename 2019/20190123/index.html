@@ -41,12 +41,12 @@
 <meta property="og:url" content="https://www.tokme.cn/2019/20190123/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="之前有遇到需要打印出执行SQL的问题，在Laravel的ORM关联模型中 之前都是用 builder 对象执行 toSql() 方法 或者写错一个字段名 这样会报错显示出SQL（满脑子的骚操作…） 感觉不能在懒下去了 还是要回归正途使用 Laravel-Debugbar 然后安装又遇到了幺蛾子">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel_debugbar.png">
-<meta property="og:updated_time" content="2019-01-24T09:01:54.061Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/laravel_debugbar.png">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.227Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Laraval-Debugbar的简单使用">
 <meta name="twitter:description" content="之前有遇到需要打印出执行SQL的问题，在Laravel的ORM关联模型中 之前都是用 builder 对象执行 toSql() 方法 或者写错一个字段名 这样会报错显示出SQL（满脑子的骚操作…） 感觉不能在懒下去了 还是要回归正途使用 Laravel-Debugbar 然后安装又遇到了幺蛾子">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel_debugbar.png">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/php/laravel_debugbar.png">
 
 
 
@@ -343,7 +343,7 @@
 <p>同时在该文件的 <code>aliases</code> 数组下 增加 <code>&#39;Debugbar&#39; =&gt; Barryvdh\Debugbar\Facade::class,</code> 给门面起个别名 方便后续使用</p>
 <p>然后执行 <code>php artisan vendor:publish --provider=&quot;Barryvdh\Debugbar\ServiceProvider&quot;</code> 它会自动帮你在 <code>config</code> 目录下 生成 <code>debugbar.php</code> 配置文件 其主要配置都在这个文件里了</p>
 <h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>上面安装完了后就可以测试下了，访问你的项目 如果在浏览器看到下面就成功了</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/php/laravel_debugbar.png" alt="laravel_debugbar"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/php/laravel_debugbar.png" alt="laravel_debugbar"></p>
 <h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><p><strong>debugbar</strong> 是基于前端内容显示的 所以你的访问路由要有页面 <strong>内容输出</strong>，不要在你的代码中间加入 <code>exit();</code>, <code>dd();</code> 等中断操作 不然他是显示不了的。我测试的时候就加了 <code>dd()</code> 中断输出，然后一直没有debugbar内容显示 郁闷了好久！！！ 更多详细文档看官网吧 <a href="http://phpdebugbar.com/docs/readme.html#php-debug-bar" target="_blank" rel="external">http://phpdebugbar.com/docs/readme.html#php-debug-bar</a></p>
 <hr>
 

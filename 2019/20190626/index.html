@@ -41,14 +41,14 @@
 <meta property="og:url" content="https://www.tokme.cn/2019/20190626/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="最近又学了一章算法课，经典的几个 『O(n²)』 复杂度的算法比较。主要是 冒泡排序、插入排序、希尔排序、选择排序的比较">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Insertion-sort-example-300px.gif">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/shell_sort.png">
-<meta property="og:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Selection-Sort-Animation.gif">
-<meta property="og:updated_time" content="2019-06-28T08:32:52.955Z">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/Insertion-sort-example-300px.gif">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/shell_sort.png">
+<meta property="og:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/Selection-Sort-Animation.gif">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.525Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法-经典排序算法(Ⅰ)">
 <meta name="twitter:description" content="最近又学了一章算法课，经典的几个 『O(n²)』 复杂度的算法比较。主要是 冒泡排序、插入排序、希尔排序、选择排序的比较">
-<meta name="twitter:image" content="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Insertion-sort-example-300px.gif">
+<meta name="twitter:image" content="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/Insertion-sort-example-300px.gif">
 
 
 
@@ -383,7 +383,7 @@
 <p>插入排序是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。插入排序在实现上，通常采用in-place排序（即只需用到 O(1) 的额外空间的排序），因而在从后向前扫描过程中，需要反复把已排序元素逐步向后挪位，为最新元素提供插入空间。</p>
 </blockquote>
 <p>动态图如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Insertion-sort-example-300px.gif" alt="insertion_sort"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/Insertion-sort-example-300px.gif" alt="insertion_sort"></p>
 <p>排序过程：</p>
 <p>1.首先把数据分为2个区间，『已排序区间』和『未排序区间』。<br>2.从未排序区间中取出一个值，然后遍历已排序区间。<br>3.对已排序区间进行从后往前顺序遍历，然后通过移动已经排序区间元素的位置，把新值插入到已排序区间中合适位置</p>
 <p>PHP实现伪代码：</p>
@@ -397,7 +397,7 @@
 <p>排序过程：</p>
 <p>1.选择较大步长，一般使用待排序的元素个数除2来获得当前的步长 <strong>gap</strong><br>2.然后从头开始，单位步长内的数据算一个小组 最终会有 <strong>gap</strong> 个小分组<br>3.然后依次对这些小分组进行 <strong>插入排序</strong> 操作。<br>4.然后重复上面3步操作，使用上一步的步长继续除2来得出新的步长。一直到步长为1<br>5.此时希尔排序恢复到普通的插入排序，不过大部分的数据经过上面已经很有序了。最后进行一次全部的插入排序就完成了。</p>
 <p>大概图如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/shell_sort.png" alt="shell_sort"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/shell_sort.png" alt="shell_sort"></p>
 <p>PHP实现伪代码：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">shellSort</span><span class="params">($arr)</span></span></div><div class="line">&#123;</div><div class="line">    $count = count($arr);</div><div class="line"></div><div class="line">    <span class="comment">// 最外层循环控制增量步长</span></div><div class="line">    <span class="comment">// 向上取整的话当是小数的时候 会得出1，</span></div><div class="line">    <span class="comment">// 然后1就死循环了 1 / 2 向上取整还是1...</span></div><div class="line">    <span class="keyword">for</span> ($gap = floor($count / <span class="number">2</span>); $gap &gt;= <span class="number">1</span>; $gap = floor($gap / <span class="number">2</span>)) &#123;</div><div class="line">        <span class="comment">// 这里的2层循环就是插入排序了和插入排序代码是一样的</span></div><div class="line">        <span class="comment">// 只不过普通的插入排序步长是1，这里换成计算出来的步长gap即可</span></div><div class="line">        <span class="keyword">for</span> ($i = $gap; $i &lt; $count; $i++) &#123;</div><div class="line">            $value = $arr[$i];</div><div class="line"></div><div class="line">            <span class="keyword">for</span> ($j = $i - $gap; $j &gt;= <span class="number">0</span>; $j = $j - $gap) &#123;</div><div class="line">                <span class="keyword">if</span> ($arr[$j] &gt; $value) &#123;</div><div class="line">                    $arr[$j + $gap] = $arr[$j];</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            $arr[$j + $gap] = $value;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    var_dump($arr);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p><strong>希尔排序总结：</strong></p>
@@ -415,7 +415,7 @@
 <p>选择排序的主要优点与数据移动有关。如果某个元素位于正确的最终位置上，则它不会被移动。选择排序每次交换一对元素，它们当中至少有一个将被移到其最终位置上，因此对 <strong>n</strong> 个元素的表进行排序总共进行至多 <strong>n - 1</strong> 次交换。在所有的完全依靠交换去移动元素的排序方法中，选择排序属于非常好的一种。</p>
 </blockquote>
 <p>动态图如下：</p>
-<p><img src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/datastruct/Selection-Sort-Animation.gif" alt="selectionSort"></p>
+<p><img src="https://www.tokme.cn/images/blogimg/reggieblog/datastruct/Selection-Sort-Animation.gif" alt="selectionSort"></p>
 <p>排序过程：</p>
 <p>1.把待排序数据分为2个区间，已排序区间和未排序区间<br>2.每次从未排序区间中找到最小值（或最大值）放入已排序区间末尾<br>3.重复直到没有数据</p>
 <p>PHP实现伪代码：</p>

@@ -41,7 +41,7 @@
 <meta property="og:url" content="https://www.tokme.cn/2019/20190206/index.html">
 <meta property="og:site_name" content="指尖的彩虹">
 <meta property="og:description" content="看了那么多Docker搭建PHP环境的文章 总想自己也写个弄个练练手 过年的时候终于有空完成了 感谢 白总 指导的 Dockerfile">
-<meta property="og:updated_time" content="2019-02-14T10:01:40.418Z">
+<meta property="og:updated_time" content="2019-12-30T07:31:31.649Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Docker搭建PHP环境">
 <meta name="twitter:description" content="看了那么多Docker搭建PHP环境的文章 总想自己也写个弄个练练手 过年的时候终于有空完成了 感谢 白总 指导的 Dockerfile">
@@ -335,7 +335,7 @@
 </blockquote>
 <p>可以使用 命令 <code>docker volume create name</code> 最后的 <strong>name</strong> 属性随便你定义 自己记得就好了</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost]<span class="comment"># docker volume create nginx_vol</span></div><div class="line">nginx_vol</div></pre></td></tr></table></figure>
-<h3 id="使用Dockerfile创建镜像"><a href="#使用Dockerfile创建镜像" class="headerlink" title="使用Dockerfile创建镜像"></a>使用Dockerfile创建镜像</h3><p>下面有个压缩包已经写好了 <a href="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/dockerfile.zip" target="_blank" rel="external"><strong>Dockerfile</strong></a></p>
+<h3 id="使用Dockerfile创建镜像"><a href="#使用Dockerfile创建镜像" class="headerlink" title="使用Dockerfile创建镜像"></a>使用Dockerfile创建镜像</h3><p>下面有个压缩包已经写好了 <a href="https://www.tokme.cn/images/blogimg/reggieblog/dockerfile.zip"><strong>Dockerfile</strong></a></p>
 <p>另外说下 如果你想安装不同版本的PHP只需要更改 Dockerfile 文件中的 <code>FROM alpine:3.8</code> 源的版本就可以了 具体对应是多少可以参考官方的 「PHP-Dockerfile」<a href="https://hub.docker.com/_/php" target="_blank" rel="external">https://hub.docker.com/_/php</a> 文件 找到对应的文件名即可 上面都有对应的版本</p>
 <p>下面创建镜像 执行命令 <code>docker build -t phpenv .</code></p>
 <h3 id="创建容器"><a href="#创建容器" class="headerlink" title="创建容器"></a>创建容器</h3><p><code>docker run --name myphp -d -p 80:80 -v /data/website:/app/www --mount source=nginx_vol,target=/etc/nginx phpenv</code></p>
