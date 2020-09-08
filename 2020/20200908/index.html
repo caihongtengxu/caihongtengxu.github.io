@@ -1,0 +1,834 @@
+<!doctype html>
+
+
+
+<html class="theme-next pisces">
+<head>
+    <script type="text/javascript" src="https://tajs.qq.com/stats?sId=66171637" charset="UTF-8"></script>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+<link href="/css/alo.css" rel="stylesheet" type="text/css" />
+<link href="/css/main.css" rel="stylesheet" type="text/css" />
+<link href="https://cdn.bootcss.com/fancybox/2.1.6/css/jquery.fancybox.min.css" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+<meta name="description" content="之前一直用docker搭建服务器运行环境，最近有个朋友来找我在服务器上手工搭建个PHP环境，搞了大半天，快玩不转了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos7下搭建Laravel环境">
+<meta property="og:url" content="https://www.tokme.cn/2020/20200908/index.html">
+<meta property="og:site_name" content="指尖的彩虹">
+<meta property="og:description" content="之前一直用docker搭建服务器运行环境，最近有个朋友来找我在服务器上手工搭建个PHP环境，搞了大半天，快玩不转了。">
+<meta property="og:updated_time" content="2020-09-08T03:52:26.526Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Centos7下搭建Laravel环境">
+<meta name="twitter:description" content="之前一直用docker搭建服务器运行环境，最近有个朋友来找我在服务器上手工搭建个PHP环境，搞了大半天，快玩不转了。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: false,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    },
+    root: '/'
+  };
+</script>
+
+
+
+  <title> Centos7下搭建Laravel环境 | 指尖的彩虹 </title>
+</head>
+
+<body itemscope  lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">指尖的彩虹</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+            
+                <span class="badge">93</span>
+            
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+            
+            
+                <span class="badge">8</span>
+            
+            
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+            
+            
+            
+                <span class="badge">29</span>
+            
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="#" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+
+
+
+    </div>
+  
+</nav>
+
+<div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input">
+        <input type="text" id="search_word" name="" value="" />
+      </div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+</div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Centos7下搭建Laravel环境
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+              
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2020-09-08T22:43:22+08:00" content="2020-09-08">
+              2020-09-08
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/20200908/index.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2020/20200908/index.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+
+           
+            
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>之前一直用docker搭建服务器运行环境，最近有个朋友来找我在服务器上手工搭建个PHP环境，搞了大半天，快玩不转了。<br><a id="more"></a></p>
+<hr>
+<p>最近呢有个朋友找我帮忙搭建个PHP的环境，本来想让他直接用docker的。但是他买的是聚石塔的服务器，那边不给数据库开外网，只能内网去访问。用docker搭载宿主机的网络去访问的时候老是时不时的找不到地址，整个服务老是中断，无奈只能迁出来，一个个的安装重新搭建环境。我也是菜鸟一个折腾了半天总算搞定了。</p>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><h4 id="更换阿里源"><a href="#更换阿里源" class="headerlink" title="更换阿里源"></a>更换阿里源</h4><p>服务器安装的centos7系统，先来换下阿里源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ cd /etc/yum.repos.d/</div><div class="line">$ cp CentOS-Base.repo CentOS-Base.repo.bak</div><div class="line">$ wget -O CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo</div><div class="line">$ yum clean all</div><div class="line">$ yum update</div><div class="line">$ yum makecache</div><div class="line"></div><div class="line"># 查看已安装的PHP，有的话rpm -e卸载</div><div class="line">$ yum list installed | grep php</div></pre></td></tr></table></figure>
+<h4 id="安装EPEL"><a href="#安装EPEL" class="headerlink" title="安装EPEL"></a>安装EPEL</h4><p>EPEL（Extra Packages for Enterprise Linux）是由 Fedora 社区打造，为 RHEL 及衍生发行版如 CentOS等提供高质量软件包的项目。就是一个高质量的白嫖软件源。</p>
+<p>安装后可以使用 <code>yum install packageName</code>，即可安装很多以前需要编译安装的软件、常用的软件或一些比较流行的软件，比如Nginx之类。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ yum install epel-release</div></pre></td></tr></table></figure></p>
+<h4 id="安装REMI源"><a href="#安装REMI源" class="headerlink" title="安装REMI源"></a>安装REMI源</h4><p>CentOS下除了EPEL源之外还有REMI的源，REMI源保证了软件的最新版，但是不保证软件是稳定版。主要拿来安装最新的PHP版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/remi/enterprise/remi-release-7.rpm</div></pre></td></tr></table></figure>
+<h3 id="安装PHP7"><a href="#安装PHP7" class="headerlink" title="安装PHP7+"></a>安装PHP7+</h3><h4 id="选择PHP版本"><a href="#选择PHP版本" class="headerlink" title="选择PHP版本"></a>选择PHP版本</h4><p>先查询下可以安装的PHP版本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">$ yum repolist all | grep php</div><div class="line"></div><div class="line"> * remi-php72: mirrors.tuna.tsinghua.edu.cn</div><div class="line">remi-php70                          Remi<span class="string">'s PHP 7.0 RPM repositor disabled</span></div><div class="line">remi-php70-debuginfo/x86_64         Remi's PHP <span class="number">7.0</span> RPM repositor disabled</div><div class="line">remi-php70-test                     Remi<span class="string">'s PHP 7.0 test RPM repo disabled</span></div><div class="line">remi-php70-test-debuginfo/x86_64    Remi's PHP <span class="number">7.0</span> test RPM repo disabled</div><div class="line">remi-php71                          Remi<span class="string">'s PHP 7.1 RPM repositor disabled</span></div><div class="line">remi-php71-debuginfo/x86_64         Remi's PHP <span class="number">7.1</span> RPM repositor disabled</div><div class="line">remi-php71-test                     Remi<span class="string">'s PHP 7.1 test RPM repo disabled</span></div><div class="line">remi-php71-test-debuginfo/x86_64    Remi's PHP <span class="number">7.1</span> test RPM repo disabled</div><div class="line">!remi-php72                         Remi<span class="string">'s PHP 7.2 RPM repositor enabled:    412</span></div><div class="line">remi-php72-debuginfo/x86_64         Remi's PHP <span class="number">7.2</span> RPM repositor disabled</div><div class="line">remi-php72-test                     Remi<span class="string">'s PHP 7.2 test RPM repo disabled</span></div><div class="line">remi-php72-test-debuginfo/x86_64    Remi's PHP <span class="number">7.2</span> test RPM repo disabled</div><div class="line">remi-php73                          Remi<span class="string">'s PHP 7.3 RPM repositor disabled</span></div><div class="line">remi-php73-debuginfo/x86_64         Remi's PHP <span class="number">7.3</span> RPM repositor disabled</div><div class="line">remi-php73-test                     Remi<span class="string">'s PHP 7.3 test RPM repo disabled</span></div><div class="line">remi-php73-test-debuginfo/x86_64    Remi's PHP <span class="number">7.3</span> test RPM repo disabled</div><div class="line">remi-php74                          Remi<span class="string">'s PHP 7.4 RPM repositor disabled</span></div><div class="line">remi-php74-debuginfo/x86_64         Remi's PHP <span class="number">7.4</span> RPM repositor disabled</div><div class="line">remi-php74-test                     Remi<span class="string">'s PHP 7.4 test RPM repo disabled</span></div><div class="line">remi-php74-test-debuginfo/x86_64    Remi's PHP <span class="number">7.4</span> test RPM repo disabled</div><div class="line">remi-php80                          Remi<span class="string">'s PHP 8.0 RPM repositor disabled</span></div><div class="line">remi-php80-debuginfo/x86_64         Remi's PHP <span class="number">8.0</span> RPM repositor disabled</div><div class="line">remi-php80-test                     Remi<span class="string">'s PHP 8.0 test RPM repo disabled</span></div><div class="line">remi-php80-test-debuginfo/x86_64    Remi's PHP <span class="number">8.0</span> test RPM repo disabled</div></pre></td></tr></table></figure>
+<p>设置默认安装的版本，这里我选择了php7.2</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ yum-config-manager --enable remi-php72</div><div class="line"></div><div class="line"><span class="comment"># 注意 如果提示 yum-config-manager 找不到的话需要先安装下 yum-utils，在来执行上面的配置</span></div><div class="line">$ yum -y install yum-utils</div><div class="line"></div><div class="line"><span class="comment"># 最后选择自己想安装的PHP版本即可</span></div><div class="line">$ yum -y install php</div><div class="line">$ php -v</div><div class="line">$ php -m</div></pre></td></tr></table></figure>
+<h4 id="安装PHP扩展"><a href="#安装PHP扩展" class="headerlink" title="安装PHP扩展"></a>安装PHP扩展</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 查找php对应版本的扩展，我这里是7.2就写的php72-php</span></div><div class="line">$ yum search php72-php</div><div class="line"> * base: mirrors.cloud.aliyuncs.com</div><div class="line"> * extras: mirrors.cloud.aliyuncs.com</div><div class="line"> * remi-php72: mirror.innosol.asia</div><div class="line"> * remi-safe: mirror.innosol.asia</div><div class="line"> * updates: mirrors.cloud.aliyuncs.com</div><div class="line">============================================================================================================= N/S matched: php72-php ==============================================================================================================</div><div class="line">php72-php-pecl-handlebars-devel.x86_64 : php72-php-pecl-handlebars developer files (header)</div><div class="line">php72-php-pecl-http-message-devel.x86_64 : php72-php-pecl-http-message developer files (headers)</div><div class="line">php72-php-pecl-propro-devel.x86_64 : php72-php-pecl-propro developer files (header)</div><div class="line">php72-php-pecl-psr-devel.x86_64 : php72-php-pecl-psr developer files (header)</div><div class="line">php72-php-pecl-raphf-devel.x86_64 : php72-php-pecl-raphf developer files (header)</div><div class="line">php72-php-pecl-swoole-devel.x86_64 : php72-php-pecl-swoole developer files (header)</div><div class="line">...</div><div class="line"></div><div class="line"><span class="comment"># 安装扩展，注意扩展名不需要带上PHP的版本号，下面是我在Laravel里需要的一些扩展</span></div><div class="line">$ yum -y install php-fpm php-bcmath php-mbstring php-mysqli php-mysqlnd php-pdo php-pdo_mysql php-posix php-shmop php-simplexml php-sodium php-xml php-xmlreader php-xmlwriter php-xsl php-zip php-opcache</div><div class="line"></div><div class="line"><span class="comment"># 然后查看扩展是否安装成功</span></div><div class="line">$ php -m</div></pre></td></tr></table></figure>
+<h4 id="PHP-FPM"><a href="#PHP-FPM" class="headerlink" title="PHP-FPM"></a>PHP-FPM</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 启动</span></div><div class="line">$ systemctl start php-fpm</div><div class="line"></div><div class="line"><span class="comment"># 停止or重启</span></div><div class="line">$ systemctl stop php-fpm</div><div class="line">$ systemctl restart php-fpm</div><div class="line"></div><div class="line"><span class="comment"># 重载</span></div><div class="line">$ systemctl reload php-fpm</div><div class="line"></div><div class="line"><span class="comment"># 设置开机启动</span></div><div class="line">$ systemctl enable php-fpm</div><div class="line"></div><div class="line"><span class="comment"># 禁止开机启动</span></div><div class="line">$ systemctl disable php-pfm</div></pre></td></tr></table></figure>
+<p>最后查看下PHP-FPM的进程</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ ps aux | grep php</div><div class="line">root      <span class="number">1728</span>  <span class="number">0.0</span>  <span class="number">0.1</span> <span class="number">455280</span> <span class="number">12780</span> ?        Ss   Sep07   <span class="number">0</span>:<span class="number">01</span> php-fpm: master process (/etc/php-fpm.conf)</div><div class="line">apache    <span class="number">1998</span>  <span class="number">0.0</span>  <span class="number">0.6</span> <span class="number">558512</span> <span class="number">48084</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">15</span> php-fpm: pool www</div><div class="line">apache    <span class="number">2873</span>  <span class="number">0.0</span>  <span class="number">0.4</span> <span class="number">542200</span> <span class="number">36012</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">19</span> php-fpm: pool www</div><div class="line">apache    <span class="number">2874</span>  <span class="number">0.0</span>  <span class="number">0.3</span> <span class="number">536164</span> <span class="number">29212</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">19</span> php-fpm: pool www</div><div class="line">apache    <span class="number">2875</span>  <span class="number">0.0</span>  <span class="number">0.4</span> <span class="number">542200</span> <span class="number">34832</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">21</span> php-fpm: pool www</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>也可以通过 <code>service php-fpm status</code> 查看下启动状态</p>
+<h4 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h4><p><code>php-fpm.conf</code> 文件默认在 <code>/etc/php-fpm.conf</code></p>
+<p><code>php.ini</code> 文件默认在 <code>/etc/php.ini</code></p>
+<p><code>php.ini</code>文件里有一些参数需要修改，编辑进入搜索 <code>max</code> 带这个关键字的一些配置自己看描述修改吧，也就是一些限制内存啦，文件大小啦，执行时间啦之类的</p>
+<p>修改完 <code>systemctl reload php-fpm</code> 执行下即可。</p>
+<h3 id="安装Nginx"><a href="#安装Nginx" class="headerlink" title="安装Nginx"></a>安装Nginx</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 安装Nginx最新源</span></div><div class="line">$ yum localinstall http:<span class="comment">//nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</span></div><div class="line">$ yum repolist enabled | grep <span class="string">"nginx*"</span></div><div class="line"></div><div class="line"><span class="comment"># 安装nginx</span></div><div class="line">$ yum -y install nginx</div><div class="line"></div><div class="line"><span class="comment"># 启动nginx</span></div><div class="line">$ service nginx start</div><div class="line"></div><div class="line"><span class="comment"># 测试nginx配置文件是否正常</span></div><div class="line">$ nginx -t</div><div class="line"></div><div class="line"><span class="comment"># 平滑加载</span></div><div class="line">$ nginx -s reload</div><div class="line"></div><div class="line"><span class="comment"># 设置nginx服务器开机自启动</span></div><div class="line">$ systemctl enable nginx.service</div><div class="line"></div><div class="line"><span class="comment"># 检查开机自动是否设置成功</span></div><div class="line">$ systemctl <span class="keyword">list</span>-dependencies | grep nginx</div></pre></td></tr></table></figure>
+<p>如果遇到nginx重启之类提示说PID为空或者找不到的，可以看下是否有残留进行杀掉，然后 <code>nginx -c /etc/nginx/nginx.conf</code> 指定好配置文件。</p>
+<p>可以通过 <code>service nginx status</code> 查看nginx的状态。</p>
+<p>Nginx的默认配置目录都在 <code>/etc/nginx/</code> 下，默认错误日志在 <code>/var/log/nginx/error.log</code>，主要服务器配置文件在 <code>/etc/nginx/conf.d/*.conf</code></p>
+<p>下面是一份简单的Server配置, 做了Https的301 跳转，不需要的话就把ssl相关部分去掉，301跳转去掉即可。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">	<span class="comment"># 这里做了Https的相关配置</span></div><div class="line">    listen <span class="number">443</span> ssl http2;</div><div class="line">    server_name your_server_name;</div><div class="line">    <span class="comment"># 项目访问根目录</span></div><div class="line">    root /xxx/www/<span class="keyword">public</span>;</div><div class="line">    <span class="comment"># ssl证书相关</span></div><div class="line">    ssl_certificate  /xxx/certs/xxx.pem;</div><div class="line">    ssl_certificate_key /xxx/certs/xxx.key;</div><div class="line">    ssl_session_timeout <span class="number">5</span>m;</div><div class="line">    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!<span class="keyword">NULL</span>:!aNULL:!MD5:!ADH:!RC4;</div><div class="line">    ssl_protocols TLSv1 TLSv1<span class="number">.1</span> TLSv1<span class="number">.2</span>;</div><div class="line">    ssl_prefer_server_ciphers on;    </div><div class="line"></div><div class="line">    <span class="comment"># 添加几条有关安全的响应头；与 Google+ 的配置类似，详情参见文末。</span></div><div class="line">    add_header X-Frame-Options <span class="string">"SAMEORIGIN"</span>;</div><div class="line">    add_header X-XSS-Protection <span class="string">"1; mode=block"</span>;</div><div class="line">    add_header X-Content-Type-Options <span class="string">"nosniff"</span>;</div><div class="line"></div><div class="line">    <span class="comment"># 站点默认页面；可指定多个，将顺序查找。</span></div><div class="line">    <span class="comment"># 例如，访问 http://example.com/ Nginx 将首先尝试「站点根目录/index.html」是否存在，不存在则继续尝试「站点根目录/index.htm」，以此类推...</span></div><div class="line">    index index.html index.htm index.php;</div><div class="line"></div><div class="line">    <span class="comment"># 指定字符集为 UTF-8</span></div><div class="line">    charset utf<span class="number">-8</span>;</div><div class="line"></div><div class="line">    <span class="comment"># Laravel 默认重写规则；删除将导致 Laravel 路由失效且 Nginx 响应 404。</span></div><div class="line">    location / &#123;</div><div class="line">        try_files $uri $uri/ /index.php?$query_string;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment"># 关闭 [/favicon.ico] 和 [/robots.txt] 的访问日志。</span></div><div class="line">    <span class="comment"># 并且即使它们不存在，也不写入错误日志。</span></div><div class="line">    location = /favicon.ico &#123; access_log off; log_not_found off; &#125;</div><div class="line">    location = /robots.txt  &#123; access_log off; log_not_found off; &#125;</div><div class="line"></div><div class="line">    <span class="comment"># 将 [404] 错误交给 [/index.php] 处理，表示由 Laravel 渲染美观的错误页面。</span></div><div class="line">    error_page <span class="number">404</span> /index.php;</div><div class="line"></div><div class="line">    <span class="comment"># URI 符合正则表达式 [\.php$] 的请求将进入此段配置</span></div><div class="line">    location ~ \.php$ &#123;</div><div class="line">        <span class="comment"># 配置 FastCGI 服务地址，可以为 IP:端口，也可以为 Unix socket。</span></div><div class="line">        fastcgi_pass <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9000</span>;</div><div class="line">        <span class="comment"># 配置 FastCGI 的主页为 index.php。</span></div><div class="line">        fastcgi_index index.php;</div><div class="line">        <span class="comment"># 配置 FastCGI 参数 SCRIPT_FILENAME 为 $realpath_root$fastcgi_script_name。</span></div><div class="line">        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;</div><div class="line">        <span class="comment"># 引用更多默认的 FastCGI 参数。</span></div><div class="line">        <span class="keyword">include</span> fastcgi_params;</div><div class="line">    &#125;</div><div class="line">    <span class="comment"># 通俗地说，以上配置将所有 URI 以 .php 结尾的请求，全部交给 PHP-FPM 处理。</span></div><div class="line"></div><div class="line">    <span class="comment"># 除符合正则表达式 [/\.(?!well-known).*] 之外的 URI，全部拒绝访问</span></div><div class="line">    <span class="comment"># 也就是说，拒绝公开以 [.] 开头的目录，[.well-known] 除外</span></div><div class="line">    location ~ /\.(?!well-known).* &#123;</div><div class="line">        deny all;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen <span class="number">80</span>;</div><div class="line">    server_name your_server_name;</div><div class="line">    <span class="keyword">return</span> <span class="number">301</span> https:<span class="comment">//your_server_name$request_uri;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后重启下nginx让配置生效 <code>nginx -s reload</code>， 如果中间有问题记得查看下nginx的错误日志文件，很有用，基本坑都会记录在里面 <code>/var/log/nginx/error.log</code>。</p>
+<h3 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h3><p>因为朋友这边是使用的聚石塔的RDS，其实是不需要安装数据库的了，不过还是简单写下Mysql的安装把，这里使用Mysql5.7为例，想要安装Mysql8的自行换下。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 安装mysql源</span></div><div class="line">$ yum -y localinstall  http:<span class="comment">//dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm</span></div><div class="line">$ yum repolist enabled | grep <span class="string">"mysql.*-community.*"</span></div><div class="line"></div><div class="line"><span class="comment"># 安装Mysql</span></div><div class="line">$ yum -y install mysql-community-server install mysql-community-devel</div><div class="line"></div><div class="line"><span class="comment"># 启动mysql</span></div><div class="line">$ service mysqld start</div><div class="line"></div><div class="line"><span class="comment"># 检查mysql启动是否正常</span></div><div class="line">$ service mysqld status 或者 ps -ef | grep mysql</div><div class="line"></div><div class="line"><span class="comment"># 设置mysqld服务开机自启动</span></div><div class="line">$ systemctl enable mysqld.service</div><div class="line"></div><div class="line"><span class="comment"># 使用yum安装Mysql,启动会系统会自动生成一个随机的数据库密码，需要修改下</span></div><div class="line"><span class="comment"># 查看mysql的随机密码</span></div><div class="line">$ grep <span class="string">'temporary password'</span> /<span class="keyword">var</span>/log/mysqld.log</div><div class="line"></div><div class="line"><span class="comment"># 终端登录Mysql</span></div><div class="line">$ mysql -hlocalhost -u root -p xxx</div><div class="line"><span class="comment"># 修改密码</span></div><div class="line">$ ALTER USER <span class="string">'root'</span>@<span class="string">'localhost'</span> IDENTIFIED BY <span class="string">'Yourpassword'</span>;</div></pre></td></tr></table></figure>
+<h3 id="Laravel权限"><a href="#Laravel权限" class="headerlink" title="Laravel权限"></a>Laravel权限</h3><p>安装完 Laravel 后，你可能需要给这两个文件配置读写权限：<code>storage</code> 目录和 <code>bootstrap/cache</code> 目录应该允许 Web 服务器写入。</p>
+<p>这里需要给<code>PHP-FPM</code>运行角色的权限。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ ps aux | grep php-fpm</div><div class="line">root      <span class="number">1728</span>  <span class="number">0.0</span>  <span class="number">0.1</span> <span class="number">455280</span> <span class="number">12780</span> ?        Ss   Sep07   <span class="number">0</span>:<span class="number">01</span> php-fpm: master process (/etc/php-fpm.conf)</div><div class="line">apache    <span class="number">1998</span>  <span class="number">0.0</span>  <span class="number">0.4</span> <span class="number">542128</span> <span class="number">31616</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">17</span> php-fpm: pool www</div><div class="line">apache    <span class="number">2873</span>  <span class="number">0.0</span>  <span class="number">0.5</span> <span class="number">552440</span> <span class="number">46508</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">22</span> php-fpm: pool www</div><div class="line">apache    <span class="number">2874</span>  <span class="number">0.0</span>  <span class="number">0.6</span> <span class="number">560740</span> <span class="number">52748</span> ?        S    Sep07   <span class="number">0</span>:<span class="number">22</span> php-fpm: pool www</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>可以看到我这里子进程是一个 <code>apache</code> 用户在执行，所以需要把上面2个目录改成 <code>apache</code>（我也不知道这个鬼用户那里创建来的，可能默认安装php-fpm的时候创建的吧…）。</p>
+<p>找到对应的目录</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 暴力一些</span></div><div class="line">$ chown -R apache:apache /xxx/storage/</div><div class="line">$ chown -R apache:apache /xxx/bootstrap/cache/</div><div class="line"></div><div class="line"><span class="comment"># 在给个755权限</span></div><div class="line">$ chmod -R <span class="number">755</span> /xxx/storage/</div><div class="line">$ chmod -R <span class="number">755</span> /xxx/bootstrap/cache/</div></pre></td></tr></table></figure>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+        
+          <div>
+    
+        <div style="text-align:center;color: #555;font-size:14px;">-------------The End-------------</div>
+    
+</div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i>Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/20200703/index.html" rel="next" title="自定义Nginx日志格式">
+                <i class="fa fa-chevron-left"></i> 自定义Nginx日志格式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://reggie-1258048181.cos.ap-guangzhou.myqcloud.com/reggieblog/che2.png"
+               alt="teng xu" />
+          <p class="site-author-name" itemprop="name">teng xu</p>
+          <p class="site-description motion-element" itemprop="description">Iron armor is still <br /> caihong.teng.xu@gmail.com</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">93</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <a href="https://info.flagcounter.com/dLMY"><img src="https://s04.flagcounter.com/count2/dLMY/bg_FFFFFF/txt_000000/border_CCCCCC/columns_3/maxflags_12/viewers_0/labels_0/pageviews_1/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">1.</span> <span class="nav-text">准备工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#更换阿里源"><span class="nav-number">1.1.</span> <span class="nav-text">更换阿里源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装EPEL"><span class="nav-number">1.2.</span> <span class="nav-text">安装EPEL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装REMI源"><span class="nav-number">1.3.</span> <span class="nav-text">安装REMI源</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装PHP7"><span class="nav-number">2.</span> <span class="nav-text">安装PHP7+</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#选择PHP版本"><span class="nav-number">2.1.</span> <span class="nav-text">选择PHP版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安装PHP扩展"><span class="nav-number">2.2.</span> <span class="nav-text">安装PHP扩展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PHP-FPM"><span class="nav-number">2.3.</span> <span class="nav-text">PHP-FPM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置文件"><span class="nav-number">2.4.</span> <span class="nav-text">配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Nginx"><span class="nav-number">3.</span> <span class="nav-text">安装Nginx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Mysql"><span class="nav-number">4.</span> <span class="nav-text">安装Mysql</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Laravel权限"><span class="nav-number">5.</span> <span class="nav-text">Laravel权限</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder"><a target="_blank" href="https://caihongtengxu.github.io/" >teng xu</a></span>
+  <a target="_blank" href="http://www.beian.miit.gov.cn">粤ICP备18150902号</a>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/fastclick/1.0.6/fastclick.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.lazyload/1.9.3/jquery.lazyload.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.min.js"></script>
+
+  
+  <script type="text/javascript" src="//cdn.jsdelivr.net/velocity/1.2.3/velocity.ui.min.js"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+    <script type="text/javascript">
+      var disqus_shortname = 'reggie-3';
+      var disqus_identifier = '2020/20200908/index.html';
+      var disqus_title = 'Centos7下搭建Laravel环境';
+      var disqus_url = 'https://www.tokme.cn/2020/20200908/index.html';
+
+      function run_disqus_script(disqus_script){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }
+
+      run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
+      
+    </script>
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+  <script src="/js/jpage.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+var default_search_word="";
+var t1;
+  $("#search_word").focus(function(){
+      console.log('in');
+      t1=window.setInterval(show_search_word,2000);
+  });
+
+  function show_search_word(){
+    var search_word=$("#search_word").val().trim();
+    if(default_search_word!=search_word){
+        default_search_word=search_word
+        var matchcounts = 0;
+        var str='<ul id=\"itemContainer\" class=\"search-result-list\">';
+        var keywords=$("#search_word").val().trim().toLowerCase().split(/[\s\-]+/);
+
+        $.getJSON("/json/main.json",function(data){
+            var isMath=true;
+            for(var i=0;i<data.length;i++){
+              var isMatch = true;
+              var content_index = [];
+              var data_url = data[i]['url'];
+              var host = window.location.host;
+              var prot = document.location.protocol;
+              data_url = prot + "//" + host + "/" + data_url;
+              var index_title = -1;
+              var index_content = -1;
+              var data_title=data[i]['title'].trim().toLowerCase();
+              var data_content=data[i]['excerpt'].trim().replace(/<[^>]+>/g,"").toLowerCase();
+              var first_occur=-1;
+
+              index_title = data_title.indexOf(keywords);
+              index_content = data_content.indexOf(keywords);
+
+              if( index_title < 0 && index_content < 0 ){
+                isMatch = false;
+              }
+
+              if (isMatch) {
+                matchcounts += 1;
+                console.log(data_title);
+                var left=data_title.indexOf(keywords);
+                var left_word=data_title.substring(0,left);
+                var midd=keywords.toString();
+                var len=midd.length;
+                var right_word=data_title.substring(left+len,data_title.length);
+                console.log(data_url);
+                str += "<li class='und_line'><a href='"+ data_url +"' class='search-result-title' style='border-bottom: 1px solid #fff;'>"+left_word+"<em class='highlight'>"+keywords+"</em>"+ right_word +"</a>";
+                str += "</li>";
+              }
+            }
+            str += "</ul>";
+            //str += "</div>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'; $("#algolia-pagination").html(''); }
+
+            $("#algolia-hits").html(str);
+            $("#algolia-pagination").jPages({
+                  containerID : "itemContainer"
+            });
+        })
+    }
+  }
+
+  $("#search_word").blur(function(){
+      console.log("out");
+      window.clearInterval(t1);
+  })
+
+  $('.popup-trigger').on('click', function(e) {
+    e.stopPropagation();
+    $('body').append('<div class="popoverlay">').css('overflow', 'hidden');
+    $('.popup').toggle();
+    $('#algolia-search-input').find('input').focus();
+  });
+
+  $('.popup-btn-close').click(function(){
+    $('.popup').hide();
+    $('.popoverlay').remove();
+    $('body').css('overflow', '');
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    if ( $('#local-search-input').size() === 0) {
+      return;
+    }
+    var isfetched = false;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+  <script type="text/javascript" src="/dist/my_affix.js"></script>
+    
+
+    <script>
+        var _mtac = {};
+        (function() {
+            var mta = document.createElement("script");
+            mta.src = "//pingjs.qq.com/h5/stats.js?v2.0.4";
+            mta.setAttribute("name", "MTAH5");
+            mta.setAttribute("sid", "500669726");
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(mta, s);
+        })();
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var arr = path.split("/");
+        var prot = document.location.protocol;
+        var host = window.location.host;
+        // http协议处理
+        if (prot == "http:" && host == "caihongtengxu.github.io") {
+            window.location.href = window.location.href.replace("http", "https");
+        }
+
+        if (arr.length >=4 && arr[2].length == 2) {
+            // 老的路径跳转下
+            data_url = prot + "//" + host + "/" + arr[1] + "/" + arr[4] + "/index.html";
+            console.log(data_url);
+            window.location.href = data_url;
+        }
+    </script>
+</body>
+</html>
